@@ -787,26 +787,40 @@ function OvertimePage({ isDark }) {
   const [hourly, setHourly] = useState(25);
   const [weeklyOtHours, setWeeklyOtHours] = useState(5);
   const [weeksPerYear, setWeeksPerYear] = useState(52);
+  const [stateCode, setStateCode] = useState('CA');
+  const [taxYear, setTaxYear] = useState('2026');
+  const [showAdvanced, setShowAdvanced] = useState(true);
+  const [otMultiplier, setOtMultiplier] = useState(1.5);
+  const [k401, setK401] = useState(0);
+  const [hsa, setHsa] = useState(0);
+  const [ira, setIra] = useState(0);
+  const [studentLoanInterest, setStudentLoanInterest] = useState(0);
+  const [dependentCareFsa, setDependentCareFsa] = useState(0);
+  const [dependents, setDependents] = useState(0);
 
   const r = useMemo(() => {
-    const prem = num(hourly) * 0.5;
-    const annual = prem * Math.max(0, num(weeklyOtHours)) * Math.max(1, Math.min(52, num(weeksPerYear)));
+    const annualOtHours = Math.max(0, num(weeklyOtHours)) * Math.max(1, Math.min(52, num(weeksPerYear)));
+    const premiumPortionFactor = Math.max(0, num(otMultiplier) - 1);
+    const prem = num(hourly) * premiumPortionFactor;
+    const annual = prem * annualOtHours;
     const cap = status === 'married' ? 25000 : 12500;
     const capped = Math.min(annual, cap);
-    const start = status === 'married' ? 300000 : status === 'mfs' ? 75000 : 150000;
-    const full = status === 'married' ? 550000 : status === 'mfs' ? 137500 : 275000;
-    const reduction = num(magi) > start ? phaseReduction(num(magi), start, 100) : 0;
-    const deduction = num(magi) >= full ? 0 : Math.max(0, capped - reduction);
-    const rateKey = status === 'married' ? 'married' : status === 'hoh' ? 'hoh' : status === 'mfs' ? 'mfs' : 'single';
+    const start = status === 'married' ? 300000 : 150000;
+    const full = status === 'married' ? 550000 : 275000;
+    const adjustments = Math.max(0, num(k401)) + Math.max(0, num(hsa)) + Math.max(0, num(ira)) + Math.max(0, num(studentLoanInterest)) + Math.max(0, num(dependentCareFsa));
+    const adjustedMagi = Math.max(0, num(magi) - adjustments);
+    const reduction = adjustedMagi > start ? phaseReduction(adjustedMagi, start, 100) : 0;
+    const deduction = adjustedMagi >= full ? 0 : Math.max(0, capped - reduction);
+    const rateKey = status === 'married' ? 'married' : 'single';
     const rate = rateFor(rateKey, num(magi) + deduction);
-    const phaseStatus = num(magi) <= start
+    const phaseStatus = adjustedMagi <= start
       ? 'No phase-out (within deduction range)'
-      : num(magi) >= full
+      : adjustedMagi >= full
         ? `Fully phased out (over income limit)`
         : `Partially phased out (${usd(deduction)} remaining)`;
     const savings = deduction * rate;
-    return { prem, annual, deduction, savings, rate, phaseStatus, monthly: savings / 12, biweekly: savings / 26 };
-  }, [status, magi, hourly, weeklyOtHours, weeksPerYear]);
+    return { prem, annual, annualOtHours, deduction, savings, rate, phaseStatus, monthly: savings / 12, biweekly: savings / 26, adjustedMagi };
+  }, [status, magi, hourly, weeklyOtHours, weeksPerYear, otMultiplier, k401, hsa, ira, studentLoanInterest, dependentCareFsa]);
 
   useEffect(() => {
     document.title = 'Use the No Tax on Overtime Calculator to Maximize Earnings';
@@ -865,14 +879,42 @@ function OvertimePage({ isDark }) {
       </article>
 
       <CalcShell title="No Tax on Overtime" isDark={isDark}>
-        <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single','Single'],['married','Married Filing Jointly'],['hoh','Head of Household'],['mfs','Married Filing Separately']]} /></Field>
+        <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single','Single'],['married','Married Filing Jointly']]} /></Field>
         <Field label="Hourly Rate ($)"><Input value={hourly} onChange={setHourly} /></Field>
         <Field label="Weekly Overtime Hours"><Input value={weeklyOtHours} onChange={setWeeklyOtHours} /></Field>
         <Field label="Weeks Per Year (1-52)"><Input value={weeksPerYear} onChange={setWeeksPerYear} /></Field>
+        <Field label="Annual OT Hours (calculated)">
+          <div className={`w-full rounded-xl p-3 border ${isDark ? 'bg-slate-800 border-slate-700 text-slate-200' : 'bg-slate-100 border-slate-300 text-slate-700'}`}>{r.annualOtHours.toFixed(2)} hrs</div>
+        </Field>
         <Field label="MAGI (before overtime) $"><Input value={magi} onChange={setMagi} /></Field>
+        <Field label="State">
+          <Select value={stateCode} onChange={setStateCode} options={FEDERAL_STATE_OPTIONS.filter(s => s.code).map((s) => [s.code, s.name])} />
+        </Field>
+        <Field label="Tax Year">
+          <Select value={taxYear} onChange={setTaxYear} options={[['2026', '2026'], ['2025', '2025'], ['2024', '2024']]} />
+        </Field>
+        <button
+          type="button"
+          onClick={() => setShowAdvanced((v) => !v)}
+          className={`w-full rounded-xl border px-4 py-2 text-left text-sm ${isDark ? 'border-slate-700 bg-slate-800 text-slate-200' : 'border-slate-300 bg-slate-100 text-slate-700'}`}
+        >
+          {showAdvanced ? 'Hide Advanced Options ▲' : 'Show Advanced Options ▼'}
+        </button>
+        {showAdvanced && (
+          <>
+            <Field label="Overtime Multiplier"><Input value={otMultiplier} onChange={setOtMultiplier} /></Field>
+            <Field label="401(k) Contributions ($)"><Input value={k401} onChange={setK401} /></Field>
+            <Field label="HSA Contributions ($)"><Input value={hsa} onChange={setHsa} /></Field>
+            <Field label="Traditional IRA Contributions ($)"><Input value={ira} onChange={setIra} /></Field>
+            <Field label="Student Loan Interest ($)"><Input value={studentLoanInterest} onChange={setStudentLoanInterest} /></Field>
+            <Field label="Dependent Care FSA ($)"><Input value={dependentCareFsa} onChange={setDependentCareFsa} /></Field>
+            <Field label="Dependents (Child Tax Credit)"><Input value={dependents} onChange={setDependents} /></Field>
+          </>
+        )}
         <Result isDark={isDark} lines={[
           `Annual OT Premium: ${usd(r.annual)}`,
           `Deductible OT Premium: ${usd(r.deduction)}`,
+          `Adjusted MAGI (after advanced inputs): ${usd(r.adjustedMagi)}`,
           `Phase-Out Status: ${r.phaseStatus}`,
           `Your Tax Bracket: ${Math.round(r.rate * 100)}%`,
           `Estimated Annual Tax Savings: ${usd(r.savings)}`,
