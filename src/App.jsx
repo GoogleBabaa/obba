@@ -2324,6 +2324,23 @@ export default function App() {
     };
   }, [location.pathname]);
 
+  useEffect(() => {
+    // Ensure SPA navigation behaves like a fresh page load for footer/header links.
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
+    // Move focus to the primary page title for accessibility and clear context shift.
+    const focusTitle = () => {
+      const h1 = document.querySelector('main h1');
+      if (!h1) return;
+      h1.setAttribute('tabindex', '-1');
+      h1.focus({ preventScroll: true });
+    };
+
+    // Run after paint so new route content is mounted.
+    const id = window.requestAnimationFrame(focusTitle);
+    return () => window.cancelAnimationFrame(id);
+  }, [location.pathname]);
+
   return (
     <div className={`min-h-screen ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-white text-slate-900'}`}>
       <Header isDark={isDark} setIsDark={setIsDark} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
