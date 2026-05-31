@@ -22,12 +22,50 @@ const BRACKETS = {
     { upTo: 768700, rate: 0.35 },
     { upTo: 1e15, rate: 0.37 },
   ],
+  hoh: [
+    { upTo: 17700, rate: 0.1 },
+    { upTo: 67450, rate: 0.12 },
+    { upTo: 105700, rate: 0.22 },
+    { upTo: 201750, rate: 0.24 },
+    { upTo: 256200, rate: 0.32 },
+    { upTo: 640600, rate: 0.35 },
+    { upTo: 1e15, rate: 0.37 },
+  ],
+  mfs: [
+    { upTo: 12400, rate: 0.1 },
+    { upTo: 50400, rate: 0.12 },
+    { upTo: 105700, rate: 0.22 },
+    { upTo: 201775, rate: 0.24 },
+    { upTo: 256225, rate: 0.32 },
+    { upTo: 640600, rate: 0.35 },
+    { upTo: 1e15, rate: 0.37 },
+  ],
+};
+const STANDARD_DEDUCTION_2026 = {
+  single: 16100,
+  married: 32200,
+  hoh: 24150,
+  mfs: 16100,
 };
 
 const num = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
 const usd = (v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(Math.max(0, v));
 const rateFor = (status, income) => BRACKETS[status].find((b) => income <= b.upTo)?.rate ?? 0.37;
 const phaseReduction = (magi, start, per1000) => Math.max(0, ((magi - start) / 1000) * per1000);
+const progressiveTax = (taxableIncome, brackets) => {
+  let remaining = Math.max(0, num(taxableIncome));
+  let previous = 0;
+  let tax = 0;
+  for (const b of brackets) {
+    const width = Math.max(0, b.upTo - previous);
+    const amountAtRate = Math.min(remaining, width);
+    tax += amountAtRate * b.rate;
+    remaining -= amountAtRate;
+    previous = b.upTo;
+    if (remaining <= 0) break;
+  }
+  return Math.max(0, tax);
+};
 
 const SOCIAL_SECURITY_RATE = 0.062;
 const SOCIAL_SECURITY_WAGE_BASE_2026 = 184500;
@@ -36,6 +74,8 @@ const ADDITIONAL_MEDICARE_RATE = 0.009;
 const ADDITIONAL_MEDICARE_THRESHOLD = {
   single: 200000,
   married: 250000,
+  hoh: 200000,
+  mfs: 125000,
 };
 
 const EXECUTIVE_LEVEL_IV_CAP = 197200;
@@ -155,6 +195,61 @@ const LOCALITY_OPTIONS = [
   ['vb', 'Virginia Beach-Norfolk, VA-NC (+18.80%)', 0.188],
   ['ak', 'State of Alaska (+32.36%)', 0.3236],
   ['hi', 'State of Hawaii (+22.21%)', 0.2221],
+];
+
+const FEDERAL_STATE_OPTIONS = [
+  { name: 'Select State', rate: null, code: null },
+  { name: 'Alabama', rate: '2% – 5%', code: 'AL' },
+  { name: 'Alaska', rate: '0%', code: 'AK' },
+  { name: 'Arizona', rate: '2.55% – 4.5%', code: 'AZ' },
+  { name: 'Arkansas', rate: '2% – 5.75%', code: 'AR' },
+  { name: 'California', rate: '1% – 13.3%', code: 'CA' },
+  { name: 'Colorado', rate: '4.4% flat', code: 'CO' },
+  { name: 'Connecticut', rate: '3% – 6.99%', code: 'CT' },
+  { name: 'Delaware', rate: '0% – 6.6%', code: 'DE' },
+  { name: 'Florida', rate: '0%', code: 'FL' },
+  { name: 'Georgia', rate: '0.55% – 5.75%', code: 'GA' },
+  { name: 'Hawaii', rate: '1.4% – 11%', code: 'HI' },
+  { name: 'Idaho', rate: '1% – 5.8%', code: 'ID' },
+  { name: 'Illinois', rate: '4.95% flat', code: 'IL' },
+  { name: 'Indiana', rate: '3.4% flat', code: 'IN' },
+  { name: 'Iowa', rate: '0.33% – 6.5%', code: 'IA' },
+  { name: 'Kansas', rate: '5.7% – 5.9%', code: 'KS' },
+  { name: 'Kentucky', rate: '2% – 5%', code: 'KY' },
+  { name: 'Louisiana', rate: '2% – 6%', code: 'LA' },
+  { name: 'Maine', rate: '5.8% – 7.15%', code: 'ME' },
+  { name: 'Maryland', rate: '2% – 5.75%', code: 'MD' },
+  { name: 'Massachusetts', rate: '5% flat', code: 'MA' },
+  { name: 'Michigan', rate: '4.25% flat', code: 'MI' },
+  { name: 'Minnesota', rate: '5.35% – 10.85%', code: 'MN' },
+  { name: 'Mississippi', rate: '0% – 5%', code: 'MS' },
+  { name: 'Missouri', rate: '1.5% – 5.3%', code: 'MO' },
+  { name: 'Montana', rate: '1% – 10.84%', code: 'MT' },
+  { name: 'Nebraska', rate: '2.84% – 8.84%', code: 'NE' },
+  { name: 'Nevada', rate: '0%', code: 'NV' },
+  { name: 'New Hampshire', rate: '0% (wages only)', code: 'NH' },
+  { name: 'New Jersey', rate: '1.4% – 10.75%', code: 'NJ' },
+  { name: 'New Mexico', rate: '1.7% – 5.9%', code: 'NM' },
+  { name: 'New York', rate: '4% – 10.9%', code: 'NY' },
+  { name: 'North Carolina', rate: '4.99% flat', code: 'NC' },
+  { name: 'North Dakota', rate: '1.1% – 2.9%', code: 'ND' },
+  { name: 'Ohio', rate: '0% – 5.75%', code: 'OH' },
+  { name: 'Oklahoma', rate: '0.5% – 5.85%', code: 'OK' },
+  { name: 'Oregon', rate: '4.75% – 9.9%', code: 'OR' },
+  { name: 'Pennsylvania', rate: '3.07% flat', code: 'PA' },
+  { name: 'Rhode Island', rate: '3.75% – 5.99%', code: 'RI' },
+  { name: 'South Carolina', rate: '0% – 7%', code: 'SC' },
+  { name: 'South Dakota', rate: '0%', code: 'SD' },
+  { name: 'Tennessee', rate: '0%', code: 'TN' },
+  { name: 'Texas', rate: '0%', code: 'TX' },
+  { name: 'Utah', rate: '4.65% flat', code: 'UT' },
+  { name: 'Vermont', rate: '3.55% – 8.75%', code: 'VT' },
+  { name: 'Virginia', rate: '2% – 5.75%', code: 'VA' },
+  { name: 'Washington', rate: '0%', code: 'WA' },
+  { name: 'West Virginia', rate: '3% – 6.5%', code: 'WV' },
+  { name: 'Wisconsin', rate: '3.54% – 7.65%', code: 'WI' },
+  { name: 'Wyoming', rate: '0%', code: 'WY' },
+  { name: 'District of Columbia', rate: '4% – 10.75%', code: 'DC' },
 ];
 
 function upsertMeta(selector, create) {
@@ -1153,9 +1248,11 @@ function SalaryCalculatorPage({ isDark }) {
 
 function PaycheckCalculatorPage({ isDark }) {
   const [status, setStatus] = useState('single');
+  const [stateCode, setStateCode] = useState('');
   const [annualSalary, setAnnualSalary] = useState(60000);
   const [payFreq, setPayFreq] = useState('biweekly');
   const [preTaxDeduction, setPreTaxDeduction] = useState(0);
+  const [additionalWithholding, setAdditionalWithholding] = useState(0);
 
   const r = useMemo(() => {
     const grossAnnual = Math.max(0, num(annualSalary));
@@ -1163,22 +1260,23 @@ function PaycheckCalculatorPage({ isDark }) {
     const grossPer = grossAnnual / periods;
     const pretax = Math.max(0, num(preTaxDeduction));
     const annualPretax = pretax * periods;
-    const taxableAnnual = Math.max(0, grossAnnual - annualPretax);
-    const fedRate = rateFor(status, taxableAnnual);
-    const fedAnnual = taxableAnnual * fedRate;
+    const taxableAnnual = Math.max(0, grossAnnual - (STANDARD_DEDUCTION_2026[status] ?? 16100) - annualPretax);
+    const fedAnnual = progressiveTax(taxableAnnual, BRACKETS[status] ?? BRACKETS.single);
     const ficaAnnual = ficaForAnnualWages(grossAnnual, status);
-    const netAnnual = grossAnnual - annualPretax - fedAnnual - ficaAnnual;
+    const annualAdditional = Math.max(0, num(additionalWithholding)) * periods;
+    const netAnnual = grossAnnual - annualPretax - fedAnnual - ficaAnnual - annualAdditional;
     return {
       periods,
       grossPer,
       taxableAnnual,
-      fedRate,
       fedPer: fedAnnual / periods,
       ficaPer: ficaAnnual / periods,
+      addlPer: annualAdditional / periods,
       netPer: netAnnual / periods,
       netAnnual,
     };
-  }, [status, annualSalary, payFreq, preTaxDeduction]);
+  }, [status, annualSalary, payFreq, preTaxDeduction, additionalWithholding]);
+  const selectedState = FEDERAL_STATE_OPTIONS.find((s) => s.code === stateCode);
 
   useEffect(() => {
     document.title = 'Paycheck Calculator to Estimate Your Take-Home Pay';
@@ -1236,15 +1334,25 @@ function PaycheckCalculatorPage({ isDark }) {
       </article>
 
       <CalcShell title="Paycheck" isDark={isDark}>
-        <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly']]} /></Field>
+        <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} /></Field>
+        <Field label="State">
+          <Select
+            value={stateCode}
+            onChange={setStateCode}
+            options={FEDERAL_STATE_OPTIONS.map((s) => [s.code ?? '', s.code ? `${s.name} (${s.rate})` : s.name])}
+          />
+        </Field>
         <Field label="Annual Salary ($)"><Input value={annualSalary} onChange={setAnnualSalary} /></Field>
         <Field label="Pay Frequency"><Select value={payFreq} onChange={setPayFreq} options={[['weekly','Weekly'],['biweekly','Biweekly'],['semimonthly','Semi-Monthly'],['monthly','Monthly']]} /></Field>
         <Field label="Pre-tax Deduction Per Paycheck ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
+        <Field label="Additional Federal Withholding Per Paycheck ($)"><Input value={additionalWithholding} onChange={setAdditionalWithholding} /></Field>
         <Result isDark={isDark} lines={[
+          `Selected State: ${selectedState?.name ?? 'Not selected'}${selectedState?.rate ? ` (${selectedState.rate})` : ''}`,
           `Pay Periods/Year: ${r.periods}`,
           `Gross Per Paycheck: ${usd(r.grossPer)}`,
-          `Estimated Federal Tax Per Paycheck: ${usd(r.fedPer)} (${Math.round(r.fedRate * 100)}%)`,
+          `Estimated Federal Tax Per Paycheck: ${usd(r.fedPer)}`,
           `Estimated FICA Per Paycheck: ${usd(r.ficaPer)}`,
+          `Additional Federal Withholding Per Paycheck: ${usd(r.addlPer)}`,
           `Estimated Net Per Paycheck: ${usd(r.netPer)}`,
           `Estimated Net Annual: ${usd(r.netAnnual)}`,
         ]} />
@@ -1501,34 +1609,72 @@ function PaycheckCalculatorPage({ isDark }) {
 }
 
 function StatePaycheckCalculatorPage({ isDark, stateName }) {
-  const [status, setStatus] = useState('single');
-  const [annualSalary, setAnnualSalary] = useState(60000);
-  const [payFreq, setPayFreq] = useState('biweekly');
+  const isZeroStateTaxCalc = stateName === 'Texas' || stateName === 'Florida';
+  const [status, setStatus] = useState('');
+  const [grossPay, setGrossPay] = useState('');
+  const [rateType, setRateType] = useState('');
+  const [payFreq, setPayFreq] = useState('');
   const [preTaxDeduction, setPreTaxDeduction] = useState(0);
 
   const r = useMemo(() => {
-    const grossAnnual = Math.max(0, num(annualSalary));
-    const periods = payFreq === 'weekly' ? 52 : payFreq === 'semimonthly' ? 24 : payFreq === 'monthly' ? 12 : 26;
+    const periods = payFreq === 'weekly' ? 52 : payFreq === 'biweekly' ? 26 : payFreq === 'semimonthly' ? 24 : payFreq === 'monthly' ? 12 : 1;
+
+    if (isZeroStateTaxCalc) {
+      const gross = Math.max(0, num(grossPay));
+      const annualGross = rateType === 'hourly' ? gross * 2080 : gross;
+      const statusKey = status || 'single';
+      const standardDeduction = STANDARD_DEDUCTION_2026[statusKey] ?? 16100;
+      const taxableAnnual = Math.max(0, annualGross - standardDeduction);
+
+      const federalAnnual = progressiveTax(taxableAnnual, BRACKETS[statusKey] ?? BRACKETS.single);
+      const socialSecurityAnnual = Math.min(annualGross, 184500) * 0.062;
+      const medicareBase = annualGross * 0.0145;
+      const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
+      const addMedicare = Math.max(0, annualGross - addMedThreshold) * 0.009;
+      const medicareAnnual = medicareBase + addMedicare;
+      const stateAnnual = 0;
+      const totalDeductions = federalAnnual + socialSecurityAnnual + medicareAnnual + stateAnnual;
+      const annualTakeHome = annualGross - totalDeductions;
+      const perPeriodTakeHome = annualTakeHome / periods;
+      const effectiveFederalRate = annualGross > 0 ? (federalAnnual / annualGross) * 100 : 0;
+
+      return {
+        periods,
+        annualGross,
+        taxableAnnual,
+        federalAnnual,
+        socialSecurityAnnual,
+        medicareAnnual,
+        stateAnnual,
+        totalDeductions,
+        annualTakeHome,
+        monthlyNet: annualTakeHome / 12,
+        biweeklyNet: annualTakeHome / 26,
+        perPeriodTakeHome,
+        effectiveFederalRate,
+      };
+    }
+
+    const grossAnnual = Math.max(0, num(grossPay));
     const grossPer = grossAnnual / periods;
     const pretax = Math.max(0, num(preTaxDeduction));
     const annualPretax = pretax * periods;
     const taxableAnnual = Math.max(0, grossAnnual - annualPretax);
-    const fedRate = rateFor(status, taxableAnnual);
-    const fedAnnual = taxableAnnual * fedRate;
+    const taxableAfterStd = Math.max(0, taxableAnnual - (STANDARD_DEDUCTION_2026[status] ?? 16100));
+    const fedAnnual = progressiveTax(taxableAfterStd, BRACKETS[status] ?? BRACKETS.single);
     const ficaAnnual = ficaForAnnualWages(grossAnnual, status);
     const stateAnnual = 0;
     const netAnnual = grossAnnual - annualPretax - fedAnnual - ficaAnnual - stateAnnual;
     return {
       periods,
       grossPer,
-      fedRate,
       fedPer: fedAnnual / periods,
       ficaPer: ficaAnnual / periods,
       statePer: stateAnnual / periods,
       netPer: netAnnual / periods,
       netAnnual,
     };
-  }, [status, annualSalary, payFreq, preTaxDeduction]);
+  }, [isZeroStateTaxCalc, status, grossPay, rateType, payFreq, preTaxDeduction]);
 
   useEffect(() => {
     let title = `${stateName} Paycheck Calculator`;
@@ -1616,19 +1762,50 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
         </article>
       )}
       <CalcShell title={`${stateName} Paycheck`} isDark={isDark}>
-        <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly']]} /></Field>
-        <Field label="Annual Salary ($)"><Input value={annualSalary} onChange={setAnnualSalary} /></Field>
-        <Field label="Pay Frequency"><Select value={payFreq} onChange={setPayFreq} options={[['weekly','Weekly'],['biweekly','Biweekly'],['semimonthly','Semi-Monthly'],['monthly','Monthly']]} /></Field>
-        <Field label="Pre-tax Deduction Per Paycheck ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
-        <Result isDark={isDark} lines={[
-          `Pay Periods/Year: ${r.periods}`,
-          `Gross Per Paycheck: ${usd(r.grossPer)}`,
-          `Estimated Federal Tax Per Paycheck: ${usd(r.fedPer)} (${Math.round(r.fedRate * 100)}%)`,
-          `Estimated FICA Per Paycheck: ${usd(r.ficaPer)}`,
-          `Estimated State Income Tax Per Paycheck (${stateName}): ${usd(r.statePer)} (No state income tax)`,
-          `Estimated Net Per Paycheck: ${usd(r.netPer)}`,
-          `Estimated Net Annual: ${usd(r.netAnnual)}`,
-        ]} />
+        <Field
+          label="Gross Pay Amount ($)"
+          hint={`Enter your gross annual salary (${stateName} has 0% state income tax)`}
+        >
+          <Input value={grossPay} onChange={setGrossPay} />
+        </Field>
+        <Field label="Rate Type">
+          <Select value={rateType} onChange={setRateType} options={[['', 'Select…'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
+        </Field>
+        <Field label="Pay Frequency" hint="Select how often you're paid">
+          <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select…'], ['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
+        </Field>
+        <Field label="Filing Status" hint="Select for Federal tax calculation">
+          <Select value={status} onChange={setStatus} options={[['', 'Select…'], ['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
+        </Field>
+        {!isZeroStateTaxCalc && (
+          <Field label="Pre-tax Deduction Per Paycheck ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
+        )}
+        {isZeroStateTaxCalc ? (
+          <Result
+            isDark={isDark}
+            lines={[
+              `Per-Period Take-Home Pay: ${usd(r.perPeriodTakeHome)}`,
+              `Federal Income Tax (Annual): ${usd(r.federalAnnual)}`,
+              `Social Security 6.2% (Annual): ${usd(r.socialSecurityAnnual)}`,
+              `Medicare 1.45% (Annual): ${usd(r.medicareAnnual)}`,
+              `${stateName} State Income Tax: ${usd(r.stateAnnual)} (None)`,
+              `Effective Federal Rate: ${r.effectiveFederalRate.toFixed(2)}%`,
+              `Annual Take-Home: ${usd(r.annualTakeHome)}`,
+              `Monthly Net Pay: ${usd(r.monthlyNet)}`,
+              `${payFreq === 'weekly' ? 'Weekly Net Pay' : payFreq === 'biweekly' ? 'Biweekly Net Paycheck' : payFreq === 'semimonthly' ? 'Semi-Monthly Net' : payFreq === 'monthly' ? 'Monthly Net Pay' : 'Annual Take-Home'}: ${usd(r.perPeriodTakeHome)}`,
+            ]}
+          />
+        ) : (
+          <Result isDark={isDark} lines={[
+            `Pay Periods/Year: ${r.periods}`,
+            `Gross Per Paycheck: ${usd(r.grossPer)}`,
+            `Estimated Federal Tax Per Paycheck: ${usd(r.fedPer)}`,
+            `Estimated FICA Per Paycheck: ${usd(r.ficaPer)}`,
+            `Estimated State Income Tax Per Paycheck (${stateName}): ${usd(r.statePer)} (No state income tax)`,
+            `Estimated Net Per Paycheck: ${usd(r.netPer)}`,
+            `Estimated Net Annual: ${usd(r.netAnnual)}`,
+          ]} />
+        )}
       </CalcShell>
 
       {stateName === 'Texas' && (
