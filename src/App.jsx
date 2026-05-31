@@ -38,6 +38,56 @@ const ADDITIONAL_MEDICARE_THRESHOLD = {
   married: 250000,
 };
 
+const EXECUTIVE_LEVEL_IV_CAP = 197200;
+const HOURS_PER_YEAR = 2087;
+const PAY_PERIODS = 26;
+
+const GS_PAY_TABLE_2026 = {
+  'GS-1':  [28953, 29927, 30901, 31875, 32849, 33823, 34797, 35771, 36745, 37719],
+  'GS-2':  [32550, 33658, 34766, 35874, 36982, 38090, 39198, 40306, 41414, 42522],
+  'GS-3':  [35560, 36744, 37928, 39112, 40296, 41480, 42664, 43848, 45032, 46216],
+  'GS-4':  [39916, 41280, 42644, 44008, 45372, 46736, 48100, 49464, 50828, 52192],
+  'GS-5':  [44663, 46151, 47639, 49127, 50615, 52103, 53591, 55079, 56567, 58055],
+  'GS-6':  [49752, 51368, 52984, 54600, 56216, 57832, 59448, 61064, 62680, 64296],
+  'GS-7':  [55219, 57059, 58899, 60739, 62579, 64419, 66259, 68099, 69939, 71779],
+  'GS-8':  [60916, 62947, 64978, 67009, 69040, 71071, 73102, 75133, 77164, 79195],
+  'GS-9':  [67254, 69530, 71806, 74082, 76358, 78634, 80910, 83186, 85462, 87738],
+  'GS-10': [74070, 76605, 79140, 81675, 84210, 86745, 89280, 91815, 94350, 96885],
+  'GS-11': [81343, 84144, 86945, 89746, 92547, 95348, 98149, 100950, 103751, 106552],
+  'GS-12': [97590, 100828, 104066, 107304, 110542, 113780, 117018, 120256, 123494, 126732],
+  'GS-13': [116069, 119906, 123743, 127580, 131417, 135254, 139091, 142928, 146765, 150602],
+  'GS-14': [136807, 141398, 145989, 150580, 155171, 159762, 164353, 168944, 173535, 178126],
+  'GS-15': [160866, 166261, 171656, 177051, 182446, 187841, 193236, 198631, 204026, 209421],
+};
+
+const GS_PAY_TABLE = {
+  2026: GS_PAY_TABLE_2026,
+  2025: GS_PAY_TABLE_2026,
+  2024: GS_PAY_TABLE_2026,
+};
+
+const LOCALITY_OPTIONS = [
+  ['rest-us', 'Rest of U.S. (+17.06%)', 0.1706],
+  ['dc', 'Washington-Baltimore-Arlington, DC-MD-VA-WV-PA (+33.94%)', 0.3394],
+  ['sf', 'San Jose-San Francisco-Oakland, CA (+46.34%)', 0.4634],
+  ['ny', 'New York-Newark, NY-NJ-CT-PA (+37.95%)', 0.3795],
+  ['houston', 'Houston-The Woodlands, TX-LA (+35.00%)', 0.35],
+  ['la', 'Los Angeles-Long Beach, CA (+36.47%)', 0.3647],
+  ['sd', 'San Diego-Chula Vista-Carlsbad, CA (+33.72%)', 0.3372],
+  ['seattle', 'Seattle-Tacoma, WA (+31.57%)', 0.3157],
+  ['denver', 'Denver-Aurora, CO (+30.52%)', 0.3052],
+  ['boston', 'Boston-Worcester-Providence, MA-RI-NH-CT-ME-VT (+32.58%)', 0.3258],
+  ['chicago', 'Chicago-Naperville, IL-IN-WI (+30.86%)', 0.3086],
+  ['philly', 'Philadelphia-Reading-Camden, PA-NJ-DE-MD (+28.99%)', 0.2899],
+  ['minneapolis', 'Minneapolis-St. Paul, MN-WI (+27.62%)', 0.2762],
+  ['dfw', 'Dallas-Fort Worth, TX-OK (+27.26%)', 0.2726],
+  ['portland', 'Portland-Vancouver-Salem, OR-WA (+26.13%)', 0.2613],
+  ['miami', 'Miami-Port St. Lucie-Fort Lauderdale, FL (+24.67%)', 0.2467],
+  ['atlanta', 'Atlanta-Athens-Clarke County-Sandy Springs, GA-AL (+23.79%)', 0.2379],
+  ['cleveland', 'Cleveland-Akron-Canton, OH-PA (+22.23%)', 0.2223],
+  ['raleigh', 'Raleigh-Durham-Cary, NC (+22.24%)', 0.2224],
+];
+
 function upsertMeta(selector, create) {
   let el = document.querySelector(selector);
   if (!el) {
@@ -756,36 +806,40 @@ function OvertimePage({ isDark }) {
 }
 
 function SalaryCalculatorPage({ isDark }) {
-  const [status, setStatus] = useState('single');
-  const [annualSalary, setAnnualSalary] = useState(60000);
-  const [retirementPct, setRetirementPct] = useState(0);
+  const [payYear, setPayYear] = useState('2026');
+  const [grade, setGrade] = useState('GS-13');
+  const [step, setStep] = useState('6');
+  const [localityKey, setLocalityKey] = useState('dc');
+  const [raisePct, setRaisePct] = useState(0);
 
   const r = useMemo(() => {
-    const gross = Math.max(0, num(annualSalary));
-    const retirement = gross * (Math.max(0, num(retirementPct)) / 100);
-    const taxable = Math.max(0, gross - retirement);
-    const federalRate = rateFor(status, taxable);
-    const federalEstimate = taxable * federalRate;
-    const netAnnual = gross - retirement - federalEstimate;
+    const table = GS_PAY_TABLE[Number(payYear)] ?? GS_PAY_TABLE[2026];
+    const stepIdx = Math.max(1, Math.min(10, num(step))) - 1;
+    const basePay = table?.[grade]?.[stepIdx] ?? 0;
+    const locality = LOCALITY_OPTIONS.find((x) => x[0] === localityKey);
+    const localityPct = locality ? locality[2] : 0;
+    const localityAdj = basePay * localityPct;
+    const uncappedAnnual = basePay + localityAdj;
+    const cappedAnnual = Math.min(uncappedAnnual, EXECUTIVE_LEVEL_IV_CAP);
+    const raise = Math.max(0, Math.min(10, num(raisePct))) / 100;
+    const annualWithRaise = Math.min(cappedAnnual * (1 + raise), EXECUTIVE_LEVEL_IV_CAP);
+
     return {
-      gross,
-      retirement,
-      taxable,
-      federalRate,
-      federalEstimate,
-      monthlyGross: gross / 12,
-      biweeklyGross: gross / 26,
-      weeklyGross: gross / 52,
-      hourlyGross: gross / 2080,
-      netAnnual,
-      netMonthly: netAnnual / 12,
+      basePay,
+      localityPct,
+      localityAdj,
+      uncappedAnnual,
+      cappedAnnual,
+      annualWithRaise,
+      biweekly: annualWithRaise / PAY_PERIODS,
+      hourly: annualWithRaise / HOURS_PER_YEAR,
     };
-  }, [status, annualSalary, retirementPct]);
+  }, [payYear, grade, step, localityKey, raisePct]);
 
   useEffect(() => {
-    document.title = 'Hourly to Salary Calculator to Estimate Your Annual Pay';
+    document.title = 'Federal Salary Calculator (GS Pay) - Estimate Annual, Biweekly & Hourly Pay';
 
-    const metaDescriptionContent = 'Use our Hourly to Salary Calculator to convert hourly wages into accurate annual pay, compare hourly vs salaried income, plan budgets, and track career earnings with confidence.';
+    const metaDescriptionContent = 'Federal Salary Calculator with GS grade, step, locality adjustment, and what-if raise. Estimate base pay, annual total, biweekly pay, and hourly rate with the federal pay cap.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -804,12 +858,12 @@ function SalaryCalculatorPage({ isDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Hourly to Salary Calculator to Estimate Your Annual Pay',
+      name: 'Federal Salary Calculator (GS Pay) - Estimate Annual, Biweekly & Hourly Pay',
       description: metaDescriptionContent,
       url: `${window.location.origin}/salary-calculator`,
       mainEntity: {
         '@type': 'SoftwareApplication',
-        name: 'Hourly to Salary Calculator',
+        name: 'Federal Salary Calculator',
         applicationCategory: 'FinanceApplication',
         operatingSystem: 'Web',
         offers: {
@@ -830,27 +884,33 @@ function SalaryCalculatorPage({ isDark }) {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8">
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
-        <h1 className="text-3xl font-bold mb-4 text-white">Hourly to Salary Calculator to Estimate Your Annual Pay</h1>
+        <h1 className="text-3xl font-bold mb-4 text-white">Federal Salary Calculator (GS Pay)</h1>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Understanding your total annual compensation is a vital step for managing your personal finances. Many workers find it difficult to track their earnings when pay cycles vary throughout the year.</p>
-          <p>Using an effective hourly to salary calculator provides a clear picture of your financial health. This simple tool helps you see the bigger picture of your income in the United States.</p>
-          <p>Estimating your yearly pay is a foundational move for better budgeting and long-term planning. Our friendly guide aims to simplify complex payroll math for every worker. By using an hourly to salary calculator, you can gain confidence in your financial decisions today.</p>
+          <p>Model federal pay using exact GS inputs: pay year, grade, step, locality area, and optional what-if raise scenario.</p>
+          <p>Results show base annual pay, locality adjustment, capped annual pay, biweekly paycheck, and hourly rate.</p>
         </div>
       </article>
 
-      <CalcShell title="Salary" isDark={isDark}>
-        <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly']]} /></Field>
-        <Field label="Annual Salary ($)"><Input value={annualSalary} onChange={setAnnualSalary} /></Field>
-        <Field label="Retirement Contribution (%)"><Input value={retirementPct} onChange={setRetirementPct} /></Field>
+      <CalcShell title="Federal Salary" isDark={isDark}>
+        <Field label="Pay Year"><Select value={payYear} onChange={setPayYear} options={[['2026', '2026'], ['2025', '2025'], ['2024', '2024']]} /></Field>
+        <Field label="GS Grade"><Select value={grade} onChange={setGrade} options={Array.from({ length: 15 }, (_, i) => [`GS-${i + 1}`, `GS-${i + 1}`])} /></Field>
+        <Field label="Step"><Select value={step} onChange={setStep} options={Array.from({ length: 10 }, (_, i) => [`${i + 1}`, `Step ${i + 1}`])} /></Field>
+        <Field label="Locality Area">
+          <select value={localityKey} onChange={(e) => setLocalityKey(e.target.value)} className="w-full rounded-xl p-3 border bg-white border-slate-300 text-slate-900">
+            {LOCALITY_OPTIONS.map(([key, label]) => <option key={key} value={key}>{label}</option>)}
+          </select>
+        </Field>
+        <Field label="What-if Raise Scenario (%)">
+          <input type="number" min="0" max="10" step="0.1" value={raisePct} onChange={(e) => setRaisePct(e.target.value)} className="w-full rounded-xl p-3 border bg-white border-slate-300 text-slate-900" />
+        </Field>
         <Result isDark={isDark} lines={[
-          `Annual Gross: ${usd(r.gross)}`,
-          `Monthly Gross: ${usd(r.monthlyGross)}`,
-          `Biweekly Gross: ${usd(r.biweeklyGross)}`,
-          `Weekly Gross: ${usd(r.weeklyGross)}`,
-          `Hourly Gross (2080 hrs): ${usd(r.hourlyGross)}`,
-          `Estimated Federal Tax: ${usd(r.federalEstimate)} (${Math.round(r.federalRate * 100)}%)`,
-          `Estimated Net Annual: ${usd(r.netAnnual)}`,
-          `Estimated Net Monthly: ${usd(r.netMonthly)}`,
+          `Base Annual (${grade} Step ${step}): ${usd(r.basePay)}`,
+          `Locality Adjustment (+${(r.localityPct * 100).toFixed(2)}%): ${usd(r.localityAdj)}`,
+          `Total Annual (Before Cap): ${usd(r.uncappedAnnual)}`,
+          `Total Annual (After Cap): ${usd(r.cappedAnnual)}`,
+          `Total Annual (After Raise): ${usd(r.annualWithRaise)}`,
+          `Biweekly Pay: ${usd(r.biweekly)}`,
+          `Hourly Rate: ${usd(r.hourly)}/hr`,
         ]} />
       </CalcShell>
 
@@ -2181,8 +2241,8 @@ export default function App() {
         canonicalPath: '/overtime',
       },
       '/salary-calculator': {
-        title: 'Hourly to Salary Calculator to Estimate Your Annual Pay',
-        description: 'Convert hourly wages into annual salary with accurate projections, compare hourly vs salaried compensation, and plan yearly budget with confidence.',
+        title: 'Federal Salary Calculator (GS Pay) - Estimate Annual, Biweekly & Hourly Pay',
+        description: 'Federal Salary Calculator for GS grade, step, locality area, and raise scenario. Estimate base pay, locality adjustment, capped annual salary, biweekly pay, and hourly rate.',
         canonicalPath: '/salary-calculator',
       },
       '/paycheck-calculator': {
