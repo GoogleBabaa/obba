@@ -1288,7 +1288,7 @@ function SalaryCalculatorPage({ isDark }) {
       </article>
 
       <CalcShell title="Federal Salary" isDark={isDark}>
-        <Field label="Pay Year"><Select value={payYear} onChange={setPayYear} options={[['2026', '2026'], ['2025', '2025'], ['2024', '2024']]} /></Field>
+        <Field label="Pay Year"><Select value={payYear} onChange={setPayYear} options={[['2026', '2026'], ['2025', '2025']]} /></Field>
         <Field label="GS Grade"><Select value={grade} onChange={setGrade} options={Array.from({ length: 15 }, (_, i) => [`GS-${i + 1}`, `GS-${i + 1}`])} /></Field>
         <Field
           label="Step (Within GS Grade)"
