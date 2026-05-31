@@ -44,15 +44,15 @@ const PAY_PERIODS = 26;
 
 const GS_PAY_TABLE = {
   2026: {
-    'GS-1':  [22584, 23341, 24092, 24840, 25589, 26028, 26771, 27519, 27550, 28248],
-    'GS-2':  [25393, 25997, 26839, 27550, 27858, 28677, 29496, 30315, 31134, 31953],
-    'GS-3':  [27708, 28632, 29556, 30480, 31404, 32328, 33252, 34176, 35100, 36024],
-    'GS-4':  [31103, 32140, 33177, 34214, 35251, 36288, 37325, 38362, 39399, 40436],
-    'GS-5':  [34799, 35959, 37119, 38279, 39439, 40599, 41759, 42919, 44079, 45239],
-    'GS-6':  [38791, 40084, 41377, 42670, 43963, 45256, 46549, 47842, 49135, 50428],
-    'GS-7':  [43106, 44543, 45980, 47417, 48854, 50291, 51728, 53165, 54602, 56039],
-    'GS-8':  [47738, 49329, 50920, 52511, 54102, 55693, 57284, 58875, 60466, 62057],
-    'GS-9':  [52727, 54485, 56243, 58001, 59759, 61517, 63275, 65033, 66791, 68549],
+    'GS-1': [22584, 23341, 24092, 24840, 25589, 26028, 26771, 27519, 27550, 28248],
+    'GS-2': [25393, 25997, 26839, 27550, 27858, 28677, 29496, 30315, 31134, 31953],
+    'GS-3': [27708, 28632, 29556, 30480, 31404, 32328, 33252, 34176, 35100, 36024],
+    'GS-4': [31103, 32140, 33177, 34214, 35251, 36288, 37325, 38362, 39399, 40436],
+    'GS-5': [34799, 35959, 37119, 38279, 39439, 40599, 41759, 42919, 44079, 45239],
+    'GS-6': [38791, 40084, 41377, 42670, 43963, 45256, 46549, 47842, 49135, 50428],
+    'GS-7': [43106, 44543, 45980, 47417, 48854, 50291, 51728, 53165, 54602, 56039],
+    'GS-8': [47738, 49329, 50920, 52511, 54102, 55693, 57284, 58875, 60466, 62057],
+    'GS-9': [52727, 54485, 56243, 58001, 59759, 61517, 63275, 65033, 66791, 68549],
     'GS-10': [58064, 59999, 61934, 63869, 65804, 67739, 69674, 71609, 73544, 75479],
     'GS-11': [63795, 65922, 68049, 70176, 72303, 74430, 76557, 78684, 80811, 82938],
     'GS-12': [76463, 79012, 81561, 84110, 86659, 89208, 91757, 94306, 96855, 99404],
@@ -97,25 +97,64 @@ const GS_PAY_TABLE = {
 };
 
 const LOCALITY_OPTIONS = [
-  ['rest-us', 'Rest of U.S. (+17.06%)', 0.1706],
-  ['dc', 'Washington-Baltimore-Arlington, DC-MD-VA-WV-PA (+33.94%)', 0.3394],
+  ['dcb', 'Washington-Baltimore-Arlington, DC-MD-VA-WV-PA (+33.94%)', 0.3394],
+  ['rus', 'Rest of U.S. (+17.06%)', 0.1706],
   ['sf', 'San Jose-San Francisco-Oakland, CA (+46.34%)', 0.4634],
   ['ny', 'New York-Newark, NY-NJ-CT-PA (+37.95%)', 0.3795],
-  ['houston', 'Houston-The Woodlands, TX-LA (+35.00%)', 0.35],
+  ['hou', 'Houston-The Woodlands, TX-LA (+35.00%)', 0.35],
   ['la', 'Los Angeles-Long Beach, CA (+36.47%)', 0.3647],
   ['sd', 'San Diego-Chula Vista-Carlsbad, CA (+33.72%)', 0.3372],
-  ['seattle', 'Seattle-Tacoma, WA (+31.57%)', 0.3157],
-  ['denver', 'Denver-Aurora, CO (+30.52%)', 0.3052],
-  ['boston', 'Boston-Worcester-Providence, MA-RI-NH-CT-ME-VT (+32.58%)', 0.3258],
-  ['chicago', 'Chicago-Naperville, IL-IN-WI (+30.86%)', 0.3086],
-  ['philly', 'Philadelphia-Reading-Camden, PA-NJ-DE-MD (+28.99%)', 0.2899],
-  ['minneapolis', 'Minneapolis-St. Paul, MN-WI (+27.62%)', 0.2762],
+  ['sea', 'Seattle-Tacoma, WA (+31.57%)', 0.3157],
+  ['den', 'Denver-Aurora, CO (+30.52%)', 0.3052],
+  ['bos', 'Boston-Worcester-Providence, MA-RI-NH-CT-ME-VT (+32.58%)', 0.3258],
+  ['chi', 'Chicago-Naperville, IL-IN-WI (+30.86%)', 0.3086],
+  ['phl', 'Philadelphia-Reading-Camden, PA-NJ-DE-MD (+28.99%)', 0.2899],
+  ['msp', 'Minneapolis-St. Paul, MN-WI (+27.62%)', 0.2762],
   ['dfw', 'Dallas-Fort Worth, TX-OK (+27.26%)', 0.2726],
-  ['portland', 'Portland-Vancouver-Salem, OR-WA (+26.13%)', 0.2613],
-  ['miami', 'Miami-Port St. Lucie-Fort Lauderdale, FL (+24.67%)', 0.2467],
-  ['atlanta', 'Atlanta-Athens-Clarke County-Sandy Springs, GA-AL (+23.79%)', 0.2379],
-  ['cleveland', 'Cleveland-Akron-Canton, OH-PA (+22.23%)', 0.2223],
-  ['raleigh', 'Raleigh-Durham-Cary, NC (+22.24%)', 0.2224],
+  ['por', 'Portland-Vancouver-Salem, OR-WA (+26.13%)', 0.2613],
+  ['mfl', 'Miami-Port St. Lucie-Fort Lauderdale, FL (+24.67%)', 0.2467],
+  ['atl', 'Atlanta--Athens-Clarke County--Sandy Springs, GA-AL (+23.79%)', 0.2379],
+  ['cle', 'Cleveland-Akron-Canton, OH-PA (+22.23%)', 0.2223],
+  ['ra', 'Raleigh-Durham-Cary, NC (+22.24%)', 0.2224],
+  ['al', 'Albany-Schenectady, NY-MA (+20.77%)', 0.2077],
+  ['aq', 'Albuquerque-Santa Fe-Las Vegas, NM (+18.33%)', 0.1833],
+  ['au', 'Austin-Round Rock-Georgetown, TX (+20.35%)', 0.2035],
+  ['bh', 'Birmingham-Hoover-Talladega, AL (+18.24%)', 0.1824],
+  ['bu', 'Buffalo-Cheektowaga-Olean, NY (+22.41%)', 0.2241],
+  ['bn', 'Burlington-South Burlington-Barre, VT (+19.45%)', 0.1945],
+  ['ct', 'Charlotte-Concord, NC-SC (+19.67%)', 0.1967],
+  ['cin', 'Cincinnati-Wilmington-Maysville, OH-KY-IN (+21.93%)', 0.2193],
+  ['cs', 'Colorado Springs, CO (+20.15%)', 0.2015],
+  ['col', 'Columbus-Marion-Zanesville, OH (+22.15%)', 0.2215],
+  ['cc', 'Corpus Christi-Kingsville-Alice, TX (+17.63%)', 0.1763],
+  ['dv', 'Davenport-Moline, IA-IL (+18.93%)', 0.1893],
+  ['day', 'Dayton-Springfield-Kettering, OH (+21.42%)', 0.2142],
+  ['dm', 'Des Moines-Ames-West Des Moines, IA (+18.01%)', 0.1801],
+  ['det', 'Detroit-Warren-Ann Arbor, MI (+29.12%)', 0.2912],
+  ['fn', 'Fresno-Madera-Hanford, CA (+17.65%)', 0.1765],
+  ['hb', 'Harrisburg-Lebanon, PA (+19.43%)', 0.1943],
+  ['har', 'Hartford-East Hartford, CT-MA (+32.08%)', 0.3208],
+  ['hnt', 'Huntsville-Decatur, AL-TN (+21.91%)', 0.2191],
+  ['ind', 'Indianapolis-Carmel-Muncie, IN (+18.15%)', 0.1815],
+  ['kc', 'Kansas City-Overland Park-Kansas City, MO-KS (+18.97%)', 0.1897],
+  ['lr', 'Laredo, TX (+21.59%)', 0.2159],
+  ['lv', 'Las Vegas-Henderson, NV-AZ (+19.57%)', 0.1957],
+  ['mil', 'Milwaukee-Racine-Waukesha, WI (+22.42%)', 0.2242],
+  ['om', 'Omaha-Council Bluffs-Fremont, NE-IA (+18.23%)', 0.1823],
+  ['pb', 'Palm Bay-Melbourne-Titusville, FL (+17.93%)', 0.1793],
+  ['px', 'Phoenix-Mesa, AZ (+22.45%)', 0.2245],
+  ['pit', 'Pittsburgh-New Castle-Weirton, PA-OH-WV (+21.03%)', 0.2103],
+  ['rn', 'Reno-Fernley, NV (+17.52%)', 0.1752],
+  ['rch', 'Richmond, VA (+22.28%)', 0.2228],
+  ['rt', 'Rochester-Batavia-Seneca Falls, NY (+17.88%)', 0.1788],
+  ['sac', 'Sacramento-Roseville, CA-NV (+29.76%)', 0.2976],
+  ['so', 'San Antonio-New Braunfels-Pearsall, TX (+18.78%)', 0.1878],
+  ['sn', "Spokane-Spokane Valley-Coeur d'Alene, WA-ID (+17.67%)", 0.1767],
+  ['sl', 'St. Louis-St. Charles-Farmington, MO-IL (+20.03%)', 0.2003],
+  ['tu', 'Tucson-Nogales, AZ (+19.28%)', 0.1928],
+  ['vb', 'Virginia Beach-Norfolk, VA-NC (+18.80%)', 0.188],
+  ['ak', 'State of Alaska (+32.36%)', 0.3236],
+  ['hi', 'State of Hawaii (+22.21%)', 0.2221],
 ];
 
 function upsertMeta(selector, create) {
@@ -839,7 +878,7 @@ function SalaryCalculatorPage({ isDark }) {
   const [payYear, setPayYear] = useState('2026');
   const [grade, setGrade] = useState('GS-13');
   const [step, setStep] = useState('6');
-  const [localityKey, setLocalityKey] = useState('dc');
+  const [localityKey, setLocalityKey] = useState('dcb');
   const [raisePct, setRaisePct] = useState(0);
 
   const r = useMemo(() => {
@@ -848,7 +887,7 @@ function SalaryCalculatorPage({ isDark }) {
     const basePay = table?.[grade]?.[stepIdx] ?? 0;
     const locality = LOCALITY_OPTIONS.find((x) => x[0] === localityKey);
     const localityPct = locality ? locality[2] : 0;
-    const localityAdj = basePay * localityPct;
+    const localityAdj = Math.round(basePay * localityPct);
     const uncappedAnnual = basePay + localityAdj;
     const cappedAnnual = Math.min(uncappedAnnual, EXECUTIVE_LEVEL_IV_CAP);
     const raise = Math.max(0, Math.min(10, num(raisePct))) / 100;
