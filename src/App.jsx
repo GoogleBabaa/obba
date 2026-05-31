@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { BarChart3, Menu, Moon, Sun, X } from 'lucide-react';
-import FAQPage from './FAQPage';
+const FAQPage = lazy(() => import('./FAQPage'));
 
 const BRACKETS = {
   single: [
@@ -2311,20 +2311,22 @@ export default function App() {
   return (
     <div className={`min-h-screen ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-white text-slate-900'}`}>
       <Header isDark={isDark} setIsDark={setIsDark} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
-      <Routes>
-        <Route path="/" element={<HomePage isDark={isDark} />} />
-        <Route path="/overtime" element={<OvertimePage isDark={isDark} />} />
-        <Route path="/salary-calculator" element={<SalaryCalculatorPage isDark={isDark} />} />
-        <Route path="/paycheck-calculator" element={<PaycheckCalculatorPage isDark={isDark} />} />
-        <Route path="/texas-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Texas" />} />
-        <Route path="/florida-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Florida" />} />
-        <Route path="/about-us" element={<AboutUsPage isDark={isDark} />} />
-        <Route path="/faq" element={<FAQPage isDark={isDark} />} />
-        <Route path="/faqs" element={<FAQPage isDark={isDark} />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicyPage isDark={isDark} />} />
-        <Route path="/terms-conditions" element={<TermsConditionsPage isDark={isDark} />} />
-        <Route path="/contact-us" element={<ContactUsPage isDark={isDark} />} />
-      </Routes>
+      <Suspense fallback={<main className="max-w-7xl mx-auto px-4 py-8"><p className={isDark ? 'text-slate-300' : 'text-slate-700'}>Loading...</p></main>}>
+        <Routes>
+          <Route path="/" element={<HomePage isDark={isDark} />} />
+          <Route path="/overtime" element={<OvertimePage isDark={isDark} />} />
+          <Route path="/salary-calculator" element={<SalaryCalculatorPage isDark={isDark} />} />
+          <Route path="/paycheck-calculator" element={<PaycheckCalculatorPage isDark={isDark} />} />
+          <Route path="/texas-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Texas" />} />
+          <Route path="/florida-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Florida" />} />
+          <Route path="/about-us" element={<AboutUsPage isDark={isDark} />} />
+          <Route path="/faq" element={<FAQPage isDark={isDark} />} />
+          <Route path="/faqs" element={<FAQPage isDark={isDark} />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage isDark={isDark} />} />
+          <Route path="/terms-conditions" element={<TermsConditionsPage isDark={isDark} />} />
+          <Route path="/contact-us" element={<ContactUsPage isDark={isDark} />} />
+        </Routes>
+      </Suspense>
       <footer className={`border-t ${isDark ? 'border-white/10 bg-slate-950/90' : 'border-slate-200 bg-slate-50'} py-10`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-10">
