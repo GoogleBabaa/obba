@@ -1503,7 +1503,7 @@ function PaycheckCalculatorPage({ isDark }) {
   const [additionalWithholding, setAdditionalWithholding] = useState(0);
 
   const r = useMemo(() => {
-    const periods = payFreq === 'weekly' ? 52 : payFreq === 'semimonthly' ? 24 : payFreq === 'monthly' ? 12 : payFreq === 'annual' ? 1 : 26;
+    const periods = payFreq === 'daily' ? 260 : payFreq === 'weekly' ? 52 : payFreq === 'semimonthly' ? 24 : payFreq === 'monthly' ? 12 : payFreq === 'annual' ? 1 : 26;
     const lines = [
       [num(rate1), num(hours1)],
       [num(rate2), num(hours2)],
@@ -2081,7 +2081,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
           <Select value={rateType} onChange={setRateType} options={[['', 'Select…'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
         </Field>
         <Field label="Pay Frequency" hint="Select how often you're paid">
-          <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select…'], ['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
+          <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select…'], ['daily', 'Daily (260×/yr)'], ['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
         </Field>
         <Field label="Filing Status" hint="Select for Federal tax calculation">
           <Select value={status} onChange={setStatus} options={[['', 'Select…'], ['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
@@ -2101,7 +2101,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
               `Effective Federal Rate: ${r.effectiveFederalRate.toFixed(2)}%`,
               `Annual Take-Home: ${usd(r.annualTakeHome)}`,
               `Monthly Net Pay: ${usd(r.monthlyNet)}`,
-              `${payFreq === 'weekly' ? 'Weekly Net Pay' : payFreq === 'biweekly' ? 'Biweekly Net Paycheck' : payFreq === 'semimonthly' ? 'Semi-Monthly Net' : payFreq === 'monthly' ? 'Monthly Net Pay' : 'Annual Take-Home'}: ${usd(r.perPeriodTakeHome)}`,
+              `${payFreq === 'daily' ? 'Daily Net Pay' : payFreq === 'weekly' ? 'Weekly Net Pay' : payFreq === 'biweekly' ? 'Biweekly Net Paycheck' : payFreq === 'semimonthly' ? 'Semi-Monthly Net' : payFreq === 'monthly' ? 'Monthly Net Pay' : 'Annual Take-Home'}: ${usd(r.perPeriodTakeHome)}`,
             ]}
           />
         ) : (
