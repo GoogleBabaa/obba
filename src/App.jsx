@@ -185,6 +185,7 @@ function HomePage({ isDark }) {
             </ul>
           </div>
 
+          <section style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 5000px' }}>
           <div className={`mt-8 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
             <h2 className="text-2xl font-bold mb-4">Understanding the 2026 Federal Tax Landscape</h2>
             <p className="mb-4">Understanding your 2026 tax obligations starts with recognizing how federal policies evolve annually. The government frequently updates tax codes to ensure that the system remains fair and functional for all citizens. Staying informed about these shifts is the best way to manage your financial expectations throughout the year.</p>
@@ -472,6 +473,7 @@ function HomePage({ isDark }) {
               <div><h3 className="text-xl font-semibold mb-2 text-white">Does the OBBBA Tax Calculator 2026 account for FICA taxes?</h3><p>Yes, it includes Social Security and Medicare in net-pay estimates.</p></div>
             </div>
           </div>
+          </section>
         </section>
 
         {/* DISCLAIMER */}
