@@ -141,7 +141,7 @@ function HomePage({ isDark }) {
             <p className="text-sm font-medium text-cyan-400">Federal Tax Deduction Calculators</p>
             <h1 className={`text-3xl font-semibold tracking-tight sm:text-5xl ${isDark ? 'text-white' : 'text-slate-900'}`}>OBBBA Tax Calculator 2026 - Overtime Deduction, Salary & Paycheck Calculator</h1>
             <div className={`max-w-3xl space-y-4 text-sm sm:text-base ${isDark ? 'text-cyan-100/90' : 'text-slate-700'}`}>
-              <p>Planning your finances for the upcoming year can feel overwhelming, but you do not have to navigate it alone. The OBBBA tool serves as your primary resource for estimating take-home pay during the 2026 fiscal year. By using a reliable faderal tax calculator, you can gain clarity on how new withholding rules might impact your monthly earnings.</p>
+              <p>Planning your finances for the upcoming year can feel overwhelming, but you do not have to navigate it alone. The OBBBA tool serves as your primary resource for estimating take-home pay during the 2026 fiscal year. By using a reliable federal tax calculator, you can gain clarity on how new withholding rules might impact your monthly earnings.</p>
               <p>Managing your income requires more than just basic math. Our comprehensive paycheck calculator simplifies the complex process of projecting your net income after accounting for various obligations. Whether you are tracking overtime deductions or adjusting your salary expectations, this tool provides the precision you need to stay ahead.</p>
               <p>We designed this platform to be user-friendly and accessible for everyone. You can feel confident about your financial planning as you prepare for the changes ahead. Let us help you take control of your budget with ease and accuracy.</p>
             </div>
@@ -302,12 +302,13 @@ function HomePage({ isDark }) {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$50,000</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$6,500</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$0</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$2,500</td></tr>
-                  <tr><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$75,000</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$11,250</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$0</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$3,750</td></tr>
-                  <tr><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$100,000</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$17,000</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$0</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$5,000</td></tr>
+                  <tr><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$50,000</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$6,000</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$0</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$2,500</td></tr>
+                  <tr><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$75,000</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$16,500</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$0</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$3,750</td></tr>
+                  <tr><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$100,000</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$22,000</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$0</td><td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>$5,000</td></tr>
                 </tbody>
               </table>
             </div>
+            <p className="mb-6">These federal figures are simplified estimates aligned with this calculator&apos;s marginal-rate model and are shown for comparison only.</p>
             <p className="mb-6">As shown above, the financial benefits of residing in a tax-friendly state are substantial. Using a reliable florida paycheck calculator helps you visualize these savings, allowing for better long-term financial planning.</p>
           </div>
 
@@ -1899,7 +1900,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
                     <tr>
                       <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Additional Medicare</td>
                       <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>0.9%</td>
-                      <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Over $200,000</td>
+                      <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Over $200,000 (Single) / $250,000 (MFJ)</td>
                     </tr>
                   </tbody>
                 </table>
