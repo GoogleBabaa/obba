@@ -798,29 +798,77 @@ function OvertimePage({ isDark }) {
   const [dependentCareFsa, setDependentCareFsa] = useState(0);
   const [dependents, setDependents] = useState(0);
 
+  const usd2 = (v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Math.max(0, v));
+  const getOvertimeFederalRate = (filingStatus, annualIncome) => {
+    const income = Math.max(0, num(annualIncome));
+    if (filingStatus === 'married') {
+      if (income <= 50000) return 0.12;
+      if (income <= 100000) return 0.18;
+      if (income <= 200000) return 0.22;
+      return 0.24;
+    }
+    if (income <= 50000) return 0.12;
+    if (income <= 100000) return 0.212;
+    if (income <= 200000) return 0.24;
+    return 0.32;
+  };
+  const getOvertimeStateRate = (stateName, annualIncome) => {
+    const income = Math.max(0, num(annualIncome));
+    if (stateName === 'California') {
+      if (income <= 50000) return 0.01;
+      if (income <= 100000) return 0.093;
+      if (income <= 200000) return 0.103;
+      return 0.113;
+    }
+    return getStateTaxRate(stateName, income) / 100;
+  };
+
   const r = useMemo(() => {
     const annualOtHours = Math.max(0, num(weeklyOtHours)) * Math.max(1, Math.min(52, num(weeksPerYear)));
     const premiumPortionFactor = Math.max(0, num(otMultiplier) - 1);
-    const prem = num(hourly) * premiumPortionFactor;
-    const annual = prem * annualOtHours;
+    const premiumHourly = num(hourly) * premiumPortionFactor;
+    const regularHourly = num(hourly);
+    const premiumGross = premiumHourly * annualOtHours;
+    const regularPortion = regularHourly * annualOtHours;
+    const totalOvertimePay = regularPortion + premiumGross;
     const cap = status === 'married' ? 25000 : 12500;
-    const capped = Math.min(annual, cap);
+    const capped = Math.min(premiumGross, cap);
     const start = status === 'married' ? 300000 : 150000;
     const full = status === 'married' ? 550000 : 275000;
     const adjustments = Math.max(0, num(k401)) + Math.max(0, num(hsa)) + Math.max(0, num(ira)) + Math.max(0, num(studentLoanInterest)) + Math.max(0, num(dependentCareFsa));
     const adjustedMagi = Math.max(0, num(magi) - adjustments);
     const reduction = adjustedMagi > start ? phaseReduction(adjustedMagi, start, 100) : 0;
     const deduction = adjustedMagi >= full ? 0 : Math.max(0, capped - reduction);
-    const rateKey = status === 'married' ? 'married' : 'single';
-    const rate = rateFor(rateKey, num(magi) + deduction);
+    const annualIncomeForRates = adjustedMagi + totalOvertimePay;
+    const selectedState = FEDERAL_STATE_OPTIONS.find((s) => s.code === stateCode);
+    const stateName = selectedState?.name ?? '';
+    const federalRate = getOvertimeFederalRate(status, annualIncomeForRates);
+    const stateRate = getOvertimeStateRate(stateName, annualIncomeForRates);
     const phaseStatus = adjustedMagi <= start
       ? 'No phase-out (within deduction range)'
       : adjustedMagi >= full
         ? `Fully phased out (over income limit)`
         : `Partially phased out (${usd(deduction)} remaining)`;
-    const savings = deduction * rate;
-    return { prem, annual, annualOtHours, deduction, savings, rate, phaseStatus, monthly: savings / 12, biweekly: savings / 26, adjustedMagi };
-  }, [status, magi, hourly, weeklyOtHours, weeksPerYear, otMultiplier, k401, hsa, ira, studentLoanInterest, dependentCareFsa]);
+    const federalSavings = deduction * federalRate;
+    const stateSavings = deduction * stateRate;
+    const totalSavings = federalSavings + stateSavings;
+    return {
+      annualOtHours,
+      totalOvertimePay,
+      regularPortion,
+      premiumGross,
+      deduction,
+      federalSavings,
+      stateSavings,
+      totalSavings,
+      federalRate,
+      phaseStatus,
+      adjustedMagi,
+      monthly: totalSavings / 12,
+      quarterly: totalSavings / 4,
+      semiAnnual: totalSavings / 2,
+    };
+  }, [status, magi, hourly, weeklyOtHours, weeksPerYear, stateCode, otMultiplier, k401, hsa, ira, studentLoanInterest, dependentCareFsa]);
 
   useEffect(() => {
     document.title = 'Use the No Tax on Overtime Calculator to Maximize Earnings';
@@ -911,16 +959,42 @@ function OvertimePage({ isDark }) {
             <Field label="Dependents (Child Tax Credit)"><Input value={dependents} onChange={setDependents} /></Field>
           </>
         )}
-        <Result isDark={isDark} lines={[
-          `Annual OT Premium: ${usd(r.annual)}`,
-          `Deductible OT Premium: ${usd(r.deduction)}`,
-          `Adjusted MAGI (after advanced inputs): ${usd(r.adjustedMagi)}`,
-          `Phase-Out Status: ${r.phaseStatus}`,
-          `Your Tax Bracket: ${Math.round(r.rate * 100)}%`,
-          `Estimated Annual Tax Savings: ${usd(r.savings)}`,
-          `Monthly Savings (Est.): ${usd(r.monthly)}`,
-          `Per-Paycheck Savings (Biweekly Est.): ${usd(r.biweekly)}`,
-        ]} />
+        <div className={`col-span-2 overflow-hidden rounded-2xl border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+          <table className={`w-full text-sm ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+            <thead className={isDark ? 'bg-slate-800' : 'bg-slate-100'}>
+              <tr>
+                <th className="px-4 py-3 text-left">Category</th>
+                <th className="px-4 py-3 text-left">Amount</th>
+                <th className="px-4 py-3 text-left">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Total Overtime Pay</td><td className="px-4 py-3">{usd2(r.totalOvertimePay)}</td><td className="px-4 py-3">Your total overtime compensation</td></tr>
+              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Regular Portion</td><td className="px-4 py-3">{usd2(r.regularPortion)}</td><td className="px-4 py-3">Taxable at regular rate</td></tr>
+              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Premium Portion (gross)</td><td className="px-4 py-3">{usd2(r.premiumGross)}</td><td className="px-4 py-3">FLSA &quot;half-time&quot; overtime premium</td></tr>
+              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Deductible Overtime</td><td className="px-4 py-3">{usd2(r.deduction)}</td><td className="px-4 py-3">Qualified deduction after $12,500 cap and MAGI phase-out</td></tr>
+              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Federal Tax Savings</td><td className="px-4 py-3">{usd2(r.federalSavings)}</td><td className="px-4 py-3">Federal income tax saved</td></tr>
+              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">CA State Tax Savings</td><td className="px-4 py-3">{usd2(r.stateSavings)}</td><td className="px-4 py-3">State income tax saved</td></tr>
+              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3 font-semibold">Total Annual Savings</td><td className="px-4 py-3 font-semibold">{usd2(r.totalSavings)}</td><td className="px-4 py-3">Your total tax savings</td></tr>
+            </tbody>
+          </table>
+          <div className={`p-4 ${isDark ? 'bg-slate-900 border-t border-slate-700' : 'bg-white border-t border-slate-300'}`}>
+            <h3 className={`mb-3 text-base font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>Monthly Breakdown</h3>
+            <table className={`w-full text-sm ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+              <thead className={isDark ? 'bg-slate-800' : 'bg-slate-100'}>
+                <tr><th className="px-4 py-2 text-left">Period</th><th className="px-4 py-2 text-left">Savings</th></tr>
+              </thead>
+              <tbody>
+                <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-2">Monthly</td><td className="px-4 py-2">{usd2(r.monthly)}</td></tr>
+                <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-2">Quarterly</td><td className="px-4 py-2">{usd2(r.quarterly)}</td></tr>
+                <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-2">Semi-Annually</td><td className="px-4 py-2">{usd2(r.semiAnnual)}</td></tr>
+                <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-2">Annually</td><td className="px-4 py-2">{usd2(r.totalSavings)}</td></tr>
+              </tbody>
+            </table>
+            <p className={`mt-3 text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Phase-out status: {r.phaseStatus}</p>
+            <p className={`mt-1 text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Adjusted MAGI: {usd2(r.adjustedMagi)} | Federal rate used: {(r.federalRate * 100).toFixed(1)}%</p>
+          </div>
+        </div>
       </CalcShell>
       <img
         src="/overtime-seo-illustration.svg"
