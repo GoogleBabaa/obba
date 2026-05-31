@@ -66,6 +66,67 @@ const progressiveTax = (taxableIncome, brackets) => {
   }
   return Math.max(0, tax);
 };
+const stateEffectiveTaxRates = {
+  Alaska: { low: 0, mid1: 0, mid2: 0, high: 0 },
+  Alabama: { low: 2, mid1: 3.2, mid2: 4.2, high: 5 },
+  Arizona: { low: 2.55, mid1: 3.2, mid2: 3.9, high: 4.5 },
+  Arkansas: { low: 2, mid1: 3.5, mid2: 4.7, high: 5.75 },
+  California: { low: 1, mid1: 4, mid2: 8, high: 13.3 },
+  Colorado: { low: 4.4, mid1: 4.4, mid2: 4.4, high: 4.4 },
+  Connecticut: { low: 3, mid1: 4.5, mid2: 5.8, high: 6.99 },
+  Delaware: { low: 0, mid1: 2.2, mid2: 4.8, high: 6.6 },
+  Florida: { low: 0, mid1: 0, mid2: 0, high: 0 },
+  Georgia: { low: 0.55, mid1: 2.5, mid2: 4.2, high: 5.75 },
+  Hawaii: { low: 1.4, mid1: 4, mid2: 7, high: 11 },
+  Idaho: { low: 1, mid1: 2.8, mid2: 4.3, high: 5.8 },
+  Illinois: { low: 4.95, mid1: 4.95, mid2: 4.95, high: 4.95 },
+  Indiana: { low: 3.4, mid1: 3.4, mid2: 3.4, high: 3.4 },
+  Iowa: { low: 0.33, mid1: 2.5, mid2: 4.5, high: 6.5 },
+  Kansas: { low: 5.7, mid1: 5.75, mid2: 5.85, high: 5.9 },
+  Kentucky: { low: 2, mid1: 3.2, mid2: 4.2, high: 5 },
+  Louisiana: { low: 2, mid1: 3.5, mid2: 4.8, high: 6 },
+  Maine: { low: 5.8, mid1: 6.3, mid2: 6.8, high: 7.15 },
+  Maryland: { low: 2, mid1: 3.3, mid2: 4.5, high: 5.75 },
+  Massachusetts: { low: 5, mid1: 5, mid2: 5, high: 5 },
+  Michigan: { low: 4.25, mid1: 4.25, mid2: 4.25, high: 4.25 },
+  Minnesota: { low: 5.35, mid1: 7, mid2: 8.8, high: 10.85 },
+  Mississippi: { low: 0, mid1: 1.8, mid2: 3.5, high: 5 },
+  Missouri: { low: 1.5, mid1: 2.9, mid2: 4.1, high: 5.3 },
+  Montana: { low: 1, mid1: 3.8, mid2: 6.8, high: 10.84 },
+  Nebraska: { low: 2.84, mid1: 4.5, mid2: 6.8, high: 8.84 },
+  Nevada: { low: 0, mid1: 0, mid2: 0, high: 0 },
+  'New Hampshire': { low: 0, mid1: 0, mid2: 0, high: 0 },
+  'New Jersey': { low: 1.4, mid1: 3.5, mid2: 6.5, high: 10.75 },
+  'New Mexico': { low: 1.7, mid1: 3.3, mid2: 4.7, high: 5.9 },
+  'New York': { low: 4, mid1: 6, mid2: 8, high: 10.9 },
+  'North Carolina': { low: 4.99, mid1: 4.99, mid2: 4.99, high: 4.99 },
+  'North Dakota': { low: 1.1, mid1: 1.6, mid2: 2.3, high: 2.9 },
+  Ohio: { low: 0, mid1: 1.9, mid2: 3.8, high: 5.75 },
+  Oklahoma: { low: 0.5, mid1: 2.3, mid2: 4, high: 5.85 },
+  Oregon: { low: 4.75, mid1: 6.5, mid2: 8.2, high: 9.9 },
+  Pennsylvania: { low: 3.07, mid1: 3.07, mid2: 3.07, high: 3.07 },
+  'Rhode Island': { low: 3.75, mid1: 4.6, mid2: 5.3, high: 5.99 },
+  'South Carolina': { low: 0, mid1: 2.3, mid2: 4.5, high: 7 },
+  'South Dakota': { low: 0, mid1: 0, mid2: 0, high: 0 },
+  Tennessee: { low: 0, mid1: 0, mid2: 0, high: 0 },
+  Texas: { low: 0, mid1: 0, mid2: 0, high: 0 },
+  Utah: { low: 4.65, mid1: 4.65, mid2: 4.65, high: 4.65 },
+  Vermont: { low: 3.55, mid1: 5.3, mid2: 7, high: 8.75 },
+  Virginia: { low: 2, mid1: 3.5, mid2: 4.7, high: 5.75 },
+  Washington: { low: 0, mid1: 0, mid2: 0, high: 0 },
+  'West Virginia': { low: 3, mid1: 4.2, mid2: 5.3, high: 6.5 },
+  Wisconsin: { low: 3.54, mid1: 4.8, mid2: 6.2, high: 7.65 },
+  Wyoming: { low: 0, mid1: 0, mid2: 0, high: 0 },
+  'District of Columbia': { low: 4, mid1: 6.5, mid2: 8.5, high: 10.75 },
+};
+const getStateTaxRate = (state, income) => {
+  const rates = stateEffectiveTaxRates[state];
+  if (!rates) return 0;
+  if (income <= 50000) return rates.low;
+  if (income <= 100000) return rates.mid1;
+  if (income <= 200000) return rates.mid2;
+  return rates.high;
+};
 
 const SOCIAL_SECURITY_RATE = 0.062;
 const SOCIAL_SECURITY_WAGE_BASE_2026 = 184500;
@@ -724,20 +785,28 @@ function OvertimePage({ isDark }) {
   const [status, setStatus] = useState('single');
   const [magi, setMagi] = useState(60000);
   const [hourly, setHourly] = useState(25);
-  const [otHoursYearly, setOtHoursYearly] = useState(260);
+  const [weeklyOtHours, setWeeklyOtHours] = useState(5);
+  const [weeksPerYear, setWeeksPerYear] = useState(52);
 
   const r = useMemo(() => {
     const prem = num(hourly) * 0.5;
-    const annual = prem * Math.max(0, num(otHoursYearly));
-    const cap = status === 'single' ? 12500 : 25000;
+    const annual = prem * Math.max(0, num(weeklyOtHours)) * Math.max(1, Math.min(52, num(weeksPerYear)));
+    const cap = status === 'married' ? 25000 : 12500;
     const capped = Math.min(annual, cap);
-    const start = status === 'single' ? 150000 : 300000;
-    const full = status === 'single' ? 275000 : 550000;
+    const start = status === 'married' ? 300000 : status === 'mfs' ? 75000 : 150000;
+    const full = status === 'married' ? 550000 : status === 'mfs' ? 137500 : 275000;
     const reduction = num(magi) > start ? phaseReduction(num(magi), start, 100) : 0;
     const deduction = num(magi) >= full ? 0 : Math.max(0, capped - reduction);
-    const rate = rateFor(status, num(magi) + deduction);
-    return { prem, annual, deduction, savings: deduction * rate, rate };
-  }, [status, magi, hourly, otHoursYearly]);
+    const rateKey = status === 'married' ? 'married' : status === 'hoh' ? 'hoh' : status === 'mfs' ? 'mfs' : 'single';
+    const rate = rateFor(rateKey, num(magi) + deduction);
+    const phaseStatus = num(magi) <= start
+      ? 'No phase-out (within deduction range)'
+      : num(magi) >= full
+        ? `Fully phased out (over income limit)`
+        : `Partially phased out (${usd(deduction)} remaining)`;
+    const savings = deduction * rate;
+    return { prem, annual, deduction, savings, rate, phaseStatus, monthly: savings / 12, biweekly: savings / 26 };
+  }, [status, magi, hourly, weeklyOtHours, weeksPerYear]);
 
   useEffect(() => {
     document.title = 'Use the No Tax on Overtime Calculator to Maximize Earnings';
@@ -796,11 +865,20 @@ function OvertimePage({ isDark }) {
       </article>
 
       <CalcShell title="No Tax on Overtime" isDark={isDark}>
-        <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single','Single'],['married','Married Filing Jointly']]} /></Field>
-        <Field label="MAGI (before overtime) $"><Input value={magi} onChange={setMagi} /></Field>
+        <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single','Single'],['married','Married Filing Jointly'],['hoh','Head of Household'],['mfs','Married Filing Separately']]} /></Field>
         <Field label="Hourly Rate ($)"><Input value={hourly} onChange={setHourly} /></Field>
-        <Field label="Overtime hours (yearly)"><Input value={otHoursYearly} onChange={setOtHoursYearly} /></Field>
-        <Result isDark={isDark} lines={[`Overtime Premium/hr: ${usd(r.prem)}`, `Annual OT Premium: ${usd(r.annual)}`, `Final Deduction: ${usd(r.deduction)}`, `Tax Savings: ${usd(r.savings)} (${Math.round(r.rate*100)}%)`]} />
+        <Field label="Weekly Overtime Hours"><Input value={weeklyOtHours} onChange={setWeeklyOtHours} /></Field>
+        <Field label="Weeks Per Year (1-52)"><Input value={weeksPerYear} onChange={setWeeksPerYear} /></Field>
+        <Field label="MAGI (before overtime) $"><Input value={magi} onChange={setMagi} /></Field>
+        <Result isDark={isDark} lines={[
+          `Annual OT Premium: ${usd(r.annual)}`,
+          `Deductible OT Premium: ${usd(r.deduction)}`,
+          `Phase-Out Status: ${r.phaseStatus}`,
+          `Your Tax Bracket: ${Math.round(r.rate * 100)}%`,
+          `Estimated Annual Tax Savings: ${usd(r.savings)}`,
+          `Monthly Savings (Est.): ${usd(r.monthly)}`,
+          `Per-Paycheck Savings (Biweekly Est.): ${usd(r.biweekly)}`,
+        ]} />
       </CalcShell>
       <img
         src="/overtime-seo-illustration.svg"
@@ -1249,33 +1327,82 @@ function SalaryCalculatorPage({ isDark }) {
 function PaycheckCalculatorPage({ isDark }) {
   const [status, setStatus] = useState('single');
   const [stateCode, setStateCode] = useState('');
-  const [annualSalary, setAnnualSalary] = useState(60000);
+  const [checkDate, setCheckDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [rateType, setRateType] = useState('');
   const [payFreq, setPayFreq] = useState('biweekly');
+  const [rate1, setRate1] = useState(0);
+  const [hours1, setHours1] = useState(0);
+  const [rate2, setRate2] = useState(0);
+  const [hours2, setHours2] = useState(0);
+  const [rate3, setRate3] = useState(0);
+  const [hours3, setHours3] = useState(0);
+  const [rate4, setRate4] = useState(0);
+  const [hours4, setHours4] = useState(0);
+  const [rate5, setRate5] = useState(0);
+  const [hours5, setHours5] = useState(0);
+  const [rate6, setRate6] = useState(0);
+  const [hours6, setHours6] = useState(0);
+  const [additionalIncome, setAdditionalIncome] = useState(0);
   const [preTaxDeduction, setPreTaxDeduction] = useState(0);
+  const [postTaxDeduction, setPostTaxDeduction] = useState(0);
+  const [dependents, setDependents] = useState(0);
   const [additionalWithholding, setAdditionalWithholding] = useState(0);
 
   const r = useMemo(() => {
-    const grossAnnual = Math.max(0, num(annualSalary));
-    const periods = payFreq === 'weekly' ? 52 : payFreq === 'semimonthly' ? 24 : payFreq === 'monthly' ? 12 : 26;
-    const grossPer = grossAnnual / periods;
+    const periods = payFreq === 'weekly' ? 52 : payFreq === 'semimonthly' ? 24 : payFreq === 'monthly' ? 12 : payFreq === 'annual' ? 1 : 26;
+    const lines = [
+      [num(rate1), num(hours1)],
+      [num(rate2), num(hours2)],
+      [num(rate3), num(hours3)],
+      [num(rate4), num(hours4)],
+      [num(rate5), num(hours5)],
+      [num(rate6), num(hours6)],
+    ];
+    const hourlyGross = lines.reduce((sum, [rt, hrs]) => sum + (Math.max(0, rt) * Math.max(0, hrs)), 0);
+    const adIncome = Math.max(0, num(additionalIncome));
+    const grossPer = Math.max(0, hourlyGross + adIncome);
+    const grossAnnual = rateType === 'hourly' ? grossPer * periods : Math.max(0, num(rate1));
+    const effectiveGrossPer = rateType === 'hourly' ? grossPer : grossAnnual / periods;
     const pretax = Math.max(0, num(preTaxDeduction));
+    const posttax = Math.max(0, num(postTaxDeduction));
     const annualPretax = pretax * periods;
+    const annualPostTax = posttax * periods;
     const taxableAnnual = Math.max(0, grossAnnual - (STANDARD_DEDUCTION_2026[status] ?? 16100) - annualPretax);
-    const fedAnnual = progressiveTax(taxableAnnual, BRACKETS[status] ?? BRACKETS.single);
-    const ficaAnnual = ficaForAnnualWages(grossAnnual, status);
+    const depCredit = Math.max(0, num(dependents)) * 2000;
+    const fedAnnualBase = progressiveTax(taxableAnnual, BRACKETS[status] ?? BRACKETS.single);
+    const fedAnnual = Math.max(0, fedAnnualBase - depCredit);
+    const ssAnnual = Math.min(Math.max(0, grossAnnual - annualPretax), SOCIAL_SECURITY_WAGE_BASE_2026) * SOCIAL_SECURITY_RATE;
+    const medBaseAnnual = Math.max(0, grossAnnual - annualPretax) * MEDICARE_RATE;
+    const addThreshold = ADDITIONAL_MEDICARE_THRESHOLD[status] ?? 200000;
+    const addMedAnnual = Math.max(0, (grossAnnual - annualPretax) - addThreshold) * ADDITIONAL_MEDICARE_RATE;
+    const medicareAnnual = medBaseAnnual + addMedAnnual;
+    const selectedState = FEDERAL_STATE_OPTIONS.find((s) => s.code === stateCode);
+    const stateRatePct = getStateTaxRate(selectedState?.name, grossAnnual);
+    const stateAnnual = Math.max(0, grossAnnual - annualPretax) * (stateRatePct / 100);
     const annualAdditional = Math.max(0, num(additionalWithholding)) * periods;
-    const netAnnual = grossAnnual - annualPretax - fedAnnual - ficaAnnual - annualAdditional;
+    const totalAnnualDeductions = fedAnnual + ssAnnual + medicareAnnual + stateAnnual + annualPretax + annualPostTax + annualAdditional;
+    const netAnnual = grossAnnual - totalAnnualDeductions;
     return {
       periods,
-      grossPer,
+      grossPer: effectiveGrossPer,
       taxableAnnual,
+      grossAnnual,
       fedPer: fedAnnual / periods,
-      ficaPer: ficaAnnual / periods,
+      fedAnnual,
+      statePer: stateAnnual / periods,
+      stateAnnual,
+      ssPer: ssAnnual / periods,
+      ssAnnual,
+      medicarePer: medicareAnnual / periods,
+      medicareAnnual,
+      preTaxPer: pretax,
+      postTaxPer: posttax,
       addlPer: annualAdditional / periods,
       netPer: netAnnual / periods,
       netAnnual,
+      effectiveFederalRate: grossAnnual > 0 ? (fedAnnual / grossAnnual) * 100 : 0,
     };
-  }, [status, annualSalary, payFreq, preTaxDeduction, additionalWithholding]);
+  }, [status, stateCode, checkDate, rateType, rate1, hours1, rate2, hours2, rate3, hours3, rate4, hours4, rate5, hours5, rate6, hours6, additionalIncome, payFreq, preTaxDeduction, postTaxDeduction, dependents, additionalWithholding]);
   const selectedState = FEDERAL_STATE_OPTIONS.find((s) => s.code === stateCode);
 
   useEffect(() => {
@@ -1334,27 +1461,55 @@ function PaycheckCalculatorPage({ isDark }) {
       </article>
 
       <CalcShell title="Paycheck" isDark={isDark}>
-        <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} /></Field>
-        <Field label="State">
+        <Field label="State" hint="Select for state income tax calculation">
           <Select
             value={stateCode}
             onChange={setStateCode}
-            options={FEDERAL_STATE_OPTIONS.map((s) => [s.code ?? '', s.code ? `${s.name} (${s.rate})` : s.name])}
+            options={FEDERAL_STATE_OPTIONS.map((s) => [s.code ?? '', s.code ? `${s.name} (${s.rate})` : 'Federal taxes only / Select a state'])}
           />
         </Field>
-        <Field label="Annual Salary ($)"><Input value={annualSalary} onChange={setAnnualSalary} /></Field>
-        <Field label="Pay Frequency"><Select value={payFreq} onChange={setPayFreq} options={[['weekly','Weekly'],['biweekly','Biweekly'],['semimonthly','Semi-Monthly'],['monthly','Monthly']]} /></Field>
-        <Field label="Pre-tax Deduction Per Paycheck ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
-        <Field label="Additional Federal Withholding Per Paycheck ($)"><Input value={additionalWithholding} onChange={setAdditionalWithholding} /></Field>
+        <Field label="Check Date" hint="Enter the date on your paycheck">
+          <input type="date" value={checkDate} onChange={(e) => setCheckDate(e.target.value)} className="w-full rounded-xl p-3 border bg-white border-slate-300 text-slate-900" />
+        </Field>
+        <Field label="Rate Type">
+          <Select value={rateType} onChange={setRateType} options={[['', 'Select…'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
+        </Field>
+        <Field label="Pay Frequency" hint="Select how often you're paid">
+          <Select value={payFreq} onChange={setPayFreq} options={[['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
+        </Field>
+        <Field label="Filing Status">
+          <Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly'], ['mfs', 'Married Filing Separately'], ['hoh', 'Head of Household']]} />
+        </Field>
+        <Field label="Rate 1 ($)"><Input value={rate1} onChange={setRate1} /></Field>
+        <Field label="Hours 1"><Input value={hours1} onChange={setHours1} /></Field>
+        <Field label="Rate 2 ($)"><Input value={rate2} onChange={setRate2} /></Field>
+        <Field label="Hours 2"><Input value={hours2} onChange={setHours2} /></Field>
+        <Field label="Rate 3 ($)"><Input value={rate3} onChange={setRate3} /></Field>
+        <Field label="Hours 3"><Input value={hours3} onChange={setHours3} /></Field>
+        <Field label="Rate 4 ($)"><Input value={rate4} onChange={setRate4} /></Field>
+        <Field label="Hours 4"><Input value={hours4} onChange={setHours4} /></Field>
+        <Field label="Rate 5 ($)"><Input value={rate5} onChange={setRate5} /></Field>
+        <Field label="Hours 5"><Input value={hours5} onChange={setHours5} /></Field>
+        <Field label="Rate 6 ($)"><Input value={rate6} onChange={setRate6} /></Field>
+        <Field label="Hours 6"><Input value={hours6} onChange={setHours6} /></Field>
+        <Field label="Additional Income ($)"><Input value={additionalIncome} onChange={setAdditionalIncome} /></Field>
+        <Field label="Pre-Tax Deductions ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
+        <Field label="Post-Tax Deductions ($)"><Input value={postTaxDeduction} onChange={setPostTaxDeduction} /></Field>
+        <Field label="W-4 Allowances / Dependents"><Input value={dependents} onChange={setDependents} /></Field>
+        <Field label="Additional Federal Withholding ($)"><Input value={additionalWithholding} onChange={setAdditionalWithholding} /></Field>
         <Result isDark={isDark} lines={[
           `Selected State: ${selectedState?.name ?? 'Not selected'}${selectedState?.rate ? ` (${selectedState.rate})` : ''}`,
-          `Pay Periods/Year: ${r.periods}`,
-          `Gross Per Paycheck: ${usd(r.grossPer)}`,
-          `Estimated Federal Tax Per Paycheck: ${usd(r.fedPer)}`,
-          `Estimated FICA Per Paycheck: ${usd(r.ficaPer)}`,
-          `Additional Federal Withholding Per Paycheck: ${usd(r.addlPer)}`,
-          `Estimated Net Per Paycheck: ${usd(r.netPer)}`,
-          `Estimated Net Annual: ${usd(r.netAnnual)}`,
+          `Gross Pay: ${usd(r.grossPer)}`,
+          `Federal Income Tax: ${usd(r.fedPer)}`,
+          `${selectedState?.name ?? 'State'} Income Tax: ${usd(r.statePer)}`,
+          `Social Security (6.2%): ${usd(r.ssPer)}`,
+          `Medicare (1.45%): ${usd(r.medicarePer)}`,
+          `Pre-Tax Deductions: ${usd(r.preTaxPer)}`,
+          `Post-Tax Deductions: ${usd(r.postTaxPer)}`,
+          `Net Pay: ${usd(r.netPer)}`,
+          `Annual Gross (Est.): ${usd(r.grossAnnual)}`,
+          `Annual Federal Tax (Est.): ${usd(r.fedAnnual)}`,
+          `Effective Federal Rate: ${r.effectiveFederalRate.toFixed(2)}%`,
         ]} />
       </CalcShell>
 
