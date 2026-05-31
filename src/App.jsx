@@ -842,6 +842,7 @@ function OvertimePage({ isDark }) {
     const annualIncomeForRates = adjustedMagi + totalOvertimePay;
     const selectedState = FEDERAL_STATE_OPTIONS.find((s) => s.code === stateCode);
     const stateName = selectedState?.name ?? '';
+    const stateCodeLabel = selectedState?.code ?? 'State';
     const federalRate = getOvertimeFederalRate(status, annualIncomeForRates);
     const stateRate = getOvertimeStateRate(stateName, annualIncomeForRates);
     const phaseStatus = adjustedMagi <= start
@@ -862,6 +863,7 @@ function OvertimePage({ isDark }) {
       stateSavings,
       totalSavings,
       federalRate,
+      stateCodeLabel,
       phaseStatus,
       adjustedMagi,
       monthly: totalSavings / 12,
@@ -974,7 +976,7 @@ function OvertimePage({ isDark }) {
               <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Premium Portion (gross)</td><td className="px-4 py-3">{usd2(r.premiumGross)}</td><td className="px-4 py-3">FLSA &quot;half-time&quot; overtime premium</td></tr>
               <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Deductible Overtime</td><td className="px-4 py-3">{usd2(r.deduction)}</td><td className="px-4 py-3">Qualified deduction after $12,500 cap and MAGI phase-out</td></tr>
               <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Federal Tax Savings</td><td className="px-4 py-3">{usd2(r.federalSavings)}</td><td className="px-4 py-3">Federal income tax saved</td></tr>
-              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">CA State Tax Savings</td><td className="px-4 py-3">{usd2(r.stateSavings)}</td><td className="px-4 py-3">State income tax saved</td></tr>
+              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">{r.stateCodeLabel} State Tax Savings</td><td className="px-4 py-3">{usd2(r.stateSavings)}</td><td className="px-4 py-3">State income tax saved</td></tr>
               <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3 font-semibold">Total Annual Savings</td><td className="px-4 py-3 font-semibold">{usd2(r.totalSavings)}</td><td className="px-4 py-3">Your total tax savings</td></tr>
             </tbody>
           </table>
