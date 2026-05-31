@@ -789,7 +789,7 @@ function OvertimePage({ isDark }) {
   const [weeksPerYear, setWeeksPerYear] = useState(52);
   const [stateCode, setStateCode] = useState('CA');
   const [taxYear, setTaxYear] = useState('2026');
-  const [showAdvanced, setShowAdvanced] = useState(true);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [otMultiplier, setOtMultiplier] = useState(1.5);
   const [k401, setK401] = useState(0);
   const [hsa, setHsa] = useState(0);
