@@ -23,3 +23,9 @@ body {
 .bg-white main h6.text-white {
   color: rgb(15 23 42) !important;
 }
+
+/* Route-change focus target: keep accessibility focus behavior, hide visual ring on H1. */
+main h1[tabindex="-1"]:focus {
+  outline: none;
+  box-shadow: none;
+}
