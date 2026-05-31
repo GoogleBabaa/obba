@@ -13,3 +13,13 @@ body,
 body {
   margin: 0;
 }
+
+/* Light mode fix: headings that were hard-coded as text-white should stay readable. */
+.bg-white main h1.text-white,
+.bg-white main h2.text-white,
+.bg-white main h3.text-white,
+.bg-white main h4.text-white,
+.bg-white main h5.text-white,
+.bg-white main h6.text-white {
+  color: rgb(15 23 42) !important;
+}
