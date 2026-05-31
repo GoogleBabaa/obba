@@ -508,14 +508,13 @@ function HomePage({ isDark }) {
 
 function OvertimePage({ isDark }) {
   const [status, setStatus] = useState('single');
-  const [hourly, setHourly] = useState(25);
-  const [otHours, setOtHours] = useState(5);
-  const [weeks, setWeeks] = useState(52);
   const [magi, setMagi] = useState(60000);
+  const [hourly, setHourly] = useState(25);
+  const [otHoursYearly, setOtHoursYearly] = useState(260);
 
   const r = useMemo(() => {
     const prem = num(hourly) * 0.5;
-    const annual = prem * num(otHours) * Math.max(1, Math.min(52, num(weeks)));
+    const annual = prem * Math.max(0, num(otHoursYearly));
     const cap = status === 'single' ? 12500 : 25000;
     const capped = Math.min(annual, cap);
     const start = status === 'single' ? 150000 : 300000;
@@ -524,7 +523,7 @@ function OvertimePage({ isDark }) {
     const deduction = num(magi) >= full ? 0 : Math.max(0, capped - reduction);
     const rate = rateFor(status, num(magi) + deduction);
     return { prem, annual, deduction, savings: deduction * rate, rate };
-  }, [status, hourly, otHours, weeks, magi]);
+  }, [status, magi, hourly, otHoursYearly]);
 
   useEffect(() => {
     document.title = 'Use the No Tax on Overtime Calculator to Maximize Earnings';
@@ -584,10 +583,9 @@ function OvertimePage({ isDark }) {
 
       <CalcShell title="No Tax on Overtime" isDark={isDark}>
         <Field label="Filing Status"><Select value={status} onChange={setStatus} options={[['single','Single'],['married','Married Filing Jointly']]} /></Field>
+        <Field label="MAGI (before overtime) $"><Input value={magi} onChange={setMagi} /></Field>
         <Field label="Hourly Rate ($)"><Input value={hourly} onChange={setHourly} /></Field>
-        <Field label="Weekly Overtime Hours"><Input value={otHours} onChange={setOtHours} /></Field>
-        <Field label="Weeks Per Year (1-52)"><Input value={weeks} onChange={setWeeks} /></Field>
-        <Field label="Modified Adjusted Gross Income (MAGI) (before overtime)"><Input value={magi} onChange={setMagi} /></Field>
+        <Field label="Overtime hours (yearly)"><Input value={otHoursYearly} onChange={setOtHoursYearly} /></Field>
         <Result isDark={isDark} lines={[`Overtime Premium/hr: ${usd(r.prem)}`, `Annual OT Premium: ${usd(r.annual)}`, `Final Deduction: ${usd(r.deduction)}`, `Tax Savings: ${usd(r.savings)} (${Math.round(r.rate*100)}%)`]} />
       </CalcShell>
       <img
