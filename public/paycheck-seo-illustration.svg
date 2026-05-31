@@ -1,0 +1,16 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#0F172A"/>
+  <rect x="64" y="64" width="1072" height="502" rx="24" fill="#111827" stroke="#334155"/>
+  <text x="96" y="150" fill="#F8FAFC" font-size="44" font-family="Arial" font-weight="700">Paycheck Calculator</text>
+  <text x="96" y="196" fill="#93C5FD" font-size="24" font-family="Arial">Estimate Gross-to-Net Pay with Federal + FICA Deductions</text>
+  <rect x="96" y="248" width="500" height="250" rx="16" fill="#0B1220" stroke="#475569"/>
+  <text x="126" y="295" fill="#A5F3FC" font-size="22" font-family="Arial" font-weight="700">Inputs</text>
+  <text x="126" y="336" fill="#E2E8F0" font-size="20" font-family="Arial">Annual Salary</text>
+  <text x="126" y="370" fill="#E2E8F0" font-size="20" font-family="Arial">Pay Frequency</text>
+  <text x="126" y="404" fill="#E2E8F0" font-size="20" font-family="Arial">Pre-tax Deductions</text>
+  <rect x="634" y="248" width="470" height="250" rx="16" fill="#052E2B" stroke="#0F766E"/>
+  <text x="664" y="295" fill="#99F6E4" font-size="22" font-family="Arial" font-weight="700">Output</text>
+  <text x="664" y="336" fill="#F1F5F9" font-size="20" font-family="Arial">Federal Tax / Paycheck</text>
+  <text x="664" y="370" fill="#F1F5F9" font-size="20" font-family="Arial">FICA / Paycheck</text>
+  <text x="664" y="404" fill="#F1F5F9" font-size="20" font-family="Arial">Estimated Net Pay</text>
+</svg>

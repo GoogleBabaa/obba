@@ -1,0 +1,11 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#111827"/>
+  <rect x="64" y="64" width="1072" height="502" rx="24" fill="#1F2937" stroke="#374151"/>
+  <text x="96" y="150" fill="#F9FAFB" font-size="44" font-family="Arial" font-weight="700">Texas Paycheck Calculator</text>
+  <text x="96" y="196" fill="#FCA5A5" font-size="24" font-family="Arial">No State Income Tax, Federal + FICA Estimate</text>
+  <rect x="96" y="248" width="1008" height="250" rx="16" fill="#0B1220" stroke="#4B5563"/>
+  <text x="126" y="304" fill="#FDE68A" font-size="24" font-family="Arial" font-weight="700">Texas Advantage</text>
+  <text x="126" y="346" fill="#E5E7EB" font-size="20" font-family="Arial">State Income Tax: $0</text>
+  <text x="126" y="382" fill="#E5E7EB" font-size="20" font-family="Arial">Federal Withholding + FICA still apply</text>
+  <text x="126" y="418" fill="#E5E7EB" font-size="20" font-family="Arial">Better net pay visibility for monthly budgeting</text>
+</svg>
