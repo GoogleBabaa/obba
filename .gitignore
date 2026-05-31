@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+playwright-*.png
+preview-check.png
+.DS_Store
+.vscode/
