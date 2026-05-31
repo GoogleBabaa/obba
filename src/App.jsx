@@ -128,6 +128,22 @@ function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
           </button>
         </div>
       </div>
+      {isMobileMenuOpen && (
+        <div className={`md:hidden border-t ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+          <div className="px-4 py-4 space-y-2">
+            {links.map(([label, to]) => (
+              <Link
+                key={label}
+                to={to}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-lg ${isDark ? 'text-slate-100 hover:bg-slate-800' : 'text-slate-800 hover:bg-slate-100'}`}
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
