@@ -38,6 +38,52 @@ const ADDITIONAL_MEDICARE_THRESHOLD = {
   married: 250000,
 };
 
+function upsertMeta(selector, create) {
+  let el = document.querySelector(selector);
+  if (!el) {
+    el = document.createElement('meta');
+    Object.entries(create).forEach(([k, v]) => el.setAttribute(k, v));
+    document.head.appendChild(el);
+  }
+  return el;
+}
+
+function setPageMeta({ title, description, canonicalPath }) {
+  document.title = title;
+
+  const desc = upsertMeta('meta[name="description"]', { name: 'description' });
+  desc.setAttribute('content', description);
+
+  const robots = upsertMeta('meta[name="robots"]', { name: 'robots' });
+  robots.setAttribute('content', 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1');
+
+  const ogTitle = upsertMeta('meta[property="og:title"]', { property: 'og:title' });
+  ogTitle.setAttribute('content', title);
+  const ogDescription = upsertMeta('meta[property="og:description"]', { property: 'og:description' });
+  ogDescription.setAttribute('content', description);
+  const ogType = upsertMeta('meta[property="og:type"]', { property: 'og:type' });
+  ogType.setAttribute('content', 'website');
+  const ogUrl = upsertMeta('meta[property="og:url"]', { property: 'og:url' });
+  ogUrl.setAttribute('content', `${window.location.origin}${canonicalPath}`);
+  const ogSite = upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name' });
+  ogSite.setAttribute('content', 'OBBBA Tax Calculators');
+
+  const twitterCard = upsertMeta('meta[name="twitter:card"]', { name: 'twitter:card' });
+  twitterCard.setAttribute('content', 'summary_large_image');
+  const twitterTitle = upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title' });
+  twitterTitle.setAttribute('content', title);
+  const twitterDescription = upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description' });
+  twitterDescription.setAttribute('content', description);
+
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    document.head.appendChild(canonical);
+  }
+  canonical.setAttribute('href', `${window.location.origin}${canonicalPath}`);
+}
+
 function ficaForAnnualWages(annualWages, status) {
   const wages = Math.max(0, num(annualWages));
   const ss = Math.min(wages, SOCIAL_SECURITY_WAGE_BASE_2026) * SOCIAL_SECURITY_RATE;
@@ -2106,6 +2152,102 @@ export default function App() {
   const location = useLocation();
 
   useEffect(() => {
+    const seoByPath = {
+      '/': {
+        title: 'OBBBA Tax Calculator 2026 - Overtime Deduction, Salary & Paycheck Calculator',
+        description: 'Estimate 2026 federal take-home pay with OBBBA Tax Calculators: no tax on overtime estimator, hourly to salary converter, paycheck calculator, Texas paycheck calculator, and Florida paycheck calculator.',
+        canonicalPath: '/',
+      },
+      '/overtime': {
+        title: 'Use the No Tax on Overtime Calculator to Maximize Earnings',
+        description: 'Use our No Tax on Overtime Calculator to estimate federal overtime deductions, understand FLSA overtime rules, plan take-home pay, and optimize tax strategy under 2025-2028 OBBBA limits.',
+        canonicalPath: '/overtime',
+      },
+      '/salary-calculator': {
+        title: 'Hourly to Salary Calculator to Estimate Your Annual Pay',
+        description: 'Convert hourly wages into annual salary with accurate projections, compare hourly vs salaried compensation, and plan yearly budget with confidence.',
+        canonicalPath: '/salary-calculator',
+      },
+      '/paycheck-calculator': {
+        title: 'Paycheck Calculator to Estimate Your Take-Home Pay',
+        description: 'Estimate paycheck take-home pay by modeling gross-to-net income, federal withholding, FICA deductions, and pre-tax adjustments for accurate monthly budgeting.',
+        canonicalPath: '/paycheck-calculator',
+      },
+      '/texas-paycheck-calculator': {
+        title: 'Texas Paycheck Calculator Estimate Your Take-Home Pay',
+        description: 'Estimate Texas take-home pay with federal withholding and FICA deductions, compare gross vs net income, and plan monthly payroll budget accurately.',
+        canonicalPath: '/texas-paycheck-calculator',
+      },
+      '/florida-paycheck-calculator': {
+        title: 'Florida Paycheck Calculator - See Your Earnings Instantly',
+        description: 'Estimate Florida paycheck net income instantly using federal tax withholding and FICA deductions, and plan monthly spending with accurate payroll projections.',
+        canonicalPath: '/florida-paycheck-calculator',
+      },
+      '/faq': {
+        title: 'FAQ - OBBBA Tax Calculators',
+        description: 'Read frequently asked questions for OBBBA Tax Calculators covering overtime, salary, paycheck, Texas, and Florida paycheck estimation workflows.',
+        canonicalPath: '/faq',
+      },
+      '/faqs': {
+        title: 'FAQ - OBBBA Tax Calculators',
+        description: 'Read frequently asked questions for OBBBA Tax Calculators covering overtime, salary, paycheck, Texas, and Florida paycheck estimation workflows.',
+        canonicalPath: '/faq',
+      },
+      '/about-us': {
+        title: 'About Us - OBBBA Tax Calculators',
+        description: 'Learn about OBBBA Tax Calculators, our estimate methodology, active tools, SEO-focused resources, and planning scope for federal payroll calculations.',
+        canonicalPath: '/about-us',
+      },
+      '/privacy-policy': {
+        title: 'Privacy Policy - OBBBA Tax Calculators',
+        description: 'Review the OBBBA Tax Calculators Privacy Policy explaining data use, security practices, calculator input handling, and privacy rights.',
+        canonicalPath: '/privacy-policy',
+      },
+      '/terms-conditions': {
+        title: 'Terms & Conditions - OBBBA Tax Calculators',
+        description: 'Read Terms & Conditions for OBBBA Tax Calculators including estimate limitations, liability terms, acceptable use, and legal scope.',
+        canonicalPath: '/terms-conditions',
+      },
+      '/contact-us': {
+        title: 'Contact Us - OBBBA Tax Calculators',
+        description: 'Contact OBBBA Tax Calculators for support, corrections, policy requests, and calculator feedback across overtime, salary, and paycheck tools.',
+        canonicalPath: '/contact-us',
+      },
+    };
+
+    const pageSeo = seoByPath[location.pathname];
+    if (!pageSeo) return;
+    setPageMeta(pageSeo);
+
+    const pageSchemaId = 'page-webpage-schema';
+    const oldPageSchema = document.getElementById(pageSchemaId);
+    if (oldPageSchema) oldPageSchema.remove();
+
+    const pageSchema = document.createElement('script');
+    pageSchema.type = 'application/ld+json';
+    pageSchema.id = pageSchemaId;
+    pageSchema.text = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: pageSeo.title,
+      description: pageSeo.description,
+      url: `${window.location.origin}${pageSeo.canonicalPath}`,
+      inLanguage: 'en-US',
+      isPartOf: {
+        '@type': 'WebSite',
+        name: 'OBBBA Tax Calculators',
+        url: `${window.location.origin}/`,
+      },
+    });
+    document.head.appendChild(pageSchema);
+
+    return () => {
+      const existing = document.getElementById(pageSchemaId);
+      if (existing) existing.remove();
+    };
+  }, [location.pathname]);
+
+  useEffect(() => {
     const breadcrumbId = 'breadcrumb-schema';
     const old = document.getElementById(breadcrumbId);
     if (old) old.remove();
@@ -2117,6 +2259,8 @@ export default function App() {
       '/paycheck-calculator': 'Paycheck Calculator',
       '/texas-paycheck-calculator': 'Texas Paycheck Calculator',
       '/florida-paycheck-calculator': 'Florida Paycheck Calculator',
+      '/faq': 'FAQ',
+      '/faqs': 'FAQ',
       '/about-us': 'About Us',
       '/privacy-policy': 'Privacy Policy',
       '/terms-conditions': 'Terms & Conditions',
