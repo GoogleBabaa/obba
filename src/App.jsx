@@ -2294,6 +2294,12 @@ export default function App() {
       {
         '@type': 'ListItem',
         position: 1,
+        name: 'Website',
+        item: `${window.location.origin}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
         name: 'Home',
         item: `${window.location.origin}/`,
       },
@@ -2302,7 +2308,7 @@ export default function App() {
     if (path !== '/') {
       items.push({
         '@type': 'ListItem',
-        position: 2,
+        position: 3,
         name: pageLabel,
         item: `${window.location.origin}${path}`,
       });
