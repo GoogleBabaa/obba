@@ -786,6 +786,7 @@ function OvertimePage({ isDark }) {
   const [magi, setMagi] = useState(60000);
   const [hourly, setHourly] = useState(25);
   const [weeklyOtHours, setWeeklyOtHours] = useState(5);
+  const [weeklyTips, setWeeklyTips] = useState(0);
   const [weeksPerYear, setWeeksPerYear] = useState(52);
   const [stateCode, setStateCode] = useState('CA');
   const [taxYear, setTaxYear] = useState('2026');
@@ -799,78 +800,112 @@ function OvertimePage({ isDark }) {
   const [dependents, setDependents] = useState(0);
 
   const usd2 = (v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Math.max(0, v));
-  const getOvertimeFederalRate = (filingStatus, annualIncome) => {
-    const income = Math.max(0, num(annualIncome));
-    if (filingStatus === 'married') {
-      if (income <= 50000) return 0.12;
-      if (income <= 100000) return 0.18;
-      if (income <= 200000) return 0.22;
-      return 0.24;
-    }
-    if (income <= 50000) return 0.12;
-    if (income <= 100000) return 0.212;
-    if (income <= 200000) return 0.24;
-    return 0.32;
+  const TAX_BRACKETS_2025 = {
+    single: [
+      { upTo: 11925, rate: 0.1 },
+      { upTo: 48475, rate: 0.12 },
+      { upTo: 103350, rate: 0.22 },
+      { upTo: 197300, rate: 0.24 },
+      { upTo: 250525, rate: 0.32 },
+      { upTo: 626350, rate: 0.35 },
+      { upTo: 1e15, rate: 0.37 },
+    ],
+    married: [
+      { upTo: 23850, rate: 0.1 },
+      { upTo: 96950, rate: 0.12 },
+      { upTo: 206700, rate: 0.22 },
+      { upTo: 394600, rate: 0.24 },
+      { upTo: 501050, rate: 0.32 },
+      { upTo: 751600, rate: 0.35 },
+      { upTo: 1e15, rate: 0.37 },
+    ],
   };
-  const getOvertimeStateRate = (stateName, annualIncome) => {
-    const income = Math.max(0, num(annualIncome));
-    if (stateName === 'California') {
-      if (income <= 50000) return 0.01;
-      if (income <= 100000) return 0.093;
-      if (income <= 200000) return 0.103;
-      return 0.113;
-    }
-    return getStateTaxRate(stateName, income) / 100;
+  const TAX_BRACKETS_2026_EST = {
+    single: [
+      { upTo: 12200, rate: 0.1 },
+      { upTo: 49500, rate: 0.12 },
+      { upTo: 105600, rate: 0.22 },
+      { upTo: 201500, rate: 0.24 },
+      { upTo: 255800, rate: 0.32 },
+      { upTo: 639800, rate: 0.35 },
+      { upTo: 1e15, rate: 0.37 },
+    ],
+    married: [
+      { upTo: 24400, rate: 0.1 },
+      { upTo: 99000, rate: 0.12 },
+      { upTo: 211200, rate: 0.22 },
+      { upTo: 403000, rate: 0.24 },
+      { upTo: 511600, rate: 0.32 },
+      { upTo: 767600, rate: 0.35 },
+      { upTo: 1e15, rate: 0.37 },
+    ],
+  };
+  const getStdDeduction = (year, filingStatus) => {
+    if (year === '2025') return filingStatus === 'married' ? 30000 : 15000;
+    if (year === '2026') return filingStatus === 'married' ? 31500 : 15750;
+    return filingStatus === 'married' ? 30000 : 15000;
+  };
+  const getMarginalRate = (year, filingStatus, taxableIncome) => {
+    const table = year === '2026' ? TAX_BRACKETS_2026_EST : TAX_BRACKETS_2025;
+    const row = table[filingStatus].find((b) => taxableIncome <= b.upTo);
+    return row?.rate ?? 0.37;
   };
 
   const r = useMemo(() => {
-    const annualOtHours = Math.max(0, num(weeklyOtHours)) * Math.max(1, Math.min(52, num(weeksPerYear)));
+    const weeksWorked = Math.max(1, Math.min(52, num(weeksPerYear)));
+    const annualOtHours = Math.max(0, num(weeklyOtHours)) * weeksWorked;
     const premiumPortionFactor = Math.max(0, num(otMultiplier) - 1);
+    const weeklyPremium = Math.max(0, num(weeklyOtHours)) * num(hourly) * premiumPortionFactor;
     const premiumHourly = num(hourly) * premiumPortionFactor;
     const regularHourly = num(hourly);
-    const premiumGross = premiumHourly * annualOtHours;
+    const premiumGross = weeklyPremium * weeksWorked;
     const regularPortion = regularHourly * annualOtHours;
     const totalOvertimePay = regularPortion + premiumGross;
-    const cap = status === 'married' ? 25000 : 12500;
-    const capped = Math.min(premiumGross, cap);
-    const start = status === 'married' ? 300000 : 150000;
-    const full = status === 'married' ? 550000 : 275000;
+    const tipsCap = status === 'married' ? 25000 : 12500;
+    const otCap = status === 'married' ? 25000 : 12500;
+    const phaseOutStart = status === 'married' ? 300000 : 150000;
+    const phaseOutFull = status === 'married' ? 550000 : 275000;
     const adjustments = Math.max(0, num(k401)) + Math.max(0, num(hsa)) + Math.max(0, num(ira)) + Math.max(0, num(studentLoanInterest)) + Math.max(0, num(dependentCareFsa));
     const adjustedMagi = Math.max(0, num(magi) - adjustments);
-    const reduction = adjustedMagi > start ? phaseReduction(adjustedMagi, start, 100) : 0;
-    const deduction = adjustedMagi >= full ? 0 : Math.max(0, capped - reduction);
-    const annualIncomeForRates = adjustedMagi + totalOvertimePay;
-    const selectedState = FEDERAL_STATE_OPTIONS.find((s) => s.code === stateCode);
-    const stateName = selectedState?.name ?? '';
-    const stateCodeLabel = selectedState?.code ?? 'State';
-    const federalRate = getOvertimeFederalRate(status, annualIncomeForRates);
-    const stateRate = getOvertimeStateRate(stateName, annualIncomeForRates);
-    const phaseStatus = adjustedMagi <= start
+    const annualTips = Math.max(0, num(weeklyTips)) * weeksWorked;
+    const cappedOt = Math.min(premiumGross, otCap);
+    const cappedTips = Math.min(annualTips, tipsCap);
+    const excessMagi = Math.max(0, adjustedMagi - phaseOutStart);
+    const reduction = Math.floor(excessMagi / 1000) * 100;
+    const deduction = adjustedMagi >= phaseOutFull ? 0 : Math.max(0, cappedOt - reduction);
+    const finalTipsDeduction = adjustedMagi >= phaseOutFull ? 0 : Math.max(0, cappedTips - reduction);
+    const taxableIncome = Math.max(0, adjustedMagi - getStdDeduction(taxYear, status));
+    const marginalRate = getMarginalRate(taxYear, status, taxableIncome);
+    const phaseStatus = adjustedMagi <= phaseOutStart
       ? 'No phase-out (within deduction range)'
-      : adjustedMagi >= full
+      : adjustedMagi >= phaseOutFull
         ? `Fully phased out (over income limit)`
         : `Partially phased out (${usd(deduction)} remaining)`;
-    const federalSavings = deduction * federalRate;
-    const stateSavings = deduction * stateRate;
-    const totalSavings = federalSavings + stateSavings;
+    const federalSavings = deduction * marginalRate;
+    const tipsSavings = finalTipsDeduction * marginalRate;
+    const totalSavings = federalSavings + tipsSavings;
     return {
+      weeksWorked,
+      weeklyPremium,
       annualOtHours,
       totalOvertimePay,
       regularPortion,
       premiumGross,
+      annualTips,
       deduction,
+      finalTipsDeduction,
       federalSavings,
-      stateSavings,
+      tipsSavings,
       totalSavings,
-      federalRate,
-      stateCodeLabel,
+      marginalRate,
       phaseStatus,
       adjustedMagi,
+      taxableIncome,
       monthly: totalSavings / 12,
       quarterly: totalSavings / 4,
       semiAnnual: totalSavings / 2,
     };
-  }, [status, magi, hourly, weeklyOtHours, weeksPerYear, stateCode, otMultiplier, k401, hsa, ira, studentLoanInterest, dependentCareFsa]);
+  }, [status, magi, hourly, weeklyOtHours, weeklyTips, weeksPerYear, taxYear, otMultiplier, k401, hsa, ira, studentLoanInterest, dependentCareFsa]);
 
   useEffect(() => {
     document.title = 'Use the No Tax on Overtime Calculator to Maximize Earnings';
@@ -936,12 +971,13 @@ function OvertimePage({ isDark }) {
         <Field label="Annual OT Hours (calculated)">
           <div className={`w-full rounded-xl p-3 border ${isDark ? 'bg-slate-800 border-slate-700 text-slate-200' : 'bg-slate-100 border-slate-300 text-slate-700'}`}>{r.annualOtHours.toFixed(2)} hrs</div>
         </Field>
+        <Field label="Weekly Tips ($)"><Input value={weeklyTips} onChange={setWeeklyTips} /></Field>
         <Field label="MAGI (before overtime) $"><Input value={magi} onChange={setMagi} /></Field>
         <Field label="State">
           <Select value={stateCode} onChange={setStateCode} options={FEDERAL_STATE_OPTIONS.filter(s => s.code).map((s) => [s.code, s.name])} />
         </Field>
         <Field label="Tax Year">
-          <Select value={taxYear} onChange={setTaxYear} options={[['2026', '2026'], ['2025', '2025'], ['2024', '2024']]} />
+          <Select value={taxYear} onChange={setTaxYear} options={[['2026', '2026'], ['2025', '2025']]} />
         </Field>
         <button
           type="button"
@@ -976,7 +1012,7 @@ function OvertimePage({ isDark }) {
               <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Premium Portion (gross)</td><td className="px-4 py-3">{usd2(r.premiumGross)}</td><td className="px-4 py-3">FLSA &quot;half-time&quot; overtime premium</td></tr>
               <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Deductible Overtime</td><td className="px-4 py-3">{usd2(r.deduction)}</td><td className="px-4 py-3">Qualified deduction after $12,500 cap and MAGI phase-out</td></tr>
               <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Federal Tax Savings</td><td className="px-4 py-3">{usd2(r.federalSavings)}</td><td className="px-4 py-3">Federal income tax saved</td></tr>
-              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">{r.stateCodeLabel} State Tax Savings</td><td className="px-4 py-3">{usd2(r.stateSavings)}</td><td className="px-4 py-3">State income tax saved</td></tr>
+              <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3">Tips Deduction Savings</td><td className="px-4 py-3">{usd2(r.tipsSavings)}</td><td className="px-4 py-3">Estimated savings from qualified tips deduction</td></tr>
               <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3 font-semibold">Total Annual Savings</td><td className="px-4 py-3 font-semibold">{usd2(r.totalSavings)}</td><td className="px-4 py-3">Your total tax savings</td></tr>
             </tbody>
           </table>
@@ -994,7 +1030,7 @@ function OvertimePage({ isDark }) {
               </tbody>
             </table>
             <p className={`mt-3 text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Phase-out status: {r.phaseStatus}</p>
-            <p className={`mt-1 text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Adjusted MAGI: {usd2(r.adjustedMagi)} | Federal rate used: {(r.federalRate * 100).toFixed(1)}%</p>
+            <p className={`mt-1 text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Adjusted MAGI: {usd2(r.adjustedMagi)} | Taxable income: {usd2(r.taxableIncome)} | Marginal rate used: {(r.marginalRate * 100).toFixed(1)}%</p>
           </div>
         </div>
       </CalcShell>
