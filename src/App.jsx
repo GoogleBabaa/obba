@@ -260,57 +260,57 @@ const LOCALITY_OPTIONS = [
 
 const FEDERAL_STATE_OPTIONS = [
   { name: 'Select State', rate: null, code: null },
-  { name: 'Alabama', rate: '2% â€“ 5%', code: 'AL' },
+  { name: 'Alabama', rate: '2% - 5%', code: 'AL' },
   { name: 'Alaska', rate: '0%', code: 'AK' },
-  { name: 'Arizona', rate: '2.55% â€“ 4.5%', code: 'AZ' },
-  { name: 'Arkansas', rate: '2% â€“ 5.75%', code: 'AR' },
-  { name: 'California', rate: '1% â€“ 13.3%', code: 'CA' },
+  { name: 'Arizona', rate: '2.55% - 4.5%', code: 'AZ' },
+  { name: 'Arkansas', rate: '2% - 5.75%', code: 'AR' },
+  { name: 'California', rate: '1% - 13.3%', code: 'CA' },
   { name: 'Colorado', rate: '4.4% flat', code: 'CO' },
-  { name: 'Connecticut', rate: '3% â€“ 6.99%', code: 'CT' },
-  { name: 'Delaware', rate: '0% â€“ 6.6%', code: 'DE' },
+  { name: 'Connecticut', rate: '3% - 6.99%', code: 'CT' },
+  { name: 'Delaware', rate: '0% - 6.6%', code: 'DE' },
   { name: 'Florida', rate: '0%', code: 'FL' },
-  { name: 'Georgia', rate: '0.55% â€“ 5.75%', code: 'GA' },
-  { name: 'Hawaii', rate: '1.4% â€“ 11%', code: 'HI' },
-  { name: 'Idaho', rate: '1% â€“ 5.8%', code: 'ID' },
+  { name: 'Georgia', rate: '0.55% - 5.75%', code: 'GA' },
+  { name: 'Hawaii', rate: '1.4% - 11%', code: 'HI' },
+  { name: 'Idaho', rate: '1% - 5.8%', code: 'ID' },
   { name: 'Illinois', rate: '4.95% flat', code: 'IL' },
   { name: 'Indiana', rate: '3.4% flat', code: 'IN' },
-  { name: 'Iowa', rate: '0.33% â€“ 6.5%', code: 'IA' },
-  { name: 'Kansas', rate: '5.7% â€“ 5.9%', code: 'KS' },
-  { name: 'Kentucky', rate: '2% â€“ 5%', code: 'KY' },
-  { name: 'Louisiana', rate: '2% â€“ 6%', code: 'LA' },
-  { name: 'Maine', rate: '5.8% â€“ 7.15%', code: 'ME' },
-  { name: 'Maryland', rate: '2% â€“ 5.75%', code: 'MD' },
+  { name: 'Iowa', rate: '0.33% - 6.5%', code: 'IA' },
+  { name: 'Kansas', rate: '5.7% - 5.9%', code: 'KS' },
+  { name: 'Kentucky', rate: '2% - 5%', code: 'KY' },
+  { name: 'Louisiana', rate: '2% - 6%', code: 'LA' },
+  { name: 'Maine', rate: '5.8% - 7.15%', code: 'ME' },
+  { name: 'Maryland', rate: '2% - 5.75%', code: 'MD' },
   { name: 'Massachusetts', rate: '5% flat', code: 'MA' },
   { name: 'Michigan', rate: '4.25% flat', code: 'MI' },
-  { name: 'Minnesota', rate: '5.35% â€“ 10.85%', code: 'MN' },
-  { name: 'Mississippi', rate: '0% â€“ 5%', code: 'MS' },
-  { name: 'Missouri', rate: '1.5% â€“ 5.3%', code: 'MO' },
-  { name: 'Montana', rate: '1% â€“ 10.84%', code: 'MT' },
-  { name: 'Nebraska', rate: '2.84% â€“ 8.84%', code: 'NE' },
+  { name: 'Minnesota', rate: '5.35% - 10.85%', code: 'MN' },
+  { name: 'Mississippi', rate: '0% - 5%', code: 'MS' },
+  { name: 'Missouri', rate: '1.5% - 5.3%', code: 'MO' },
+  { name: 'Montana', rate: '1% - 10.84%', code: 'MT' },
+  { name: 'Nebraska', rate: '2.84% - 8.84%', code: 'NE' },
   { name: 'Nevada', rate: '0%', code: 'NV' },
   { name: 'New Hampshire', rate: '0% (wages only)', code: 'NH' },
-  { name: 'New Jersey', rate: '1.4% â€“ 10.75%', code: 'NJ' },
-  { name: 'New Mexico', rate: '1.7% â€“ 5.9%', code: 'NM' },
-  { name: 'New York', rate: '4% â€“ 10.9%', code: 'NY' },
+  { name: 'New Jersey', rate: '1.4% - 10.75%', code: 'NJ' },
+  { name: 'New Mexico', rate: '1.7% - 5.9%', code: 'NM' },
+  { name: 'New York', rate: '4% - 10.9%', code: 'NY' },
   { name: 'North Carolina', rate: '4.99% flat', code: 'NC' },
-  { name: 'North Dakota', rate: '1.1% â€“ 2.9%', code: 'ND' },
-  { name: 'Ohio', rate: '0% â€“ 5.75%', code: 'OH' },
-  { name: 'Oklahoma', rate: '0.5% â€“ 5.85%', code: 'OK' },
-  { name: 'Oregon', rate: '4.75% â€“ 9.9%', code: 'OR' },
+  { name: 'North Dakota', rate: '1.1% - 2.9%', code: 'ND' },
+  { name: 'Ohio', rate: '0% - 5.75%', code: 'OH' },
+  { name: 'Oklahoma', rate: '0.5% - 5.85%', code: 'OK' },
+  { name: 'Oregon', rate: '4.75% - 9.9%', code: 'OR' },
   { name: 'Pennsylvania', rate: '3.07% flat', code: 'PA' },
-  { name: 'Rhode Island', rate: '3.75% â€“ 5.99%', code: 'RI' },
-  { name: 'South Carolina', rate: '0% â€“ 7%', code: 'SC' },
+  { name: 'Rhode Island', rate: '3.75% - 5.99%', code: 'RI' },
+  { name: 'South Carolina', rate: '0% - 7%', code: 'SC' },
   { name: 'South Dakota', rate: '0%', code: 'SD' },
   { name: 'Tennessee', rate: '0%', code: 'TN' },
   { name: 'Texas', rate: '0%', code: 'TX' },
   { name: 'Utah', rate: '4.65% flat', code: 'UT' },
-  { name: 'Vermont', rate: '3.55% â€“ 8.75%', code: 'VT' },
-  { name: 'Virginia', rate: '2% â€“ 5.75%', code: 'VA' },
+  { name: 'Vermont', rate: '3.55% - 8.75%', code: 'VT' },
+  { name: 'Virginia', rate: '2% - 5.75%', code: 'VA' },
   { name: 'Washington', rate: '0%', code: 'WA' },
-  { name: 'West Virginia', rate: '3% â€“ 6.5%', code: 'WV' },
-  { name: 'Wisconsin', rate: '3.54% â€“ 7.65%', code: 'WI' },
+  { name: 'West Virginia', rate: '3% - 6.5%', code: 'WV' },
+  { name: 'Wisconsin', rate: '3.54% - 7.65%', code: 'WI' },
   { name: 'Wyoming', rate: '0%', code: 'WY' },
-  { name: 'District of Columbia', rate: '4% â€“ 10.75%', code: 'DC' },
+  { name: 'District of Columbia', rate: '4% - 10.75%', code: 'DC' },
 ];
 
 function upsertMeta(selector, create) {
@@ -984,7 +984,7 @@ function OvertimePage({ isDark }) {
           onClick={() => setShowAdvanced((v) => !v)}
           className={`w-full rounded-xl border px-4 py-2 text-left text-sm ${isDark ? 'border-slate-700 bg-slate-800 text-slate-200' : 'border-slate-300 bg-slate-100 text-slate-700'}`}
         >
-          {showAdvanced ? 'Hide Advanced Options â–²' : 'Show Advanced Options â–¼'}
+          {showAdvanced ? 'Hide Advanced Options ▲' : 'Show Advanced Options ▼'}
         </button>
         {showAdvanced && (
           <>
@@ -2619,7 +2619,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2 text-white">Does my filing status change how much I am paid in Florida?</h3>
-                <p>Yes, your filing statusâ€”such as Single, Married Filing Jointly, or Head of Householdâ€”directly impacts your federal income tax brackets and your standard deduction. When using a paycheck calculator florida, selecting the correct status ensures that the tool applies the correct IRS withholding tables to your specific situation.</p>
+                <p>Yes, your filing status-such as Single, Married Filing Jointly, or Head of Household-directly impacts your federal income tax brackets and your standard deduction. When using a paycheck calculator florida, selecting the correct status ensures that the tool applies the correct IRS withholding tables to your specific situation.</p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2 text-white">Why does my pay frequency matter when using a florida paycheck calculator?</h3>
@@ -3062,6 +3062,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
