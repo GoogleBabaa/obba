@@ -1924,6 +1924,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
   const [grossPay, setGrossPay] = useState('');
   const [rateType, setRateType] = useState('');
   const [payFreq, setPayFreq] = useState('');
+  const [hoursPerDay, setHoursPerDay] = useState('8');
   const [preTaxDeduction, setPreTaxDeduction] = useState(0);
 
   const r = useMemo(() => {
@@ -1931,7 +1932,8 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
 
     if (isZeroStateTaxCalc) {
       const gross = Math.max(0, num(grossPay));
-      const annualGross = rateType === 'hourly' ? gross * 2080 : gross;
+      const hours = Math.max(0, num(hoursPerDay));
+      const annualGross = rateType === 'hourly' ? gross * hours * 260 : gross;
       const statusKey = status || 'single';
       const standardDeduction = STANDARD_DEDUCTION_2026[statusKey] ?? 16100;
       const taxableAnnual = Math.max(0, annualGross - standardDeduction);
@@ -2007,7 +2009,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       netPer: netAnnual / periods,
       netAnnual,
     };
-  }, [isZeroStateTaxCalc, status, grossPay, rateType, payFreq, preTaxDeduction, locationZip]);
+  }, [isZeroStateTaxCalc, status, grossPay, rateType, payFreq, preTaxDeduction, locationZip, hoursPerDay]);
 
   useEffect(() => {
     let title = `${stateName} Paycheck Calculator`;
@@ -2104,6 +2106,11 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
         <Field label="Rate Type">
           <Select value={rateType} onChange={setRateType} options={[['', 'Select…'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
         </Field>
+        {isZeroStateTaxCalc && rateType === 'hourly' && (
+          <Field label="Hours per day">
+            <Input value={hoursPerDay} onChange={setHoursPerDay} />
+          </Field>
+        )}
         {isZeroStateTaxCalc && (
           <Field label="Location (ZIP)">
             <Input value={locationZip} onChange={setLocationZip} />
