@@ -1203,39 +1203,68 @@ function OvertimePage({ isDark }) {
 
 function SalaryCalculatorPage({ isDark }) {
   const [payYear, setPayYear] = useState('2026');
-  const [grade, setGrade] = useState('GS-13');
-  const [step, setStep] = useState('6');
-  const [localityKey, setLocalityKey] = useState('dcb');
-  const [raisePct, setRaisePct] = useState(0);
+  const [payFrequency, setPayFrequency] = useState('monthly');
+  const [paidType, setPaidType] = useState('salary');
+  const [grossPayMethod, setGrossPayMethod] = useState('perYear');
+  const [amount, setAmount] = useState('0');
+  const [otType, setOtType] = useState('overtime');
+  const [otHours, setOtHours] = useState('0');
+  const [otAmount, setOtAmount] = useState('0');
 
   const r = useMemo(() => {
-    const table = GS_PAY_TABLE[Number(payYear)] ?? GS_PAY_TABLE[2026];
-    const stepIdx = Math.max(1, Math.min(10, num(step))) - 1;
-    const basePay = table?.[grade]?.[stepIdx] ?? 0;
-    const locality = LOCALITY_OPTIONS.find((x) => x[0] === localityKey);
-    const localityPct = locality ? locality[2] : 0;
-    const localityAdj = Math.round(basePay * localityPct);
-    const uncappedAnnual = basePay + localityAdj;
-    const cappedAnnual = Math.min(uncappedAnnual, EXECUTIVE_LEVEL_IV_CAP);
-    const raise = Math.max(0, Math.min(10, num(raisePct))) / 100;
-    const annualWithRaise = Math.min(cappedAnnual * (1 + raise), EXECUTIVE_LEVEL_IV_CAP);
+    const periods =
+      payFrequency === 'daily' ? 260
+      : payFrequency === 'weekly' ? 52
+      : payFrequency === 'biweekly' ? 26
+      : payFrequency === 'semimonthly' ? 24
+      : payFrequency === 'monthly' ? 12
+      : 1;
+    const inputAmount = Math.max(0, num(amount));
+    const overtimeHours = Math.max(0, num(otHours));
+    const overtimeAmount = Math.max(0, num(otAmount));
+    const overtimeMultiplier = otType === 'doubletime' ? 2 : 1.5;
+    const basePerPeriod =
+      grossPayMethod === 'perPeriod'
+        ? inputAmount
+        : inputAmount / periods;
+    const annualBase = basePerPeriod * periods;
+
+    let overtimePerPeriod = 0;
+    if (paidType === 'hourly' && overtimeHours > 0) {
+      const hourlyRate = grossPayMethod === 'perPeriod'
+        ? inputAmount
+        : inputAmount / (periods * 8);
+      overtimePerPeriod += hourlyRate * overtimeMultiplier * overtimeHours;
+    }
+    overtimePerPeriod += overtimeAmount;
+    const annualOvertime = overtimePerPeriod * periods;
+    const grossAnnual = annualBase + annualOvertime;
+    const grossPerPeriod = grossAnnual / periods;
+    const taxableAnnual = Math.max(0, grossAnnual - STANDARD_DEDUCTION_2026.single);
+    const federalAnnual = progressiveTax(taxableAnnual, BRACKETS.single);
+    const ssAnnual = Math.min(grossAnnual, SOCIAL_SECURITY_WAGE_BASE_2026) * SOCIAL_SECURITY_RATE;
+    const medicareAnnual = grossAnnual * MEDICARE_RATE + Math.max(0, grossAnnual - ADDITIONAL_MEDICARE_THRESHOLD.single) * ADDITIONAL_MEDICARE_RATE;
+    const deductionsAnnual = federalAnnual + ssAnnual + medicareAnnual;
+    const netAnnual = grossAnnual - deductionsAnnual;
 
     return {
-      basePay,
-      localityPct,
-      localityAdj,
-      uncappedAnnual,
-      cappedAnnual,
-      annualWithRaise,
-      biweekly: annualWithRaise / PAY_PERIODS,
-      hourly: annualWithRaise / HOURS_PER_YEAR,
+      periods,
+      grossPerPeriod,
+      grossAnnual,
+      annualBase,
+      annualOvertime,
+      federalAnnual,
+      ssAnnual,
+      medicareAnnual,
+      netAnnual,
+      netPerPeriod: netAnnual / periods,
     };
-  }, [payYear, grade, step, localityKey, raisePct]);
+  }, [payFrequency, paidType, grossPayMethod, amount, otType, otHours, otAmount]);
 
   useEffect(() => {
-    document.title = 'Federal Salary Calculator (GS Pay) - Estimate Annual, Biweekly & Hourly Pay';
+    document.title = 'Federal Salary Calculator - Estimate Annual and Per-Pay Earnings';
 
-    const metaDescriptionContent = 'Federal Salary Calculator with GS grade, step, locality adjustment, and what-if raise. Estimate base pay, annual total, biweekly pay, and hourly rate with the federal pay cap.';
+    const metaDescriptionContent = 'Federal Salary Calculator with pay frequency, paid type, gross pay method, overtime type, and 2026 pay-year selection.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -1254,7 +1283,7 @@ function SalaryCalculatorPage({ isDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Federal Salary Calculator (GS Pay) - Estimate Annual, Biweekly & Hourly Pay',
+      name: 'Federal Salary Calculator - Estimate Annual and Per-Pay Earnings',
       description: metaDescriptionContent,
       url: `${window.location.origin}/salary-calculator`,
       mainEntity: {
@@ -1280,38 +1309,47 @@ function SalaryCalculatorPage({ isDark }) {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8">
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
-        <h1 className="text-3xl font-bold mb-4 text-white">Federal Salary Calculator (GS Pay)</h1>
+        <h1 className="text-3xl font-bold mb-4 text-white">Federal Salary Calculator</h1>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Model federal pay using exact GS inputs: pay year, grade, step, locality area, and optional what-if raise scenario.</p>
-          <p>Results show base annual pay, locality adjustment, capped annual pay, biweekly paycheck, and hourly rate.</p>
+          <p>Estimate federal salary using your pay frequency, paid type, gross pay method, overtime details, and pay year.</p>
+          <p>Results show annual gross, overtime impact, federal/FICA deductions, and net pay per period.</p>
         </div>
       </article>
 
       <CalcShell title="Federal Salary" isDark={isDark}>
-        <Field label="Pay Year"><Select value={payYear} onChange={setPayYear} options={[['2026', '2026'], ['2025', '2025']]} /></Field>
-        <Field label="GS Grade"><Select value={grade} onChange={setGrade} options={Array.from({ length: 15 }, (_, i) => [`GS-${i + 1}`, `GS-${i + 1}`])} /></Field>
-        <Field
-          label="Step (Within GS Grade)"
-          hint="Step is your pay level within the selected GS grade (Step 1 to Step 10). Higher step means higher base pay."
-        >
-          <Select value={step} onChange={setStep} options={Array.from({ length: 10 }, (_, i) => [`${i + 1}`, `Step ${i + 1}`])} />
+        <Field label="Pay Frequency">
+          <Select value={payFrequency} onChange={setPayFrequency} options={[['daily', 'Daily'], ['weekly', 'Weekly'], ['biweekly', 'Bi-Weekly'], ['semimonthly', 'Semi-Monthly'], ['monthly', 'Monthly'], ['annual', 'Annual']]} />
         </Field>
-        <Field label="Locality Area">
-          <select value={localityKey} onChange={(e) => setLocalityKey(e.target.value)} className="w-full rounded-xl p-3 border bg-white border-slate-300 text-slate-900">
-            {LOCALITY_OPTIONS.map(([key, label]) => <option key={key} value={key}>{label}</option>)}
-          </select>
+        <Field label="Type (How are you paid?)">
+          <Select value={paidType} onChange={setPaidType} options={[['hourly', 'Hourly'], ['salary', 'Salary']]} />
         </Field>
-        <Field label="What-if Raise Scenario (%)">
-          <input type="number" min="0" max="10" step="0.1" value={raisePct} onChange={(e) => setRaisePct(e.target.value)} className="w-full rounded-xl p-3 border bg-white border-slate-300 text-slate-900" />
+        <Field label="Gross Pay Method">
+          <Select value={grossPayMethod} onChange={setGrossPayMethod} options={[['perYear', 'Pay Per Year'], ['perPeriod', 'Pay Per Period']]} />
+        </Field>
+        <Field label="Amount ($)">
+          <Input value={amount} onChange={setAmount} />
+        </Field>
+        <Field label="Overtime Type">
+          <Select value={otType} onChange={setOtType} options={[['overtime', 'Overtime'], ['doubletime', 'Double Time']]} />
+        </Field>
+        <Field label="Overtime Hours">
+          <Input value={otHours} onChange={setOtHours} />
+        </Field>
+        <Field label="Overtime Amount ($)">
+          <Input value={otAmount} onChange={setOtAmount} />
+        </Field>
+        <Field label="Pay Year">
+          <Select value={payYear} onChange={setPayYear} options={[['2026', '2026']]} />
         </Field>
         <Result isDark={isDark} lines={[
-          `Base Annual (${grade} Step ${step}): ${usd(r.basePay)}`,
-          `Locality Adjustment (+${(r.localityPct * 100).toFixed(2)}%): ${usd(r.localityAdj)}`,
-          `Total Annual (Before Cap): ${usd(r.uncappedAnnual)}`,
-          `Total Annual (After Cap): ${usd(r.cappedAnnual)}`,
-          `Total Annual (After Raise): ${usd(r.annualWithRaise)}`,
-          `Biweekly Pay: ${usd(r.biweekly)}`,
-          `Hourly Rate: ${usd(r.hourly)}/hr`,
+          `Annual Base Pay: ${usd(r.annualBase)}`,
+          `Annual Overtime Pay: ${usd(r.annualOvertime)}`,
+          `Annual Gross Pay: ${usd(r.grossAnnual)}`,
+          `Federal Income Tax (Annual): ${usd(r.federalAnnual)}`,
+          `Social Security (Annual): ${usd(r.ssAnnual)}`,
+          `Medicare (Annual): ${usd(r.medicareAnnual)}`,
+          `Annual Net Pay: ${usd(r.netAnnual)}`,
+          `Per-Paycheck Net Pay: ${usd(r.netPerPeriod)}`,
         ]} />
       </CalcShell>
 
@@ -1598,7 +1636,7 @@ function PaycheckCalculatorPage({ isDark }) {
           <Input value={grossPay} onChange={setGrossPay} />
         </Field>
         <Field label="Rate Type">
-          <Select value={rateType} onChange={setRateType} options={[['', 'Select…'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
+          <Select value={rateType} onChange={setRateType} options={[['', 'Select...'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
         </Field>
         {rateType === 'hourly' && (
           <Field label="Hours per day">
@@ -1613,7 +1651,7 @@ function PaycheckCalculatorPage({ isDark }) {
           />
         </Field>
         <Field label="Pay Frequency" hint="Select how often you're paid">
-          <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select…'], ['daily', 'Daily (260×/yr)'], ['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
+          <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select...'], ['daily', 'Daily (260x/yr)'], ['weekly', 'Weekly (52x/yr)'], ['biweekly', 'Bi-Weekly (26x/yr)'], ['semimonthly', 'Semi-Monthly (24x/yr)'], ['monthly', 'Monthly (12x/yr)'], ['annual', 'Annual']]} />
         </Field>
         <Field label="Filing Status" hint="Select for Federal tax calculation">
           <Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly']]} />
@@ -2077,7 +2115,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
           <Input value={grossPay} onChange={setGrossPay} />
         </Field>
         <Field label="Rate Type">
-          <Select value={rateType} onChange={setRateType} options={[['', 'Select…'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
+          <Select value={rateType} onChange={setRateType} options={[['', 'Select...'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
         </Field>
         {isZeroStateTaxCalc && rateType === 'hourly' && (
           <Field label="Hours per day">
@@ -2090,10 +2128,10 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
           </Field>
         )}
         <Field label="Pay Frequency" hint="Select how often you're paid">
-          <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select…'], ['daily', 'Daily (260×/yr)'], ['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
+          <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select...'], ['daily', 'Daily (260x/yr)'], ['weekly', 'Weekly (52x/yr)'], ['biweekly', 'Bi-Weekly (26x/yr)'], ['semimonthly', 'Semi-Monthly (24x/yr)'], ['monthly', 'Monthly (12x/yr)'], ['annual', 'Annual']]} />
         </Field>
         <Field label="Filing Status" hint="Select for Federal tax calculation">
-          <Select value={status} onChange={setStatus} options={isZeroStateTaxCalc ? [['single', 'Single'], ['married', 'Married Filing Jointly']] : [['', 'Select…'], ['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
+          <Select value={status} onChange={setStatus} options={isZeroStateTaxCalc ? [['single', 'Single'], ['married', 'Married Filing Jointly']] : [['', 'Select...'], ['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
         </Field>
         {!isZeroStateTaxCalc && (
           <Field label="Pre-tax Deduction Per Paycheck ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
@@ -3062,6 +3100,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
