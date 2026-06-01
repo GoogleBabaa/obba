@@ -1481,7 +1481,6 @@ function SalaryCalculatorPage({ isDark }) {
 function PaycheckCalculatorPage({ isDark }) {
   const [status, setStatus] = useState('single');
   const [stateCode, setStateCode] = useState('');
-  const [locationZip, setLocationZip] = useState('32003');
   const [rateType, setRateType] = useState('');
   const [payFreq, setPayFreq] = useState('');
   const [grossPay, setGrossPay] = useState('');
@@ -1612,9 +1611,6 @@ function PaycheckCalculatorPage({ isDark }) {
             onChange={setStateCode}
             options={FEDERAL_STATE_OPTIONS.map((s) => [s.code ?? '', s.code ? `${s.name} (${s.rate})` : 'Federal taxes only / Select a state'])}
           />
-        </Field>
-        <Field label="Location (ZIP)">
-          <Input value={locationZip} onChange={setLocationZip} />
         </Field>
         <Field label="Pay Frequency" hint="Select how often you're paid">
           <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select…'], ['daily', 'Daily (260×/yr)'], ['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
