@@ -1134,7 +1134,7 @@ function OvertimePage({ isDark }) {
           <p>Double-check your entries before hitting the calculate button to avoid errors. Even a small mistake in your hourly rate can lead to a significant difference in your projected net pay. Accuracy at this stage is the foundation of effective financial planning.</p>
           <blockquote className={`border-l-4 pl-4 italic ${isDark ? 'border-cyan-500 text-slate-200' : 'border-cyan-600 text-slate-800'}`}>
             <p>&quot;Financial peace of mind comes from knowing exactly what you earn and how it is taxed.&quot;</p>
-            <p>Ã¢â‚¬â€ Financial Planning Expert</p>
+            <p>– Financial Planning Expert</p>
           </blockquote>
           <h3 className="text-xl font-semibold pt-2 text-white">Understanding the Calculation Logic Behind the Tool</h3>
           <p>The logic behind a no tax on overtime calculator is designed to mirror federal withholding requirements for supplemental wages. Because overtime is often treated as supplemental income, the tool applies specific tax rates that differ from your regular salary. It effectively separates your base pay from your extra hours to show how federal taxes impact your bottom line.</p>
@@ -1239,7 +1239,7 @@ function OvertimePage({ isDark }) {
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">Why should I use a no tax on overtime tax return calculator at the end of the year?</h3>
-            <p>Using a no tax on overtime tax return calculator is essential for interpreting your total annual liability. Because overtime is often withheld at a higher &quot;supplemental&quot; rate, you might find that youÃ¢â‚¬â„¢ve overpaid the IRS. This tool helps you determine if you are due a significant refund or if you need to adjust your withholdings to avoid a surprise bill when you file with TurboTax or H&amp;R Block.</p>
+            <p>Using a no tax on overtime tax return calculator is essential for interpreting your total annual liability. Because overtime is often withheld at a higher &quot;supplemental&quot; rate, you might find that you've overpaid the IRS. This tool helps you determine if you are due a significant refund or if you need to adjust your withholdings to avoid a surprise bill when you file with TurboTax or H&amp;R Block.</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">Does the Fair Labor Standards Act change how my extra hours are taxed?</h3>
@@ -1668,7 +1668,7 @@ function SalaryCalculatorPage({ isDark }) {
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">Does an hourly to salary calculator account for taxes and health insurance?</h3>
-            <p>Most calculators provide your &quot;gross&quot; income, which is the total amount before deductions. To understand your actual take-home pay, you need to consider federal and state taxes, as well as deductions for health insurance and 401(k) contributions. For a realistic budget, itÃ¢â‚¬â„¢s a good idea to use the results from a yearly salary calculator and then subtract these costs to see your net disposable income.</p>
+            <p>Most calculators provide your &quot;gross&quot; income, which is the total amount before deductions. To understand your actual take-home pay, you need to consider federal and state taxes, as well as deductions for health insurance and 401(k) contributions. For a realistic budget, it's a good idea to use the results from a yearly salary calculator and then subtract these costs to see your net disposable income.</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">How should I handle unpaid holidays and vacation time in my calculations?</h3>
@@ -2040,7 +2040,7 @@ function PaycheckCalculatorPage({ isDark }) {
 
           <h3 className="text-xl font-semibold pt-2 text-white">Limitations of Online Estimation Tools</h3>
           <p>While digital resources are incredibly helpful, it is important to remember that they provide estimates rather than official payroll documents. Factors such as mid-year tax law changes or specific employer payroll cycles can influence your actual take-home pay.</p>
-          <p>Always treat the results from an adp paycheck calculator or similar platforms as a guide for your planning. For the most precise information regarding your specific compensation, consult your companyÃ¢â‚¬â„¢s human resources department or your official pay stubs.</p>
+          <p>Always treat the results from an adp paycheck calculator or similar platforms as a guide for your planning. For the most precise information regarding your specific compensation, consult your company's human resources department or your official pay stubs.</p>
         </div>
       </article>
 
@@ -2125,7 +2125,7 @@ function PaycheckCalculatorPage({ isDark }) {
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">How do I get the most accurate results from an hourly paycheck calculator?</h3>
-            <p>To ensure precision, grab your most recent pay stub from a payroll provider like Workday or Gusto. You will need to input your specific hourly wage and the total hours worked. An hourly paycheck calculator also requires you to select your correct filing status and the number of tax allowances youÃ¢â‚¬â„¢ve claimed to provide the most realistic estimate of your earnings.</p>
+            <p>To ensure precision, grab your most recent pay stub from a payroll provider like Workday or Gusto. You will need to input your specific hourly wage and the total hours worked. An hourly paycheck calculator also requires you to select your correct filing status and the number of tax allowances you've claimed to provide the most realistic estimate of your earnings.</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">What are FICA taxes, and why are they taken out of my check?</h3>
@@ -2137,7 +2137,7 @@ function PaycheckCalculatorPage({ isDark }) {
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">Is the ADP paycheck calculator better than other online estimation tools?</h3>
-            <p>The ADP paycheck calculator is highly regarded for its accuracy and its ability to handle complex state-specific tax laws. While many online tools offer quick estimates, a reliable paycheck calculator from an established industry leader like ADP or Paychex is often more comprehensive. However, always remember that these tools provide estimates; for official figures, you should always consult your employerÃ¢â‚¬â„¢s HR department or a certified tax professional.</p>
+            <p>The ADP paycheck calculator is highly regarded for its accuracy and its ability to handle complex state-specific tax laws. While many online tools offer quick estimates, a reliable paycheck calculator from an established industry leader like ADP or Paychex is often more comprehensive. However, always remember that these tools provide estimates; for official figures, you should always consult your employer's HR department or a certified tax professional.</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">What are some examples of voluntary benefit deductions?</h3>
@@ -2992,7 +2992,7 @@ function PrivacyPolicyPage({ isDark }) {
           <p><strong>9. Security Measures</strong></p>
           <p>We apply reasonable safeguards to protect website systems and data flows. However, no internet-based platform can guarantee absolute security.</p>
 
-          <p><strong>10. ChildrenÃ¢â‚¬â„¢s Privacy</strong></p>
+          <p><strong>10. Children's Privacy</strong></p>
           <p>This website is not directed to children under 13. If you believe a child provided personal information, contact us so we can review and remove it where appropriate.</p>
 
           <p><strong>11. International Access</strong></p>
@@ -3368,7 +3368,7 @@ export default function App() {
             </div>
           </div>
           <div className={`border-t ${isDark ? 'border-slate-800' : 'border-slate-300'} pt-8 text-center text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            <p>Â© 2026 OBBBA Tax Calculators. This educational tool is provided for informational purposes only.</p>
+            <p>© 2026 OBBBA Tax Calculators. This educational tool is provided for informational purposes only.</p>
           </div>
         </div>
       </footer>
