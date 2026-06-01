@@ -2246,6 +2246,23 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       netAnnual,
     };
   }, [isZeroStateTaxCalc, status, grossPay, rateType, payFreq, preTaxDeduction, locationZip, hoursPerDay]);
+  const stateGraphGross = Math.max(0, r.grossPerPeriod ?? 0);
+  const stateGraphTaxes = Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.stateAnnual ? (r.stateAnnual / (r.periods || 1)) : 0));
+  const stateGraphTakeHome = Math.max(0, r.perPeriodTakeHome ?? 0);
+  const stateGraphItems = [
+    { key: 'gross', label: 'Gross Pay', value: stateGraphGross, color: '#0ea5e9' },
+    { key: 'taxes', label: 'Taxes', value: stateGraphTaxes, color: '#f59e0b' },
+    { key: 'takehome', label: 'Take Home', value: stateGraphTakeHome, color: '#10b981' },
+  ];
+  const stateGraphTotal = Math.max(stateGraphItems.reduce((sum, item) => sum + item.value, 0), 1);
+  const stateCircumference = 2 * Math.PI * 42;
+  let stateOffset = 0;
+  const stateGraphSlices = stateGraphItems.map((item) => {
+    const dash = (item.value / stateGraphTotal) * stateCircumference;
+    const slice = { ...item, dash, offset: stateOffset };
+    stateOffset += dash;
+    return slice;
+  });
 
   useEffect(() => {
     let title = `${stateName} Paycheck Calculator`;
@@ -2362,29 +2379,62 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
           <Field label="Pre-tax Deduction Per Paycheck ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
         )}
         {isZeroStateTaxCalc ? (
-          <Result
-            isDark={isDark}
-            lines={[
-              `Where is your money going?`,
-              `Gross Paycheck: ${usd(r.grossPerPeriod)}`,
-              `Taxes: ${r.taxesPct.toFixed(2)}%  ${usd(r.federalPerPeriod)}`,
-              `Federal Income: ${r.taxesPct.toFixed(2)}%  ${usd(r.federalPerPeriod)}`,
-              `State Income: 0.00%  ${usd(0)}`,
-              `Local Income: 0.00%  ${usd(0)}`,
-              `FICA and State Insurance Taxes: ${r.ficaPct.toFixed(2)}%  ${usd(r.ficaPerPeriod)}`,
-              `Social Security: 6.20%  ${usd(r.socialSecurityPerPeriod)}`,
-              `Medicare: 1.45%  ${usd(r.medicarePerPeriod)}`,
-              `State Disability Insurance Tax: 0.00%  ${usd(0)}`,
-              `State Unemployment Insurance Tax: 0.00%  ${usd(0)}`,
-              `State Family Leave Insurance Tax: 0.00%  ${usd(0)}`,
-              `State Workers Compensation Insurance Tax: 0.00%  ${usd(0)}`,
-              `Pre-Tax Deductions: 0.00%  ${usd(0)}`,
-              `Post-Tax Deductions: 0.00%  ${usd(0)}`,
-              `Take Home Salary: ${r.takeHomePct.toFixed(2)}%  ${usd(r.perPeriodTakeHome)}`,
-              `Annual Take-Home: ${usd(r.annualTakeHome)}`,
-              `Monthly Net Pay: ${usd(r.monthlyNet)}`,
-            ]}
-          />
+          <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+              <div className="space-y-1 text-sm">
+                <p>Where is your money going?</p>
+                <p>Gross Paycheck: {usd(r.grossPerPeriod)}</p>
+                <p>Taxes: {r.taxesPct.toFixed(2)}%  {usd(r.federalPerPeriod)}</p>
+                <p>Federal Income: {r.taxesPct.toFixed(2)}%  {usd(r.federalPerPeriod)}</p>
+                <p>State Income: 0.00%  {usd(0)}</p>
+                <p>Local Income: 0.00%  {usd(0)}</p>
+                <p>FICA and State Insurance Taxes: {r.ficaPct.toFixed(2)}%  {usd(r.ficaPerPeriod)}</p>
+                <p>Social Security: 6.20%  {usd(r.socialSecurityPerPeriod)}</p>
+                <p>Medicare: 1.45%  {usd(r.medicarePerPeriod)}</p>
+                <p>State Disability Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Unemployment Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Family Leave Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Workers Compensation Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>Pre-Tax Deductions: 0.00%  {usd(0)}</p>
+                <p>Post-Tax Deductions: 0.00%  {usd(0)}</p>
+                <p>Take Home Salary: {r.takeHomePct.toFixed(2)}%  {usd(r.perPeriodTakeHome)}</p>
+                <p>Annual Take-Home: {usd(r.annualTakeHome)}</p>
+                <p>Monthly Net Pay: {usd(r.monthlyNet)}</p>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-center">
+                  <svg viewBox="0 0 120 120" className="h-36 w-36">
+                    <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                    {stateGraphSlices.map((slice) => (
+                      <circle
+                        key={slice.key}
+                        cx="60"
+                        cy="60"
+                        r="42"
+                        fill="none"
+                        stroke={slice.color}
+                        strokeWidth="16"
+                        strokeDasharray={`${slice.dash} ${stateCircumference - slice.dash}`}
+                        strokeDashoffset={-slice.offset}
+                        transform="rotate(-90 60 60)"
+                      />
+                    ))}
+                  </svg>
+                </div>
+                <div className="space-y-1 text-xs">
+                  {stateGraphItems.map((item) => (
+                    <div key={item.key} className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                        {item.label}
+                      </span>
+                      <span>{usd(item.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
           <Result isDark={isDark} lines={[
             `Pay Periods/Year: ${r.periods}`,
