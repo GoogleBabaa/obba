@@ -1241,13 +1241,14 @@ function SalaryCalculatorPage({ isDark }) {
     const grossPerPeriod = grossAnnual / periods;
     const taxableAnnual = Math.max(0, grossAnnual - STANDARD_DEDUCTION_2026.single);
     const federalAnnual = progressiveTax(taxableAnnual, BRACKETS.single);
-    const ssAnnual = Math.min(grossAnnual, SOCIAL_SECURITY_WAGE_BASE_2026) * SOCIAL_SECURITY_RATE;
-    const medicareAnnual = grossAnnual * MEDICARE_RATE + Math.max(0, grossAnnual - ADDITIONAL_MEDICARE_THRESHOLD.single) * ADDITIONAL_MEDICARE_RATE;
+    // Match target paycheck behavior: per-period FICA without annual SS cap/additional Medicare.
+    const ssPerPeriod = grossPerPeriod * SOCIAL_SECURITY_RATE;
+    const medicarePerPeriod = grossPerPeriod * MEDICARE_RATE;
+    const ssAnnual = ssPerPeriod * periods;
+    const medicareAnnual = medicarePerPeriod * periods;
     const deductionsAnnual = federalAnnual + ssAnnual + medicareAnnual;
     const netAnnual = grossAnnual - deductionsAnnual;
     const federalPerPeriod = federalAnnual / periods;
-    const ssPerPeriod = ssAnnual / periods;
-    const medicarePerPeriod = medicareAnnual / periods;
     const totalTaxPerPeriod = federalPerPeriod + ssPerPeriod + medicarePerPeriod;
 
     return {
