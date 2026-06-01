@@ -1270,6 +1270,23 @@ function SalaryCalculatorPage({ isDark }) {
       totalTaxPerPeriod,
     };
   }, [payFrequency, paidType, grossPayMethod, hourCount, amount, otType, otHours, otAmount]);
+  const earningsChart = Math.max(0, r.grossPerPeriod);
+  const taxesChart = Math.max(0, r.totalTaxPerPeriod);
+  const takeHomeChart = Math.max(0, r.netPerPeriod);
+  const chartTotal = Math.max(earningsChart + taxesChart + takeHomeChart, 1);
+  const chartSlices = [
+    { key: 'earnings', value: earningsChart, color: '#0ea5e9' },
+    { key: 'taxes', value: taxesChart, color: '#f59e0b' },
+    { key: 'takehome', value: takeHomeChart, color: '#10b981' },
+  ];
+  const circumference = 2 * Math.PI * 42;
+  let chartOffset = 0;
+  const chartData = chartSlices.map((slice) => {
+    const dash = (slice.value / chartTotal) * circumference;
+    const item = { ...slice, dash, offset: chartOffset };
+    chartOffset += dash;
+    return item;
+  });
 
   useEffect(() => {
     document.title = 'Federal Salary Calculator - Estimate Annual and Per-Pay Earnings';
@@ -1359,10 +1376,11 @@ function SalaryCalculatorPage({ isDark }) {
           <Select value={payYear} onChange={setPayYear} options={[['2026', '2026']]} />
         </Field>
         <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
-          <div className="space-y-5">
+          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_170px]">
+            <div className="space-y-5">
             <div>
               <div className="flex items-center justify-between font-bold text-lg">
-                <span>Earnings</span>
+                <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-3 rounded-sm bg-sky-500" />Earnings</span>
                 <span>{usd2(r.grossPerPeriod)}</span>
               </div>
               <div className="mt-2 space-y-1">
@@ -1384,7 +1402,7 @@ function SalaryCalculatorPage({ isDark }) {
 
             <div>
               <div className="flex items-center justify-between font-bold text-lg">
-                <span>Taxes</span>
+                <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-3 rounded-sm bg-amber-500" />Taxes</span>
                 <span>-{usd2(r.totalTaxPerPeriod)}</span>
               </div>
               <div className="mt-2 space-y-1">
@@ -1409,8 +1427,29 @@ function SalaryCalculatorPage({ isDark }) {
             </div>
 
             <div className="flex items-center justify-between font-bold text-2xl">
-              <span>Take Home</span>
+              <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-3 rounded-sm bg-emerald-500" />Take Home</span>
               <span>{usd2(r.netPerPeriod)}</span>
+            </div>
+          </div>
+            <div className="flex items-center justify-center md:justify-end">
+              <svg viewBox="0 0 120 120" className="h-36 w-36">
+                <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                {chartData.map((slice) => (
+                  <circle
+                    key={slice.key}
+                    cx="60"
+                    cy="60"
+                    r="42"
+                    fill="none"
+                    stroke={slice.color}
+                    strokeWidth="16"
+                    strokeDasharray={`${slice.dash} ${circumference - slice.dash}`}
+                    strokeDashoffset={-slice.offset}
+                    transform="rotate(-90 60 60)"
+                    strokeLinecap="butt"
+                  />
+                ))}
+              </svg>
             </div>
           </div>
         </div>
