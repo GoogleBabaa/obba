@@ -906,6 +906,20 @@ function OvertimePage({ isDark }) {
       semiAnnual: totalSavings / 2,
     };
   }, [status, magi, hourly, weeklyOtHours, weeklyTips, weeksPerYear, taxYear, otMultiplier, k401, hsa, ira, studentLoanInterest, dependentCareFsa]);
+  const overtimeMainGraph = [
+    { key: 'overtime_pay', label: 'Total Overtime Pay', value: Math.max(0, r.totalOvertimePay), color: '#0ea5e9' },
+    { key: 'federal_savings', label: 'Federal Tax Savings', value: Math.max(0, r.federalSavings), color: '#f59e0b' },
+    { key: 'total_savings', label: 'Total Annual Savings', value: Math.max(0, r.totalSavings), color: '#10b981' },
+  ];
+  const overtimeGraphTotal = Math.max(overtimeMainGraph.reduce((sum, x) => sum + x.value, 0), 1);
+  const overtimeCircumference = 2 * Math.PI * 42;
+  let overtimeOffset = 0;
+  const overtimeGraphSlices = overtimeMainGraph.map((item) => {
+    const dash = (item.value / overtimeGraphTotal) * overtimeCircumference;
+    const slice = { ...item, dash, offset: overtimeOffset };
+    overtimeOffset += dash;
+    return slice;
+  });
 
   useEffect(() => {
     document.title = 'Use the No Tax on Overtime Calculator to Maximize Earnings';
@@ -1016,6 +1030,40 @@ function OvertimePage({ isDark }) {
               <tr className={isDark ? 'border-t border-slate-700' : 'border-t border-slate-300'}><td className="px-4 py-3 font-semibold">Total Annual Savings</td><td className="px-4 py-3 font-semibold">{usd2(r.totalSavings)}</td><td className="px-4 py-3">Your total tax savings</td></tr>
             </tbody>
           </table>
+          <div className={`px-4 py-4 border-t ${isDark ? 'border-slate-700 bg-slate-900' : 'border-slate-300 bg-slate-50'}`}>
+            <div className="grid gap-4 md:grid-cols-[200px_minmax(0,1fr)]">
+              <div className="flex justify-center">
+                <svg viewBox="0 0 120 120" className="h-36 w-36">
+                  <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                  {overtimeGraphSlices.map((slice) => (
+                    <circle
+                      key={slice.key}
+                      cx="60"
+                      cy="60"
+                      r="42"
+                      fill="none"
+                      stroke={slice.color}
+                      strokeWidth="16"
+                      strokeDasharray={`${slice.dash} ${overtimeCircumference - slice.dash}`}
+                      strokeDashoffset={-slice.offset}
+                      transform="rotate(-90 60 60)"
+                    />
+                  ))}
+                </svg>
+              </div>
+              <div className="space-y-2 text-sm">
+                {overtimeMainGraph.map((item) => (
+                  <div key={item.key} className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-2">
+                      <span className="inline-block h-3 w-3 rounded-sm" style={{ backgroundColor: item.color }} />
+                      {item.label}
+                    </span>
+                    <span>{usd2(item.value)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
           <div className={`p-4 ${isDark ? 'bg-slate-900 border-t border-slate-700' : 'bg-white border-t border-slate-300'}`}>
             <h3 className={`mb-3 text-base font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>Monthly Breakdown</h3>
             <table className={`w-full text-sm ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
