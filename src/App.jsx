@@ -1481,82 +1481,59 @@ function SalaryCalculatorPage({ isDark }) {
 function PaycheckCalculatorPage({ isDark }) {
   const [status, setStatus] = useState('single');
   const [stateCode, setStateCode] = useState('');
-  const [checkDate, setCheckDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [locationZip, setLocationZip] = useState('32003');
   const [rateType, setRateType] = useState('');
-  const [payFreq, setPayFreq] = useState('biweekly');
-  const [rate1, setRate1] = useState(0);
-  const [hours1, setHours1] = useState(0);
-  const [rate2, setRate2] = useState(0);
-  const [hours2, setHours2] = useState(0);
-  const [rate3, setRate3] = useState(0);
-  const [hours3, setHours3] = useState(0);
-  const [rate4, setRate4] = useState(0);
-  const [hours4, setHours4] = useState(0);
-  const [rate5, setRate5] = useState(0);
-  const [hours5, setHours5] = useState(0);
-  const [rate6, setRate6] = useState(0);
-  const [hours6, setHours6] = useState(0);
-  const [additionalIncome, setAdditionalIncome] = useState(0);
-  const [preTaxDeduction, setPreTaxDeduction] = useState(0);
-  const [postTaxDeduction, setPostTaxDeduction] = useState(0);
-  const [dependents, setDependents] = useState(0);
-  const [additionalWithholding, setAdditionalWithholding] = useState(0);
+  const [payFreq, setPayFreq] = useState('');
+  const [grossPay, setGrossPay] = useState('');
+  const [hoursPerDay, setHoursPerDay] = useState('8');
 
   const r = useMemo(() => {
     const periods = payFreq === 'daily' ? 260 : payFreq === 'weekly' ? 52 : payFreq === 'semimonthly' ? 24 : payFreq === 'monthly' ? 12 : payFreq === 'annual' ? 1 : 26;
-    const lines = [
-      [num(rate1), num(hours1)],
-      [num(rate2), num(hours2)],
-      [num(rate3), num(hours3)],
-      [num(rate4), num(hours4)],
-      [num(rate5), num(hours5)],
-      [num(rate6), num(hours6)],
-    ];
-    const hourlyGross = lines.reduce((sum, [rt, hrs]) => sum + (Math.max(0, rt) * Math.max(0, hrs)), 0);
-    const adIncome = Math.max(0, num(additionalIncome));
-    const grossPer = Math.max(0, hourlyGross + adIncome);
-    const grossAnnual = rateType === 'hourly' ? grossPer * periods : Math.max(0, num(rate1));
-    const effectiveGrossPer = rateType === 'hourly' ? grossPer : grossAnnual / periods;
-    const pretax = Math.max(0, num(preTaxDeduction));
-    const posttax = Math.max(0, num(postTaxDeduction));
-    const annualPretax = pretax * periods;
-    const annualPostTax = posttax * periods;
-    const taxableAnnual = Math.max(0, grossAnnual - (STANDARD_DEDUCTION_2026[status] ?? 16100) - annualPretax);
-    const depCredit = Math.max(0, num(dependents)) * 2000;
-    const fedAnnualBase = progressiveTax(taxableAnnual, BRACKETS[status] ?? BRACKETS.single);
-    const fedAnnual = Math.max(0, fedAnnualBase - depCredit);
-    const ssAnnual = Math.min(Math.max(0, grossAnnual - annualPretax), SOCIAL_SECURITY_WAGE_BASE_2026) * SOCIAL_SECURITY_RATE;
-    const medBaseAnnual = Math.max(0, grossAnnual - annualPretax) * MEDICARE_RATE;
+    const gross = Math.max(0, num(grossPay));
+    const hours = Math.max(0, num(hoursPerDay));
+    const grossAnnual = rateType === 'hourly' ? gross * hours * 260 : gross;
+    const taxableAnnual = Math.max(0, grossAnnual - (STANDARD_DEDUCTION_2026[status] ?? 16100));
+    const fedAnnual = progressiveTax(taxableAnnual, BRACKETS[status] ?? BRACKETS.single);
+    const ssAnnual = Math.min(grossAnnual, SOCIAL_SECURITY_WAGE_BASE_2026) * SOCIAL_SECURITY_RATE;
+    const medBaseAnnual = grossAnnual * MEDICARE_RATE;
     const addThreshold = ADDITIONAL_MEDICARE_THRESHOLD[status] ?? 200000;
-    const addMedAnnual = Math.max(0, (grossAnnual - annualPretax) - addThreshold) * ADDITIONAL_MEDICARE_RATE;
+    const addMedAnnual = Math.max(0, grossAnnual - addThreshold) * ADDITIONAL_MEDICARE_RATE;
     const medicareAnnual = medBaseAnnual + addMedAnnual;
     const selectedState = FEDERAL_STATE_OPTIONS.find((s) => s.code === stateCode);
     const stateRatePct = getStateTaxRate(selectedState?.name, grossAnnual);
-    const stateAnnual = Math.max(0, grossAnnual - annualPretax) * (stateRatePct / 100);
-    const annualAdditional = Math.max(0, num(additionalWithholding)) * periods;
-    const totalAnnualDeductions = fedAnnual + ssAnnual + medicareAnnual + stateAnnual + annualPretax + annualPostTax + annualAdditional;
+    const stateAnnual = grossAnnual * (stateRatePct / 100);
+    const totalAnnualDeductions = fedAnnual + ssAnnual + medicareAnnual + stateAnnual;
     const netAnnual = grossAnnual - totalAnnualDeductions;
+    const grossPer = grossAnnual / periods;
+    const fedPer = fedAnnual / periods;
+    const statePer = stateAnnual / periods;
+    const ssPer = ssAnnual / periods;
+    const medicarePer = medicareAnnual / periods;
+    const ficaPer = ssPer + medicarePer;
+    const netPer = netAnnual / periods;
     return {
       periods,
-      grossPer: effectiveGrossPer,
+      grossPer,
       taxableAnnual,
       grossAnnual,
-      fedPer: fedAnnual / periods,
+      fedPer,
       fedAnnual,
-      statePer: stateAnnual / periods,
+      statePer,
       stateAnnual,
-      ssPer: ssAnnual / periods,
+      ssPer,
       ssAnnual,
-      medicarePer: medicareAnnual / periods,
+      medicarePer,
       medicareAnnual,
-      preTaxPer: pretax,
-      postTaxPer: posttax,
-      addlPer: annualAdditional / periods,
-      netPer: netAnnual / periods,
+      ficaPer,
+      netPer,
       netAnnual,
       effectiveFederalRate: grossAnnual > 0 ? (fedAnnual / grossAnnual) * 100 : 0,
+      stateRatePct,
+      taxesPct: grossPer > 0 ? (fedPer / grossPer) * 100 : 0,
+      ficaPct: grossPer > 0 ? (ficaPer / grossPer) * 100 : 0,
+      takeHomePct: grossPer > 0 ? (netPer / grossPer) * 100 : 0,
     };
-  }, [status, stateCode, checkDate, rateType, rate1, hours1, rate2, hours2, rate3, hours3, rate4, hours4, rate5, hours5, rate6, hours6, additionalIncome, payFreq, preTaxDeduction, postTaxDeduction, dependents, additionalWithholding]);
+  }, [status, stateCode, rateType, grossPay, hoursPerDay, payFreq]);
   const selectedState = FEDERAL_STATE_OPTIONS.find((s) => s.code === stateCode);
 
   useEffect(() => {
@@ -1615,6 +1592,20 @@ function PaycheckCalculatorPage({ isDark }) {
       </article>
 
       <CalcShell title="Paycheck" isDark={isDark}>
+        <Field
+          label={rateType === 'hourly' ? 'Hourly Wage ($)' : 'Salary (per year)'}
+          hint="Use federal + selected state withholding setup"
+        >
+          <Input value={grossPay} onChange={setGrossPay} />
+        </Field>
+        <Field label="Rate Type">
+          <Select value={rateType} onChange={setRateType} options={[['', 'Select…'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
+        </Field>
+        {rateType === 'hourly' && (
+          <Field label="Hours per day">
+            <Input value={hoursPerDay} onChange={setHoursPerDay} />
+          </Field>
+        )}
         <Field label="State" hint="Select for state income tax calculation">
           <Select
             value={stateCode}
@@ -1622,48 +1613,34 @@ function PaycheckCalculatorPage({ isDark }) {
             options={FEDERAL_STATE_OPTIONS.map((s) => [s.code ?? '', s.code ? `${s.name} (${s.rate})` : 'Federal taxes only / Select a state'])}
           />
         </Field>
-        <Field label="Check Date" hint="Enter the date on your paycheck">
-          <input type="date" value={checkDate} onChange={(e) => setCheckDate(e.target.value)} className="w-full rounded-xl p-3 border bg-white border-slate-300 text-slate-900" />
-        </Field>
-        <Field label="Rate Type">
-          <Select value={rateType} onChange={setRateType} options={[['', 'Selectâ€¦'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
+        <Field label="Location (ZIP)">
+          <Input value={locationZip} onChange={setLocationZip} />
         </Field>
         <Field label="Pay Frequency" hint="Select how often you're paid">
-          <Select value={payFreq} onChange={setPayFreq} options={[['weekly', 'Weekly (52Ã—/yr)'], ['biweekly', 'Bi-Weekly (26Ã—/yr)'], ['semimonthly', 'Semi-Monthly (24Ã—/yr)'], ['monthly', 'Monthly (12Ã—/yr)'], ['annual', 'Annual']]} />
+          <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select…'], ['daily', 'Daily (260×/yr)'], ['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
         </Field>
-        <Field label="Filing Status">
-          <Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly'], ['mfs', 'Married Filing Separately'], ['hoh', 'Head of Household']]} />
+        <Field label="Filing Status" hint="Select for Federal tax calculation">
+          <Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly']]} />
         </Field>
-        <Field label="Rate 1 ($)"><Input value={rate1} onChange={setRate1} /></Field>
-        <Field label="Hours 1"><Input value={hours1} onChange={setHours1} /></Field>
-        <Field label="Rate 2 ($)"><Input value={rate2} onChange={setRate2} /></Field>
-        <Field label="Hours 2"><Input value={hours2} onChange={setHours2} /></Field>
-        <Field label="Rate 3 ($)"><Input value={rate3} onChange={setRate3} /></Field>
-        <Field label="Hours 3"><Input value={hours3} onChange={setHours3} /></Field>
-        <Field label="Rate 4 ($)"><Input value={rate4} onChange={setRate4} /></Field>
-        <Field label="Hours 4"><Input value={hours4} onChange={setHours4} /></Field>
-        <Field label="Rate 5 ($)"><Input value={rate5} onChange={setRate5} /></Field>
-        <Field label="Hours 5"><Input value={hours5} onChange={setHours5} /></Field>
-        <Field label="Rate 6 ($)"><Input value={rate6} onChange={setRate6} /></Field>
-        <Field label="Hours 6"><Input value={hours6} onChange={setHours6} /></Field>
-        <Field label="Additional Income ($)"><Input value={additionalIncome} onChange={setAdditionalIncome} /></Field>
-        <Field label="Pre-Tax Deductions ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
-        <Field label="Post-Tax Deductions ($)"><Input value={postTaxDeduction} onChange={setPostTaxDeduction} /></Field>
-        <Field label="W-4 Allowances / Dependents"><Input value={dependents} onChange={setDependents} /></Field>
-        <Field label="Additional Federal Withholding ($)"><Input value={additionalWithholding} onChange={setAdditionalWithholding} /></Field>
         <Result isDark={isDark} lines={[
-          `Selected State: ${selectedState?.name ?? 'Not selected'}${selectedState?.rate ? ` (${selectedState.rate})` : ''}`,
-          `Gross Pay: ${usd(r.grossPer)}`,
-          `Federal Income Tax: ${usd(r.fedPer)}`,
-          `${selectedState?.name ?? 'State'} Income Tax: ${usd(r.statePer)}`,
-          `Social Security (6.2%): ${usd(r.ssPer)}`,
-          `Medicare (1.45%): ${usd(r.medicarePer)}`,
-          `Pre-Tax Deductions: ${usd(r.preTaxPer)}`,
-          `Post-Tax Deductions: ${usd(r.postTaxPer)}`,
-          `Net Pay: ${usd(r.netPer)}`,
-          `Annual Gross (Est.): ${usd(r.grossAnnual)}`,
-          `Annual Federal Tax (Est.): ${usd(r.fedAnnual)}`,
-          `Effective Federal Rate: ${r.effectiveFederalRate.toFixed(2)}%`,
+          `Where is your money going?`,
+          `Gross Paycheck: ${usd(r.grossPer)}`,
+          `Taxes: ${r.taxesPct.toFixed(2)}%  ${usd(r.fedPer)}`,
+          `Federal Income: ${r.taxesPct.toFixed(2)}%  ${usd(r.fedPer)}`,
+          `${selectedState?.name ?? 'State'} Income: ${r.stateRatePct.toFixed(2)}%  ${usd(r.statePer)}`,
+          `Local Income: 0.00%  ${usd(0)}`,
+          `FICA and State Insurance Taxes: ${r.ficaPct.toFixed(2)}%  ${usd(r.ficaPer)}`,
+          `Social Security: 6.20%  ${usd(r.ssPer)}`,
+          `Medicare: 1.45%  ${usd(r.medicarePer)}`,
+          `State Disability Insurance Tax: 0.00%  ${usd(0)}`,
+          `State Unemployment Insurance Tax: 0.00%  ${usd(0)}`,
+          `State Family Leave Insurance Tax: 0.00%  ${usd(0)}`,
+          `State Workers Compensation Insurance Tax: 0.00%  ${usd(0)}`,
+          `Pre-Tax Deductions: 0.00%  ${usd(0)}`,
+          `Post-Tax Deductions: 0.00%  ${usd(0)}`,
+          `Take Home Salary: ${r.takeHomePct.toFixed(2)}%  ${usd(r.netPer)}`,
+          `Annual Take-Home: ${usd(r.netAnnual)}`,
+          `Monthly Net Pay: ${usd(r.netAnnual / 12)}`,
         ]} />
       </CalcShell>
 
