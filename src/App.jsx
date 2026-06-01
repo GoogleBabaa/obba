@@ -1202,15 +1202,16 @@ function OvertimePage({ isDark }) {
 }
 
 function SalaryCalculatorPage({ isDark }) {
+  const usd2 = (v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Math.max(0, Number(v) || 0));
   const [payYear, setPayYear] = useState('2026');
   const [payFrequency, setPayFrequency] = useState('monthly');
   const [paidType, setPaidType] = useState('salary');
   const [grossPayMethod, setGrossPayMethod] = useState('perYear');
   const [hourCount, setHourCount] = useState('0');
-  const [amount, setAmount] = useState('0');
+  const [amount, setAmount] = useState('10000');
   const [otType, setOtType] = useState('overtime');
-  const [otHours, setOtHours] = useState('0');
-  const [otAmount, setOtAmount] = useState('0');
+  const [otHours, setOtHours] = useState('10');
+  const [otAmount, setOtAmount] = useState('15');
 
   const r = useMemo(() => {
     const periods =
@@ -1233,12 +1234,8 @@ function SalaryCalculatorPage({ isDark }) {
           : inputAmount / periods;
     const annualBase = basePerPeriod * periods;
 
-    let overtimePerPeriod = 0;
-    if (paidType === 'hourly' && overtimeHours > 0) {
-      const hourlyRate = inputAmount;
-      overtimePerPeriod += hourlyRate * overtimeMultiplier * overtimeHours;
-    }
-    overtimePerPeriod += overtimeAmount;
+    // Overtime amount is treated as hourly overtime-rate input.
+    const overtimePerPeriod = overtimeMultiplier * overtimeHours * overtimeAmount;
     const annualOvertime = overtimePerPeriod * periods;
     const grossAnnual = annualBase + annualOvertime;
     const grossPerPeriod = grossAnnual / periods;
@@ -1248,6 +1245,10 @@ function SalaryCalculatorPage({ isDark }) {
     const medicareAnnual = grossAnnual * MEDICARE_RATE + Math.max(0, grossAnnual - ADDITIONAL_MEDICARE_THRESHOLD.single) * ADDITIONAL_MEDICARE_RATE;
     const deductionsAnnual = federalAnnual + ssAnnual + medicareAnnual;
     const netAnnual = grossAnnual - deductionsAnnual;
+    const federalPerPeriod = federalAnnual / periods;
+    const ssPerPeriod = ssAnnual / periods;
+    const medicarePerPeriod = medicareAnnual / periods;
+    const totalTaxPerPeriod = federalPerPeriod + ssPerPeriod + medicarePerPeriod;
 
     return {
       periods,
@@ -1260,6 +1261,12 @@ function SalaryCalculatorPage({ isDark }) {
       medicareAnnual,
       netAnnual,
       netPerPeriod: netAnnual / periods,
+      salaryPerPeriod: basePerPeriod,
+      overtimePerPeriod,
+      federalPerPeriod,
+      ssPerPeriod,
+      medicarePerPeriod,
+      totalTaxPerPeriod,
     };
   }, [payFrequency, paidType, grossPayMethod, hourCount, amount, otType, otHours, otAmount]);
 
@@ -1350,16 +1357,62 @@ function SalaryCalculatorPage({ isDark }) {
         <Field label="Pay Year">
           <Select value={payYear} onChange={setPayYear} options={[['2026', '2026']]} />
         </Field>
-        <Result isDark={isDark} lines={[
-          `Annual Base Pay: ${usd(r.annualBase)}`,
-          `Annual Overtime Pay: ${usd(r.annualOvertime)}`,
-          `Annual Gross Pay: ${usd(r.grossAnnual)}`,
-          `Federal Income Tax (Annual): ${usd(r.federalAnnual)}`,
-          `Social Security (Annual): ${usd(r.ssAnnual)}`,
-          `Medicare (Annual): ${usd(r.medicareAnnual)}`,
-          `Annual Net Pay: ${usd(r.netAnnual)}`,
-          `Per-Paycheck Net Pay: ${usd(r.netPerPeriod)}`,
-        ]} />
+        <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+          <div className="space-y-5">
+            <div>
+              <div className="flex items-center justify-between font-bold text-lg">
+                <span>Earnings</span>
+                <span>{usd2(r.grossPerPeriod)}</span>
+              </div>
+              <div className="mt-2 space-y-1">
+                <div className="flex items-start justify-between">
+                  <span>Salary</span>
+                  <span>{usd2(r.salaryPerPeriod)}</span>
+                </div>
+                <div className="flex items-start justify-between">
+                  <span>
+                    {otType === 'doubletime' ? 'Double Time' : 'Overtime'}
+                    <span className={`block text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      ({otType === 'doubletime' ? '2.0' : '1.5'} x {num(otHours)} hrs x {usd2(num(otAmount))})
+                    </span>
+                  </span>
+                  <span>{usd2(r.overtimePerPeriod)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between font-bold text-lg">
+                <span>Taxes</span>
+                <span>-{usd2(r.totalTaxPerPeriod)}</span>
+              </div>
+              <div className="mt-2 space-y-1">
+                <div className="flex items-start justify-between">
+                  <span>Federal Income Tax</span>
+                  <span>-{usd2(r.federalPerPeriod)}</span>
+                </div>
+                <div className="flex items-start justify-between">
+                  <span>Social Security Tax</span>
+                  <span>-{usd2(r.ssPerPeriod)}</span>
+                </div>
+                <div className="flex items-start justify-between">
+                  <span>Medicare Tax</span>
+                  <span>-{usd2(r.medicarePerPeriod)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between font-bold text-lg">
+              <span>Benefits</span>
+              <span>{usd2(0)}</span>
+            </div>
+
+            <div className="flex items-center justify-between font-bold text-2xl">
+              <span>Take Home</span>
+              <span>{usd2(r.netPerPeriod)}</span>
+            </div>
+          </div>
+        </div>
       </CalcShell>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
