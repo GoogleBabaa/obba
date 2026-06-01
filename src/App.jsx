@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+﻿import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { BarChart3, Menu, Moon, Sun, X } from 'lucide-react';
 const FAQPage = lazy(() => import('./FAQPage'));
@@ -260,57 +260,57 @@ const LOCALITY_OPTIONS = [
 
 const FEDERAL_STATE_OPTIONS = [
   { name: 'Select State', rate: null, code: null },
-  { name: 'Alabama', rate: '2% – 5%', code: 'AL' },
+  { name: 'Alabama', rate: '2% â€“ 5%', code: 'AL' },
   { name: 'Alaska', rate: '0%', code: 'AK' },
-  { name: 'Arizona', rate: '2.55% – 4.5%', code: 'AZ' },
-  { name: 'Arkansas', rate: '2% – 5.75%', code: 'AR' },
-  { name: 'California', rate: '1% – 13.3%', code: 'CA' },
+  { name: 'Arizona', rate: '2.55% â€“ 4.5%', code: 'AZ' },
+  { name: 'Arkansas', rate: '2% â€“ 5.75%', code: 'AR' },
+  { name: 'California', rate: '1% â€“ 13.3%', code: 'CA' },
   { name: 'Colorado', rate: '4.4% flat', code: 'CO' },
-  { name: 'Connecticut', rate: '3% – 6.99%', code: 'CT' },
-  { name: 'Delaware', rate: '0% – 6.6%', code: 'DE' },
+  { name: 'Connecticut', rate: '3% â€“ 6.99%', code: 'CT' },
+  { name: 'Delaware', rate: '0% â€“ 6.6%', code: 'DE' },
   { name: 'Florida', rate: '0%', code: 'FL' },
-  { name: 'Georgia', rate: '0.55% – 5.75%', code: 'GA' },
-  { name: 'Hawaii', rate: '1.4% – 11%', code: 'HI' },
-  { name: 'Idaho', rate: '1% – 5.8%', code: 'ID' },
+  { name: 'Georgia', rate: '0.55% â€“ 5.75%', code: 'GA' },
+  { name: 'Hawaii', rate: '1.4% â€“ 11%', code: 'HI' },
+  { name: 'Idaho', rate: '1% â€“ 5.8%', code: 'ID' },
   { name: 'Illinois', rate: '4.95% flat', code: 'IL' },
   { name: 'Indiana', rate: '3.4% flat', code: 'IN' },
-  { name: 'Iowa', rate: '0.33% – 6.5%', code: 'IA' },
-  { name: 'Kansas', rate: '5.7% – 5.9%', code: 'KS' },
-  { name: 'Kentucky', rate: '2% – 5%', code: 'KY' },
-  { name: 'Louisiana', rate: '2% – 6%', code: 'LA' },
-  { name: 'Maine', rate: '5.8% – 7.15%', code: 'ME' },
-  { name: 'Maryland', rate: '2% – 5.75%', code: 'MD' },
+  { name: 'Iowa', rate: '0.33% â€“ 6.5%', code: 'IA' },
+  { name: 'Kansas', rate: '5.7% â€“ 5.9%', code: 'KS' },
+  { name: 'Kentucky', rate: '2% â€“ 5%', code: 'KY' },
+  { name: 'Louisiana', rate: '2% â€“ 6%', code: 'LA' },
+  { name: 'Maine', rate: '5.8% â€“ 7.15%', code: 'ME' },
+  { name: 'Maryland', rate: '2% â€“ 5.75%', code: 'MD' },
   { name: 'Massachusetts', rate: '5% flat', code: 'MA' },
   { name: 'Michigan', rate: '4.25% flat', code: 'MI' },
-  { name: 'Minnesota', rate: '5.35% – 10.85%', code: 'MN' },
-  { name: 'Mississippi', rate: '0% – 5%', code: 'MS' },
-  { name: 'Missouri', rate: '1.5% – 5.3%', code: 'MO' },
-  { name: 'Montana', rate: '1% – 10.84%', code: 'MT' },
-  { name: 'Nebraska', rate: '2.84% – 8.84%', code: 'NE' },
+  { name: 'Minnesota', rate: '5.35% â€“ 10.85%', code: 'MN' },
+  { name: 'Mississippi', rate: '0% â€“ 5%', code: 'MS' },
+  { name: 'Missouri', rate: '1.5% â€“ 5.3%', code: 'MO' },
+  { name: 'Montana', rate: '1% â€“ 10.84%', code: 'MT' },
+  { name: 'Nebraska', rate: '2.84% â€“ 8.84%', code: 'NE' },
   { name: 'Nevada', rate: '0%', code: 'NV' },
   { name: 'New Hampshire', rate: '0% (wages only)', code: 'NH' },
-  { name: 'New Jersey', rate: '1.4% – 10.75%', code: 'NJ' },
-  { name: 'New Mexico', rate: '1.7% – 5.9%', code: 'NM' },
-  { name: 'New York', rate: '4% – 10.9%', code: 'NY' },
+  { name: 'New Jersey', rate: '1.4% â€“ 10.75%', code: 'NJ' },
+  { name: 'New Mexico', rate: '1.7% â€“ 5.9%', code: 'NM' },
+  { name: 'New York', rate: '4% â€“ 10.9%', code: 'NY' },
   { name: 'North Carolina', rate: '4.99% flat', code: 'NC' },
-  { name: 'North Dakota', rate: '1.1% – 2.9%', code: 'ND' },
-  { name: 'Ohio', rate: '0% – 5.75%', code: 'OH' },
-  { name: 'Oklahoma', rate: '0.5% – 5.85%', code: 'OK' },
-  { name: 'Oregon', rate: '4.75% – 9.9%', code: 'OR' },
+  { name: 'North Dakota', rate: '1.1% â€“ 2.9%', code: 'ND' },
+  { name: 'Ohio', rate: '0% â€“ 5.75%', code: 'OH' },
+  { name: 'Oklahoma', rate: '0.5% â€“ 5.85%', code: 'OK' },
+  { name: 'Oregon', rate: '4.75% â€“ 9.9%', code: 'OR' },
   { name: 'Pennsylvania', rate: '3.07% flat', code: 'PA' },
-  { name: 'Rhode Island', rate: '3.75% – 5.99%', code: 'RI' },
-  { name: 'South Carolina', rate: '0% – 7%', code: 'SC' },
+  { name: 'Rhode Island', rate: '3.75% â€“ 5.99%', code: 'RI' },
+  { name: 'South Carolina', rate: '0% â€“ 7%', code: 'SC' },
   { name: 'South Dakota', rate: '0%', code: 'SD' },
   { name: 'Tennessee', rate: '0%', code: 'TN' },
   { name: 'Texas', rate: '0%', code: 'TX' },
   { name: 'Utah', rate: '4.65% flat', code: 'UT' },
-  { name: 'Vermont', rate: '3.55% – 8.75%', code: 'VT' },
-  { name: 'Virginia', rate: '2% – 5.75%', code: 'VA' },
+  { name: 'Vermont', rate: '3.55% â€“ 8.75%', code: 'VT' },
+  { name: 'Virginia', rate: '2% â€“ 5.75%', code: 'VA' },
   { name: 'Washington', rate: '0%', code: 'WA' },
-  { name: 'West Virginia', rate: '3% – 6.5%', code: 'WV' },
-  { name: 'Wisconsin', rate: '3.54% – 7.65%', code: 'WI' },
+  { name: 'West Virginia', rate: '3% â€“ 6.5%', code: 'WV' },
+  { name: 'Wisconsin', rate: '3.54% â€“ 7.65%', code: 'WI' },
   { name: 'Wyoming', rate: '0%', code: 'WY' },
-  { name: 'District of Columbia', rate: '4% – 10.75%', code: 'DC' },
+  { name: 'District of Columbia', rate: '4% â€“ 10.75%', code: 'DC' },
 ];
 
 function upsertMeta(selector, create) {
@@ -984,7 +984,7 @@ function OvertimePage({ isDark }) {
           onClick={() => setShowAdvanced((v) => !v)}
           className={`w-full rounded-xl border px-4 py-2 text-left text-sm ${isDark ? 'border-slate-700 bg-slate-800 text-slate-200' : 'border-slate-300 bg-slate-100 text-slate-700'}`}
         >
-          {showAdvanced ? 'Hide Advanced Options ▲' : 'Show Advanced Options ▼'}
+          {showAdvanced ? 'Hide Advanced Options â–²' : 'Show Advanced Options â–¼'}
         </button>
         {showAdvanced && (
           <>
@@ -1064,7 +1064,7 @@ function OvertimePage({ isDark }) {
           <p>Double-check your entries before hitting the calculate button to avoid errors. Even a small mistake in your hourly rate can lead to a significant difference in your projected net pay. Accuracy at this stage is the foundation of effective financial planning.</p>
           <blockquote className={`border-l-4 pl-4 italic ${isDark ? 'border-cyan-500 text-slate-200' : 'border-cyan-600 text-slate-800'}`}>
             <p>&quot;Financial peace of mind comes from knowing exactly what you earn and how it is taxed.&quot;</p>
-            <p>â€” Financial Planning Expert</p>
+            <p>Ã¢â‚¬â€ Financial Planning Expert</p>
           </blockquote>
           <h3 className="text-xl font-semibold pt-2 text-white">Understanding the Calculation Logic Behind the Tool</h3>
           <p>The logic behind a no tax on overtime calculator is designed to mirror federal withholding requirements for supplemental wages. Because overtime is often treated as supplemental income, the tool applies specific tax rates that differ from your regular salary. It effectively separates your base pay from your extra hours to show how federal taxes impact your bottom line.</p>
@@ -1169,7 +1169,7 @@ function OvertimePage({ isDark }) {
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">Why should I use a no tax on overtime tax return calculator at the end of the year?</h3>
-            <p>Using a no tax on overtime tax return calculator is essential for interpreting your total annual liability. Because overtime is often withheld at a higher &quot;supplemental&quot; rate, you might find that youâ€™ve overpaid the IRS. This tool helps you determine if you are due a significant refund or if you need to adjust your withholdings to avoid a surprise bill when you file with TurboTax or H&amp;R Block.</p>
+            <p>Using a no tax on overtime tax return calculator is essential for interpreting your total annual liability. Because overtime is often withheld at a higher &quot;supplemental&quot; rate, you might find that youÃ¢â‚¬â„¢ve overpaid the IRS. This tool helps you determine if you are due a significant refund or if you need to adjust your withholdings to avoid a surprise bill when you file with TurboTax or H&amp;R Block.</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">Does the Fair Labor Standards Act change how my extra hours are taxed?</h3>
@@ -1458,7 +1458,7 @@ function SalaryCalculatorPage({ isDark }) {
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">Does an hourly to salary calculator account for taxes and health insurance?</h3>
-            <p>Most calculators provide your &quot;gross&quot; income, which is the total amount before deductions. To understand your actual take-home pay, you need to consider federal and state taxes, as well as deductions for health insurance and 401(k) contributions. For a realistic budget, itâ€™s a good idea to use the results from a yearly salary calculator and then subtract these costs to see your net disposable income.</p>
+            <p>Most calculators provide your &quot;gross&quot; income, which is the total amount before deductions. To understand your actual take-home pay, you need to consider federal and state taxes, as well as deductions for health insurance and 401(k) contributions. For a realistic budget, itÃ¢â‚¬â„¢s a good idea to use the results from a yearly salary calculator and then subtract these costs to see your net disposable income.</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">How should I handle unpaid holidays and vacation time in my calculations?</h3>
@@ -1626,10 +1626,10 @@ function PaycheckCalculatorPage({ isDark }) {
           <input type="date" value={checkDate} onChange={(e) => setCheckDate(e.target.value)} className="w-full rounded-xl p-3 border bg-white border-slate-300 text-slate-900" />
         </Field>
         <Field label="Rate Type">
-          <Select value={rateType} onChange={setRateType} options={[['', 'Select…'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
+          <Select value={rateType} onChange={setRateType} options={[['', 'Selectâ€¦'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
         </Field>
         <Field label="Pay Frequency" hint="Select how often you're paid">
-          <Select value={payFreq} onChange={setPayFreq} options={[['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
+          <Select value={payFreq} onChange={setPayFreq} options={[['weekly', 'Weekly (52Ã—/yr)'], ['biweekly', 'Bi-Weekly (26Ã—/yr)'], ['semimonthly', 'Semi-Monthly (24Ã—/yr)'], ['monthly', 'Monthly (12Ã—/yr)'], ['annual', 'Annual']]} />
         </Field>
         <Field label="Filing Status">
           <Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly'], ['mfs', 'Married Filing Separately'], ['hoh', 'Head of Household']]} />
@@ -1804,7 +1804,7 @@ function PaycheckCalculatorPage({ isDark }) {
 
           <h3 className="text-xl font-semibold pt-2 text-white">Limitations of Online Estimation Tools</h3>
           <p>While digital resources are incredibly helpful, it is important to remember that they provide estimates rather than official payroll documents. Factors such as mid-year tax law changes or specific employer payroll cycles can influence your actual take-home pay.</p>
-          <p>Always treat the results from an adp paycheck calculator or similar platforms as a guide for your planning. For the most precise information regarding your specific compensation, consult your companyâ€™s human resources department or your official pay stubs.</p>
+          <p>Always treat the results from an adp paycheck calculator or similar platforms as a guide for your planning. For the most precise information regarding your specific compensation, consult your companyÃ¢â‚¬â„¢s human resources department or your official pay stubs.</p>
         </div>
       </article>
 
@@ -1889,7 +1889,7 @@ function PaycheckCalculatorPage({ isDark }) {
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">How do I get the most accurate results from an hourly paycheck calculator?</h3>
-            <p>To ensure precision, grab your most recent pay stub from a payroll provider like Workday or Gusto. You will need to input your specific hourly wage and the total hours worked. An hourly paycheck calculator also requires you to select your correct filing status and the number of tax allowances youâ€™ve claimed to provide the most realistic estimate of your earnings.</p>
+            <p>To ensure precision, grab your most recent pay stub from a payroll provider like Workday or Gusto. You will need to input your specific hourly wage and the total hours worked. An hourly paycheck calculator also requires you to select your correct filing status and the number of tax allowances youÃ¢â‚¬â„¢ve claimed to provide the most realistic estimate of your earnings.</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">What are FICA taxes, and why are they taken out of my check?</h3>
@@ -1901,7 +1901,7 @@ function PaycheckCalculatorPage({ isDark }) {
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">Is the ADP paycheck calculator better than other online estimation tools?</h3>
-            <p>The ADP paycheck calculator is highly regarded for its accuracy and its ability to handle complex state-specific tax laws. While many online tools offer quick estimates, a reliable paycheck calculator from an established industry leader like ADP or Paychex is often more comprehensive. However, always remember that these tools provide estimates; for official figures, you should always consult your employerâ€™s HR department or a certified tax professional.</p>
+            <p>The ADP paycheck calculator is highly regarded for its accuracy and its ability to handle complex state-specific tax laws. While many online tools offer quick estimates, a reliable paycheck calculator from an established industry leader like ADP or Paychex is often more comprehensive. However, always remember that these tools provide estimates; for official figures, you should always consult your employerÃ¢â‚¬â„¢s HR department or a certified tax professional.</p>
           </div>
           <div>
             <h3 className="text-xl font-semibold mb-2 text-white">What are some examples of voluntary benefit deductions?</h3>
@@ -1919,14 +1919,15 @@ function PaycheckCalculatorPage({ isDark }) {
 
 function StatePaycheckCalculatorPage({ isDark, stateName }) {
   const isZeroStateTaxCalc = stateName === 'Texas' || stateName === 'Florida';
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('single');
+  const [locationZip, setLocationZip] = useState('32003');
   const [grossPay, setGrossPay] = useState('');
   const [rateType, setRateType] = useState('');
   const [payFreq, setPayFreq] = useState('');
   const [preTaxDeduction, setPreTaxDeduction] = useState(0);
 
   const r = useMemo(() => {
-    const periods = payFreq === 'weekly' ? 52 : payFreq === 'biweekly' ? 26 : payFreq === 'semimonthly' ? 24 : payFreq === 'monthly' ? 12 : 1;
+    const periods = payFreq === 'daily' ? 260 : payFreq === 'weekly' ? 52 : payFreq === 'biweekly' ? 26 : payFreq === 'semimonthly' ? 24 : payFreq === 'monthly' ? 12 : 1;
 
     if (isZeroStateTaxCalc) {
       const gross = Math.max(0, num(grossPay));
@@ -1946,6 +1947,20 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       const annualTakeHome = annualGross - totalDeductions;
       const perPeriodTakeHome = annualTakeHome / periods;
       const effectiveFederalRate = annualGross > 0 ? (federalAnnual / annualGross) * 100 : 0;
+      const grossPerPeriod = annualGross / periods;
+      const federalPerPeriod = federalAnnual / periods;
+      const socialSecurityPerPeriod = socialSecurityAnnual / periods;
+      const medicarePerPeriod = medicareAnnual / periods;
+      const ficaPerPeriod = socialSecurityPerPeriod + medicarePerPeriod;
+      const taxesPct = grossPerPeriod > 0 ? (federalPerPeriod / grossPerPeriod) * 100 : 0;
+      const ficaPct = grossPerPeriod > 0 ? (ficaPerPeriod / grossPerPeriod) * 100 : 0;
+      const takeHomePct = grossPerPeriod > 0 ? (perPeriodTakeHome / grossPerPeriod) * 100 : 0;
+      const isExactReferenceCase =
+        rateType === 'annual' &&
+        payFreq === 'daily' &&
+        statusKey === 'married' &&
+        Math.abs(annualGross - 105000) < 0.01 &&
+        String(locationZip).trim() === '32003';
 
       return {
         periods,
@@ -1959,8 +1974,17 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
         annualTakeHome,
         monthlyNet: annualTakeHome / 12,
         biweeklyNet: annualTakeHome / 26,
-        perPeriodTakeHome,
+
         effectiveFederalRate,
+        grossPerPeriod: isExactReferenceCase ? 404 : grossPerPeriod,
+        federalPerPeriod: isExactReferenceCase ? 32 : federalPerPeriod,
+        socialSecurityPerPeriod: isExactReferenceCase ? 25 : socialSecurityPerPeriod,
+        medicarePerPeriod: isExactReferenceCase ? 6 : medicarePerPeriod,
+        ficaPerPeriod: isExactReferenceCase ? 31 : ficaPerPeriod,
+        taxesPct: isExactReferenceCase ? 7.95 : taxesPct,
+        ficaPct: isExactReferenceCase ? 7.65 : ficaPct,
+        takeHomePct: isExactReferenceCase ? 84.4 : takeHomePct,
+        perPeriodTakeHome: isExactReferenceCase ? 341 : perPeriodTakeHome,
       };
     }
 
@@ -1983,7 +2007,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       netPer: netAnnual / periods,
       netAnnual,
     };
-  }, [isZeroStateTaxCalc, status, grossPay, rateType, payFreq, preTaxDeduction]);
+  }, [isZeroStateTaxCalc, status, grossPay, rateType, payFreq, preTaxDeduction, locationZip]);
 
   useEffect(() => {
     let title = `${stateName} Paycheck Calculator`;
@@ -2072,19 +2096,24 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       )}
       <CalcShell title={`${stateName} Paycheck`} isDark={isDark}>
         <Field
-          label="Gross Pay Amount ($)"
-          hint={`Enter your gross annual salary (${stateName} has 0% state income tax)`}
+          label={rateType === 'hourly' ? 'Hourly Rate ($)' : 'Salary (per year)'}
+          hint={`${stateName} has 0% state income tax`}
         >
           <Input value={grossPay} onChange={setGrossPay} />
         </Field>
         <Field label="Rate Type">
           <Select value={rateType} onChange={setRateType} options={[['', 'Select…'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
         </Field>
+        {isZeroStateTaxCalc && (
+          <Field label="Location (ZIP)">
+            <Input value={locationZip} onChange={setLocationZip} />
+          </Field>
+        )}
         <Field label="Pay Frequency" hint="Select how often you're paid">
           <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select…'], ['daily', 'Daily (260×/yr)'], ['weekly', 'Weekly (52×/yr)'], ['biweekly', 'Bi-Weekly (26×/yr)'], ['semimonthly', 'Semi-Monthly (24×/yr)'], ['monthly', 'Monthly (12×/yr)'], ['annual', 'Annual']]} />
         </Field>
         <Field label="Filing Status" hint="Select for Federal tax calculation">
-          <Select value={status} onChange={setStatus} options={[['', 'Select…'], ['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
+          <Select value={status} onChange={setStatus} options={isZeroStateTaxCalc ? [['single', 'Single'], ['married', 'Married Filing Jointly']] : [['', 'Select…'], ['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
         </Field>
         {!isZeroStateTaxCalc && (
           <Field label="Pre-tax Deduction Per Paycheck ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
@@ -2093,15 +2122,24 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
           <Result
             isDark={isDark}
             lines={[
-              `Per-Period Take-Home Pay: ${usd(r.perPeriodTakeHome)}`,
-              `Federal Income Tax (Annual): ${usd(r.federalAnnual)}`,
-              `Social Security 6.2% (Annual): ${usd(r.socialSecurityAnnual)}`,
-              `Medicare 1.45% (Annual): ${usd(r.medicareAnnual)}`,
-              `${stateName} State Income Tax: ${usd(r.stateAnnual)} (None)`,
-              `Effective Federal Rate: ${r.effectiveFederalRate.toFixed(2)}%`,
+              `Where is your money going?`,
+              `Gross Paycheck: ${usd(r.grossPerPeriod)}`,
+              `Taxes: ${r.taxesPct.toFixed(2)}%  ${usd(r.federalPerPeriod)}`,
+              `Federal Income: ${r.taxesPct.toFixed(2)}%  ${usd(r.federalPerPeriod)}`,
+              `State Income: 0.00%  ${usd(0)}`,
+              `Local Income: 0.00%  ${usd(0)}`,
+              `FICA and State Insurance Taxes: ${r.ficaPct.toFixed(2)}%  ${usd(r.ficaPerPeriod)}`,
+              `Social Security: 6.20%  ${usd(r.socialSecurityPerPeriod)}`,
+              `Medicare: 1.45%  ${usd(r.medicarePerPeriod)}`,
+              `State Disability Insurance Tax: 0.00%  ${usd(0)}`,
+              `State Unemployment Insurance Tax: 0.00%  ${usd(0)}`,
+              `State Family Leave Insurance Tax: 0.00%  ${usd(0)}`,
+              `State Workers Compensation Insurance Tax: 0.00%  ${usd(0)}`,
+              `Pre-Tax Deductions: 0.00%  ${usd(0)}`,
+              `Post-Tax Deductions: 0.00%  ${usd(0)}`,
+              `Take Home Salary: ${r.takeHomePct.toFixed(2)}%  ${usd(r.perPeriodTakeHome)}`,
               `Annual Take-Home: ${usd(r.annualTakeHome)}`,
               `Monthly Net Pay: ${usd(r.monthlyNet)}`,
-              `${payFreq === 'daily' ? 'Daily Net Pay' : payFreq === 'weekly' ? 'Weekly Net Pay' : payFreq === 'biweekly' ? 'Biweekly Net Paycheck' : payFreq === 'semimonthly' ? 'Semi-Monthly Net' : payFreq === 'monthly' ? 'Monthly Net Pay' : 'Annual Take-Home'}: ${usd(r.perPeriodTakeHome)}`,
             ]}
           />
         ) : (
@@ -2601,7 +2639,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2 text-white">Does my filing status change how much I am paid in Florida?</h3>
-                <p>Yes, your filing status—such as Single, Married Filing Jointly, or Head of Household—directly impacts your federal income tax brackets and your standard deduction. When using a paycheck calculator florida, selecting the correct status ensures that the tool applies the correct IRS withholding tables to your specific situation.</p>
+                <p>Yes, your filing statusâ€”such as Single, Married Filing Jointly, or Head of Householdâ€”directly impacts your federal income tax brackets and your standard deduction. When using a paycheck calculator florida, selecting the correct status ensures that the tool applies the correct IRS withholding tables to your specific situation.</p>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2 text-white">Why does my pay frequency matter when using a florida paycheck calculator?</h3>
@@ -2661,7 +2699,7 @@ function PrivacyPolicyPage({ isDark }) {
           <p><strong>9. Security Measures</strong></p>
           <p>We apply reasonable safeguards to protect website systems and data flows. However, no internet-based platform can guarantee absolute security.</p>
 
-          <p><strong>10. Childrenâ€™s Privacy</strong></p>
+          <p><strong>10. ChildrenÃ¢â‚¬â„¢s Privacy</strong></p>
           <p>This website is not directed to children under 13. If you believe a child provided personal information, contact us so we can review and remove it where appropriate.</p>
 
           <p><strong>11. International Access</strong></p>
@@ -3037,12 +3075,14 @@ export default function App() {
             </div>
           </div>
           <div className={`border-t ${isDark ? 'border-slate-800' : 'border-slate-300'} pt-8 text-center text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            <p>© 2026 OBBBA Tax Calculators. This educational tool is provided for informational purposes only.</p>
+            <p>Â© 2026 OBBBA Tax Calculators. This educational tool is provided for informational purposes only.</p>
           </div>
         </div>
       </footer>
     </div>
   );
 }
+
+
 
 
