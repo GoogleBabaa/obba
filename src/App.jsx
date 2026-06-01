@@ -1206,6 +1206,7 @@ function SalaryCalculatorPage({ isDark }) {
   const [payFrequency, setPayFrequency] = useState('monthly');
   const [paidType, setPaidType] = useState('salary');
   const [grossPayMethod, setGrossPayMethod] = useState('perYear');
+  const [hourCount, setHourCount] = useState('0');
   const [amount, setAmount] = useState('0');
   const [otType, setOtType] = useState('overtime');
   const [otHours, setOtHours] = useState('0');
@@ -1220,20 +1221,21 @@ function SalaryCalculatorPage({ isDark }) {
       : payFrequency === 'monthly' ? 12
       : 1;
     const inputAmount = Math.max(0, num(amount));
+    const hours = Math.max(0, num(hourCount));
     const overtimeHours = Math.max(0, num(otHours));
     const overtimeAmount = Math.max(0, num(otAmount));
     const overtimeMultiplier = otType === 'doubletime' ? 2 : 1.5;
     const basePerPeriod =
-      grossPayMethod === 'perPeriod'
-        ? inputAmount
-        : inputAmount / periods;
+      paidType === 'hourly'
+        ? inputAmount * hours
+        : grossPayMethod === 'perPeriod'
+          ? inputAmount
+          : inputAmount / periods;
     const annualBase = basePerPeriod * periods;
 
     let overtimePerPeriod = 0;
     if (paidType === 'hourly' && overtimeHours > 0) {
-      const hourlyRate = grossPayMethod === 'perPeriod'
-        ? inputAmount
-        : inputAmount / (periods * 8);
+      const hourlyRate = inputAmount;
       overtimePerPeriod += hourlyRate * overtimeMultiplier * overtimeHours;
     }
     overtimePerPeriod += overtimeAmount;
@@ -1259,7 +1261,7 @@ function SalaryCalculatorPage({ isDark }) {
       netAnnual,
       netPerPeriod: netAnnual / periods,
     };
-  }, [payFrequency, paidType, grossPayMethod, amount, otType, otHours, otAmount]);
+  }, [payFrequency, paidType, grossPayMethod, hourCount, amount, otType, otHours, otAmount]);
 
   useEffect(() => {
     document.title = 'Federal Salary Calculator - Estimate Annual and Per-Pay Earnings';
@@ -1323,9 +1325,16 @@ function SalaryCalculatorPage({ isDark }) {
         <Field label="Type (How are you paid?)">
           <Select value={paidType} onChange={setPaidType} options={[['hourly', 'Hourly'], ['salary', 'Salary']]} />
         </Field>
-        <Field label="Gross Pay Method">
-          <Select value={grossPayMethod} onChange={setGrossPayMethod} options={[['perYear', 'Pay Per Year'], ['perPeriod', 'Pay Per Period']]} />
-        </Field>
+        {paidType === 'salary' && (
+          <Field label="Gross Pay Method">
+            <Select value={grossPayMethod} onChange={setGrossPayMethod} options={[['perYear', 'Pay Per Year'], ['perPeriod', 'Pay Per Period']]} />
+          </Field>
+        )}
+        {paidType === 'hourly' && (
+          <Field label="Number of Hours">
+            <Input value={hourCount} onChange={setHourCount} />
+          </Field>
+        )}
         <Field label="Amount ($)">
           <Input value={amount} onChange={setAmount} />
         </Field>
