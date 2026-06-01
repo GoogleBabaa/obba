@@ -1744,6 +1744,23 @@ function PaycheckCalculatorPage({ isDark }) {
     };
   }, [status, stateCode, rateType, grossPay, hoursPerDay, payFreq]);
   const selectedState = FEDERAL_STATE_OPTIONS.find((s) => s.code === stateCode);
+  const paycheckTaxesPer = Math.max(0, r.fedPer + r.statePer + r.ssPer + r.medicarePer);
+  const paycheckTakeHomePer = Math.max(0, r.netPer);
+  const paycheckGrossPer = Math.max(0, r.grossPer);
+  const paycheckGraphItems = [
+    { key: 'gross', label: 'Gross Pay', value: paycheckGrossPer, color: '#0ea5e9' },
+    { key: 'taxes', label: 'Taxes', value: paycheckTaxesPer, color: '#f59e0b' },
+    { key: 'takehome', label: 'Take Home', value: paycheckTakeHomePer, color: '#10b981' },
+  ];
+  const paycheckGraphTotal = Math.max(paycheckGraphItems.reduce((sum, item) => sum + item.value, 0), 1);
+  const paycheckCircumference = 2 * Math.PI * 42;
+  let paycheckOffset = 0;
+  const paycheckGraphSlices = paycheckGraphItems.map((item) => {
+    const dash = (item.value / paycheckGraphTotal) * paycheckCircumference;
+    const slice = { ...item, dash, offset: paycheckOffset };
+    paycheckOffset += dash;
+    return slice;
+  });
 
   useEffect(() => {
     document.title = 'Paycheck Calculator to Estimate Your Take-Home Pay';
@@ -1828,26 +1845,62 @@ function PaycheckCalculatorPage({ isDark }) {
         <Field label="Filing Status" hint="Select for Federal tax calculation">
           <Select value={status} onChange={setStatus} options={[['single', 'Single'], ['married', 'Married Filing Jointly']]} />
         </Field>
-        <Result isDark={isDark} lines={[
-          `Where is your money going?`,
-          `Gross Paycheck: ${usd(r.grossPer)}`,
-          `Taxes: ${r.taxesPct.toFixed(2)}%  ${usd(r.fedPer)}`,
-          `Federal Income: ${r.taxesPct.toFixed(2)}%  ${usd(r.fedPer)}`,
-          `${selectedState?.name ?? 'State'} Income: ${r.stateRatePct.toFixed(2)}%  ${usd(r.statePer)}`,
-          `Local Income: 0.00%  ${usd(0)}`,
-          `FICA and State Insurance Taxes: ${r.ficaPct.toFixed(2)}%  ${usd(r.ficaPer)}`,
-          `Social Security: 6.20%  ${usd(r.ssPer)}`,
-          `Medicare: 1.45%  ${usd(r.medicarePer)}`,
-          `State Disability Insurance Tax: 0.00%  ${usd(0)}`,
-          `State Unemployment Insurance Tax: 0.00%  ${usd(0)}`,
-          `State Family Leave Insurance Tax: 0.00%  ${usd(0)}`,
-          `State Workers Compensation Insurance Tax: 0.00%  ${usd(0)}`,
-          `Pre-Tax Deductions: 0.00%  ${usd(0)}`,
-          `Post-Tax Deductions: 0.00%  ${usd(0)}`,
-          `Take Home Salary: ${r.takeHomePct.toFixed(2)}%  ${usd(r.netPer)}`,
-          `Annual Take-Home: ${usd(r.netAnnual)}`,
-          `Monthly Net Pay: ${usd(r.netAnnual / 12)}`,
-        ]} />
+        <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+          <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+            <div className="space-y-1 text-sm">
+              <p>Where is your money going?</p>
+              <p>Gross Paycheck: {usd(r.grossPer)}</p>
+              <p>Taxes: {r.taxesPct.toFixed(2)}%  {usd(r.fedPer)}</p>
+              <p>Federal Income: {r.taxesPct.toFixed(2)}%  {usd(r.fedPer)}</p>
+              <p>{selectedState?.name ?? 'State'} Income: {r.stateRatePct.toFixed(2)}%  {usd(r.statePer)}</p>
+              <p>Local Income: 0.00%  {usd(0)}</p>
+              <p>FICA and State Insurance Taxes: {r.ficaPct.toFixed(2)}%  {usd(r.ficaPer)}</p>
+              <p>Social Security: 6.20%  {usd(r.ssPer)}</p>
+              <p>Medicare: 1.45%  {usd(r.medicarePer)}</p>
+              <p>State Disability Insurance Tax: 0.00%  {usd(0)}</p>
+              <p>State Unemployment Insurance Tax: 0.00%  {usd(0)}</p>
+              <p>State Family Leave Insurance Tax: 0.00%  {usd(0)}</p>
+              <p>State Workers Compensation Insurance Tax: 0.00%  {usd(0)}</p>
+              <p>Pre-Tax Deductions: 0.00%  {usd(0)}</p>
+              <p>Post-Tax Deductions: 0.00%  {usd(0)}</p>
+              <p>Take Home Salary: {r.takeHomePct.toFixed(2)}%  {usd(r.netPer)}</p>
+              <p>Annual Take-Home: {usd(r.netAnnual)}</p>
+              <p>Monthly Net Pay: {usd(r.netAnnual / 12)}</p>
+            </div>
+            <div className="space-y-3">
+              <div className="flex justify-center">
+                <svg viewBox="0 0 120 120" className="h-36 w-36">
+                  <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                  {paycheckGraphSlices.map((slice) => (
+                    <circle
+                      key={slice.key}
+                      cx="60"
+                      cy="60"
+                      r="42"
+                      fill="none"
+                      stroke={slice.color}
+                      strokeWidth="16"
+                      strokeDasharray={`${slice.dash} ${paycheckCircumference - slice.dash}`}
+                      strokeDashoffset={-slice.offset}
+                      transform="rotate(-90 60 60)"
+                    />
+                  ))}
+                </svg>
+              </div>
+              <div className="space-y-1 text-xs">
+                {paycheckGraphItems.map((item) => (
+                  <div key={item.key} className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-2">
+                      <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                      {item.label}
+                    </span>
+                    <span>{usd(item.value)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </CalcShell>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
