@@ -1359,9 +1359,9 @@ function SalaryCalculatorPage({ isDark }) {
   });
 
   useEffect(() => {
-    document.title = 'Federal Salary Calculator - Estimate Annual and Per-Pay Earnings';
+    document.title = 'Text to Handwriting Converter – Free Handwriting Generator';
 
-    const metaDescriptionContent = 'Federal Salary Calculator with pay frequency, paid type, gross pay method, overtime type, and 2026 pay-year selection.';
+    const metaDescriptionContent = 'Convert typed text into realistic handwritten notes with a free text to handwriting converter. Choose fonts, paper styles, ink colors, headers, and download as PDF or image.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -1380,12 +1380,12 @@ function SalaryCalculatorPage({ isDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Federal Salary Calculator - Estimate Annual and Per-Pay Earnings',
+      name: 'Text to Handwriting Converter – Free Handwriting Generator',
       description: metaDescriptionContent,
       url: `${window.location.origin}/salary-calculator`,
       mainEntity: {
         '@type': 'SoftwareApplication',
-        name: 'Federal Salary Calculator',
+        name: 'Text to Handwriting Converter',
         applicationCategory: 'FinanceApplication',
         operatingSystem: 'Web',
         offers: {
@@ -1406,10 +1406,12 @@ function SalaryCalculatorPage({ isDark }) {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8">
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
-        <h1 className="text-3xl font-bold mb-4 text-white">Federal Salary Calculator</h1>
+        <h1 className="text-3xl font-bold mb-4 text-white">Text to Handwriting Converter: Turn Typed Text into Realistic Handwritten Notes</h1>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Estimate federal salary using your pay frequency, paid type, gross pay method, overtime details, and pay year.</p>
-          <p>Results show annual gross, overtime impact, federal/FICA deductions, and net pay per period.</p>
+          <p>Does your handwriting look messy, or do you feel tired when writing long assignments by hand? Many students face this problem every day. They may understand the topic well, but when it is time to write pages of notes, projects, homework, or assignments, the work becomes stressful and time-consuming.</p>
+          <p>Some students do not have neat handwriting. Some write slowly. Some make spelling mistakes while copying long text. Others simply feel bored after writing two or three pages. In many schools, colleges, and universities, handwritten work still matters. A clean page, proper spacing, readable writing, and a neat layout can make an assignment look more professional.</p>
+          <p>This is where a text to handwriting converter can help. A text to handwriting tool allows you to type or paste your content and convert it into realistic handwritten notes within seconds. Instead of writing everything manually, you can choose a handwriting style, select a paper design, adjust ink color, add a custom header, and download the final page as a PDF or image.</p>
+          <p>It is simple, fast, and useful for students, teachers, content creators, and anyone who wants digital text to look like natural handwriting.</p>
         </div>
       </article>
 
@@ -1526,162 +1528,174 @@ function SalaryCalculatorPage({ isDark }) {
       </CalcShell>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Understanding the Basics of Hourly vs. Salary Pay</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">What Is a Text to Handwriting Converter?</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Whether you earn an hourly rate or a set salary, your compensation model dictates your work-life balance. These two systems function differently under United States labor laws, impacting how you track your time and receive your earnings. Recognizing these distinctions helps you make informed decisions about your career path.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">The fundamental differences between hourly and salaried roles</h3>
-          <p>Hourly employees receive pay based on the exact number of hours they work during a pay period. If you work extra hours, you are often entitled to overtime pay, which is typically one and a half times your base rate. This structure provides a direct link between your time spent on the job and your total take-home pay.</p>
-          <p>In contrast, salaried employees receive a fixed amount of money regardless of the hours worked in a specific week. While this offers a predictable income, it often means that working beyond standard hours does not result in additional compensation. Many salaried roles are considered &quot;exempt&quot; from overtime pay requirements under the Fair Labor Standards Act.</p>
-          <div className="overflow-x-auto">
-            <table className={`w-full min-w-[620px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
-              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
-                <tr>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Feature</th>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Hourly Employee</th>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Salaried Employee</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Pay Basis</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Hours worked</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Fixed annual amount</td>
-                </tr>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Overtime Pay</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Eligible for overtime</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Usually exempt</td>
-                </tr>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Income Stability</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Variable based on hours</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Consistent every period</td>
-                </tr>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Time Tracking</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Required for payroll</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Often not required</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <h3 className="text-xl font-semibold pt-2 text-white">Why converting your pay matters for financial planning</h3>
-          <p>Converting your pay into a common format is essential for accurate budgeting and long-term financial health. When you understand your true annual income, you can better compare job offers that use different compensation models. This clarity allows you to set realistic savings goals and manage your monthly expenses effectively.</p>
-          <p>Calculating your annual equivalent helps you see the bigger picture of your financial life. It reveals how much you actually earn after accounting for unpaid holidays or potential overtime shifts. By mastering these numbers, you gain the confidence to negotiate your worth and plan for your future with precision.</p>
-        </div>
-      </article>
-
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">How to Use an Hourly to Salary Calculator Effectively</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Using an hourly to salary calculator is a simple way to project your annual earnings. When you provide precise information, the tool gives you a clear picture of your financial future. Accuracy remains the most important factor in ensuring your results reflect your true earning potential.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Inputting your base hourly rate</h3>
-          <p>The first step involves entering your current base wage into the hourly to salary calculator. Make sure to use your gross pay rate before any taxes or deductions are taken out. This ensures the math remains consistent and reliable for your planning needs.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Accounting for standard work hours per week</h3>
-          <p>Most professionals operate on a standard 40-hour work week. You should input this figure to establish a baseline for your annual income projections. If your schedule fluctuates, consider using an average of your weekly hours to maintain a realistic outlook.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Adjusting for unpaid time off and holidays</h3>
-          <p>Real-world income often differs from a simple multiplication of your hourly rate. You must account for unpaid vacation days or company holidays that might reduce your total take-home pay. By subtracting these non-working days, you gain a much more accurate estimate of your yearly salary.</p>
-          <p>Keeping these adjustments in mind helps you avoid common financial surprises. Using an hourly to salary calculator with these specific details allows you to manage your budget with greater confidence and ease.</p>
-        </div>
-      </article>
-
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Tools and Resources for Career Financial Planning</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Managing your career finances requires more than just a calculator; it demands a solid system. By organizing your income data, you gain a clearer picture of your professional trajectory. These digital resources help you stay consistent while planning for your future needs.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Using digital spreadsheets for long-term tracking</h3>
-          <p>Spreadsheets are excellent tools for monitoring your salary growth over several years. You can create custom columns to track base pay, bonuses, and annual raises. This historical data helps you identify trends and set realistic expectations for future negotiations.</p>
-          <p>To get started, consider these benefits of using a spreadsheet:</p>
+          <p>A text to handwriting converter is an online tool that changes typed text into handwriting-style text. You write or paste normal digital text, and the tool turns it into a handwritten page.</p>
+          <p>It works like a handwriting maker. You do not need to write every word by hand. The tool uses handwriting fonts, page settings, ink styles, and paper layouts to create a natural handwritten look.</p>
+          <p>For example, you can type a paragraph in English or Hindi, choose a neat handwriting font, select ruled paper, set blue ink, and download the result as a handwritten assignment.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">In simple words</h3>
+          <p>A text to handwriting converter helps you create handwritten-looking pages from typed text.</p>
+          <p>It can be used for:</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li>Visualizing your income growth through charts and graphs.</li>
-            <li>Comparing your actual earnings against your career goals.</li>
-            <li>Storing historical data for easy access during performance reviews.</li>
-            <li>Customizing formulas to account for specific tax brackets or deductions.</li>
+            <li>Handwritten assignments</li>
+            <li>School homework</li>
+            <li>College projects</li>
+            <li>Study notes</li>
+            <li>Practice sheets</li>
+            <li>Letters</li>
+            <li>Application writing</li>
+            <li>Notebook-style pages</li>
+            <li>Exam-style writing samples</li>
+            <li>Digital handwritten notes</li>
+            <li>Printable handwritten pages</li>
           </ul>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Integrating salary calculators with personal finance apps</h3>
-          <p>Modern technology allows you to connect your income data with popular personal finance apps like Mint, YNAB, or Empower. By inputting your calculated annual salary into these platforms, you can automate your monthly budgeting process. This integration ensures that your spending limits align with your actual take-home pay.</p>
-          <p>Automating your financial tracking reduces the risk of human error. It also provides real-time updates on your savings progress. When your income changes, you simply update your base rate in the app to see how it impacts your long-term financial health.</p>
-
-          <div className="overflow-x-auto">
-            <table className={`w-full min-w-[620px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
-              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
-                <tr>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Tool Type</th>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Primary Benefit</th>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Best For</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Digital Spreadsheets</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>High Customization</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Long-term trend analysis</td>
-                </tr>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Finance Apps</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Real-time Automation</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Daily budget management</td>
-                </tr>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Salary Calculators</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Quick Projections</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Immediate pay estimation</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <p>The main purpose is to save time while still making the final output look clean, natural, and easy to read.</p>
         </div>
       </article>
 
-      <img
-        src="/salary-seo-illustration.svg"
-        alt="Hourly to Salary Calculator visual showing formula from hourly pay to annual salary estimate"
-        className="mt-6 w-full rounded-2xl border border-white/10"
-        loading="lazy"
-      />
-
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Conclusion</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Why Students Use a Handwriting Generator</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Taking control of your earnings requires more than just a paycheck stub. You now possess the tools to translate hourly wages into a clear annual salary picture. This shift in perspective allows you to view your professional value through a lens of long-term stability.</p>
-          <p>Applying these calculations helps you align your work life with your personal financial goals. Whether you use tools from ADP or Paychex, consistent tracking remains vital for your success. You can now navigate salary negotiations with evidence-based confidence.</p>
-          <p>Your journey toward career growth involves constant learning and adjustment. Use these insights to build a budget that supports your lifestyle and future ambitions. Clarity regarding your income empowers you to make smart choices every single day.</p>
+          <p>Students often have to complete long written tasks. Sometimes the topic is ready, but writing everything by hand takes hours. A handwriting generator makes this process easier.</p>
+          <p>It is helpful for students who want neat writing but do not want to spend too much time copying text again and again.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Common problems students face</h3>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>Handwriting is not clean</li>
+            <li>Writing speed is slow</li>
+            <li>Long assignments feel boring</li>
+            <li>Pages look messy</li>
+            <li>Line spacing is not equal</li>
+            <li>Words become hard to read</li>
+            <li>Hand pain starts after writing for a long time</li>
+            <li>Mistakes happen while copying text</li>
+            <li>Deadline is close</li>
+            <li>Printed text does not look like handwritten work</li>
+          </ul>
+          <p>A text to handwriting AI tool solves many of these problems by converting typed content into handwritten-style pages quickly.</p>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">FAQ</h2>
-        <div className={`space-y-5 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Why should I use an hourly to salary calculator when planning my finances?</h3>
-            <p>Using an hourly to salary calculator is essential because it provides a comprehensive view of your financial health. While hourly wages tell you what you earn today, knowing your annual salary allows you to create long-term goals, such as saving for a home or planning for retirement. It simplifies the math for workers across the United States, helping you understand your total earning power beyond just the next paycheck.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What does the &quot;2,080-hour work year&quot; mean in a yearly salary calculator?</h3>
-            <p>The 2,080-hour figure is the standard benchmark used by payroll professionals at companies like ADP and Gusto. It represents a full-time schedule of 40 hours per week for 52 weeks. When you use a yearly salary calculator, this standard helps convert your hourly rate into a predictable annual figure, though you can always adjust the hours if you work part-time or have significant overtime.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">How can a salary to hourly calculator help me evaluate a new job offer?</h3>
-            <p>When you receive a job offer with a fixed annual rate, a salary to hourly calculator helps you break down that number to see what your time is actually worth. This is particularly useful if the new role requires more hours than your current one. By seeing the hourly breakdown, you can better compare offers from different employers, such as a corporate role at Amazon versus a freelance contract, to ensure the transition is financially worth it.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Does an hourly to salary calculator account for taxes and health insurance?</h3>
-            <p>Most calculators provide your &quot;gross&quot; income, which is the total amount before deductions. To understand your actual take-home pay, you need to consider federal and state taxes, as well as deductions for health insurance and 401(k) contributions. For a realistic budget, it's a good idea to use the results from a yearly salary calculator and then subtract these costs to see your net disposable income.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">How should I handle unpaid holidays and vacation time in my calculations?</h3>
-            <p>This is a common pitfall! If your position does not offer paid time off, you should subtract those unpaid hours from the standard 2,080-hour year. For instance, if you take two weeks of unpaid vacation, you would calculate based on 2,000 hours instead. Accounting for this in your salary to hourly calculator ensures you don&apos;t overestimate your annual income and helps you build a more accurate emergency fund.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Can I use these conversion tools to help with salary negotiations?</h3>
-            <p>Definitely. Being armed with accurate data makes you a much stronger negotiator. By researching industry standards on platforms like Glassdoor or LinkedIn and using an hourly to salary calculator, you can confidently present your salary expectations to recruiters. If a recruiter offers an hourly rate, you can quickly convert it to see if it meets your annual financial requirements, ensuring you advocate for the compensation you deserve.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What is the best way to track my income growth over time?</h3>
-            <p>Many professionals use digital tools like Microsoft Excel or Google Sheets to track their earnings history. You can integrate the data from a yearly salary calculator into these spreadsheets to visualize your career progression. Additionally, personal finance apps like YNAB or Empower can help you connect your converted salary data to your monthly spending, making it easier to manage irregular income or variable overtime pay.</p>
-          </div>
+        <h2 className="text-2xl font-bold mb-4 text-white">How Does a Text to Handwriting Tool Work?</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>A text to handwriting tool works in a very simple way. You enter your text, choose the handwriting style, select the page design, adjust the settings, and download the result.</p>
+          <p>The tool combines your text with handwriting fonts and paper templates. It then creates a page that looks like it was written with a real pen.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Basic working process</h3>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>You type or paste your text.</li>
+            <li>You choose a handwriting font.</li>
+            <li>You select paper style.</li>
+            <li>You adjust font size, ink color, spacing, and margins.</li>
+            <li>You preview the handwritten page.</li>
+            <li>You download the final file as PDF, PNG, or JPG.</li>
+          </ul>
+          <p>The best part is that you do not need design skills. The tool does most of the work for you.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Key Features of the Handwriting Generator</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>A good handwriting generator should not only convert text into handwriting. It should also give users control over the final page. The more customization options it has, the more realistic and useful the output becomes.</p>
+          <p>Below are the main features of this realistic handwriting generator.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Simple and Easy Interface</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>The tool has a simple design, so users can understand it quickly. You do not need technical knowledge, design experience, or special training.</p>
+          <p>Everything is placed in an easy way. You can see the editor, settings, preview, and download options clearly.</p>
+          <p>Even a school student can use the tool without confusion.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Why this matters</h3>
+          <p>A complicated tool wastes time. A simple interface helps users create handwritten notes faster. You can open the website, paste your content, choose settings, and create the final page without learning a difficult process.</p>
+          <p>Main benefits of the simple interface:</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>Easy to use</li>
+            <li>Beginner-friendly</li>
+            <li>No technical skills needed</li>
+            <li>Quick editing</li>
+            <li>Clear options</li>
+            <li>Fast preview</li>
+            <li>Smooth user experience</li>
+          </ul>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Fast and Live Preview</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>One of the most useful features is live preview. When you type or paste your text, you can instantly see how it will look on the handwritten page.</p>
+          <p>This saves time because you do not have to download the file again and again just to check the output.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Why live preview is helpful</h3>
+          <p>Live preview helps you check:</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>Handwriting style</li>
+            <li>Text size</li>
+            <li>Ink color</li>
+            <li>Page spacing</li>
+            <li>Margins</li>
+            <li>Header position</li>
+            <li>Paper design</li>
+            <li>Overall page look</li>
+          </ul>
+          <p>If something does not look right, you can change it immediately and see the updated result.</p>
+          <p>This makes the handwriting converter more practical for students who want their assignments to look clean before downloading.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Free to Use</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>Many users search for a free text to handwriting converter because they do not want to pay for simple assignment or note-making work.</p>
+          <p>This tool is free to use. You do not need to buy a subscription or pay hidden charges before creating handwritten notes.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">What free access means for users</h3>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>No payment required</li>
+            <li>No subscription needed</li>
+            <li>No hidden charges</li>
+            <li>No premium lock for basic use</li>
+            <li>Easy access for students</li>
+            <li>Useful for regular note creation</li>
+          </ul>
+          <p>This is especially helpful for students who need to create handwritten assignments, homework pages, and project files without spending money.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Custom Header Feature</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>The custom header feature is one of the most important features of this handwriting generator. Many students need a proper assignment header on the first page or every page.</p>
+          <p>With this feature, users can create a professional-looking handwritten assignment page.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">What you can add in the custom header</h3>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>School name</li>
+            <li>College name</li>
+            <li>University name</li>
+            <li>Assignment title</li>
+            <li>Subject name</li>
+            <li>Teacher name</li>
+            <li>Student name</li>
+            <li>Roll number</li>
+            <li>Class or semester</li>
+            <li>Date</li>
+            <li>Logo</li>
+            <li>Header image</li>
+            <li>Watermark</li>
+            <li>Custom design</li>
+          </ul>
+          <h3 className="text-xl font-semibold pt-2 text-white">Why custom header is useful</h3>
+          <p>A clean header gives the page a professional look. It also helps organize the assignment properly.</p>
+          <p>For example, if you are making a college assignment, you can add your name, subject, teacher name, and topic at the top. If you are making a school project, you can add the school logo and project title.</p>
+          <p>This makes the final handwritten work look more polished and organized.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Image and PDF Export</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>The handwriting changer allows users to download the final handwritten page in different formats. This is important because different users need different file types.</p>
+          <p>Some students want to print their handwritten notes. Some prefer to share them digitally or submit them online. Whether you need a PDF for easy printing or a PNG image for sharing, the tool gives you the flexibility to choose the right format for your needs.</p>
         </div>
       </article>
     </main>
@@ -3140,8 +3154,8 @@ export default function App() {
         canonicalPath: '/overtime',
       },
       '/salary-calculator': {
-        title: 'Federal Salary Calculator (GS Pay) - Estimate Annual, Biweekly & Hourly Pay',
-        description: 'Federal Salary Calculator for GS grade, step, locality area, and raise scenario. Estimate base pay, locality adjustment, capped annual salary, biweekly pay, and hourly rate.',
+        title: 'Text to Handwriting Converter – Free Handwriting Generator',
+        description: 'Convert typed text into realistic handwritten notes with a free text to handwriting converter. Choose fonts, paper styles, ink colors, headers, and download as PDF or image.',
         canonicalPath: '/salary-calculator',
       },
       '/paycheck-calculator': {
