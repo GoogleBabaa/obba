@@ -1359,9 +1359,9 @@ function SalaryCalculatorPage({ isDark }) {
   });
 
   useEffect(() => {
-    document.title = 'Salary Calculator: Monthly Income & Take-Home Pay';
+    document.title = 'Salary Calculator - Convert Hourly, Monthly & Annual Pay';
 
-    const metaDescriptionContent = 'Estimate annual salary, monthly income, gross pay, taxes, deductions, and take-home pay with this easy salary calculator guide.';
+    const metaDescriptionContent = 'Use our Salary Calculator to convert hourly, weekly, monthly, and annual pay into clear income estimates for USA workers.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -1380,7 +1380,7 @@ function SalaryCalculatorPage({ isDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Salary Calculator: Monthly Income & Take-Home Pay',
+      name: 'Salary Calculator - Convert Hourly, Monthly & Annual Pay',
       description: metaDescriptionContent,
       url: `${window.location.origin}/salary-calculator`,
       mainEntity: {
@@ -1406,12 +1406,10 @@ function SalaryCalculatorPage({ isDark }) {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8">
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
-        <h1 className="text-3xl font-bold mb-4 text-white">Salary Calculator: Calculate Monthly Income, Annual Salary, Gross Pay, and Take-Home Pay</h1>
+        <h1 className="text-3xl font-bold mb-4 text-white">Salary Calculator</h1>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>A salary offer can look exciting at first. You may see a job paying $50,000, $70,000, or even $100,000 a year and think that is the amount you will actually receive. But when the first paycheck arrives, the number is often lower than expected.</p>
-          <p>That does not mean your employer made a mistake. It usually happens because your gross salary is not the same as your take-home pay. Before money reaches your bank account, taxes and deductions may be taken out. Federal income tax, state income tax, Social Security, Medicare, health insurance, retirement contributions, and other deductions can all reduce your final paycheck.</p>
-          <p>That is why a salary calculator is useful. A salary calculator helps you understand what your income really means. It can help you calculate monthly income, estimate annual salary, convert hourly wage to yearly income, check monthly gross salary, and understand how much money you may actually take home after taxes.</p>
-          <p>This guide explains salary calculation in a simple and practical way. You will learn how annual income works, how to calculate gross monthly income, how paycheck deductions affect your income, how federal tax is estimated, and why take-home pay changes from one state to another.</p>
+          <p>A Salary Calculator helps you understand your income in a clear and simple way. Instead of guessing what your pay means weekly, monthly, or yearly, you can quickly convert one amount into useful salary figures. Whether you earn an hourly wage, receive a fixed annual salary, or want to compare two job offers, this tool gives you a better view of your real earning value.</p>
+          <p>It can also help you plan your budget, review your gross salary, estimate your net salary, and understand how different pay schedules affect your money. For workers in the USA, it makes salary planning easier and more practical.</p>
         </div>
       </article>
 
@@ -1530,406 +1528,486 @@ function SalaryCalculatorPage({ isDark }) {
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
         <h2 className="text-2xl font-bold mb-4 text-white">What Is a Salary Calculator?</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>A salary calculator is a tool that helps you estimate income based on salary, hourly wage, pay frequency, taxes, and deductions. It can convert your income from one format to another — turning hourly pay into annual salary, annual salary into monthly income, or gross pay into estimated take-home pay.</p>
-          <p>This is useful because people do not always think about income in the same way. Employers may talk about yearly salary. Banks may ask for monthly gross income. Workers may care more about weekly or biweekly paychecks. A salary calculator connects all these numbers together.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">What a salary calculator can estimate</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Annual salary and yearly income</li>
-            <li>Monthly income and monthly gross salary</li>
-            <li>Gross monthly income</li>
-            <li>Weekly and biweekly pay</li>
-            <li>Hourly wage</li>
-            <li>Net pay and take-home pay</li>
-            <li>Salary after taxes</li>
-            <li>Federal and state income tax</li>
-            <li>Paycheck deductions</li>
-            <li>Income per pay period</li>
-          </ul>
-          <p>A yearly salary calculator is useful when you want to understand your full annual income. A monthly income calculator is useful when you are planning rent, bills, savings, or loan payments. A take-home pay calculator is useful when you want to know what may actually come into your account after taxes.</p>
+          <p>A Salary Calculator is a tool that converts income from one payment frequency into another. For example, it can turn $30 per hour into yearly income, or it can turn a $70,000 yearly salary into an estimated hourly value. This makes it easier to compare jobs that pay in different ways. A nurse may look at biweekly pay, while a contractor may think in daily or weekly rates.</p>
+          <p>A good income calculator does more than show one number. It helps you see how working hours, hours per week, days per week, holidays per year, and vacation days can affect real income value. This matters because two people can both say they earn $60,000 a year, but their real working time may be very different.</p>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Why Your Salary Is Not the Same as Your Paycheck</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">How to Use the Salary Calculator</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Many people get confused when their paycheck looks smaller than their salary. This happens because salary is usually shown before taxes, while your paycheck is what remains after deductions.</p>
-          <p>Think of it this way: your salary is the starting number. Your paycheck is the final number. Between these two numbers, taxes and deductions are applied.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">What is gross pay?</h3>
-          <p>Gross pay is your income before taxes and deductions. If your job offer says $60,000 per year, that is your gross annual salary. Gross pay can include:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Base salary and hourly wages</li>
-            <li>Overtime pay and bonuses</li>
-            <li>Commissions and tips</li>
-            <li>Allowances and taxable benefits</li>
-            <li>Other taxable income</li>
-          </ul>
-          <h3 className="text-xl font-semibold pt-2 text-white">What is net pay?</h3>
-          <p>Net pay is your income after taxes and deductions. This is also called take-home pay.</p>
-          <p>Simple formula: Gross Pay - Taxes - Deductions = Net Pay</p>
-          <p>Your net pay is the amount you can actually use for rent, bills, groceries, savings, and personal spending.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Is gross pay before or after taxes?</h3>
-          <p>Gross pay is before taxes. Net pay is after taxes. Take-home pay means the money you actually receive after taxes and deductions. This is one of the most important things to understand before using any salary calculator, paycheck calculator, or income calculator.</p>
+          <p>Using a salary calculator is simple. You enter your pay amount, choose whether it is hourly, weekly, monthly, or yearly, then add your normal hours per week and days per week. If the tool includes time-off settings, you can also add holidays per year and vacation days. This gives a more realistic view of your income.</p>
+          <p>For example, if you earn $25 per hour and work 40 hours a week, an hourly to salary calculator can estimate your yearly income before taxes. However, if you take unpaid time off, your real yearly earnings may drop. That is where an adjusted salary calculator becomes helpful because it looks beyond the clean number on paper.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Input Field</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>What It Means</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Why It Matters</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Salary amount', 'The pay figure you enter', 'This is the starting point for every calculation'],
+                  ['Payment frequency', 'Hourly, weekly, monthly, or yearly', 'This tells the calculator how to convert your income'],
+                  ['Hours per week', 'Your normal weekly work time', 'This affects hourly and annual estimates'],
+                  ['Days per week', 'Your regular workdays', 'This helps calculate daily salary'],
+                  ['Holidays per year', 'Paid or unpaid holidays', 'This can change adjusted income'],
+                  ['Vacation days', 'Time off from work', 'This helps estimate real earning value'],
+                ].map(([a, b, c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">How to Calculate Annual Income</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Salary vs Wage: What Is the Difference?</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Annual income means how much you earn in one year. The formula depends on how you are paid. A salary calculator uses your pay frequency to estimate your annual income correctly.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">How to calculate annual income from hourly wage</h3>
-          <p>Formula: Hourly Rate &times; Hours Per Week &times; 52 = Annual Income</p>
-          <p>Example: $30 &times; 40 &times; 52 = $62,400</p>
-          <p>So, $30 an hour is about $62,400 per year before taxes if you work full time. After taxes, the amount depends on your state, filing status, deductions, and pay period.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">How to calculate annual income from weekly pay</h3>
-          <p>Formula: Weekly Pay &times; 52 = Annual Income</p>
-          <p>Example: $1,000 &times; 52 = $52,000</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">How to calculate annual income from biweekly pay</h3>
-          <p>Formula: Biweekly Pay &times; 26 = Annual Income</p>
-          <p>Example: $2,000 &times; 26 = $52,000. Most years have 26 biweekly pay periods.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">How to calculate annual income from monthly salary</h3>
-          <p>Formula: Monthly Salary &times; 12 = Annual Income</p>
-          <p>Example: $5,000 &times; 12 = $60,000</p>
+          <p>Salary vs wage is one of the most common income questions in the USA. A salary is usually a fixed amount paid on a regular schedule, often shown as a yearly figure such as $80,000 per year. A wage is usually based on an hourly rate such as $22 per hour. Both are forms of pay, but they work differently in real life.</p>
+          <p>A salaried office worker may receive the same pay each pay period, even if one week feels harder than another. A wage worker is usually paid for the exact hours worked. For example, a retail employee earning an hourly wage may earn more during a busy week with extra shifts. This is why a wage calculator and an employee salary calculator can both help, depending on how you are paid.</p>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">How to Calculate Monthly Income</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Gross Salary vs Net Salary</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Monthly income is one of the most useful numbers in daily life. Most people plan their expenses monthly — rent, mortgage, car payments, phone bills, groceries, insurance, and subscriptions are all paid month by month.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">How to calculate monthly income from annual salary</h3>
-          <p>Formula: Annual Salary &divide; 12 = Monthly Gross Income</p>
-          <p>Example: $72,000 &divide; 12 = $6,000</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">How to calculate monthly income from hourly wage</h3>
-          <p>Formula: Hourly Rate &times; Hours Per Week &times; 52 &divide; 12 = Monthly Income</p>
-          <p>Example: $25 &times; 40 &times; 52 &divide; 12 = $4,333.33</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">How to calculate monthly income from weekly paycheck</h3>
-          <p>A common mistake is multiplying weekly pay by 4. That gives a rough estimate, but it is not fully accurate because a year has 52 weeks, not 48.</p>
-          <p>Better formula: Weekly Pay &times; 52 &divide; 12 = Monthly Income</p>
-          <p>Example: $900 &times; 52 &divide; 12 = $3,900</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">How to calculate monthly income from biweekly paycheck</h3>
-          <p>Formula: Biweekly Pay &times; 26 &divide; 12 = Monthly Income</p>
-          <p>Example: $1,800 &times; 26 &divide; 12 = $3,900</p>
+          <p>Gross salary is your income before deductions. It is the big number you see in a job offer, employment contract, or salary discussion. If a company offers you $75,000 per year, that is usually your gross amount. A gross salary calculator helps you understand this number across different pay periods.</p>
+          <p>Net salary is what remains after deductions. This may include income tax, Social Security tax, Medicare tax, health insurance, retirement contributions, and other deductions. A net salary calculator gives a closer picture of take-home pay, but exact results depend on your tax filing status, state, benefits, and personal deductions.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Salary Type</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Meaning</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Gross salary', 'Income before deductions', '$75,000 per year before tax'],
+                  ['Net salary', 'Income after deductions', 'The amount that reaches your bank'],
+                  ['Base salary', 'Fixed pay before bonuses', '$70,000 plus possible bonus'],
+                  ['Take-home pay', 'Spendable pay after deductions', 'Your real paycheck deposit'],
+                ].map(([a, b, c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">What Is Monthly Gross Salary?</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">How Annual Salary Is Calculated</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Monthly gross salary is your salary for one month before taxes and deductions. If your yearly salary is $60,000, your monthly gross salary is $5,000. But your actual take-home pay will be lower after federal tax, state tax, Social Security, Medicare, health insurance, retirement contributions, and other deductions.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Why monthly gross salary matters</h3>
-          <p>Monthly gross salary is often required when applying for financial products or services. It may be needed for:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Apartment and mortgage applications</li>
-            <li>Car loans and personal loans</li>
-            <li>Credit cards and income verification</li>
-            <li>Financial aid and budget planning</li>
-          </ul>
-          <p>However, for personal budgeting, your monthly net income is more useful because it shows the money you actually receive.</p>
+          <p>Annual salary is usually calculated by multiplying your pay rate by the amount of time you work in a year. If you are paid hourly, the common formula is hourly rate multiplied by weekly hours, then multiplied by 52 weeks.</p>
+          <p>For example, if your hourly rate is $30 and you work 40 hours per week, your estimated annual income is $62,400 before taxes. The math is: $30 &times; 40 &times; 52 = $62,400. However, that number may change if you work fewer weeks, take unpaid leave, or have irregular hours.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Hourly Rate</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Hours Per Week</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Estimated Annual Salary</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[['$20','40','$41,600'],['$25','40','$52,000'],['$30','40','$62,400'],['$35','40','$72,800'],['$40','40','$83,200']].map(([a,b,c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">How to Calculate Gross Monthly Income</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Salary by Pay Frequency</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Gross monthly income means your income before taxes for one month. The formula depends on how you are paid.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">If you know your annual salary</h3>
-          <p>Annual Salary &divide; 12 = Gross Monthly Income</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">If you know your hourly wage</h3>
-          <p>Hourly Rate &times; Weekly Hours &times; 52 &divide; 12 = Gross Monthly Income</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">If you know your weekly pay</h3>
-          <p>Weekly Pay &times; 52 &divide; 12 = Gross Monthly Income</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">If you know your biweekly pay</h3>
-          <p>Biweekly Pay &times; 26 &divide; 12 = Gross Monthly Income</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Quick example</h3>
-          <p>If you earn $24 per hour and work 40 hours per week: $24 &times; 40 &times; 52 &divide; 12 = $4,160. Your gross monthly income is about $4,160 before taxes.</p>
+          <p>Salary by pay frequency shows how the same income looks across different payment schedules. This is useful because a $60,000 yearly salary does not feel like $60,000 in your pocket at once. It comes in pieces that may arrive weekly, biweekly, semi-monthly, or monthly.</p>
+          <p>A pay frequency calculator helps you plan your budget around real cash flow. Rent may be monthly, groceries may be weekly, and debt payments may be due on fixed dates. Your pay period decides when money arrives, so it can shape how easily you manage bills.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Pay Frequency</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Payments Per Year</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Example From $60,000 Salary</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[['Weekly','52','About $1,153.85'],['Biweekly','26','About $2,307.69'],['Semi-Monthly','24','$2,500'],['Monthly','12','$5,000'],['Quarterly','4','$15,000']].map(([a,b,c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <h3 className="text-xl font-semibold pt-2 text-white">Weekly Salary</h3>
+          <p>A weekly salary calculator shows what you earn every week. Weekly pay can feel steady because money arrives often. It may help you manage groceries, fuel, short bills, and small savings goals. For example, a $52,000 yearly salary equals about $1,000 per week before deductions.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Biweekly Salary</h3>
+          <p>A biweekly salary calculator divides yearly pay into 26 payments. Biweekly pay is common in the USA because many employers pay workers every two weeks. One useful quirk is that some months may include three paychecks instead of two. That third check can feel like a small financial bonus if you plan it well.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Semi-Monthly Salary</h3>
+          <p>A semi-monthly salary calculator divides yearly salary into 24 payments, usually arriving around the 15th and the last day. It is not the same as biweekly pay. Biweekly gives 26 payments per year, while semi-monthly gives 24.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Monthly Salary</h3>
+          <p>A monthly salary calculator divides yearly income into 12 payments. Monthly pay may make rent and big bills easier to organize because many bills are monthly too. However, it requires discipline — if you spend too much early in the month, the last week can feel tight.</p>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">How to Calculate Take-Home Pay</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Salary to Hourly Wage Conversion</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Take-home pay is the money you actually receive after taxes and deductions. This is the number most people care about because it affects real-life spending.</p>
-          <p>Simple formula: Gross Pay - Federal Tax - State Tax - Local Tax - Payroll Taxes - Deductions = Take-Home Pay</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Common deductions from a paycheck</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Federal income tax</li>
-            <li>State income tax</li>
-            <li>Local income tax</li>
-            <li>Social Security</li>
-            <li>Medicare</li>
-            <li>Health, dental, and vision insurance</li>
-            <li>Retirement and 401(k) contributions</li>
-            <li>Wage garnishments and union dues</li>
-            <li>Post-tax deductions</li>
-          </ul>
-          <p>This is why your salary after taxes may be much lower than your gross salary. A take-home pay calculator helps estimate your real paycheck after these deductions.</p>
+          <p>A salary to hourly calculator helps you understand the hourly value of a yearly salary. This is useful when you compare a salaried job with an hourly job. It also helps you see whether a higher title really gives you better pay for your time.</p>
+          <p>The common formula is annual salary divided by 52 weeks, then divided by weekly work hours. For example, $70,000 &divide; 52 &divide; 40 = about $33.65 per hour.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Annual Salary</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>40 Hours Per Week</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Estimated Hourly Wage</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[['$40,000','2,080 hours/year','$19.23'],['$50,000','2,080 hours/year','$24.04'],['$60,000','2,080 hours/year','$28.85'],['$70,000','2,080 hours/year','$33.65'],['$100,000','2,080 hours/year','$48.08']].map(([a,b,c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </article>
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Adjusted vs Unadjusted Salary</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>Unadjusted salary is your income calculated as if you worked every single working day with no time off. Adjusted salary accounts for holidays, vacation days, and unpaid leave. The difference between the two can be significant if you take a lot of time away from work.</p>
+          <p>For example, a $52,000 unadjusted yearly salary assumes 260 working days. If you take 13 days off (10 vacation days and 3 holidays), your adjusted salary covers only 247 working days. That changes your real daily and hourly income values.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Salary Type</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>What It Shows</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Unadjusted salary','Income if every work day is paid','$52,000 per year, 260 days'],
+                  ['Adjusted salary','Income after holidays and vacation','About $49,400 after 13 days off'],
+                  ['Real working days','Days actually worked','247 instead of 260'],
+                  ['Effective hourly rate','Real hourly value of your time','Lower than unadjusted rate'],
+                ].map(([a,b,c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Employee Benefits and Salary Value</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>Employee benefits can add significant value on top of your base salary. When you compare two job offers, you should not only look at the salary number — you should also look at the total compensation package. A job with a $65,000 salary plus great benefits can be worth more than a $75,000 salary with no benefits.</p>
+          <p>Common benefits include health insurance, dental and vision coverage, paid time off, retirement matching, bonuses, remote work options, and professional development support. These are real financial values that affect how much your salary is truly worth.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Benefit</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Estimated Annual Value</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Why It Matters</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Health insurance','$5,000 to $15,000','Major cost if you pay it yourself'],
+                  ['401(k) employer match','Up to 6% of salary','Direct extra income for retirement'],
+                  ['Paid time off','10 to 20 days per year','Paid rest without losing income'],
+                  ['Remote work option','$2,000 to $5,000','Saves commute cost and time'],
+                  ['Life and dental insurance','$500 to $2,000','Reduces your out-of-pocket spending'],
+                  ['Annual bonus','5% to 20% of base salary','Can boost total pay significantly'],
+                ].map(([a,b,c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Self-Employed Contractor Salary Calculation</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>A self-employed person or independent contractor does not receive a traditional paycheck with automatic deductions. Instead, they must calculate their own salary, pay self-employment tax, fund their own retirement, and buy their own health insurance. This is why contractors often charge higher rates than salaried employees to reach the same real take-home pay.</p>
+          <p>For example, a freelance designer charging $50 per hour may actually take home less than a salaried designer earning $40 per hour once taxes and expenses are accounted for. A self-employed salary calculator helps compare these scenarios honestly.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Expense Type</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Who Pays</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Estimated Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Self-employment tax','Contractor pays both sides','About 15.3% of net earnings'],
+                  ['Health insurance','Contractor funds directly','$300 to $800 per month'],
+                  ['Retirement savings','Contractor funds own plan','Varies by contribution level'],
+                  ['Unpaid time off','No paid leave protection','Lost income for every day off'],
+                ].map(([a,b,c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">U.S. Salary Information and Average Salary</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>Average salary in the USA varies widely by industry, experience, location, and education. According to Bureau of Labor Statistics estimates, the median full-time worker in the United States earns around $60,000 per year. However, some fields pay much more and some pay much less.</p>
+          <p>A salary calculator is especially useful when you want to compare your income against national averages or when you move between states with different tax rates. What feels like a good salary in one city may not go as far in another.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Category</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Estimated Annual Salary</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Median U.S. full-time salary','About $60,000','Based on BLS estimates'],
+                  ['Entry-level average','$35,000 to $50,000','Fresh graduates and new workers'],
+                  ['Mid-career average','$55,000 to $80,000','5 to 15 years of experience'],
+                  ['Senior professional','$85,000 to $120,000','Specialized skills or management'],
+                  ['Tech industry average','$90,000 to $140,000','Software, IT, and data roles'],
+                  ['Healthcare average','$65,000 to $100,000','Nurses through specialists'],
+                ].map(([a,b,c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
       <img
         src="/salary-seo-illustration.svg"
-        alt="Hourly to Salary Calculator visual showing formula from hourly pay to annual salary estimate"
+        alt="Salary Calculator visual showing income conversion from hourly to annual pay"
         className="mt-6 w-full rounded-2xl border border-white/10"
         loading="lazy"
       />
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">How to Calculate Federal Income Tax</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">How Taxes Affect Your Salary</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Federal income tax is based on your taxable income, filing status, Form W-4, tax brackets, deductions, and credits. Your employer uses your W-4 details to estimate how much federal tax should be withheld from each paycheck.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Simple federal income tax process</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Start with gross income.</li>
-            <li>Subtract eligible pre-tax deductions.</li>
-            <li>Find taxable income.</li>
-            <li>Apply your filing status.</li>
-            <li>Use federal tax brackets.</li>
-            <li>Apply available credits.</li>
-            <li>Estimate yearly federal tax.</li>
-            <li>Divide it by pay periods.</li>
-          </ul>
-          <h3 className="text-xl font-semibold pt-2 text-white">What affects federal tax withholding?</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Filing status and number of dependents</li>
-            <li>Multiple jobs and spouse income</li>
-            <li>Extra withholding and pre-tax deductions</li>
-            <li>Tax credits and bonuses</li>
-            <li>Taxable income and Form W-4 settings</li>
-          </ul>
-          <p>This is why two people with the same salary may still have different paycheck amounts.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">What Is Filing Status?</h3>
-          <p>Filing status tells the tax system how your income should be treated. It affects your tax brackets, withholding, and sometimes your final tax bill. Common filing statuses include Single, Married Filing Jointly, Married Filing Separately, and Head of Household.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">What Is Form W-4?</h3>
-          <p>Form W-4 is the form employees complete so employers know how much federal income tax to withhold. Update your W-4 when you start a new job, get married, have a child, start a second job, or when your income changes significantly.</p>
+          <p>Taxes are the biggest reason why your paycheck is smaller than your salary. The U.S. tax system has federal income tax, state income tax (in most states), Social Security tax, Medicare tax, and sometimes local tax. All of these are removed from your paycheck before you see it.</p>
+          <p>Federal income tax uses progressive brackets — meaning higher earners pay a higher percentage on income above each threshold. State income tax varies from zero in states like Texas and Florida to over 13% in California. Understanding how taxes affect your income helps you make smarter financial decisions.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Tax Type</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Rate</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Who Pays</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Federal income tax','10% to 37%','All workers, based on income bracket'],
+                  ['State income tax','0% to 13.3%','Depends on your state'],
+                  ['Social Security','6.2%','Employee and employer each pay 6.2%'],
+                  ['Medicare','1.45%','Employee and employer each pay 1.45%'],
+                  ['Additional Medicare','0.9%','High earners above $200,000'],
+                ].map(([a,b,c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">What Is a Pay Period?</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">How to Increase Your Salary</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>A pay period is how often your employer pays you. Your annual salary may stay the same, but your paycheck amount changes based on pay frequency.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Common pay periods</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Weekly: 52 paychecks per year</li>
-            <li>Biweekly: 26 paychecks per year</li>
-            <li>Semimonthly: 24 paychecks per year</li>
-            <li>Monthly: 12 paychecks per year</li>
-          </ul>
-          <h3 className="text-xl font-semibold pt-2 text-white">Pay period example</h3>
-          <p>If your salary is $52,000 per year:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Weekly gross pay: $1,000</li>
-            <li>Biweekly gross pay: $2,000</li>
-            <li>Semimonthly gross pay: $2,166.67</li>
-            <li>Monthly gross pay: $4,333.33</li>
-          </ul>
-          <p>The yearly salary is the same, but each paycheck looks different because the pay schedule is different.</p>
+          <p>Increasing your salary requires a mix of strategy, timing, and preparation. Simply working hard is rarely enough — you also need to communicate your value clearly. Knowing your market rate using a salary calculator helps you go into any negotiation with real numbers.</p>
+          <p>Common ways to grow income include negotiating a raise, getting certifications, switching jobs strategically, relocating to higher-pay markets, and building additional income streams through freelance work or consulting.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Strategy</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>How It Works</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Estimated Impact</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Ask for a raise','Negotiate with your current employer','3% to 10% increase'],
+                  ['Get certified or educated','Add skills and credentials','5% to 20% increase'],
+                  ['Switch jobs','Move to a higher-paying role','10% to 30% jump'],
+                  ['Relocate to better market','Move to higher-pay city or state','Varies widely'],
+                  ['Take on more responsibility','Lead projects or manage others','5% to 15% increase'],
+                  ['Freelance on the side','Add extra income streams','$5,000 to $30,000 extra per year'],
+                ].map(([a,b,c]) => (
+                  <tr key={a}>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                    <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Yearly Salary Calculator and Hourly to Salary Converter</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Common Salary Calculator Questions</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>A yearly salary calculator helps you understand how much you earn in a full year. It is useful when you want to compare jobs, convert hourly pay into yearly income, or understand how your monthly or weekly pay becomes annual income.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Use a yearly salary calculator when you want to</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Convert hourly wage to annual salary</li>
-            <li>Convert weekly or monthly pay to yearly income</li>
-            <li>Compare job offers</li>
-            <li>Estimate annual income before taxes</li>
-            <li>Plan yearly savings</li>
-            <li>Compare full-time and part-time income</li>
-          </ul>
-          <h3 className="text-xl font-semibold pt-2 text-white">Hourly to Salary: Convert Hourly Wage to Annual Pay</h3>
-          <p>Formula: Hourly Wage &times; Hours Per Week &times; Weeks Per Year = Annual Salary</p>
-          <p>Example: $20 &times; 40 &times; 52 = $41,600. So, $20 per hour equals about $41,600 per year before taxes if you work 40 hours per week for 52 weeks.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">$30 an Hour Is How Much a Year After Taxes?</h3>
-          <p>$30 &times; 40 &times; 52 = $62,400 per year before taxes. After-tax income depends on your state, filing status, Form W-4, Social Security, Medicare, health insurance, and retirement contributions. Someone earning $30 an hour in Texas may take home a different amount than someone in New York or California because state and local taxes differ.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">What is the difference between gross and net salary?</h3>
+          <p>Gross salary is your income before any deductions. Net salary is what you actually receive after federal tax, state tax, Social Security, Medicare, insurance, and retirement contributions are removed. For budgeting purposes, always plan with your net salary, not your gross salary.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">How do I calculate my hourly rate from my annual salary?</h3>
+          <p>Divide your annual salary by 52 (weeks), then divide by your weekly hours. For example, a $60,000 yearly salary divided by 52 and then by 40 gives about $28.85 per hour. This is your unadjusted hourly rate before any time-off adjustments.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Why is my paycheck different from my salary?</h3>
+          <p>Your paycheck is smaller than your salary because taxes and deductions are removed. Federal income tax, state income tax, Social Security (6.2%), Medicare (1.45%), health insurance, and retirement contributions all reduce your take-home pay. This is normal and expected for every worker in the USA.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Is this salary calculator accurate?</h3>
+          <p>This salary calculator provides useful estimates based on your inputs. Actual results may vary depending on your exact tax filing status, Form W-4 settings, state-specific rules, employer benefit plans, and other personal factors. For precise tax calculations, consult a tax professional or use official tax tools.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Can I use this for part-time work?</h3>
+          <p>Yes. Enter your actual hours per week to get accurate estimates for part-time schedules. For example, if you work 20 hours per week at $25 per hour, the calculator will estimate your weekly, monthly, and annual income correctly based on those inputs.</p>
         </div>
       </article>
 
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">What Is a Gross Up Calculator?</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>A gross up calculator helps calculate how much gross pay is needed so someone receives a specific net amount after taxes. This is often used when an employer wants an employee to receive a fixed after-tax amount.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Simple gross-up formula</h3>
-          <p>Desired Net Pay &divide; (1 - Tax Rate) = Grossed-Up Pay</p>
-          <p>Example: To give someone $1,000 after a 25% tax rate: $1,000 &divide; 0.75 = $1,333.33</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">When gross-up calculations are used</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Bonus and relocation payments</li>
-            <li>One-time payroll payments</li>
-            <li>Employer-paid tax support</li>
-            <li>Net guaranteed payments</li>
-            <li>Special compensation adjustments</li>
-          </ul>
-        </div>
-      </article>
 
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">State Salary and Paycheck Calculators</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <h3 className="text-xl font-semibold pt-2 text-white">Texas Salary Calculator</h3>
-          <p>Texas does not have state income tax on wages. A Texas take home pay calculator focuses on federal income tax, Social Security, Medicare, health insurance, and retirement contributions. A $70,000 salary gives $5,833.33 monthly gross income before these deductions.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">New York Salary Calculator</h3>
-          <p>New York take-home pay may include federal tax, New York State income tax, and New York City local tax if applicable. An $80,000 salary in NYC gives $6,666.67 monthly gross income before all taxes and deductions — making a salary calculator NYC essential for planning.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">California Pay Calculator</h3>
-          <p>California has state income tax, so a California pay calculator estimates take-home pay after federal tax, California state tax, payroll taxes, and deductions. People search for California net pay calculator, after tax salary calculator California, or post tax income calculator California.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Illinois, Ohio, Michigan, and DC</h3>
-          <p>A take home pay calculator Illinois estimates net pay after federal and Illinois state income taxes. A wage calculator Ohio helps hourly and salaried workers estimate gross wages and take-home pay including local taxes in some areas. A Michigan salary calculator and DC paycheck calculator follow the same pattern — each state has its own rules that affect your final paycheck.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">NH Paycheck Calculator</h3>
-          <p>An NH paycheck calculator estimates take-home pay for New Hampshire workers after federal tax and payroll deductions, helping plan weekly, biweekly, or monthly expenses.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Other Common State Calculator Searches</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Salary calculator New Jersey, New Mexico, Nevada</li>
-            <li>Pay stub calculator Florida, income calculator Florida</li>
-            <li>Take home pay calculator Oregon, Arizona, Indiana</li>
-            <li>Salary calculator Tennessee, Pennsylvania, Connecticut, Massachusetts</li>
-            <li>Minnesota salary calculator, Missouri paycheck tax calculator</li>
-            <li>West Virginia paycheck calculator</li>
-            <li>Washington state, Virginia, Rhode Island take home pay calculator</li>
-            <li>Paycheck calculator Chicago, Seattle, Boston</li>
-          </ul>
-        </div>
-      </article>
 
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">CTC to In-Hand, Annual Income, and Paycheck Deductions</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <h3 className="text-xl font-semibold pt-2 text-white">CTC to In-Hand Calculator</h3>
-          <p>A CTC to inhand calculator is used where salary packages are shown as Cost to Company. CTC may include employer contributions, bonuses, insurance, and allowances. In-hand salary is what the employee actually receives after deductions.</p>
-          <p>Simple formula: CTC - Employer Contributions - Employee Deductions - Taxes = In-Hand Salary</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Annual Income Before Taxes vs After Taxes</h3>
-          <p>Annual income before taxes is your gross annual income — salary, wages, bonuses, commissions, tips, freelance income, and other taxable income. Annual income after taxes is the amount left after all federal, state, and local taxes and deductions. Job offers usually state gross salary; for real budgeting, always use after-tax income.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Pre-Tax vs Post-Tax Deductions</h3>
-          <p>Pre-tax deductions are taken before taxes are calculated and may reduce taxable income: traditional 401(k), health insurance premiums, HSA, FSA, and some commuter benefits. Post-tax deductions are taken after taxes: Roth contributions, some insurance plans, union dues, wage garnishments, and voluntary benefits. Both reduce your final paycheck.</p>
-        </div>
-      </article>
 
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Why Two People With the Same Salary Can Have Different Take-Home Pay</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Two people can earn the same gross salary and still receive different paychecks. A person earning $70,000 in Texas may take home more than a person earning $70,000 in New York City because state and local taxes are different.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">Reasons take-home pay can differ</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Different state and local income tax</li>
-            <li>Different filing status and Form W-4 settings</li>
-            <li>Different health insurance cost</li>
-            <li>Different retirement contributions</li>
-            <li>Different pay period</li>
-            <li>Different pre-tax and post-tax deductions</li>
-            <li>Different bonuses or commissions</li>
-          </ul>
-          <p>This is why a salary calculator gives an estimate, not a guaranteed final paycheck.</p>
-        </div>
-      </article>
 
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Salary Calculator for Budgeting, Job Offers, and Freelancers</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <h3 className="text-xl font-semibold pt-2 text-white">For Budgeting</h3>
-          <p>Use your net monthly income for budgeting, not gross salary. If your monthly gross is $5,000 but take-home is $3,850, plan your budget around $3,850. Cover rent, utilities, groceries, transportation, insurance, debt payments, emergency savings, retirement savings, and personal spending.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">For Comparing Job Offers</h3>
-          <p>A higher salary does not always mean a better deal. Also compare state tax, cost of living, health insurance, retirement match, bonuses, paid time off, remote work options, commute cost, and career growth before accepting any offer.</p>
-          <h3 className="text-xl font-semibold pt-2 text-white">For Freelancers and Contractors</h3>
-          <p>A freelancer earning $40 per hour may need to cover self-employment tax, health insurance, retirement savings, business tools, software, equipment, marketing, unpaid vacation, accounting, and estimated quarterly taxes. This is why contractors often charge more than employees to reach the same real take-home income.</p>
-        </div>
-      </article>
 
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Common Salary Calculation Mistakes and How to Use This Calculator</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <h3 className="text-xl font-semibold pt-2 text-white">Mistakes to avoid</h3>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Confusing gross pay with net pay</li>
-            <li>Multiplying weekly pay by 4 instead of using 52 weeks</li>
-            <li>Ignoring state income tax or local tax</li>
-            <li>Forgetting Social Security and Medicare</li>
-            <li>Not including health insurance or retirement deductions</li>
-            <li>Using the wrong filing status or outdated W-4</li>
-            <li>Comparing states without considering cost of living</li>
-            <li>Assuming every calculator gives exact tax results</li>
-          </ul>
-          <h3 className="text-xl font-semibold pt-2 text-white">How to use a salary calculator correctly</h3>
-          <p>For a better estimate, enter your annual salary or hourly wage, hours worked per week, pay frequency, state, filing status, Form W-4 details, health insurance cost, retirement contributions, and any bonuses or extra withholding. The more accurate your inputs, the more useful your estimate will be.</p>
-        </div>
-      </article>
 
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">FAQs About Salary Calculator and Take-Home Pay</h2>
-        <div className={`space-y-5 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What is a salary calculator?</h3>
-            <p>A salary calculator estimates income based on salary, hourly wage, pay frequency, taxes, and deductions. It helps you understand annual salary, monthly income, gross pay, net pay, and take-home pay.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">How do I calculate annual income?</h3>
-            <p>If you are paid hourly, multiply your hourly rate by weekly hours and then by 52. If you are paid monthly, multiply your monthly salary by 12.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">How do I calculate monthly income?</h3>
-            <p>Divide your annual salary by 12. If you are paid weekly, multiply weekly pay by 52 and divide by 12. If you are paid biweekly, multiply biweekly pay by 26 and divide by 12.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What is gross monthly income?</h3>
-            <p>Gross monthly income is your income for one month before taxes and deductions.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Is gross pay before taxes?</h3>
-            <p>Yes. Gross pay is income before taxes. Net pay is income after taxes and deductions.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What is take-home pay?</h3>
-            <p>Take-home pay is the amount you receive after taxes, payroll deductions, insurance, retirement contributions, and other deductions are removed.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">How much is $30 an hour per year?</h3>
-            <p>If you work 40 hours per week for 52 weeks, $30 an hour is about $62,400 per year before taxes.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">How much is $30 an hour after taxes?</h3>
-            <p>It depends on your state, filing status, federal tax withholding, deductions, Social Security, Medicare, and pay period.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What is monthly gross salary?</h3>
-            <p>Monthly gross salary is your monthly salary before taxes and deductions. For example, a $60,000 yearly salary equals $5,000 monthly gross salary.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What is a yearly salary calculator?</h3>
-            <p>A yearly salary calculator converts hourly, weekly, biweekly, semimonthly, or monthly income into annual salary.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What is a gross up calculator?</h3>
-            <p>A gross up calculator estimates the gross amount needed so someone receives a specific net amount after taxes.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Does Texas have state income tax?</h3>
-            <p>Texas does not have state income tax on wages, but federal tax, Social Security, Medicare, and deductions still apply.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Why is New York take-home pay different?</h3>
-            <p>New York take-home pay may include federal tax, New York State tax, and New York City local tax if applicable.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What is CTC to in-hand salary?</h3>
-            <p>CTC to in-hand salary means converting total employer cost into the amount an employee actually receives after deductions and taxes.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Is salary before or after taxes?</h3>
-            <p>Salary is usually shown before taxes unless it clearly says net salary or take-home salary.</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Why is my paycheck lower than my salary?</h3>
-            <p>Your paycheck is lower because federal tax, state tax, Social Security, Medicare, insurance, retirement contributions, and other deductions may be removed.</p>
-          </div>
-        </div>
-      </article>
+
+
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
         <h2 className="text-2xl font-bold mb-4 text-white">Final Thoughts</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>A salary calculator helps you understand your real income, not just the number written in a job offer. Your gross salary shows what you earn before taxes. Your net pay shows what you actually take home. The difference is affected by federal income tax, state income tax, local tax, filing status, Form W-4, pay period, pre-tax deductions, post-tax deductions, and benefits.</p>
-          <p>This is why users search for tools like yearly salary calculator, income calculator Texas, salary calculator Texas, Texas take home pay calculator, New York salary calculator, salary calculator NYC, California pay calculator, DC paycheck calculator, wage calculator Ohio, Michigan salary calculator, take home pay calculator Illinois, NH paycheck calculator, gross up calculator, and CTC to inhand calculator.</p>
-          <p>Before you accept a job, move to another state, plan a budget, or compare two offers — calculate your gross income, monthly income, annual salary, and take-home pay. A clear salary estimate helps you make better financial decisions with less confusion.</p>
+          <p>A Salary Calculator is one of the most useful financial tools for anyone earning an income in the USA. Whether you are paid hourly, weekly, biweekly, semi-monthly, or monthly, this calculator helps you see your income from every angle. It converts your pay into clear numbers so you can plan your budget, compare job offers, and understand what you actually take home after taxes.</p>
+          <p>Understanding the difference between gross and net salary, unadjusted and adjusted pay, and salary versus hourly wage helps you make smarter decisions about work, benefits, and career growth. Use this calculator often — any time your income changes, you start a new job, or you want to plan ahead.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">FAQs</h2>
+        <div className={`space-y-5 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is a salary calculator?</h3>
+            <p>A salary calculator is a tool that converts income between hourly, weekly, biweekly, monthly, and annual pay formats. It helps you understand how much you earn across different time periods so you can compare jobs, plan a budget, and estimate take-home pay.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">How does the salary calculator work?</h3>
+            <p>You enter your pay amount and select the frequency — hourly, weekly, monthly, or yearly. You can also add hours per week, days per week, holidays, and vacation days. The calculator then converts your income into all other pay formats so you can see the full picture.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is the difference between hourly and salary?</h3>
+            <p>An hourly worker is paid for each hour worked. A salaried worker receives a fixed pay amount regardless of exact hours, typically expressed as an annual figure. Salaried jobs often include benefits like paid time off, while hourly jobs may pay overtime for extra hours.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">How do I convert hourly to annual salary?</h3>
+            <p>Multiply your hourly rate by your weekly hours, then multiply by 52. For example, $25 per hour times 40 hours per week times 52 weeks equals $52,000 per year before taxes.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is gross salary?</h3>
+            <p>Gross salary is your income before any taxes or deductions are removed. It is the number shown in a job offer, employment contract, or annual salary statement. All tax calculations start from your gross salary.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is net salary?</h3>
+            <p>Net salary is what remains after federal income tax, state income tax, Social Security, Medicare, health insurance, and retirement contributions are deducted from your gross salary. This is the amount deposited into your bank account each pay period.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is adjusted salary?</h3>
+            <p>Adjusted salary is your income calculated after accounting for unpaid time off, holidays, and vacation days. It gives a more accurate picture of your real earning rate compared to an unadjusted salary that assumes you work every single working day.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is unadjusted salary?</h3>
+            <p>Unadjusted salary is your income calculated as if you work all 52 weeks without any time off. It is the standard way salary is quoted in job offers and contracts, but it does not reflect real take-home income if you take unpaid leave or holidays.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What employee benefits add to total salary value?</h3>
+            <p>Health insurance, dental and vision coverage, 401(k) employer match, paid time off, remote work options, bonuses, life insurance, and professional development benefits all add real financial value on top of your base salary. When comparing jobs, always consider total compensation, not just base pay.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">How do self-employed workers calculate their salary?</h3>
+            <p>Self-employed workers calculate their salary by taking their total revenue, then subtracting business expenses, self-employment tax (about 15.3%), health insurance costs, retirement contributions, and other deductions. The result is their effective net income — similar to take-home pay for an employee.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is the average salary in the USA?</h3>
+            <p>The median full-time salary in the USA is approximately $60,000 per year according to Bureau of Labor Statistics estimates. However, this varies widely by industry, location, experience, and education. Tech and healthcare workers typically earn above average, while entry-level and retail workers often earn below average.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">How do taxes reduce my salary?</h3>
+            <p>Federal income tax, state income tax, Social Security tax (6.2%), and Medicare tax (1.45%) are all deducted from your gross salary. Depending on your state and income level, taxes can reduce your gross pay by 20% to 35% or more. This is why take-home pay is always lower than the advertised salary.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">How can I increase my salary?</h3>
+            <p>You can increase your salary by negotiating a raise with your current employer, gaining new certifications or skills, switching to a higher-paying job, relocating to a city or state with better pay, taking on leadership responsibilities, or building freelance income alongside your main job.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is biweekly pay?</h3>
+            <p>Biweekly pay means you receive a paycheck every two weeks, giving you 26 paychecks per year. It is one of the most common pay schedules in the USA. Two months each year will have three paydays instead of two, which can help with larger expenses or savings goals.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">Can I use this calculator for part-time work?</h3>
+            <p>Yes. Enter your actual hours per week when using the calculator. For example, if you work 20 hours per week at $18 per hour, the calculator will correctly estimate your weekly, monthly, and annual income based on your real schedule, not a full-time assumption.</p>
+          </div>
         </div>
       </article>
     </main>
@@ -3428,8 +3506,8 @@ export default function App() {
         canonicalPath: '/overtime',
       },
       '/salary-calculator': {
-        title: 'Salary Calculator: Monthly Income & Take-Home Pay',
-        description: 'Estimate annual salary, monthly income, gross pay, taxes, deductions, and take-home pay with this easy salary calculator guide.',
+        title: 'Salary Calculator - Convert Hourly, Monthly & Annual Pay',
+        description: 'Use our Salary Calculator to convert hourly, weekly, monthly, and annual pay into clear income estimates for USA workers.',
         canonicalPath: '/salary-calculator',
       },
       '/paycheck-calculator': {
