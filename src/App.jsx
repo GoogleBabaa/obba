@@ -2011,8 +2011,8 @@ function PaycheckCalculatorPage({ isDark }) {
   });
 
   useEffect(() => {
-    document.title = 'Paycheck Calculator to Estimate Your Take-Home Pay';
-    const description = 'Paycheck calculator to estimate take-home pay, calculate gross-to-net income, apply federal tax withholding and FICA deductions, and optimize monthly budget planning with accurate payroll insights.';
+    document.title = 'Salary Paycheck Calculator – Estimate Your Take-Home Pay';
+    const description = 'A Salary Paycheck Calculator estimates take-home pay after federal taxes, state taxes, FICA, and deductions. Enter salary, pay frequency, and filing status for a clear net pay estimate.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -2031,12 +2031,12 @@ function PaycheckCalculatorPage({ isDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Paycheck Calculator to Estimate Your Take-Home Pay',
+      name: 'Salary Paycheck Calculator – Estimate Your Take-Home Pay',
       description,
       url: `${window.location.origin}/paycheck-calculator`,
       mainEntity: {
         '@type': 'SoftwareApplication',
-        name: 'Paycheck Calculator',
+        name: 'Salary Paycheck Calculator',
         applicationCategory: 'FinanceApplication',
         operatingSystem: 'Web',
         offers: {
@@ -2057,11 +2057,10 @@ function PaycheckCalculatorPage({ isDark }) {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8">
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
-        <h1 className="text-3xl font-bold mb-4 text-white">Paycheck Calculator to Estimate Your Take-Home Pay</h1>
+        <h1 className="text-3xl font-bold mb-4 text-white">Salary Paycheck Calculator</h1>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Managing your personal finances starts with knowing exactly how much money hits your bank account each month. Many people find it difficult to track their net earnings after various taxes and benefit contributions are removed. Using a reliable paycheck calculator simplifies this process by providing a clear view of your actual take-home pay.</p>
-          <p>When you understand your net income, you can build a more accurate monthly budget for your household expenses. This tool helps you see how specific withholdings impact your final earnings. By gaining this clarity, you can make smarter decisions about your savings and spending habits.</p>
-          <p>Our guide aims to help you navigate these financial details with confidence. Whether you are planning for a large purchase or simply organizing your monthly bills, this paycheck calculator serves as an essential resource for your financial health.</p>
+          <p>A Salary Paycheck Calculator helps you see the real value of your salary after taxes and deductions. Your job offer may show a strong annual salary, but your bank account receives a different amount after federal taxes, state taxes, FICA, insurance, and retirement contributions.</p>
+          <p>This final amount is your take-home pay, and it matters when you plan rent, bills, savings, or a new move. A good calculator makes the numbers easier to understand. You can enter your salary, pay frequency, filing status, and deductions to estimate your net pay. It gives you a clear picture of your paycheck taxes before payday arrives.</p>
         </div>
       </article>
 
@@ -2152,195 +2151,170 @@ function PaycheckCalculatorPage({ isDark }) {
       </CalcShell>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Understanding Your Gross vs. Net Pay</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Salary Paycheck Calculator: Estimate Your Take-Home Pay</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Mastering the basics of payroll begins by distinguishing between gross and net income. Many employees find it helpful to view their paycheck as a two-part story. One part represents the value of your labor, while the other reflects the actual funds available for your daily expenses.</p>
-          <p>Gaining clarity on these figures allows you to manage your personal finances with greater confidence. When you know exactly where your money goes, you can set more realistic savings goals and budget effectively for the future.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Defining Gross Income</h3>
-          <p>Gross income is the total amount of money an employer pays you before any taxes or other withholdings are taken out. If you are a salaried employee, this is your annual base pay divided by the number of pay periods in a year. For hourly workers, it is simply the number of hours worked multiplied by your hourly rate.</p>
-          <p>It is important to remember that this number does not represent the cash you will actually spend. It serves as the starting point for all payroll calculations. Your gross income includes your base salary, but it may also include:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Overtime pay for hours worked beyond the standard week.</li>
-            <li>Bonuses or performance-based incentives.</li>
-            <li>Commissions earned from sales or specific projects.</li>
-            <li>Shift differentials for working nights or weekends.</li>
-          </ul>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Defining Net Income or Take-Home Pay</h3>
-          <p>Net income, often called take-home pay, is the final amount that lands in your bank account after all deductions are processed. This figure represents your true purchasing power. It is the money you use to pay for rent, groceries, utilities, and other essential living costs.</p>
-          <p>The gap between your gross and net income is created by various mandatory and voluntary subtractions. These deductions can include federal and state income taxes, Social Security contributions, and health insurance premiums. Because these amounts vary based on your personal situation, your net income is unique to you.</p>
-          <p>To summarize the primary differences between these two financial figures, consider the following breakdown:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Gross Income: The total sum earned before any payroll taxes or benefit contributions are removed.</li>
-            <li>Net Income: The actual cash received after all mandatory taxes and voluntary deductions are subtracted.</li>
-            <li>Purpose: Gross income measures your total compensation, while net income measures your available liquid cash.</li>
-          </ul>
+          <p>A Salary Paycheck Calculator lets you estimate your take-home pay before payday arrives. You enter your gross pay, annual salary, per-period salary, pay frequency, filing status, dependents, and W-4 form details. Then the calculator estimates payroll taxes, paycheck taxes, federal withholding, state withholding, income withholding, and common payroll deductions. In simple words, it shows your likely net paycheck amount.</p>
+          <p>This tool is useful because your salary is not the same as your spendable money. A $70,000 salary does not mean you take home $70,000. Your employer must withhold taxes and may also remove employee deductions, voluntary deductions, benefits deductions, and retirement amounts. A calculator helps you calculate your net pay without doing every tax step by hand.</p>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">How to Use a Paycheck Calculator Effectively</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">What Is a Salary Paycheck Calculator?</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Taking control of your take-home pay requires a systematic approach to using a paycheck calculator. By following a few simple steps, you can transform raw numbers into a clear picture of your financial health. Precision is key, so take your time to ensure every detail is accurate.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Gathering Necessary Financial Information</h3>
-          <p>Before you begin, collect your most recent pay stub. This document contains the essential data points needed for an accurate estimate. You will need to know your gross pay, current tax withholdings, and any voluntary deductions like health insurance or retirement contributions.</p>
-          <p>Having these figures ready prevents guesswork and ensures your results reflect your actual situation. If you are starting a new job, use your offer letter to find your base salary or hourly rate. Keeping this information organized makes the entire process much faster.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Inputting Your Salary or Hourly Wage</h3>
-          <p>Once you have your documents, enter your base pay into the tool. If you are a salaried employee, simply input your annual or per-pay-period salary. This provides the foundation for the software to calculate your federal and state tax obligations.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Handling Hourly Paycheck Calculator Inputs</h3>
-          <p>If you earn an hourly wage, you must use an hourly paycheck calculator to get the best results. These tools allow you to input your specific hourly rate and the number of hours you expect to work in a typical pay period. Be sure to account for any overtime hours, as these are often taxed at a different rate or impact your total gross income significantly.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Adjusting for Filing Status and Allowances</h3>
-          <p>Your tax liability changes based on your personal circumstances. Most tools require you to select your filing status, such as single, married filing jointly, or head of household. These selections directly influence how much tax the system estimates will be withheld from your check.</p>
-          <p>Consider these factors when adjusting your settings:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Your current tax filing status.</li>
-            <li>The number of dependents you claim.</li>
-            <li>Any additional tax credits or deductions you qualify for.</li>
-            <li>State-specific tax rules that may apply to your location.</li>
-          </ul>
-          <p>Adjusting these variables allows you to see how different choices impact your final take-home pay. By experimenting with these inputs, you gain a better understanding of how your tax withholdings work throughout the year.</p>
+          <p>A Salary Paycheck Calculator is an online tool that turns your gross income into estimated net income. It uses your salary, tax location, pay period, and W-4 form information to estimate gross pay minus taxes and deductions. It can also show how tax withholding changes when you adjust your filing details, retirement contributions, or health benefits.</p>
+          <p>Think of it like a financial flashlight. Your salary is the room, but taxes and deductions hide in the corners. The calculator shines light on the full picture. It helps you understand how much tax is taken out of your paycheck, why your paycheck changes, and what your real monthly budget may look like.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Who Should Use This Calculator?</h3>
+          <p>You should use a paycheck estimator if you work in the USA and want a clear employee paycheck estimate. It helps salaried employees, new hires, remote workers, people changing states, workers comparing offers, and anyone who wants to know salary after federal and state taxes before making money decisions.</p>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Key Factors That Influence Your Take-Home Pay</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Gross Pay vs Net Pay: What Is the Difference?</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Several variables work behind the scenes to determine the final amount deposited into your bank account each pay period. While your salary or hourly rate sets the baseline, various deductions shift that number significantly. Recognizing these components allows you to plan your monthly budget with greater accuracy.</p>
+          <p>Understanding the difference between gross pay and net pay is the first step in reading your paycheck. Gross pay is the full amount you earn before anything is taken out. Net pay is what you actually receive after federal taxes, state taxes, local taxes, FICA tax, insurance, retirement, and other deductions.</p>
+          <p>This simple idea controls the whole paycheck calculation. The basic formula is: Gross Pay - Taxes - Deductions = Net Pay. Your taxable income, tax brackets, filing status, dependents, and deductions all shape the final result.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Gross Pay</h3>
+          <p>Gross pay is your total pay before deductions. If your annual salary is $60,000 and you are paid twice per month, your per-period salary before taxes is $2,500. That amount is your gross paycheck before payroll taxes and deductions are removed.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Net Pay</h3>
+          <p>Net pay is your final take-home pay after taxes and deductions. This is the money you use for rent, food, savings, debt payments, utilities, and daily spending. When people ask for a salary after taxes calculator, they usually want to know this number.</p>
+        </div>
+      </article>
 
-          <h3 className="text-xl font-semibold pt-2 text-white">Federal and State Income Tax Withholding</h3>
-          <p>The largest portion of your paycheck reduction usually comes from income taxes. Employers are required by law to withhold a portion of your earnings to cover your estimated annual tax liability. These amounts vary based on your filing status, the number of dependents you claim, and your total annual income.</p>
-          <p>Most states also require an additional withholding from your gross pay. While some states have a flat tax rate, others utilize a progressive system similar to the federal government. You should review your pay stub regularly to ensure these withholdings align with your expected tax bracket.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">FICA Taxes: Social Security and Medicare</h3>
-          <p>Beyond income taxes, the federal government mandates contributions to the Federal Insurance Contributions Act, commonly known as FICA. These taxes fund the Social Security and Medicare programs that provide benefits to retirees and eligible individuals. Unlike income taxes, these rates remain consistent regardless of your specific tax bracket.</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Social Security tax: Currently set at 6.2% of your gross earnings up to a specific annual limit.</li>
-            <li>Medicare tax: Set at 1.45% of your total gross earnings with no annual income cap.</li>
-            <li>Additional Medicare tax: An extra 0.9% may apply for high-earners exceeding certain income thresholds.</li>
-          </ul>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Pre-Tax vs. Post-Tax Contributions</h3>
-          <p>Your take-home pay is also affected by the voluntary benefits you choose to enroll in through your employer. These contributions are categorized as either pre-tax or post-tax, which changes how they impact your overall tax burden.</p>
-          <p>Pre-tax contributions are deducted before any taxes are calculated, effectively lowering your taxable income. Conversely, post-tax contributions are taken out after taxes have already been applied to your earnings.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Impact of 401(k) and Health Insurance Premiums</h3>
-          <p>Participating in a 401(k) retirement plan is a common way to reduce your current taxable income. Because these funds are taken out pre-tax, you pay less in income tax today while saving for your future. Similarly, many employer-sponsored health insurance premiums are deducted on a pre-tax basis.</p>
-
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">How to Calculate Your Salary Paycheck</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>To calculate a salary paycheck, start with your annual salary and divide it by your yearly number of paychecks. After that, subtract paycheck taxes, FICA tax, pre-tax deductions, post-tax deductions, benefits deductions, and any other required amount. This gives your net pay.</p>
           <div className="overflow-x-auto">
-            <table className={`w-full min-w-[620px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                <tr>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Pay Frequency</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Paychecks Per Year</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Example Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Weekly</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>52</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Common for hourly and some wage workers</td>
+                </tr>
+                <tr>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Biweekly</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>26</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Common for many U.S. employees</td>
+                </tr>
+                <tr>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Semi-Monthly</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>24</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Common for salaried office workers</td>
+                </tr>
+                <tr>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Monthly</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>12</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Common in some professional roles</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">How Federal Income Tax Withholding Works</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>Federal income tax withholding from paycheck means your employer takes part of your pay and sends it to the IRS during the year. Your withholding depends on your income, filing status, dependents, additional withholding, and information from your W-4 form.</p>
+          <p>Withholding is not always your final tax bill. It is more like paying your yearly tax in small slices. If too much is withheld, you may get a refund. If too little is withheld, you may owe money later.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">2025–2026 Federal Tax Brackets</h3>
+          <p>The IRS uses progressive tax brackets, which means different parts of your taxable income may be taxed at different rates. Different portions of your income are taxed at different rates as your income rises. Bracket amounts can change by tax year, so check the current IRS guidance for the most up-to-date rates.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">How W-4 Affects Your Paycheck</h3>
+          <p>Your W-4 form tells your employer how much federal tax to withhold. The current W-4 focuses on filing status, multiple jobs, dependents, deductions, extra income, and additional withholding. A small form change can alter your net pay significantly. Update your W-4 when life changes such as marriage, divorce, a new child, or a second job.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">FICA Taxes: Social Security and Medicare</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>FICA tax stands for Federal Insurance Contributions Act tax. It includes Social Security tax and Medicare tax. These taxes are separate from federal income tax. Most U.S. employees see Social Security and Medicare deductions on every paycheck, even when their federal income tax withholding is low.</p>
+          <p>For 2026, the employee Social Security tax rate is 6.2% and the Medicare tax rate is 1.45%. The 2026 Social Security wage base is $184,500. These details affect your taxable wages calculation and your final payroll tax estimate.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Social Security Tax</h3>
+          <p>Social Security tax helps fund Social Security benefits. Employees pay this tax on wages up to the yearly wage base limit. Once your earnings pass that limit, Social Security tax no longer applies to the extra wages for that year.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Medicare Tax</h3>
+          <p>Medicare tax helps fund Medicare. Most employees pay 1.45% on all wages. Higher earners may also face Additional Medicare Tax of 0.9%, so a complete paycheck calculator should account for higher-income situations when estimating paycheck taxes.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">State and Local Taxes on Your Paycheck</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>State taxes and local taxes can change your paycheck more than many workers expect. Some states have no state income tax. Others have higher rates, city wage taxes, school district taxes, or special local rules. A person earning $80,000 in Florida may keep more than someone earning the same in New York, depending on deductions and local rules.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Paycheck Calculators by State</h3>
+          <p>A paycheck calculator by state helps estimate state-specific withholding. Useful state pages may include California, Texas, Florida, New York, Illinois, Pennsylvania, Ohio, Washington, Georgia, North Carolina, New Jersey, Virginia, Michigan, and Colorado paycheck calculators.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Pay Frequency and Its Effect on Your Paycheck</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>Pay frequency means how often you are paid. It does not usually change your total yearly salary, but it changes the size of each paycheck. A $72,000 salary feels different when split into 52 checks instead of 12 checks.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Weekly Pay</h3>
+          <p>A weekly paycheck usually means 52 paychecks per year. Each check is smaller, but money arrives often. This can help with weekly bills, groceries, and short-term budgeting.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Biweekly Pay</h3>
+          <p>A biweekly paycheck usually means 26 paychecks per year. It comes every two weeks. Many workers like it because two months in the year may include an extra paycheck.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Semi-Monthly Pay</h3>
+          <p>A semi-monthly paycheck usually means 24 paychecks per year, often arriving twice a month such as on the 15th and last day. This schedule can match monthly bills better.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Monthly Pay</h3>
+          <p>A monthly paycheck usually means 12 paychecks per year. Each check is larger, but you must budget carefully. One mistake can stretch your money thin before the next payday.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Biweekly vs Semi-Monthly Pay</h3>
+          <p>Biweekly pay comes every two weeks and creates 26 checks per year. Semi-monthly pay comes twice per month and creates 24 checks per year. The difference is timing and yearly paycheck count.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Common Paycheck Deductions and Withholdings</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>Payroll deductions are amounts removed from your paycheck before you receive your net pay. Some are required, like taxes. Others are chosen by you, like retirement contributions or health coverage. These deductions can lower your net paycheck amount, but some may also reduce your taxable income.</p>
+          <div className="overflow-x-auto">
+            <table className={`w-full min-w-[500px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
               <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
                 <tr>
                   <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Deduction Type</th>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Tax Impact</th>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Primary Purpose</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>When It Is Taken</th>
+                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Common Example</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Federal Income Tax</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Reduces Net Pay</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Government Funding</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Pre-tax</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Before some taxes</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Health insurance or 401(k)</td>
                 </tr>
                 <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>FICA Taxes</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Reduces Net Pay</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Social Security/Medicare</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Post-tax</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>After taxes</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Roth 401(k) or union dues</td>
                 </tr>
                 <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>401(k) Contribution</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Lowers Taxable Income</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Retirement Savings</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Required tax</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Required by law</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Federal income tax or FICA</td>
                 </tr>
                 <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Health Insurance</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Lowers Taxable Income</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Medical Coverage</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Legal deduction</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Ordered by law</td>
+                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Wage garnishment</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </div>
-      </article>
-
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Comparing Tools Like the ADP Paycheck Calculator</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Choosing the right online resource is essential for managing your personal finances effectively. Whether you are starting a new job or adjusting your budget, using a reliable paycheck calculator helps you see a clear picture of your expected income.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Why Accuracy Matters in Payroll Estimation</h3>
-          <p>High levels of precision are vital when you are trying to balance your monthly budget or plan for major life expenses. Even small errors in your tax withholding estimates can lead to unexpected financial gaps later in the year.</p>
-          <p>Using a trusted tool like the ADP paycheck calculator provides a solid foundation for your financial planning. When you have an accurate estimate, you can make better decisions about savings, investments, and debt repayment strategies.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Features to Look for in a Reliable Calculator</h3>
-          <p>Not every tool offers the same level of detail, so you should look for specific features that match your unique situation. A high-quality paycheck calculator should offer more than just basic math.</p>
-          <p>When evaluating different options, prioritize tools that include the following capabilities:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Support for state-specific tax laws and local income tax requirements.</li>
-            <li>Options to input voluntary deductions like 401(k) contributions or health insurance premiums.</li>
-            <li>Clear breakdowns of FICA taxes, including Social Security and Medicare.</li>
-            <li>A user-friendly interface that allows for quick adjustments to your filing status.</li>
-          </ul>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Limitations of Online Estimation Tools</h3>
-          <p>While digital resources are incredibly helpful, it is important to remember that they provide estimates rather than official payroll documents. Factors such as mid-year tax law changes or specific employer payroll cycles can influence your actual take-home pay.</p>
-          <p>Always treat the results from an adp paycheck calculator or similar platforms as a guide for your planning. For the most precise information regarding your specific compensation, consult your company's human resources department or your official pay stubs.</p>
-        </div>
-      </article>
-
-      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Common Payroll Deductions Explained</h2>
-        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Deciphering the various lines on your paycheck can feel like learning a new language. While your gross income represents your total earnings, your net pay is what remains after various subtractions. Reviewing these items regularly helps you stay informed about your financial health.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Mandatory Government Deductions</h3>
-          <p>Federal and state governments require employers to withhold specific amounts from your earnings. These mandatory deductions include federal income tax, state income tax, and local taxes depending on where you live. These funds are sent directly to the government to cover public services and infrastructure.</p>
-          <p>Additionally, you will see FICA taxes on your pay stub. These cover Social Security and Medicare contributions, which are essential for your future retirement and healthcare benefits. Employers are legally obligated to calculate and withhold these amounts every pay period.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Voluntary Benefit Deductions</h3>
-          <p>Beyond taxes, you may choose to allocate parts of your paycheck toward personal benefits. These voluntary deductions often include premiums for health, dental, or vision insurance plans. Many employees also opt to contribute to retirement accounts like a 401(k) or a Flexible Spending Account (FSA).</p>
-          <p>These contributions are often taken out on a pre-tax basis, which can lower your overall taxable income. By choosing these benefits, you are investing in your long-term wellness and financial security. Always check your enrollment documents to ensure the amounts match your selections.</p>
-
-          <h3 className="text-xl font-semibold pt-2 text-white">Understanding Garnishments and Other Adjustments</h3>
-          <p>Sometimes, your paycheck may include adjustments that are not related to taxes or benefits. Wage garnishments occur when a court or government agency orders your employer to withhold a portion of your pay to satisfy a debt. Common reasons include unpaid child support, student loans, or tax liens.</p>
-          <p>Other adjustments might include payroll errors from previous periods or reimbursements for company expenses. If you notice an unexpected change in your net pay, review your pay stub carefully. Contact your human resources department if you have questions about specific line items.</p>
-
-          <div className="overflow-x-auto">
-            <table className={`w-full min-w-[620px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
-              <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
-                <tr>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Deduction Category</th>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Typical Examples</th>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Frequency</th>
-                  <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Mandatory Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Government Taxes</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Federal, State, FICA</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Every Paycheck</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Required</td>
-                </tr>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Voluntary Benefits</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Health Insurance, 401(k)</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Every Paycheck</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Optional</td>
-                </tr>
-                <tr>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Legal Garnishments</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Child Support, Tax Liens</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>As Ordered</td>
-                  <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Required</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <h3 className="text-xl font-semibold pt-2 text-white">Pre-Tax Deductions</h3>
+          <p>Pre-tax deductions are taken before certain taxes are calculated. Common examples include a traditional 401(k), health insurance, HSA, and FSA. A 401k deduction from paycheck, health insurance deduction from paycheck, or retirement contribution paycheck deduction may lower taxable wages.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Post-Tax Deductions</h3>
+          <p>Post-tax deductions are taken after taxes are calculated. A Roth 401(k), some insurance payments, union dues, and certain workplace costs may fall here. The key idea is timing — timing can change taxable income.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Benefit Deductions</h3>
+          <p>Benefit deductions are amounts taken for employee benefits. These may include medical, dental, vision, life insurance, disability insurance, retirement plans, HSA, or FSA. They reduce your paycheck, but they protect your health and future finances.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Wage Garnishments</h3>
+          <p>Wage garnishment is a required deduction usually ordered by a court or government agency. It may be used for child support, unpaid taxes, student loans, or other debts. It can reduce take-home pay even when your salary has not changed.</p>
         </div>
       </article>
 
@@ -2352,48 +2326,114 @@ function PaycheckCalculatorPage({ isDark }) {
       />
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">Conclusion</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Bonus Pay, Overtime, and Extra Income</h2>
         <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-          <p>Taking control of your earnings starts with a clear view of your paycheck. You now possess the knowledge to distinguish between gross and net income while identifying the specific taxes and benefits that impact your bottom line.</p>
-          <p>Using tools like the ADP paycheck calculator helps you turn complex payroll data into actionable insights. Regular monitoring of your pay stubs ensures that your withholdings align with your personal financial goals. You can adjust your tax status or retirement contributions to better suit your lifestyle needs.</p>
-          <p>Financial security grows when you stay proactive about your compensation. Reviewing your pay regularly prevents surprises and helps you build a stronger budget. Apply these strategies today to gain confidence in your economic decisions and plan for a stable future.</p>
+          <p>Extra income can change your paycheck in a hurry. Bonuses, commissions, tips, overtime, and other supplemental wages may increase gross pay, but they can also increase withholding. This is why a bonus can feel smaller than expected when it finally arrives.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Are Bonuses Taxed Differently?</h3>
+          <p>Bonuses can be treated as supplemental wages, and employers may withhold taxes differently from regular salary. Your final tax depends on total yearly income, so a bonus may push you into a higher withholding rate for that paycheck.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Salary vs Hourly Paycheck</h3>
+          <p>A salary paycheck is based on a fixed yearly amount, while an hourly paycheck depends on hours worked. An hourly paycheck calculator can help you see how wages, overtime, and hours change your final pay when comparing salary to hourly compensation.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Overtime and Take-Home Pay</h3>
+          <p>Overtime can raise gross pay and net pay, but it may also raise withholding. Your final value depends on overtime rate, taxes, deductions, and pay frequency. A calculator can show whether extra hours truly fit your budget goals.</p>
         </div>
       </article>
 
       <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
-        <h2 className="text-2xl font-bold mb-4 text-white">FAQ</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">How to Read a Paycheck or Pay Stub</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>A paycheck is the payment you receive. A pay stub explains how that payment was calculated. It shows your gross pay, taxes, deductions, and net pay. Reading it well helps you catch mistakes — you can check hours, salary, tax withholding, insurance costs, retirement contributions, and year-to-date totals.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Information Found on a Paycheck</h3>
+          <p>A paycheck may show your name, employer name, pay date, pay period, net pay amount, direct deposit details, and check number. If you receive direct deposit, the payment may be electronic, but the same basic information still matters.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Information Found on a Pay Stub</h3>
+          <p>A pay stub usually shows gross pay, net pay, federal withholding, state withholding, FICA tax, Social Security tax, Medicare tax, insurance, retirement deductions, year-to-date earnings, and employer contributions.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">How to Reduce Taxes Taken Out of Your Paycheck</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>You may be able to adjust taxes taken from your paycheck by reviewing your W-4 form, using eligible pre-tax benefits, checking filing status, and claiming credits when allowed. Lower withholding can increase take-home pay now, but it may reduce your refund or create a tax bill later. A good goal is balance.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Update Your W-4</h3>
+          <p>Update your W-4 when life changes. Marriage, divorce, a child, a second job, a raise, or side income can affect withholding. The IRS says workers can use Form W-4 so employers withhold the correct federal income tax from pay.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Use Pre-Tax Benefits</h3>
+          <p>Using pre-tax benefits can reduce taxable income. Traditional 401(k) contributions, health insurance premiums, HSA contributions, and FSA contributions can all affect your paycheck — lowering some taxes while helping you plan ahead.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Review Your Filing Status</h3>
+          <p>Your filing status affects withholding and tax brackets. Single, married filing jointly, married filing separately, and head of household can produce different paycheck results. This is why filing status matters when estimating taxes.</p>
+          <h3 className="text-xl font-semibold pt-2 text-white">Check Tax Credits</h3>
+          <p>Tax credits can reduce your final tax liability when you qualify. Dependents, education, and other credits may affect your tax return and withholding choices. Claiming dependents on your W-4 can also reduce withholding each paycheck.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">Final Thoughts on Using a Salary Paycheck Calculator</h2>
+        <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+          <p>A Salary Paycheck Calculator gives you more than a number. It gives you financial clarity. It helps you understand your annual salary to paycheck, your paycheck after deductions, and your real take-home pay. That clarity matters when you plan rent, savings, debt, groceries, travel, or a new job move.</p>
+          <p>The best way to use it is simple. Enter honest income details, choose the right state, select the correct pay frequency, add W-4 details, include deductions, and review your result. When your paycheck finally arrives, compare it with your estimate. If both numbers are close, you know your money map is working.</p>
+        </div>
+      </article>
+
+      <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+        <h2 className="text-2xl font-bold mb-4 text-white">FAQs</h2>
         <div className={`space-y-5 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Why should I use a paycheck calculator to estimate my monthly budget?</h3>
-            <p>Using a paycheck calculator is a brilliant way to gain clarity on your financial health. By estimating your take-home pay, you can create a more accurate household budget for expenses like rent, groceries, and utilities. Tools like the ADP paycheck calculator allow you to see exactly how federal tax withholdings and benefit deductions impact your bottom line before your salary hits your bank account at institutions like Chase or Wells Fargo.</p>
+            <h3 className="text-xl font-semibold mb-2 text-white">How much is $100,000 salary after tax in the USA?</h3>
+            <p>A $100,000 salary after tax in the USA may leave around $70,000 to $78,000 take-home pay for a single filer, depending on state taxes, deductions, and benefits.</p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What is the primary difference between gross pay and net pay?</h3>
-            <p>Your gross pay is the total amount of compensation earned before any deductions are taken out. In contrast, your net pay, often called your take-home pay, is the actual amount of money deposited into your account. Understanding this distinction is vital for effective money management and reaching your savings goals with platforms like Fidelity or Charles Schwab.</p>
+            <h3 className="text-xl font-semibold mb-2 text-white">Is $70,000 a good salary in the USA?</h3>
+            <p>Yes, $70,000 can be a good salary in many U.S. states, especially in low-cost areas. However, it may feel average in expensive cities like New York, San Francisco, Boston, or Los Angeles.</p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">How do I get the most accurate results from an hourly paycheck calculator?</h3>
-            <p>To ensure precision, grab your most recent pay stub from a payroll provider like Workday or Gusto. You will need to input your specific hourly wage and the total hours worked. An hourly paycheck calculator also requires you to select your correct filing status and the number of tax allowances you've claimed to provide the most realistic estimate of your earnings.</p>
+            <h3 className="text-xl font-semibold mb-2 text-white">How to calculate US salary?</h3>
+            <p>To calculate US salary, multiply hourly pay by hours worked per week, then by 52 weeks. For salary after taxes, subtract federal taxes, state taxes, FICA, and deductions.</p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What are FICA taxes, and why are they taken out of my check?</h3>
-            <p>FICA stands for the Federal Insurance Contributions Act. These are mandatory payroll taxes that fund Social Security and Medicare. Regardless of whether you use a salary calculator or an hourly paycheck calculator, you will notice these deductions are automatically subtracted from your gross earnings to support these federal programs.</p>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is $70,000 a year hourly?</h3>
+            <p>$70,000 a year is about $33.65 per hour, based on 40 hours per week and 52 weeks per year.</p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">How do pre-tax contributions like a 401(k) affect my take-home pay?</h3>
-            <p>Contributions to a 401(k) plan, such as those managed by Vanguard or Empower, are typically pre-tax. This means the money is deducted from your gross pay before income taxes are calculated, which actually lowers your overall taxable income. While this reduces your immediate take-home pay, it helps you save more efficiently for retirement.</p>
+            <h3 className="text-xl font-semibold mb-2 text-white">How much is $90,000 a year per hour?</h3>
+            <p>$90,000 a year is about $43.27 per hour, based on a full-time 40-hour workweek.</p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Is the ADP paycheck calculator better than other online estimation tools?</h3>
-            <p>The ADP paycheck calculator is highly regarded for its accuracy and its ability to handle complex state-specific tax laws. While many online tools offer quick estimates, a reliable paycheck calculator from an established industry leader like ADP or Paychex is often more comprehensive. However, always remember that these tools provide estimates; for official figures, you should always consult your employer's HR department or a certified tax professional.</p>
+            <h3 className="text-xl font-semibold mb-2 text-white">What&apos;s my take home pay if I earn $70,000?</h3>
+            <p>If you earn $70,000, your take-home pay may be around $52,000 to $58,000 per year, depending on your state, filing status, and deductions.</p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">What are some examples of voluntary benefit deductions?</h3>
-            <p>Beyond mandatory taxes, you might choose to have voluntary deductions taken from your check. Common examples include health insurance premiums for providers like Blue Cross Blue Shield or Aetna, dental insurance, and contributions to Flexible Spending Accounts (FSAs). These deductions are managed through your payroll system to ensure your benefits remain active and paid for seamlessly.</p>
+            <h3 className="text-xl font-semibold mb-2 text-white">Is $100,000 a good salary in the USA?</h3>
+            <p>Yes, $100,000 is a strong salary in many parts of the USA. In high-cost cities, rent, taxes, childcare, and insurance can reduce its comfort level.</p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Can a paycheck calculator account for wage garnishments?</h3>
-            <p>Yes, many advanced calculators allow you to input miscellaneous adjustments, including wage garnishments. Garnishments are legal obligations, such as unpaid student loans or child support, that are deducted directly from your earnings. Factoring these into your paycheck calculator ensures you have a completely transparent view of your available monthly cash flow.</p>
+            <h3 className="text-xl font-semibold mb-2 text-white">How much is $65,000 a year after taxes in NYC?</h3>
+            <p>A $65,000 salary in NYC may leave around $47,000 to $51,000 after federal, New York State, NYC, FICA taxes, and basic deductions.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is the 60% trap?</h3>
+            <p>The 60% trap usually means losing a large share of extra income through higher taxes, reduced benefits, or other deductions as income rises.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">Is $5,000 a month good in the USA?</h3>
+            <p>$5,000 a month can be good in many U.S. areas, especially for a single person. In expensive cities, it may feel modest after rent, insurance, and groceries.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is a $40,000 salary hourly?</h3>
+            <p>A $40,000 yearly salary is about $19.23 per hour, based on 40 hours per week and 52 weeks per year.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is my monthly income if I make $70,000 a year?</h3>
+            <p>If you make $70,000 a year, your gross monthly income is about $5,833 before taxes and deductions.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">Is $300,000 a good salary in the USA?</h3>
+            <p>Yes, $300,000 is a very high salary in the USA. It can support a strong lifestyle, though taxes and living costs still matter in expensive cities.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">Is $10,000 a month good?</h3>
+            <p>Yes, $10,000 a month is a strong income in most of the USA. After taxes, it can still provide comfortable living if housing and debt are managed well.</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold mb-2 text-white">What is a top 5% salary in the USA?</h3>
+            <p>A top 5% salary in the USA is roughly around $170,000 or more for individual income, but the exact number changes by year, state, and data source.</p>
           </div>
         </div>
       </article>
@@ -3393,8 +3433,8 @@ export default function App() {
         canonicalPath: '/salary-calculator',
       },
       '/paycheck-calculator': {
-        title: 'Paycheck Calculator to Estimate Your Take-Home Pay',
-        description: 'Estimate paycheck take-home pay by modeling gross-to-net income, federal withholding, FICA deductions, and pre-tax adjustments for accurate monthly budgeting.',
+        title: 'Salary Paycheck Calculator – Estimate Your Take-Home Pay',
+        description: 'A Salary Paycheck Calculator estimates take-home pay after federal taxes, state taxes, FICA, and deductions. Enter salary, pay frequency, and filing status for a clear net pay estimate.',
         canonicalPath: '/paycheck-calculator',
       },
       '/texas-paycheck-calculator': {
