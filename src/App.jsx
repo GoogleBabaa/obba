@@ -66,6 +66,31 @@ const progressiveTax = (taxableIncome, brackets) => {
   }
   return Math.max(0, tax);
 };
+const CA_BRACKETS = {
+  single: [
+    { upTo: 10756, rate: 0.01 }, { upTo: 25499, rate: 0.02 }, { upTo: 40245, rate: 0.04 },
+    { upTo: 55866, rate: 0.06 }, { upTo: 70606, rate: 0.08 }, { upTo: 360659, rate: 0.093 },
+    { upTo: 432787, rate: 0.103 }, { upTo: 721314, rate: 0.113 }, { upTo: 1e15, rate: 0.123 },
+  ],
+  married: [
+    { upTo: 21512, rate: 0.01 }, { upTo: 50998, rate: 0.02 }, { upTo: 80490, rate: 0.04 },
+    { upTo: 111732, rate: 0.06 }, { upTo: 141212, rate: 0.08 }, { upTo: 721318, rate: 0.093 },
+    { upTo: 865574, rate: 0.103 }, { upTo: 1442628, rate: 0.113 }, { upTo: 1e15, rate: 0.123 },
+  ],
+  hoh: [
+    { upTo: 21527, rate: 0.01 }, { upTo: 51000, rate: 0.02 }, { upTo: 65744, rate: 0.04 },
+    { upTo: 81364, rate: 0.06 }, { upTo: 96107, rate: 0.08 }, { upTo: 490493, rate: 0.093 },
+    { upTo: 588593, rate: 0.103 }, { upTo: 1000000, rate: 0.113 }, { upTo: 1e15, rate: 0.123 },
+  ],
+  mfs: [
+    { upTo: 10756, rate: 0.01 }, { upTo: 25499, rate: 0.02 }, { upTo: 40245, rate: 0.04 },
+    { upTo: 55866, rate: 0.06 }, { upTo: 70606, rate: 0.08 }, { upTo: 360659, rate: 0.093 },
+    { upTo: 432787, rate: 0.103 }, { upTo: 721314, rate: 0.113 }, { upTo: 1e15, rate: 0.123 },
+  ],
+};
+const CA_STANDARD_DEDUCTION = { single: 5202, married: 10404, hoh: 10726, mfs: 5202 };
+const CA_SDI_RATE = 0.01;
+
 const stateEffectiveTaxRates = {
   Alaska: { low: 0, mid1: 0, mid2: 0, high: 0 },
   Alabama: { low: 2, mid1: 3.2, mid2: 4.2, high: 5 },
@@ -370,7 +395,7 @@ function ficaForAnnualWages(annualWages, status) {
 
 function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
   const links = [
-    ['Home', '/'], ['Overtime', '/overtime'], ['Salary', '/salary-calculator'], ['Paycheck', '/paycheck-calculator'], ['Texas Paycheck', '/texas-paycheck-calculator'], ['Florida Paycheck', '/florida-paycheck-calculator'], ['FAQ', '/faq'], ['About Us', '/about-us'],
+    ['Home', '/'], ['Overtime', '/overtime'], ['Salary', '/salary-calculator'], ['Paycheck', '/paycheck-calculator'], ['Texas Paycheck', '/texas-paycheck-calculator'], ['Florida Paycheck', '/florida-paycheck-calculator'], ['California Paycheck', '/california-paycheck-calculator'], ['FAQ', '/faq'], ['About Us', '/about-us'],
   ];
   return (
     <header className={`sticky top-0 z-40 ${isDark ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-200'} border-b backdrop-blur-sm`}>
@@ -449,6 +474,7 @@ function HomePage({ isDark }) {
               ['Paycheck Calculator', '/paycheck-calculator'],
               ['Texas Paycheck Calculator', '/texas-paycheck-calculator'],
               ['Florida Paycheck Calculator', '/florida-paycheck-calculator'],
+              ['California Paycheck Calculator', '/california-paycheck-calculator'],
             ].map(([title, to]) => (
               <Link
                 key={title}
@@ -2521,6 +2547,7 @@ function PaycheckCalculatorPage({ isDark }) {
 
 function StatePaycheckCalculatorPage({ isDark, stateName }) {
   const isZeroStateTaxCalc = stateName === 'Texas' || stateName === 'Florida';
+  const isCalifornia = stateName === 'California';
   const [status, setStatus] = useState('single');
   const [locationZip, setLocationZip] = useState('32003');
   const [grossPay, setGrossPay] = useState('');
@@ -2592,6 +2619,46 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       };
     }
 
+    if (isCalifornia) {
+      const gross = Math.max(0, num(grossPay));
+      const hours = Math.max(0, num(hoursPerDay));
+      const annualGross = rateType === 'hourly' ? gross * hours * 260 : gross;
+      const statusKey = status || 'single';
+      const federalAnnual = progressiveTax(Math.max(0, annualGross - (STANDARD_DEDUCTION_2026[statusKey] ?? 16100)), BRACKETS[statusKey] ?? BRACKETS.single);
+      const socialSecurityAnnual = Math.min(annualGross, 184500) * 0.062;
+      const medicareBase = annualGross * 0.0145;
+      const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
+      const medicareAnnual = medicareBase + Math.max(0, annualGross - addMedThreshold) * 0.009;
+      const caTaxable = Math.max(0, annualGross - (CA_STANDARD_DEDUCTION[statusKey] ?? 5202));
+      const caStateAnnual = progressiveTax(caTaxable, CA_BRACKETS[statusKey] ?? CA_BRACKETS.single);
+      const caSdiAnnual = annualGross * CA_SDI_RATE;
+      const totalDeductions = federalAnnual + socialSecurityAnnual + medicareAnnual + caStateAnnual + caSdiAnnual;
+      const annualTakeHome = annualGross - totalDeductions;
+      const grossPerPeriod = annualGross / periods;
+      const federalPerPeriod = federalAnnual / periods;
+      const socialSecurityPerPeriod = socialSecurityAnnual / periods;
+      const medicarePerPeriod = medicareAnnual / periods;
+      const ficaPerPeriod = socialSecurityPerPeriod + medicarePerPeriod;
+      const caStatePerPeriod = caStateAnnual / periods;
+      const caSdiPerPeriod = caSdiAnnual / periods;
+      const perPeriodTakeHome = annualTakeHome / periods;
+      const federalPct = grossPerPeriod > 0 ? (federalPerPeriod / grossPerPeriod) * 100 : 0;
+      const statePct = grossPerPeriod > 0 ? (caStatePerPeriod / grossPerPeriod) * 100 : 0;
+      const ficaPct = grossPerPeriod > 0 ? (ficaPerPeriod / grossPerPeriod) * 100 : 0;
+      const sdiPct = grossPerPeriod > 0 ? (caSdiPerPeriod / grossPerPeriod) * 100 : 0;
+      return {
+        periods, annualGross, grossPerPeriod,
+        federalPerPeriod, socialSecurityPerPeriod, medicarePerPeriod, ficaPerPeriod,
+        caStatePerPeriod, caSdiPerPeriod, annualTakeHome,
+        monthlyNet: annualTakeHome / 12,
+        perPeriodTakeHome,
+        federalPct, statePct, ficaPct, sdiPct,
+        ficaAndStatePct: ficaPct + sdiPct,
+        taxesPct: federalPct + statePct,
+        takeHomePct: grossPerPeriod > 0 ? (perPeriodTakeHome / grossPerPeriod) * 100 : 0,
+      };
+    }
+
     const grossAnnual = Math.max(0, num(grossPay));
     const grossPer = grossAnnual / periods;
     const pretax = Math.max(0, num(preTaxDeduction));
@@ -2611,9 +2678,11 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       netPer: netAnnual / periods,
       netAnnual,
     };
-  }, [isZeroStateTaxCalc, status, grossPay, rateType, payFreq, preTaxDeduction, locationZip, hoursPerDay]);
+  }, [isZeroStateTaxCalc, isCalifornia, status, grossPay, rateType, payFreq, preTaxDeduction, locationZip, hoursPerDay]);
   const stateGraphGross = Math.max(0, r.grossPerPeriod ?? 0);
-  const stateGraphTaxes = Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.stateAnnual ? (r.stateAnnual / (r.periods || 1)) : 0));
+  const stateGraphTaxes = isCalifornia
+    ? Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.caStatePerPeriod ?? 0) + (r.caSdiPerPeriod ?? 0))
+    : Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.stateAnnual ? (r.stateAnnual / (r.periods || 1)) : 0));
   const stateGraphTakeHome = Math.max(0, r.perPeriodTakeHome ?? 0);
   const stateGraphItems = [
     { key: 'gross', label: 'Gross Pay', value: stateGraphGross, color: '#0ea5e9' },
@@ -2644,6 +2713,11 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       title = 'Florida Paycheck Calculator - See Your Earnings Instantly';
       description = 'Florida paycheck calculator to estimate take-home pay, calculate gross-to-net income, apply federal withholding and FICA deductions, and plan monthly budget with accurate payroll insights.';
       path = '/florida-paycheck-calculator';
+    } else if (stateName === 'California') {
+      title = 'California Paycheck Calculator - Estimate Your Take-Home Pay';
+      description = 'California paycheck calculator to estimate take-home pay after federal income tax, California state income tax, SDI, and FICA deductions. Plan your monthly budget with accurate CA payroll results.';
+      path = '/california-paycheck-calculator';
+      appName = 'California Paycheck Calculator';
     }
 
     document.title = title;
@@ -2709,6 +2783,14 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
             <p>Estimating your take-home pay is a vital step for every worker in the United States. When you know your true bottom line, you make better decisions about your lifestyle and investments. Let us explore how you can optimize your earnings and secure your financial well-being today.</p>
           </div>
         </article>
+      ) : isCalifornia ? (
+        <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
+          <h1 className="text-3xl font-bold mb-4 text-white">California Paycheck Calculator - Estimate Your Take-Home Pay</h1>
+          <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            <p>California workers face some of the most complex payroll deductions in the country. Between federal income tax, California state income tax, Social Security, Medicare, and the State Disability Insurance tax, knowing your real take-home pay requires careful calculation.</p>
+            <p>This California paycheck calculator estimates your net pay per period based on your salary or hourly wage, filing status, and pay frequency. It applies 2025 California state income tax brackets, the 1.00% SDI rate, federal withholding, and FICA contributions to give you a clear breakdown of your earnings.</p>
+          </div>
+        </article>
       ) : (
         <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
           <h1 className="text-3xl font-bold mb-4 text-white">{stateName} Paycheck Calculator</h1>
@@ -2718,19 +2800,19 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       <CalcShell title={`${stateName} Paycheck`} isDark={isDark}>
         <Field
           label={rateType === 'hourly' ? 'Hourly Rate ($)' : 'Salary (per year)'}
-          hint={`${stateName} has 0% state income tax`}
+          hint={isCalifornia ? 'California state income tax: 1% to 13.3%' : `${stateName} has 0% state income tax`}
         >
           <Input value={grossPay} onChange={setGrossPay} />
         </Field>
         <Field label="Rate Type">
           <Select value={rateType} onChange={setRateType} options={[['', 'Select...'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
         </Field>
-        {isZeroStateTaxCalc && rateType === 'hourly' && (
+        {(isZeroStateTaxCalc || isCalifornia) && rateType === 'hourly' && (
           <Field label="Hours per day">
             <Input value={hoursPerDay} onChange={setHoursPerDay} />
           </Field>
         )}
-        {isZeroStateTaxCalc && (
+        {(isZeroStateTaxCalc || isCalifornia) && (
           <Field label="Location (ZIP)">
             <Input value={locationZip} onChange={setLocationZip} />
           </Field>
@@ -2739,12 +2821,60 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
           <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select...'], ['daily', 'Daily (260x/yr)'], ['weekly', 'Weekly (52x/yr)'], ['biweekly', 'Bi-Weekly (26x/yr)'], ['semimonthly', 'Semi-Monthly (24x/yr)'], ['monthly', 'Monthly (12x/yr)'], ['annual', 'Annual']]} />
         </Field>
         <Field label="Filing Status" hint="Select for Federal tax calculation">
-          <Select value={status} onChange={setStatus} options={isZeroStateTaxCalc ? [['single', 'Single'], ['married', 'Married Filing Jointly']] : [['', 'Select...'], ['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
+          <Select value={status} onChange={setStatus} options={isZeroStateTaxCalc ? [['single', 'Single'], ['married', 'Married Filing Jointly']] : [['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
         </Field>
-        {!isZeroStateTaxCalc && (
+        {!isZeroStateTaxCalc && !isCalifornia && (
           <Field label="Pre-tax Deduction Per Paycheck ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
         )}
-        {isZeroStateTaxCalc ? (
+        {isCalifornia ? (
+          <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+              <div className="space-y-1 text-sm">
+                <p>Where is your money going?</p>
+                <p>Gross Paycheck: {usd(r.grossPerPeriod ?? 0)}</p>
+                <p>Taxes: {(r.taxesPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd((r.federalPerPeriod ?? 0) + (r.caStatePerPeriod ?? 0))}</p>
+                <p>&nbsp;&nbsp;Federal Income: {(r.federalPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.federalPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;State Income: {(r.statePct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.caStatePerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Local Income: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>FICA and State Insurance Taxes: {(r.ficaAndStatePct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd((r.ficaPerPeriod ?? 0) + (r.caSdiPerPeriod ?? 0))}</p>
+                <p>&nbsp;&nbsp;Social Security: 6.20%&nbsp;&nbsp;{usd(r.socialSecurityPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Medicare: 1.45%&nbsp;&nbsp;{usd(r.medicarePerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;State Disability Insurance Tax: 1.00%&nbsp;&nbsp;{usd(r.caSdiPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;State Unemployment Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Family Leave Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Workers Compensation Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Pre-Tax Deductions: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Post-Tax Deductions: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Take Home Salary: {(r.takeHomePct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.perPeriodTakeHome ?? 0)}</p>
+                <p>Annual Take-Home: {usd(r.annualTakeHome ?? 0)}</p>
+                <p>Monthly Net Pay: {usd(r.monthlyNet ?? 0)}</p>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-center">
+                  <svg viewBox="0 0 120 120" className="h-36 w-36">
+                    <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                    {stateGraphSlices.map((slice) => (
+                      <circle key={slice.key} cx="60" cy="60" r="42" fill="none" stroke={slice.color} strokeWidth="16"
+                        strokeDasharray={`${slice.dash} ${stateCircumference - slice.dash}`}
+                        strokeDashoffset={-slice.offset} transform="rotate(-90 60 60)" />
+                    ))}
+                  </svg>
+                </div>
+                <div className="space-y-1 text-xs">
+                  {stateGraphItems.map((item) => (
+                    <div key={item.key} className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                        {item.label}
+                      </span>
+                      <span>{usd(item.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : isZeroStateTaxCalc ? (
           <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
             <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
               <div className="space-y-1 text-sm">
@@ -3316,6 +3446,127 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
           </article>
         </>
       )}
+
+      {isCalifornia && (
+        <>
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">How California Paycheck Taxes Work</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <p>California is one of the highest-taxed states for wage earners in the United States. Unlike Texas and Florida, which have no state income tax, California applies a progressive income tax with rates ranging from 1% on the lowest income tier up to 13.3% on income above $1 million. Most middle-income workers face effective state tax rates between 4% and 9.3%.</p>
+              <p>In addition to state income tax, California employees pay the State Disability Insurance (SDI) tax at 1.00% of gross wages. This fund provides short-term disability benefits and Paid Family Leave benefits to eligible workers. Federal taxes — including federal income tax, Social Security at 6.2%, and Medicare at 1.45% — also apply just like in every other state.</p>
+              <div className="overflow-x-auto">
+                <table className={`w-full min-w-[540px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+                  <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                    <tr>
+                      <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Tax</th>
+                      <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Rate</th>
+                      <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Federal Income Tax','10% to 37%','Progressive, based on taxable income'],
+                      ['California State Income Tax','1% to 13.3%','Progressive CA brackets'],
+                      ['Social Security','6.20%','On wages up to $176,100'],
+                      ['Medicare','1.45%','No wage limit; +0.9% above $200K'],
+                      ['California SDI','1.00%','State Disability Insurance, no wage limit'],
+                    ].map(([a,b,c]) => (
+                      <tr key={a}>
+                        <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                        <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                        <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{c}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">California State Income Tax Brackets</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <p>California uses a graduated income tax system. The more you earn, the higher the rate on each dollar above each threshold. The rates below apply to single filers for 2025. Married filers use wider brackets at approximately double the single thresholds.</p>
+              <div className="overflow-x-auto">
+                <table className={`w-full min-w-[540px] border text-left text-sm ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>
+                  <thead className={isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}>
+                    <tr>
+                      <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Income Range (Single)</th>
+                      <th className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>Tax Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['$0 – $10,756','1%'],['$10,756 – $25,499','2%'],['$25,499 – $40,245','4%'],
+                      ['$40,245 – $55,866','6%'],['$55,866 – $70,606','8%'],['$70,606 – $360,659','9.3%'],
+                      ['$360,659 – $432,787','10.3%'],['$432,787 – $721,314','11.3%'],['Over $721,314','12.3%'],
+                    ].map(([a,b]) => (
+                      <tr key={a}>
+                        <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{a}</td>
+                        <td className={`px-4 py-3 border ${isDark ? 'border-slate-700' : 'border-slate-300'}`}>{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p>California also applies a Mental Health Services Tax of 1% on income over $1 million. This calculator does not include that surcharge as it affects very high earners only.</p>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">Understanding California SDI</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <p>California's State Disability Insurance (SDI) is a mandatory payroll tax that funds short-term disability benefits and Paid Family Leave (PFL) for California workers. As of 2024, the SDI rate applies to all wages with no wage base limit, meaning the 1.00% rate applies to your full gross pay.</p>
+              <p>SDI benefits can replace up to 60 to 70 percent of your wages if you are unable to work due to a non-work-related illness, injury, or pregnancy. Paid Family Leave from the same SDI fund allows you to take time off to bond with a new child or care for a seriously ill family member.</p>
+              <h3 className="text-xl font-semibold pt-2 text-white">Who pays California SDI?</h3>
+              <p>Only employees pay SDI — employers do not contribute to SDI on behalf of employees. It is withheld directly from your paycheck every pay period at 1.00% of gross wages.</p>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">Gross Pay vs Net Pay in California</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <p>Because California has both state income tax and SDI on top of federal taxes, the gap between gross pay and net pay is often larger than in other states. A worker earning $80,000 annually in California may take home significantly less than the same worker earning $80,000 in Texas, where there is no state income tax.</p>
+              <h3 className="text-xl font-semibold pt-2 text-white">How to read your California paycheck breakdown</h3>
+              <ul className="list-disc pl-5 space-y-1">
+                <li><strong>Gross Paycheck</strong> — your earnings for that pay period before any deductions</li>
+                <li><strong>Federal Income Tax</strong> — withheld based on your W-4 and filing status</li>
+                <li><strong>California State Income Tax</strong> — based on CA progressive brackets and DE-4 form</li>
+                <li><strong>Social Security</strong> — 6.2% of gross wages up to the annual wage base</li>
+                <li><strong>Medicare</strong> — 1.45% of all gross wages</li>
+                <li><strong>California SDI</strong> — 1.00% of all gross wages</li>
+                <li><strong>Take Home Salary</strong> — what remains after all taxes are deducted</li>
+              </ul>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">FAQ — California Paycheck Calculator</h2>
+            <div className={`space-y-5 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <div>
+                <h3 className="text-xl font-semibold mb-2 text-white">Does California have state income tax?</h3>
+                <p>Yes. California has a progressive state income tax with rates from 1% to 13.3%. It is one of the highest state income tax rates in the United States. Most middle-income workers pay an effective rate between 4% and 9.3%.</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2 text-white">What is California SDI on my paycheck?</h3>
+                <p>SDI stands for State Disability Insurance. It is a mandatory California employee payroll tax at 1.00% of gross wages. It funds short-term disability and Paid Family Leave benefits. Your employer withholds it automatically each pay period.</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2 text-white">How is California state income tax calculated?</h3>
+                <p>California applies progressive brackets to your annual taxable income after subtracting the California standard deduction. Your taxable income moves through each bracket and is taxed at that bracket's rate only on the portion within that range.</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2 text-white">Why is my California take-home pay lower than in other states?</h3>
+                <p>California workers pay federal income tax, California state income tax, Social Security, Medicare, and SDI. States like Texas and Florida have no state income tax, so their workers keep more of their gross pay. California's total tax burden on wages is among the highest in the USA.</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2 text-white">What is the California standard deduction?</h3>
+                <p>For 2025, the California standard deduction is $5,202 for single filers and $10,404 for married filing jointly. This amount is subtracted from your gross income before applying the state income tax brackets. It is much lower than the federal standard deduction.</p>
+              </div>
+            </div>
+          </article>
+        </>
+      )}
     </main>
   );
 }
@@ -3445,6 +3696,7 @@ function AboutUsPage({ isDark }) {
             <Link to="/paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Paycheck Calculator</Link>
             <Link to="/texas-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Texas Paycheck Calculator</Link>
             <Link to="/florida-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Florida Paycheck Calculator</Link>
+            <Link to="/california-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open California Paycheck Calculator</Link>
           </div>
 
           <h2 className="text-xl font-bold">Methodology and Scope</h2>
@@ -3525,6 +3777,11 @@ export default function App() {
         description: 'Estimate Florida paycheck net income instantly using federal tax withholding and FICA deductions, and plan monthly spending with accurate payroll projections.',
         canonicalPath: '/florida-paycheck-calculator',
       },
+      '/california-paycheck-calculator': {
+        title: 'California Paycheck Calculator - Estimate Your Take-Home Pay',
+        description: 'California paycheck calculator to estimate take-home pay after federal income tax, California state income tax, SDI, and FICA deductions. Plan your monthly budget with accurate CA payroll results.',
+        canonicalPath: '/california-paycheck-calculator',
+      },
       '/faq': {
         title: 'FAQ - OBBBA Tax Calculators',
         description: 'Read frequently asked questions for OBBBA Tax Calculators covering overtime, salary, paycheck, Texas, and Florida paycheck estimation workflows.',
@@ -3601,6 +3858,7 @@ export default function App() {
       '/paycheck-calculator': 'Paycheck Calculator',
       '/texas-paycheck-calculator': 'Texas Paycheck Calculator',
       '/florida-paycheck-calculator': 'Florida Paycheck Calculator',
+      '/california-paycheck-calculator': 'California Paycheck Calculator',
       '/faq': 'FAQ',
       '/faqs': 'FAQ',
       '/about-us': 'About Us',
@@ -3681,6 +3939,7 @@ export default function App() {
           <Route path="/paycheck-calculator" element={<PaycheckCalculatorPage isDark={isDark} />} />
           <Route path="/texas-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Texas" />} />
           <Route path="/florida-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Florida" />} />
+          <Route path="/california-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="California" />} />
           <Route path="/about-us" element={<AboutUsPage isDark={isDark} />} />
           <Route path="/faq" element={<FAQPage isDark={isDark} />} />
           <Route path="/faqs" element={<FAQPage isDark={isDark} />} />
@@ -3707,6 +3966,7 @@ export default function App() {
                 <p><Link to="/paycheck-calculator" className="hover:text-cyan-400">Paycheck Calculator</Link></p>
                 <p><Link to="/texas-paycheck-calculator" className="hover:text-cyan-400">Texas Paycheck</Link></p>
                 <p><Link to="/florida-paycheck-calculator" className="hover:text-cyan-400">Florida Paycheck</Link></p>
+                <p><Link to="/california-paycheck-calculator" className="hover:text-cyan-400">California Paycheck</Link></p>
                 <p><Link to="/faq" className="hover:text-cyan-400">FAQ</Link></p>
                 <p><Link to="/about-us" className="hover:text-cyan-400">About Us</Link></p>
               </div>
