@@ -6056,8 +6056,8 @@ export default function App() {
   useEffect(() => {
     const seoByPath = {
       '/': {
-        title: 'OBBBA Tax Calculator 2026 - Overtime Deduction, Salary & Paycheck Calculator',
-        description: 'Estimate 2026 federal take-home pay with OBBBA Tax Calculators: no tax on overtime estimator, hourly to salary converter, paycheck calculator, Texas paycheck calculator, and Florida paycheck calculator.',
+        title: 'Best Paycheck & Tax Calculators 2026 | OBBA',
+        description: 'Calculate paychecks, taxes, payroll, and income instantly. Free U.S. calculators with fast, accurate results for smarter planning.',
         canonicalPath: '/',
       },
       '/overtime': {
