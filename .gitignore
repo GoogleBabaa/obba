@@ -5,3 +5,20 @@ playwright-*.png
 preview-check.png
 .DS_Store
 .vscode/.private/
+
+# Private / internal — never commit
+.private/
+.claude/
+
+# Competitor research scripts — sensitive
+scripts.compare-overtime.mjs
+scripts.debug-competitor.mjs
+scripts.ours-overtime-sweep.mjs
+scripts.smartasset-human-check.mjs
+state-overtime-sweep.json
+
+# Debug screenshots
+competitor-overtime-debug.png
+mobile-launch-check.png
+mobile-menu-debug.png
+nav-verify-mobile.png
