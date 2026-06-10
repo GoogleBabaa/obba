@@ -6352,6 +6352,7 @@ export default function App() {
               <div className={`space-y-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                 <p><Link to="/privacy-policy" className="hover:text-cyan-400">Privacy Policy</Link></p>
                 <p><Link to="/terms-conditions" className="hover:text-cyan-400">Terms of Use</Link></p>
+                <p><Link to="/faq" className="hover:text-cyan-400">FAQ</Link></p>
                 <p><Link to="/contact-us" className="hover:text-cyan-400">Contact Us</Link></p>
                 <p><Link to="/about-us" className="hover:text-cyan-400">About Us</Link></p>
               </div>
