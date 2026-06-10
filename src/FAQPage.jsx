@@ -139,6 +139,43 @@ export default function FAQPage({ isDark }) {
       ]
     },
     {
+      category: 'California Paycheck Calculator',
+      questions: [
+        {
+          q: 'How much tax is taken out of a $2,000 paycheck in California?',
+          a: 'The exact amount depends on your filing status, pay frequency, W-4 details, and deductions. For a rough estimate on a $2,000 paycheck, federal income tax, Social Security, Medicare, California state income tax, and SDI can together remove anywhere from around $300 to $500 or more depending on your situation. A California paycheck calculator gives you a personalized number based on your actual inputs.'
+        },
+        {
+          q: 'How much is a $70,000 salary after taxes in California?',
+          a: 'A $70,000 salary in California is subject to federal income tax, California state income tax, Social Security, Medicare, and SDI. After all these deductions, take-home pay is typically in the range of $50,000 to $55,000 annually for a single filer, though the exact number shifts based on filing status, pre-tax deductions, and withholding choices. Use the California paycheck calculator to get an estimate for your specific situation.'
+        },
+        {
+          q: 'How much money does California take out of a paycheck?',
+          a: 'California takes out state income tax using a progressive bracket system that ranges from 1% up to 13.3% for the highest earners. On top of that, SDI is withheld from wages. Combined with federal withholdings, California workers can see 25% to 35% or more of gross pay removed before the deposit arrives, depending on income level and filing status.'
+        },
+        {
+          q: 'How to calculate each paycheck?',
+          a: 'To calculate your paycheck, start with gross pay, then subtract federal income tax based on your brackets and W-4, Social Security at 6.2%, Medicare at 1.45%, California state income tax using CA brackets, SDI, and any pre-tax or post-tax deductions. The result is your net pay. A California paycheck calculator handles all of this automatically when you enter your salary, pay frequency, and filing details.'
+        },
+        {
+          q: 'How much is a $100,000 salary in California after taxes?',
+          a: 'A $100,000 salary in California faces federal tax, California state income tax, FICA taxes, and SDI. For a single filer with standard deductions, take-home pay is often estimated in the range of $68,000 to $74,000 annually, though pre-tax deductions like a 401(k) or health insurance can improve that figure. The California paycheck calculator can give you a closer estimate based on your specific inputs.'
+        },
+        {
+          q: 'What are California rules for final paychecks?',
+          a: 'California has strict final paycheck laws. If an employer terminates an employee, the final paycheck must be provided immediately at the time of termination. If an employee resigns with at least 72 hours of notice, the final paycheck is due on the last day of work. If an employee quits without notice, the employer has 72 hours to provide the final paycheck. Late final paychecks may result in waiting time penalties under California Labor Code.'
+        },
+        {
+          q: 'How do you calculate hours and pay?',
+          a: 'To calculate hourly pay, multiply your hourly rate by total hours worked in the pay period. For overtime, multiply the hourly rate by 1.5 for hours above 40 in a workweek, or above 8 in a single day under California law. Then apply federal and California tax withholding to that gross amount to estimate take-home pay. The California paycheck calculator supports hourly input so you can estimate net pay directly.'
+        },
+        {
+          q: 'How much is $20,000 after taxes in California?',
+          a: 'At $20,000 in annual income, federal income tax is generally low due to the standard deduction reducing taxable income significantly. California state income tax would apply at the lower brackets. After federal tax, California tax, Social Security, Medicare, and SDI, take-home pay on a $20,000 salary is typically around $17,000 to $18,500 depending on filing status and deductions. Enter your details into the California paycheck calculator for a more accurate estimate.'
+        }
+      ]
+    },
+    {
       category: 'General Calculator Questions',
       questions: [
         {
