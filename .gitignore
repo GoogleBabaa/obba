@@ -4,4 +4,4 @@ dist/
 playwright-*.png
 preview-check.png
 .DS_Store
-.vscode/
+.vscode/.private/

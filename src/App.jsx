@@ -1,6 +1,6 @@
 ﻿import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
-import { BarChart3, Menu, Moon, Sun, X } from 'lucide-react';
+import { BarChart3, ChevronDown, Menu, Moon, Sun, X } from 'lucide-react';
 const FAQPage = lazy(() => import('./FAQPage'));
 
 const BRACKETS = {
@@ -90,6 +90,116 @@ const CA_BRACKETS = {
 };
 const CA_STANDARD_DEDUCTION = { single: 5202, married: 10404, hoh: 10726, mfs: 5202 };
 const CA_SDI_RATE = 0.01;
+const IL_STATE_TAX_RATE = 0.0495;
+const IL_PERSONAL_EXEMPTION = 2425;
+const WA_CARES_RATE = 0.0058;
+const WA_PFML_RATE = 0.0053;
+const IN_STATE_TAX_RATE = 0.030;
+const IN_LOCAL_TAX_RATE = 0.0225;
+const VA_BRACKETS = {
+  single: [
+    { upTo: 3000, rate: 0.02 }, { upTo: 5000, rate: 0.03 }, { upTo: 17000, rate: 0.05 }, { upTo: 1e15, rate: 0.0575 },
+  ],
+  married: [
+    { upTo: 3000, rate: 0.02 }, { upTo: 5000, rate: 0.03 }, { upTo: 17000, rate: 0.05 }, { upTo: 1e15, rate: 0.0575 },
+  ],
+  hoh: [
+    { upTo: 3000, rate: 0.02 }, { upTo: 5000, rate: 0.03 }, { upTo: 17000, rate: 0.05 }, { upTo: 1e15, rate: 0.0575 },
+  ],
+  mfs: [
+    { upTo: 3000, rate: 0.02 }, { upTo: 5000, rate: 0.03 }, { upTo: 17000, rate: 0.05 }, { upTo: 1e15, rate: 0.0575 },
+  ],
+};
+const VA_PERSONAL_EXEMPTION = { single: 8930, married: 17860, hoh: 8930, mfs: 8930 };
+const VA_LOCAL_TAX_RATE = 0.0;
+const HI_BRACKETS = {
+  single: [
+    { upTo: 2400,   rate: 0.014  },
+    { upTo: 4800,   rate: 0.032  },
+    { upTo: 9600,   rate: 0.055  },
+    { upTo: 14400,  rate: 0.064  },
+    { upTo: 19200,  rate: 0.068  },
+    { upTo: 24000,  rate: 0.072  },
+    { upTo: 36000,  rate: 0.076  },
+    { upTo: 48000,  rate: 0.079  },
+    { upTo: 150000, rate: 0.0825 },
+    { upTo: 175000, rate: 0.09   },
+    { upTo: 200000, rate: 0.10   },
+    { upTo: 1e15,   rate: 0.11   },
+  ],
+  married: [
+    { upTo: 4800,   rate: 0.014  },
+    { upTo: 9600,   rate: 0.032  },
+    { upTo: 19200,  rate: 0.055  },
+    { upTo: 28800,  rate: 0.064  },
+    { upTo: 38400,  rate: 0.068  },
+    { upTo: 48000,  rate: 0.072  },
+    { upTo: 72000,  rate: 0.076  },
+    { upTo: 96000,  rate: 0.079  },
+    { upTo: 300000, rate: 0.0825 },
+    { upTo: 350000, rate: 0.09   },
+    { upTo: 400000, rate: 0.10   },
+    { upTo: 1e15,   rate: 0.11   },
+  ],
+  hoh: [
+    { upTo: 2400,   rate: 0.014  },
+    { upTo: 4800,   rate: 0.032  },
+    { upTo: 9600,   rate: 0.055  },
+    { upTo: 14400,  rate: 0.064  },
+    { upTo: 19200,  rate: 0.068  },
+    { upTo: 24000,  rate: 0.072  },
+    { upTo: 36000,  rate: 0.076  },
+    { upTo: 48000,  rate: 0.079  },
+    { upTo: 150000, rate: 0.0825 },
+    { upTo: 175000, rate: 0.09   },
+    { upTo: 200000, rate: 0.10   },
+    { upTo: 1e15,   rate: 0.11   },
+  ],
+  mfs: [
+    { upTo: 2400,   rate: 0.014  },
+    { upTo: 4800,   rate: 0.032  },
+    { upTo: 9600,   rate: 0.055  },
+    { upTo: 14400,  rate: 0.064  },
+    { upTo: 19200,  rate: 0.068  },
+    { upTo: 24000,  rate: 0.072  },
+    { upTo: 36000,  rate: 0.076  },
+    { upTo: 48000,  rate: 0.079  },
+    { upTo: 150000, rate: 0.0825 },
+    { upTo: 175000, rate: 0.09   },
+    { upTo: 200000, rate: 0.10   },
+    { upTo: 1e15,   rate: 0.11   },
+  ],
+};
+const HI_PERSONAL_EXEMPTION = { single: 1144, married: 2288, hoh: 1144, mfs: 1144 };
+const HI_LOCAL_TAX_RATE = 0.0;
+const NE_BRACKETS = {
+  single: [
+    { upTo: 3700,  rate: 0.0246 },
+    { upTo: 22170, rate: 0.0351 },
+    { upTo: 35730, rate: 0.0501 },
+    { upTo: 1e15,  rate: 0.0684 },
+  ],
+  married: [
+    { upTo: 7400,  rate: 0.0246 },
+    { upTo: 44340, rate: 0.0351 },
+    { upTo: 71460, rate: 0.0501 },
+    { upTo: 1e15,  rate: 0.0684 },
+  ],
+  hoh: [
+    { upTo: 3700,  rate: 0.0246 },
+    { upTo: 22170, rate: 0.0351 },
+    { upTo: 35730, rate: 0.0501 },
+    { upTo: 1e15,  rate: 0.0684 },
+  ],
+  mfs: [
+    { upTo: 3700,  rate: 0.0246 },
+    { upTo: 22170, rate: 0.0351 },
+    { upTo: 35730, rate: 0.0501 },
+    { upTo: 1e15,  rate: 0.0684 },
+  ],
+};
+const NE_PERSONAL_EXEMPTION = { single: 8940, married: 17920, hoh: 8940, mfs: 8940 };
+const NE_LOCAL_TAX_RATE = 0.0;
 
 const stateEffectiveTaxRates = {
   Alaska: { low: 0, mid1: 0, mid2: 0, high: 0 },
@@ -154,7 +264,7 @@ const getStateTaxRate = (state, income) => {
 };
 
 const SOCIAL_SECURITY_RATE = 0.062;
-const SOCIAL_SECURITY_WAGE_BASE_2026 = 184500;
+const SOCIAL_SECURITY_WAGE_BASE_2026 = 176100;
 const MEDICARE_RATE = 0.0145;
 const ADDITIONAL_MEDICARE_RATE = 0.009;
 const ADDITIONAL_MEDICARE_THRESHOLD = {
@@ -394,9 +504,23 @@ function ficaForAnnualWages(annualWages, status) {
 }
 
 function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
-  const links = [
-    ['Home', '/'], ['Overtime', '/overtime'], ['Salary', '/salary-calculator'], ['Paycheck', '/paycheck-calculator'], ['Texas Paycheck', '/texas-paycheck-calculator'], ['Florida Paycheck', '/florida-paycheck-calculator'], ['California Paycheck', '/california-paycheck-calculator'], ['FAQ', '/faq'], ['About Us', '/about-us'],
+  const allLinks = [
+    ['Home', '/'], ['Overtime', '/overtime'], ['Salary', '/salary-calculator'], ['Paycheck', '/paycheck-calculator'], ['Texas Paycheck', '/texas-paycheck-calculator'], ['Florida Paycheck', '/florida-paycheck-calculator'], ['California Paycheck', '/california-paycheck-calculator'], ['Illinois Paycheck', '/illinois-paycheck-calculator'], ['Washington Paycheck', '/washington-paycheck-calculator'], ['Indiana Paycheck', '/indiana-paycheck-calculator'], ['Virginia Paycheck', '/virginia-paycheck-calculator'], ['Hawaii Paycheck', '/hawaii-paycheck-calculator'], ['Nebraska Paycheck', '/nebraska-paycheck-calculator'],
   ];
+  const mainLinks = allLinks.slice(0, 6);
+  const moreLinks = allLinks.slice(6);
+  const [seeMoreOpen, setSeeMoreOpen] = useState(false);
+  const seeMoreRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!seeMoreOpen) return;
+    const handleClick = (e) => {
+      if (seeMoreRef.current && !seeMoreRef.current.contains(e.target)) setSeeMoreOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [seeMoreOpen]);
+
   return (
     <header className={`sticky top-0 z-40 ${isDark ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-200'} border-b backdrop-blur-sm`}>
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
@@ -406,10 +530,35 @@ function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
           </div>
           <div><div className={`font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>OBBBA Tax Calculators</div><div className={`text-xs ${isDark ? 'text-slate-300/90' : 'text-slate-600'}`}>Federal Tax Deduction Estimators</div></div>
         </div>
-        <nav className="hidden md:flex items-center gap-2">
-          {links.map(([label, to]) => <Link key={label} to={to} className={`rounded-xl px-4 py-2 text-sm ${isDark ? 'text-white/80 hover:bg-white/10 hover:text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'}`}>{label}</Link>)}
-        </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-1">
+            {mainLinks.map(([label, to]) => (
+              <Link key={label} to={to} className={`rounded-xl px-3 py-2 text-sm ${isDark ? 'text-white/80 hover:bg-white/10 hover:text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'}`}>{label}</Link>
+            ))}
+          </nav>
+          <div className="hidden md:block relative" ref={seeMoreRef}>
+            <button
+              onClick={() => setSeeMoreOpen(!seeMoreOpen)}
+              className={`flex items-center gap-1 rounded-xl px-3 py-2 text-sm ${isDark ? 'text-white/80 hover:bg-white/10 hover:text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'}`}
+            >
+              See More
+              <ChevronDown size={14} className={`transition-transform duration-200 ${seeMoreOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {seeMoreOpen && (
+              <div className={`absolute right-0 top-full mt-2 w-52 rounded-2xl border shadow-xl z-50 py-2 ${isDark ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}`}>
+                {moreLinks.map(([label, to]) => (
+                  <Link
+                    key={label}
+                    to={to}
+                    onClick={() => setSeeMoreOpen(false)}
+                    className={`block px-4 py-2.5 text-sm ${isDark ? 'text-slate-200 hover:bg-slate-800' : 'text-slate-700 hover:bg-slate-50'}`}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
           <button
             onClick={() => setIsDark(!isDark)}
             className={`p-2 rounded-lg ${isDark ? 'bg-slate-800 text-amber-300' : 'bg-slate-100 text-slate-800'}`}
@@ -431,7 +580,7 @@ function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
       {isMobileMenuOpen && (
         <div className={`md:hidden border-t ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
           <div className="px-4 py-4 space-y-2">
-            {links.map(([label, to]) => (
+            {allLinks.map(([label, to]) => (
               <Link
                 key={label}
                 to={to}
@@ -475,6 +624,12 @@ function HomePage({ isDark }) {
               ['Texas Paycheck Calculator', '/texas-paycheck-calculator'],
               ['Florida Paycheck Calculator', '/florida-paycheck-calculator'],
               ['California Paycheck Calculator', '/california-paycheck-calculator'],
+              ['Illinois Paycheck Calculator', '/illinois-paycheck-calculator'],
+              ['Washington Paycheck Calculator', '/washington-paycheck-calculator'],
+              ['Indiana Paycheck Calculator', '/indiana-paycheck-calculator'],
+              ['Virginia Paycheck Calculator', '/virginia-paycheck-calculator'],
+              ['Hawaii Paycheck Calculator', '/hawaii-paycheck-calculator'],
+              ['Nebraska Paycheck Calculator', '/nebraska-paycheck-calculator'],
             ].map(([title, to]) => (
               <Link
                 key={title}
@@ -2548,8 +2703,15 @@ function PaycheckCalculatorPage({ isDark }) {
 function StatePaycheckCalculatorPage({ isDark, stateName }) {
   const isZeroStateTaxCalc = stateName === 'Texas' || stateName === 'Florida';
   const isCalifornia = stateName === 'California';
+  const isIllinois = stateName === 'Illinois';
+  const isWashington = stateName === 'Washington';
+  const isIndiana = stateName === 'Indiana';
+  const isVirginia = stateName === 'Virginia';
+  const isHawaii = stateName === 'Hawaii';
+  const isNebraska = stateName === 'Nebraska';
   const [status, setStatus] = useState('single');
-  const [locationZip, setLocationZip] = useState('32003');
+  const defaultZip = stateName === 'Texas' ? '75001' : stateName === 'California' ? '90001' : stateName === 'Illinois' ? '60601' : stateName === 'Washington' ? '98001' : stateName === 'Indiana' ? '46001' : stateName === 'Virginia' ? '20101' : stateName === 'Hawaii' ? '96813' : stateName === 'Nebraska' ? '68501' : '32001';
+  const [locationZip, setLocationZip] = useState(defaultZip);
   const [grossPay, setGrossPay] = useState('');
   const [rateType, setRateType] = useState('');
   const [payFreq, setPayFreq] = useState('');
@@ -2568,7 +2730,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       const taxableAnnual = Math.max(0, annualGross - standardDeduction);
 
       const federalAnnual = progressiveTax(taxableAnnual, BRACKETS[statusKey] ?? BRACKETS.single);
-      const socialSecurityAnnual = Math.min(annualGross, 184500) * 0.062;
+      const socialSecurityAnnual = Math.min(annualGross, 176100) * 0.062;
       const medicareBase = annualGross * 0.0145;
       const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
       const addMedicare = Math.max(0, annualGross - addMedThreshold) * 0.009;
@@ -2625,7 +2787,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       const annualGross = rateType === 'hourly' ? gross * hours * periods : gross;
       const statusKey = status || 'single';
       const federalAnnual = progressiveTax(Math.max(0, annualGross - (STANDARD_DEDUCTION_2026[statusKey] ?? 16100)), BRACKETS[statusKey] ?? BRACKETS.single);
-      const socialSecurityAnnual = Math.min(annualGross, 184500) * 0.062;
+      const socialSecurityAnnual = Math.min(annualGross, 176100) * 0.062;
       const medicareBase = annualGross * 0.0145;
       const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
       const medicareAnnual = medicareBase + Math.max(0, annualGross - addMedThreshold) * 0.009;
@@ -2658,6 +2820,245 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       };
     }
 
+    if (isIllinois) {
+      const gross = Math.max(0, num(grossPay));
+      const hours = Math.max(0, num(hoursPerDay));
+      const annualGross = rateType === 'hourly' ? gross * hours * periods : gross;
+      const statusKey = status || 'single';
+      const standardDeduction = STANDARD_DEDUCTION_2026[statusKey] ?? 16100;
+      const taxableAnnual = Math.max(0, annualGross - standardDeduction);
+      const federalAnnual = progressiveTax(taxableAnnual, BRACKETS[statusKey] ?? BRACKETS.single);
+      const socialSecurityAnnual = Math.min(annualGross, 176100) * 0.062;
+      const medicareBase = annualGross * 0.0145;
+      const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
+      const addMedicare = Math.max(0, annualGross - addMedThreshold) * 0.009;
+      const medicareAnnual = medicareBase + addMedicare;
+      const ilTaxable = Math.max(0, annualGross - IL_PERSONAL_EXEMPTION);
+      const ilStateAnnual = ilTaxable * IL_STATE_TAX_RATE;
+      const totalDeductions = federalAnnual + socialSecurityAnnual + medicareAnnual + ilStateAnnual;
+      const annualTakeHome = annualGross - totalDeductions;
+      const grossPerPeriod = periods > 0 ? annualGross / periods : 0;
+      const federalPerPeriod = periods > 0 ? federalAnnual / periods : 0;
+      const socialSecurityPerPeriod = periods > 0 ? socialSecurityAnnual / periods : 0;
+      const medicarePerPeriod = periods > 0 ? medicareAnnual / periods : 0;
+      const ficaPerPeriod = socialSecurityPerPeriod + medicarePerPeriod;
+      const ilStatePerPeriod = periods > 0 ? ilStateAnnual / periods : 0;
+      const perPeriodTakeHome = periods > 0 ? annualTakeHome / periods : 0;
+      const federalPct = grossPerPeriod > 0 ? (federalPerPeriod / grossPerPeriod) * 100 : 0;
+      const statePct = grossPerPeriod > 0 ? (ilStatePerPeriod / grossPerPeriod) * 100 : 0;
+      const ficaPct = grossPerPeriod > 0 ? (ficaPerPeriod / grossPerPeriod) * 100 : 0;
+      const takeHomePct = grossPerPeriod > 0 ? (perPeriodTakeHome / grossPerPeriod) * 100 : 0;
+      return {
+        periods, annualGross, grossPerPeriod,
+        federalPerPeriod, socialSecurityPerPeriod, medicarePerPeriod, ficaPerPeriod,
+        ilStatePerPeriod, annualTakeHome, monthlyNet: annualTakeHome / 12,
+        perPeriodTakeHome, federalPct, statePct, ficaPct,
+        taxesPct: federalPct + statePct,
+        takeHomePct,
+      };
+    }
+
+    if (isWashington) {
+      const gross = Math.max(0, num(grossPay));
+      const hours = Math.max(0, num(hoursPerDay));
+      const annualGross = rateType === 'hourly' ? gross * hours * periods : gross;
+      const statusKey = status || 'single';
+      const standardDeduction = STANDARD_DEDUCTION_2026[statusKey] ?? 16100;
+      const taxableAnnual = Math.max(0, annualGross - standardDeduction);
+      const federalAnnual = progressiveTax(taxableAnnual, BRACKETS[statusKey] ?? BRACKETS.single);
+      const socialSecurityAnnual = Math.min(annualGross, 176100) * 0.062;
+      const medicareBase = annualGross * 0.0145;
+      const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
+      const addMedicare = Math.max(0, annualGross - addMedThreshold) * 0.009;
+      const medicareAnnual = medicareBase + addMedicare;
+      const annualTakeHome = annualGross - federalAnnual - socialSecurityAnnual - medicareAnnual;
+      const grossPerPeriod = periods > 0 ? annualGross / periods : 0;
+      const federalPerPeriod = periods > 0 ? federalAnnual / periods : 0;
+      const socialSecurityPerPeriod = periods > 0 ? socialSecurityAnnual / periods : 0;
+      const medicarePerPeriod = periods > 0 ? medicareAnnual / periods : 0;
+      const ficaPerPeriod = socialSecurityPerPeriod + medicarePerPeriod;
+      const perPeriodTakeHome = periods > 0 ? annualTakeHome / periods : 0;
+      const federalPct = grossPerPeriod > 0 ? (federalPerPeriod / grossPerPeriod) * 100 : 0;
+      const ficaPct = grossPerPeriod > 0 ? (ficaPerPeriod / grossPerPeriod) * 100 : 0;
+      const takeHomePct = grossPerPeriod > 0 ? (perPeriodTakeHome / grossPerPeriod) * 100 : 0;
+      return {
+        periods, annualGross, grossPerPeriod,
+        federalPerPeriod, socialSecurityPerPeriod, medicarePerPeriod, ficaPerPeriod,
+        annualTakeHome, monthlyNet: annualTakeHome / 12,
+        perPeriodTakeHome, federalPct, ficaPct,
+        taxesPct: federalPct,
+        ficaAndStatePct: ficaPct,
+        takeHomePct,
+      };
+    }
+
+    if (isIndiana) {
+      const gross = Math.max(0, num(grossPay));
+      const hours = Math.max(0, num(hoursPerDay));
+      const annualGross = rateType === 'hourly' ? gross * hours * periods : gross;
+      const statusKey = status || 'single';
+      const standardDeduction = STANDARD_DEDUCTION_2026[statusKey] ?? 16100;
+      const taxableAnnual = Math.max(0, annualGross - standardDeduction);
+      const federalAnnual = progressiveTax(taxableAnnual, BRACKETS[statusKey] ?? BRACKETS.single);
+      const socialSecurityAnnual = Math.min(annualGross, 176100) * 0.062;
+      const medicareBase = annualGross * 0.0145;
+      const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
+      const addMedicare = Math.max(0, annualGross - addMedThreshold) * 0.009;
+      const medicareAnnual = medicareBase + addMedicare;
+      const inExemption = statusKey === 'married' ? 2000 : 1000;
+      const inTaxable = Math.max(0, annualGross - inExemption);
+      const inStateAnnual = inTaxable * IN_STATE_TAX_RATE;
+      const inLocalAnnual = inTaxable * IN_LOCAL_TAX_RATE;
+      const annualTakeHome = annualGross - federalAnnual - socialSecurityAnnual - medicareAnnual - inStateAnnual - inLocalAnnual;
+      const grossPerPeriod = periods > 0 ? annualGross / periods : 0;
+      const federalPerPeriod = periods > 0 ? federalAnnual / periods : 0;
+      const socialSecurityPerPeriod = periods > 0 ? socialSecurityAnnual / periods : 0;
+      const medicarePerPeriod = periods > 0 ? medicareAnnual / periods : 0;
+      const ficaPerPeriod = socialSecurityPerPeriod + medicarePerPeriod;
+      const inStatePerPeriod = periods > 0 ? inStateAnnual / periods : 0;
+      const inLocalPerPeriod = periods > 0 ? inLocalAnnual / periods : 0;
+      const perPeriodTakeHome = periods > 0 ? annualTakeHome / periods : 0;
+      const federalPct = grossPerPeriod > 0 ? (federalPerPeriod / grossPerPeriod) * 100 : 0;
+      const statePct = grossPerPeriod > 0 ? (inStatePerPeriod / grossPerPeriod) * 100 : 0;
+      const localPct = grossPerPeriod > 0 ? (inLocalPerPeriod / grossPerPeriod) * 100 : 0;
+      const ficaPct = grossPerPeriod > 0 ? (ficaPerPeriod / grossPerPeriod) * 100 : 0;
+      const takeHomePct = grossPerPeriod > 0 ? (perPeriodTakeHome / grossPerPeriod) * 100 : 0;
+      return {
+        periods, annualGross, grossPerPeriod,
+        federalPerPeriod, socialSecurityPerPeriod, medicarePerPeriod, ficaPerPeriod,
+        inStatePerPeriod, inLocalPerPeriod, annualTakeHome, monthlyNet: annualTakeHome / 12,
+        perPeriodTakeHome, federalPct, statePct, localPct, ficaPct,
+        taxesPct: federalPct + statePct + localPct,
+        takeHomePct,
+      };
+    }
+
+    if (isVirginia) {
+      const gross = Math.max(0, num(grossPay));
+      const hours = Math.max(0, num(hoursPerDay));
+      const annualGross = rateType === 'hourly' ? gross * hours * periods : gross;
+      const statusKey = status || 'single';
+      const standardDeduction = STANDARD_DEDUCTION_2026[statusKey] ?? 16100;
+      const taxableAnnual = Math.max(0, annualGross - standardDeduction);
+      const federalAnnual = progressiveTax(taxableAnnual, BRACKETS[statusKey] ?? BRACKETS.single);
+      const socialSecurityAnnual = Math.min(annualGross, 176100) * 0.062;
+      const medicareBase = annualGross * 0.0145;
+      const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
+      const addMedicare = Math.max(0, annualGross - addMedThreshold) * 0.009;
+      const medicareAnnual = medicareBase + addMedicare;
+      const vaExemption = VA_PERSONAL_EXEMPTION[statusKey] ?? 930;
+      const vaTaxable = Math.max(0, annualGross - vaExemption);
+      const vaStateBrackets = VA_BRACKETS[statusKey] ?? VA_BRACKETS.single;
+      const vaStateAnnual = progressiveTax(vaTaxable, vaStateBrackets);
+      const vaLocalAnnual = vaTaxable * VA_LOCAL_TAX_RATE;
+      const annualTakeHome = annualGross - federalAnnual - socialSecurityAnnual - medicareAnnual - vaStateAnnual - vaLocalAnnual;
+      const grossPerPeriod = periods > 0 ? annualGross / periods : 0;
+      const federalPerPeriod = periods > 0 ? federalAnnual / periods : 0;
+      const socialSecurityPerPeriod = periods > 0 ? socialSecurityAnnual / periods : 0;
+      const medicarePerPeriod = periods > 0 ? medicareAnnual / periods : 0;
+      const ficaPerPeriod = socialSecurityPerPeriod + medicarePerPeriod;
+      const vaStatePerPeriod = periods > 0 ? vaStateAnnual / periods : 0;
+      const vaLocalPerPeriod = periods > 0 ? vaLocalAnnual / periods : 0;
+      const perPeriodTakeHome = periods > 0 ? annualTakeHome / periods : 0;
+      const federalPct = grossPerPeriod > 0 ? (federalPerPeriod / grossPerPeriod) * 100 : 0;
+      const statePct = grossPerPeriod > 0 ? (vaStatePerPeriod / grossPerPeriod) * 100 : 0;
+      const localPct = grossPerPeriod > 0 ? (vaLocalPerPeriod / grossPerPeriod) * 100 : 0;
+      const ficaPct = grossPerPeriod > 0 ? (ficaPerPeriod / grossPerPeriod) * 100 : 0;
+      const takeHomePct = grossPerPeriod > 0 ? (perPeriodTakeHome / grossPerPeriod) * 100 : 0;
+      return {
+        periods, annualGross, grossPerPeriod,
+        federalPerPeriod, socialSecurityPerPeriod, medicarePerPeriod, ficaPerPeriod,
+        vaStatePerPeriod, vaLocalPerPeriod, annualTakeHome, monthlyNet: annualTakeHome / 12,
+        perPeriodTakeHome, federalPct, statePct, localPct, ficaPct,
+        taxesPct: federalPct + statePct + localPct,
+        takeHomePct,
+      };
+    }
+
+    if (isHawaii) {
+      const gross = Math.max(0, num(grossPay));
+      const hours = Math.max(0, num(hoursPerDay));
+      const annualGross = rateType === 'hourly' ? gross * hours * periods : gross;
+      const statusKey = status || 'single';
+      const standardDeduction = STANDARD_DEDUCTION_2026[statusKey] ?? 16100;
+      const taxableAnnual = Math.max(0, annualGross - standardDeduction);
+      const federalAnnual = progressiveTax(taxableAnnual, BRACKETS[statusKey] ?? BRACKETS.single);
+      const socialSecurityAnnual = Math.min(annualGross, 176100) * 0.062;
+      const medicareBase = annualGross * 0.0145;
+      const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
+      const addMedicare = Math.max(0, annualGross - addMedThreshold) * 0.009;
+      const medicareAnnual = medicareBase + addMedicare;
+      const hiExemption = HI_PERSONAL_EXEMPTION[statusKey] ?? 0;
+      const hiTaxable = Math.max(0, annualGross - hiExemption);
+      const hiStateBrackets = HI_BRACKETS[statusKey] ?? HI_BRACKETS.single;
+      const hiStateAnnual = progressiveTax(hiTaxable, hiStateBrackets);
+      const hiLocalAnnual = hiTaxable * HI_LOCAL_TAX_RATE;
+      const annualTakeHome = annualGross - federalAnnual - socialSecurityAnnual - medicareAnnual - hiStateAnnual - hiLocalAnnual;
+      const grossPerPeriod = periods > 0 ? annualGross / periods : 0;
+      const federalPerPeriod = periods > 0 ? federalAnnual / periods : 0;
+      const socialSecurityPerPeriod = periods > 0 ? socialSecurityAnnual / periods : 0;
+      const medicarePerPeriod = periods > 0 ? medicareAnnual / periods : 0;
+      const ficaPerPeriod = socialSecurityPerPeriod + medicarePerPeriod;
+      const hiStatePerPeriod = periods > 0 ? hiStateAnnual / periods : 0;
+      const hiLocalPerPeriod = periods > 0 ? hiLocalAnnual / periods : 0;
+      const perPeriodTakeHome = periods > 0 ? annualTakeHome / periods : 0;
+      const federalPct = grossPerPeriod > 0 ? (federalPerPeriod / grossPerPeriod) * 100 : 0;
+      const statePct = grossPerPeriod > 0 ? (hiStatePerPeriod / grossPerPeriod) * 100 : 0;
+      const localPct = grossPerPeriod > 0 ? (hiLocalPerPeriod / grossPerPeriod) * 100 : 0;
+      const ficaPct = grossPerPeriod > 0 ? (ficaPerPeriod / grossPerPeriod) * 100 : 0;
+      const takeHomePct = grossPerPeriod > 0 ? (perPeriodTakeHome / grossPerPeriod) * 100 : 0;
+      return {
+        periods, annualGross, grossPerPeriod,
+        federalPerPeriod, socialSecurityPerPeriod, medicarePerPeriod, ficaPerPeriod,
+        hiStatePerPeriod, hiLocalPerPeriod, annualTakeHome, monthlyNet: annualTakeHome / 12,
+        perPeriodTakeHome, federalPct, statePct, localPct, ficaPct,
+        taxesPct: federalPct + statePct + localPct,
+        takeHomePct,
+      };
+    }
+
+    if (isNebraska) {
+      const gross = Math.max(0, num(grossPay));
+      const hours = Math.max(0, num(hoursPerDay));
+      const annualGross = rateType === 'hourly' ? gross * hours * periods : gross;
+      const statusKey = status || 'single';
+      const standardDeduction = STANDARD_DEDUCTION_2026[statusKey] ?? 16100;
+      const taxableAnnual = Math.max(0, annualGross - standardDeduction);
+      const federalAnnual = progressiveTax(taxableAnnual, BRACKETS[statusKey] ?? BRACKETS.single);
+      const socialSecurityAnnual = Math.min(annualGross, 176100) * 0.062;
+      const medicareBase = annualGross * 0.0145;
+      const addMedThreshold = ADDITIONAL_MEDICARE_THRESHOLD[statusKey] ?? 200000;
+      const addMedicare = Math.max(0, annualGross - addMedThreshold) * 0.009;
+      const medicareAnnual = medicareBase + addMedicare;
+      const neExemption = NE_PERSONAL_EXEMPTION[statusKey] ?? 0;
+      const neTaxable = Math.max(0, annualGross - neExemption);
+      const neStateBrackets = NE_BRACKETS[statusKey] ?? NE_BRACKETS.single;
+      const neStateAnnual = progressiveTax(neTaxable, neStateBrackets);
+      const neLocalAnnual = neTaxable * NE_LOCAL_TAX_RATE;
+      const annualTakeHome = annualGross - federalAnnual - socialSecurityAnnual - medicareAnnual - neStateAnnual - neLocalAnnual;
+      const grossPerPeriod = periods > 0 ? annualGross / periods : 0;
+      const federalPerPeriod = periods > 0 ? federalAnnual / periods : 0;
+      const socialSecurityPerPeriod = periods > 0 ? socialSecurityAnnual / periods : 0;
+      const medicarePerPeriod = periods > 0 ? medicareAnnual / periods : 0;
+      const ficaPerPeriod = socialSecurityPerPeriod + medicarePerPeriod;
+      const neStatePerPeriod = periods > 0 ? neStateAnnual / periods : 0;
+      const neLocalPerPeriod = periods > 0 ? neLocalAnnual / periods : 0;
+      const perPeriodTakeHome = periods > 0 ? annualTakeHome / periods : 0;
+      const federalPct = grossPerPeriod > 0 ? (federalPerPeriod / grossPerPeriod) * 100 : 0;
+      const statePct = grossPerPeriod > 0 ? (neStatePerPeriod / grossPerPeriod) * 100 : 0;
+      const localPct = grossPerPeriod > 0 ? (neLocalPerPeriod / grossPerPeriod) * 100 : 0;
+      const ficaPct = grossPerPeriod > 0 ? (ficaPerPeriod / grossPerPeriod) * 100 : 0;
+      const takeHomePct = grossPerPeriod > 0 ? (perPeriodTakeHome / grossPerPeriod) * 100 : 0;
+      return {
+        periods, annualGross, grossPerPeriod,
+        federalPerPeriod, socialSecurityPerPeriod, medicarePerPeriod, ficaPerPeriod,
+        neStatePerPeriod, neLocalPerPeriod, annualTakeHome, monthlyNet: annualTakeHome / 12,
+        perPeriodTakeHome, federalPct, statePct, localPct, ficaPct,
+        taxesPct: federalPct + statePct + localPct,
+        takeHomePct,
+      };
+    }
+
     const grossAnnual = Math.max(0, num(grossPay));
     const grossPer = grossAnnual / periods;
     const pretax = Math.max(0, num(preTaxDeduction));
@@ -2677,10 +3078,22 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       netPer: netAnnual / periods,
       netAnnual,
     };
-  }, [isZeroStateTaxCalc, isCalifornia, status, grossPay, rateType, payFreq, preTaxDeduction, locationZip, hoursPerDay]);
+  }, [isZeroStateTaxCalc, isCalifornia, isIllinois, isWashington, isIndiana, isVirginia, isHawaii, isNebraska, status, grossPay, rateType, payFreq, preTaxDeduction, locationZip, hoursPerDay]);
   const stateGraphGross = Math.max(0, r.grossPerPeriod ?? 0);
   const stateGraphTaxes = isCalifornia
     ? Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.caStatePerPeriod ?? 0) + (r.caSdiPerPeriod ?? 0))
+    : isIllinois
+    ? Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.ilStatePerPeriod ?? 0))
+    : isWashington
+    ? Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0))
+    : isIndiana
+    ? Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.inStatePerPeriod ?? 0) + (r.inLocalPerPeriod ?? 0))
+    : isVirginia
+    ? Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.vaStatePerPeriod ?? 0) + (r.vaLocalPerPeriod ?? 0))
+    : isHawaii
+    ? Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.hiStatePerPeriod ?? 0) + (r.hiLocalPerPeriod ?? 0))
+    : isNebraska
+    ? Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.neStatePerPeriod ?? 0) + (r.neLocalPerPeriod ?? 0))
     : Math.max(0, (r.federalPerPeriod ?? 0) + (r.ficaPerPeriod ?? 0) + (r.stateAnnual ? (r.stateAnnual / (r.periods || 1)) : 0));
   const stateGraphTakeHome = Math.max(0, r.perPeriodTakeHome ?? 0);
   const stateGraphItems = [
@@ -2717,6 +3130,36 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       description = 'California paycheck calculator to estimate take-home pay after federal income tax, California state income tax, SDI, and FICA deductions. Plan your monthly budget with accurate CA payroll results.';
       path = '/california-paycheck-calculator';
       appName = 'California Paycheck Calculator';
+    } else if (stateName === 'Illinois') {
+      title = 'Illinois Paycheck Calculator - Estimate Your Take-Home Pay';
+      description = 'Illinois paycheck calculator to estimate take-home pay after federal income tax, Illinois flat 4.95% state income tax, and FICA deductions. Plan your monthly budget with accurate IL payroll results.';
+      path = '/illinois-paycheck-calculator';
+      appName = 'Illinois Paycheck Calculator';
+    } else if (stateName === 'Washington') {
+      title = 'Washington Paycheck Calculator - Estimate Your Take-Home Pay';
+      description = 'Washington paycheck calculator to estimate take-home pay after federal income tax, WA Cares Fund, Paid Family & Medical Leave, and FICA deductions. Plan your budget with accurate WA payroll results.';
+      path = '/washington-paycheck-calculator';
+      appName = 'Washington Paycheck Calculator';
+    } else if (stateName === 'Indiana') {
+      title = 'Indiana Paycheck Calculator - Estimate Your Take-Home Pay';
+      description = 'Indiana paycheck calculator to estimate take-home pay after federal income tax, Indiana flat 3.05% state income tax, and FICA deductions. Plan your monthly budget with accurate IN payroll results.';
+      path = '/indiana-paycheck-calculator';
+      appName = 'Indiana Paycheck Calculator';
+    } else if (stateName === 'Virginia') {
+      title = 'Virginia Paycheck Calculator - Estimate Your Take-Home Pay';
+      description = 'Virginia paycheck calculator to estimate take-home pay after federal income tax, Virginia progressive state income tax, and FICA deductions. Plan your budget with accurate VA payroll results.';
+      path = '/virginia-paycheck-calculator';
+      appName = 'Virginia Paycheck Calculator';
+    } else if (stateName === 'Hawaii') {
+      title = 'Hawaii Paycheck Calculator - Estimate Your Take-Home Pay';
+      description = 'Hawaii paycheck calculator to estimate take-home pay after federal income tax, Hawaii progressive state income tax, and FICA deductions. Plan your budget with accurate HI payroll results.';
+      path = '/hawaii-paycheck-calculator';
+      appName = 'Hawaii Paycheck Calculator';
+    } else if (stateName === 'Nebraska') {
+      title = 'Nebraska Paycheck Calculator - Estimate Your Take-Home Pay';
+      description = 'Nebraska paycheck calculator to estimate take-home pay after federal income tax, Nebraska progressive state income tax, and FICA deductions. Plan your budget with accurate NE payroll results.';
+      path = '/nebraska-paycheck-calculator';
+      appName = 'Nebraska Paycheck Calculator';
     }
 
     document.title = title;
@@ -2782,6 +3225,56 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
             <p>Estimating your take-home pay is a vital step for every worker in the United States. When you know your true bottom line, you make better decisions about your lifestyle and investments. Let us explore how you can optimize your earnings and secure your financial well-being today.</p>
           </div>
         </article>
+      ) : isIndiana ? (
+        <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
+          <h1 className="text-3xl font-bold mb-4 text-white">Indiana Paycheck Calculator: Accurately Determine Your Take-Home Pay</h1>
+          <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            <p>One of the most important parts of personal financial planning is understanding your salary. Knowing how much money you will actually receive after taxes can help you make better money choices, whether you are managing your monthly budget, starting a new job, or comparing salary offers.</p>
+            <p>By taking into account federal income tax, Social Security, Medicare, and Indiana state taxes, an <strong>Indiana Paycheck Calculator</strong> helps employees estimate their net pay. You can calculate your expected earnings in just a few moments instead of guessing how much money will be deposited into your bank account.</p>
+            <p>You can use this tool to track income, schedule expenses, and avoid financial surprises throughout the year. A dependable paycheck calculator gives you a quick and clear estimate of your take-home income, whether you are paid weekly, biweekly, semi-monthly, or monthly.</p>
+          </div>
+        </article>
+      ) : isHawaii ? (
+        <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
+          <h1 className="text-3xl font-bold mb-4 text-white">Hawaii Paycheck Calculator Guide</h1>
+          <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            <p>One of the most important free online resources you should use is the <strong>Hawaii Paycheck Calculator</strong>. This tool helps employees estimate their net income after taxes and deductions are removed from gross earnings. Understanding your earnings in Hawaii matters because state tax rules and living costs can differ from many other U.S. states.</p>
+            <p>Many employees start a job and then feel confused about how much money they will actually receive after deductions. This calculator makes the process easier by showing the difference between gross pay and net pay. It gives you a clearer idea of federal tax, Hawaii state tax, Social Security, Medicare, and other payroll deductions.</p>
+            <p>The Hawaii Paycheck Calculator also helps you make better budgeting choices. You can plan rent, groceries, savings, transportation, and household costs with more confidence. Instead of guessing your paycheck, you can estimate your take-home pay before payday arrives.</p>
+          </div>
+        </article>
+      ) : isWashington ? (
+        <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
+          <h1 className="text-3xl font-bold mb-4 text-white">Washington Paycheck Calculator Estimate Your Take-Home Pay</h1>
+          <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            <p>A <strong>Washington Paycheck Calculator</strong> helps you understand your real earnings before payday arrives. Washington has no state income tax, but your paycheck can still change because of federal tax, Social Security, Medicare, PFML, retirement savings, health insurance, and other payroll deductions.</p>
+            <p>That is why estimating your take-home pay matters before planning rent, groceries, bills, savings, or family expenses. Whether you earn hourly wages or a fixed salary, this calculator gives you a clearer view of gross pay and net pay. It helps you compare income, deductions, and pay frequency, so you can make better money choices without waiting for your actual pay stub each payday.</p>
+          </div>
+        </article>
+      ) : isIllinois ? (
+        <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
+          <h1 className="text-3xl font-bold mb-4 text-white">Illinois Paycheck Calculator - See Your Earnings Instantly</h1>
+          <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            <p>An <strong>Illinois Paycheck Calculator</strong> helps you see your real earnings before payday, not just the salary written on your offer letter. In Illinois, your paycheck can change because of federal tax, state income tax, Social Security, Medicare, retirement contributions, health insurance, and other deductions. That is why estimating your take-home pay matters before you plan rent, bills, savings, or daily spending.</p>
+            <p>Whether you earn hourly wages or a fixed salary, this calculator gives you a clearer paycheck picture. It helps you compare gross pay with net pay, understand deductions, and make smarter money choices without waiting for your actual pay stub. It also supports better budgeting for busy Illinois workers.</p>
+          </div>
+        </article>
+      ) : isNebraska ? (
+        <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
+          <h1 className="text-3xl font-bold mb-4 text-white">Nebraska Paycheck: Why Your Deposit Never Matches Your Salary</h1>
+          <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            <p>You negotiated hard for that salary. You know the number by heart. Then payday arrives, and the deposit sitting in your account looks like someone already spent a chunk of it, because they did. The federal government, the state of Nebraska, and a handful of mandatory programs all take their share before a single dollar reaches you.</p>
+            <p>This is not a complaint forum. It is a breakdown. Once you understand exactly what leaves your <strong>Nebraska paycheck</strong> and why, you stop being caught off guard and start making smarter decisions with what remains.</p>
+          </div>
+        </article>
+      ) : isVirginia ? (
+        <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
+          <h1 className="text-3xl font-bold mb-4 text-white">Virginia Paycheck: What You Actually Take Home and Why It Differs from Your Salary</h1>
+          <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+            <p>You accepted a job offer at $65,000 a year. Then your first direct deposit landed, and the number looked nothing like you expected. Welcome to the reality of every Virginia worker. The gross number on your offer letter and the net number in your bank account are two very different things.</p>
+            <p>Understanding your <strong>Virginia paycheck</strong> is not just about satisfying curiosity. It directly affects how you budget, plan retirement contributions, handle debt, and make financial decisions month to month. This guide breaks down every layer of deduction, so you can stop guessing and start knowing.</p>
+          </div>
+        </article>
       ) : isCalifornia ? (
         <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mb-6">
           <h1 className="text-3xl font-bold mb-4 text-white">California Paycheck Calculator Estimate Your Take-Home Pay</h1>
@@ -2799,20 +3292,23 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       <CalcShell title={`${stateName} Paycheck`} isDark={isDark}>
         <Field
           label={rateType === 'hourly' ? 'Hourly Rate ($)' : 'Salary (per year)'}
-          hint={isCalifornia ? 'California state income tax: 1% to 13.3%' : `${stateName} has 0% state income tax`}
+          hint={isCalifornia ? 'California state income tax: 1% to 13.3%' : isIllinois ? 'Illinois flat state income tax: 4.95%' : isIndiana ? 'Indiana flat state income tax: 3.05%' : isWashington ? 'Washington has 0% state income tax' : `${stateName} has 0% state income tax`}
         >
           <Input value={grossPay} onChange={setGrossPay} />
         </Field>
         <Field label="Rate Type">
           <Select value={rateType} onChange={setRateType} options={[['', 'Select...'], ['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']]} />
         </Field>
-        {(isZeroStateTaxCalc || isCalifornia) && rateType === 'hourly' && (
-          <Field label={isCalifornia ? 'Hours per pay period' : 'Hours per day'}>
+        {(isZeroStateTaxCalc || isCalifornia || isIllinois || isWashington || isIndiana || isVirginia || isHawaii || isNebraska) && rateType === 'hourly' && (
+          <Field label={(isCalifornia || isIllinois || isWashington || isIndiana || isVirginia || isHawaii || isNebraska) ? 'Hours per pay period' : 'Hours per day'}>
             <Input value={hoursPerDay} onChange={setHoursPerDay} />
           </Field>
         )}
-        {(isZeroStateTaxCalc || isCalifornia) && (
-          <Field label="Location (ZIP)">
+        {(isZeroStateTaxCalc || isCalifornia || isIllinois || isWashington || isIndiana || isVirginia || isHawaii || isNebraska) && (
+          <Field
+            label="Location (ZIP)"
+            hint={stateName === 'Texas' ? 'TX range: 75001 – 79999' : stateName === 'California' ? 'CA range: 90001 – 96162' : stateName === 'Illinois' ? 'IL range: 60001 – 62999' : stateName === 'Washington' ? 'WA range: 98001 – 99403' : stateName === 'Indiana' ? 'IN range: 46001 – 47999' : stateName === 'Virginia' ? 'VA range: 20101 – 24658' : stateName === 'Hawaii' ? 'HI range: 96701 – 96898' : stateName === 'Nebraska' ? 'NE range: 68001 – 69367' : 'FL range: 32001 – 34999'}
+          >
             <Input value={locationZip} onChange={setLocationZip} />
           </Field>
         )}
@@ -2820,9 +3316,9 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
           <Select value={payFreq} onChange={setPayFreq} options={[['', 'Select...'], ['daily', 'Daily (260x/yr)'], ['weekly', 'Weekly (52x/yr)'], ['biweekly', 'Bi-Weekly (26x/yr)'], ['semimonthly', 'Semi-Monthly (24x/yr)'], ['monthly', 'Monthly (12x/yr)'], ['annual', 'Annual']]} />
         </Field>
         <Field label="Filing Status" hint="Select for Federal tax calculation">
-          <Select value={status} onChange={setStatus} options={isZeroStateTaxCalc ? [['single', 'Single'], ['married', 'Married Filing Jointly']] : [['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
+          <Select value={status} onChange={setStatus} options={(isZeroStateTaxCalc || isVirginia || isHawaii || isNebraska) ? [['single', 'Single'], ['married', 'Married Filing Jointly']] : [['single', 'Single'], ['married', 'Married Filing Jointly'], ['hoh', 'Head of Household'], ['mfs', 'Married Filing Separately']]} />
         </Field>
-        {!isZeroStateTaxCalc && !isCalifornia && (
+        {!isZeroStateTaxCalc && !isCalifornia && !isIllinois && !isWashington && !isIndiana && !isVirginia && !isHawaii && !isNebraska && (
           <Field label="Pre-tax Deduction Per Paycheck ($)"><Input value={preTaxDeduction} onChange={setPreTaxDeduction} /></Field>
         )}
         {isCalifornia ? (
@@ -2886,8 +3382,324 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
               </div>
             </div>
           </div>
+        ) : isIllinois ? (
+          <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+            <div className="mb-3 text-center">
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Your estimated {payFreq === 'daily' ? 'daily' : payFreq === 'weekly' ? 'weekly' : payFreq === 'biweekly' ? 'bi-weekly' : payFreq === 'semimonthly' ? 'semi-monthly' : payFreq === 'monthly' ? 'monthly' : payFreq === 'annual' ? 'annual' : 'semi-monthly'} take home pay:</p>
+              <p className="text-3xl font-bold">{usd(r.perPeriodTakeHome ?? 0)}</p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+              <div className="space-y-1 text-sm">
+                <p>Where is your money going?</p>
+                <p>Gross Paycheck: {usd(r.grossPerPeriod ?? 0)}</p>
+                <p>Taxes: {(r.taxesPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd((r.federalPerPeriod ?? 0) + (r.ilStatePerPeriod ?? 0))}</p>
+                <p>&nbsp;&nbsp;Federal Income: {(r.federalPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.federalPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;State Income: {(r.statePct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.ilStatePerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Local Income: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>FICA and State Insurance Taxes: {(r.ficaPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.ficaPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Social Security: 6.20%&nbsp;&nbsp;{usd(r.socialSecurityPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Medicare: 1.45%&nbsp;&nbsp;{usd(r.medicarePerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;State Disability Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Unemployment Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Family Leave Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Workers Compensation Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Pre-Tax Deductions: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Post-Tax Deductions: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Take Home Salary: {(r.takeHomePct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.perPeriodTakeHome ?? 0)}</p>
+                <p>Annual Take-Home: {usd(r.annualTakeHome ?? 0)}</p>
+                <p>Monthly Net Pay: {usd(r.monthlyNet ?? 0)}</p>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-center">
+                  <svg viewBox="0 0 120 120" className="h-36 w-36">
+                    <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                    {stateGraphSlices.map((slice) => (
+                      <circle key={slice.key} cx="60" cy="60" r="42" fill="none" stroke={slice.color} strokeWidth="16"
+                        strokeDasharray={`${slice.dash} ${stateCircumference - slice.dash}`}
+                        strokeDashoffset={-slice.offset} transform="rotate(-90 60 60)" />
+                    ))}
+                  </svg>
+                </div>
+                <div className="space-y-1 text-xs">
+                  {stateGraphItems.map((item) => (
+                    <div key={item.key} className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                        {item.label}
+                      </span>
+                      <span>{usd(item.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : isIndiana ? (
+          <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+            <div className="mb-3 text-center">
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Your estimated {payFreq === 'daily' ? 'daily' : payFreq === 'weekly' ? 'weekly' : payFreq === 'biweekly' ? 'bi-weekly' : payFreq === 'semimonthly' ? 'semi-monthly' : payFreq === 'monthly' ? 'monthly' : payFreq === 'annual' ? 'annual' : 'semi-monthly'} take home pay:</p>
+              <p className="text-3xl font-bold">{usd(r.perPeriodTakeHome ?? 0)}</p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+              <div className="space-y-1 text-sm">
+                <p>Where is your money going?</p>
+                <p>Gross Paycheck: {usd(r.grossPerPeriod ?? 0)}</p>
+                <p>Taxes: {(r.taxesPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd((r.federalPerPeriod ?? 0) + (r.inStatePerPeriod ?? 0) + (r.inLocalPerPeriod ?? 0))}</p>
+                <p>&nbsp;&nbsp;Federal Income: {(r.federalPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.federalPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;State Income: {(r.statePct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.inStatePerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Local Income: {(r.localPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.inLocalPerPeriod ?? 0)}</p>
+                <p>FICA and State Insurance Taxes: {(r.ficaPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.ficaPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Social Security: 6.20%&nbsp;&nbsp;{usd(r.socialSecurityPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Medicare: 1.45%&nbsp;&nbsp;{usd(r.medicarePerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;State Disability Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Unemployment Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Family Leave Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Workers Compensation Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Pre-Tax Deductions: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Post-Tax Deductions: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Take Home Salary: {(r.takeHomePct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.perPeriodTakeHome ?? 0)}</p>
+                <p>Annual Take-Home: {usd(r.annualTakeHome ?? 0)}</p>
+                <p>Monthly Net Pay: {usd(r.monthlyNet ?? 0)}</p>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-center">
+                  <svg viewBox="0 0 120 120" className="h-36 w-36">
+                    <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                    {stateGraphSlices.map((slice) => (
+                      <circle key={slice.key} cx="60" cy="60" r="42" fill="none" stroke={slice.color} strokeWidth="16"
+                        strokeDasharray={`${slice.dash} ${stateCircumference - slice.dash}`}
+                        strokeDashoffset={-slice.offset} transform="rotate(-90 60 60)" />
+                    ))}
+                  </svg>
+                </div>
+                <div className="space-y-1 text-xs">
+                  {stateGraphItems.map((item) => (
+                    <div key={item.key} className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                        {item.label}
+                      </span>
+                      <span>{usd(item.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : isVirginia ? (
+          <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+            <div className="mb-3 text-center">
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Your estimated {payFreq === 'daily' ? 'daily' : payFreq === 'weekly' ? 'weekly' : payFreq === 'biweekly' ? 'bi-weekly' : payFreq === 'semimonthly' ? 'semi-monthly' : payFreq === 'monthly' ? 'monthly' : payFreq === 'annual' ? 'annual' : 'semi-monthly'} take home pay:</p>
+              <p className="text-3xl font-bold">{usd(r.perPeriodTakeHome ?? 0)}</p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+              <div className="space-y-1 text-sm">
+                <p>Where is your money going?</p>
+                <p>Gross Paycheck: {usd(r.grossPerPeriod ?? 0)}</p>
+                <p>Taxes: {(r.taxesPct ?? 0).toFixed(2)}%  {usd((r.federalPerPeriod ?? 0) + (r.vaStatePerPeriod ?? 0) + (r.vaLocalPerPeriod ?? 0))}</p>
+                <p>Federal Income: {(r.federalPct ?? 0).toFixed(2)}%  {usd(r.federalPerPeriod ?? 0)}</p>
+                <p>State Income: {(r.statePct ?? 0).toFixed(2)}%  {usd(r.vaStatePerPeriod ?? 0)}</p>
+                <p>Local Income: 0.00%  {usd(0)}</p>
+                <p>FICA and State Insurance Taxes: {(r.ficaPct ?? 0).toFixed(2)}%  {usd(r.ficaPerPeriod ?? 0)}</p>
+                <p>Social Security: 6.20%  {usd(r.socialSecurityPerPeriod ?? 0)}</p>
+                <p>Medicare: 1.45%  {usd(r.medicarePerPeriod ?? 0)}</p>
+                <p>State Disability Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Unemployment Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Family Leave Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Workers Compensation Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>Pre-Tax Deductions: 0.00%  {usd(0)}</p>
+                <p>Post-Tax Deductions: 0.00%  {usd(0)}</p>
+                <p>Take Home Salary: {(r.takeHomePct ?? 0).toFixed(2)}%  {usd(r.perPeriodTakeHome ?? 0)}</p>
+                <p>Annual Take-Home: {usd(r.annualTakeHome ?? 0)}</p>
+                <p>Monthly Net Pay: {usd(r.monthlyNet ?? 0)}</p>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-center">
+                  <svg viewBox="0 0 120 120" className="h-36 w-36">
+                    <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                    {stateGraphSlices.map((slice) => (
+                      <circle key={slice.key} cx="60" cy="60" r="42" fill="none" stroke={slice.color} strokeWidth="16"
+                        strokeDasharray={`${slice.dash} ${stateCircumference - slice.dash}`}
+                        strokeDashoffset={-slice.offset} transform="rotate(-90 60 60)" />
+                    ))}
+                  </svg>
+                </div>
+                <div className="space-y-1 text-xs">
+                  {stateGraphItems.map((item) => (
+                    <div key={item.key} className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                        {item.label}
+                      </span>
+                      <span>{usd(item.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : isHawaii ? (
+          <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+            <div className="mb-3 text-center">
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Your estimated {payFreq === 'daily' ? 'daily' : payFreq === 'weekly' ? 'weekly' : payFreq === 'biweekly' ? 'bi-weekly' : payFreq === 'semimonthly' ? 'semi-monthly' : payFreq === 'monthly' ? 'monthly' : payFreq === 'annual' ? 'annual' : 'semi-monthly'} take home pay:</p>
+              <p className="text-3xl font-bold">{usd(r.perPeriodTakeHome ?? 0)}</p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+              <div className="space-y-1 text-sm">
+                <p>Where is your money going?</p>
+                <p>Gross Paycheck: {usd(r.grossPerPeriod ?? 0)}</p>
+                <p>Taxes: {(r.taxesPct ?? 0).toFixed(2)}%  {usd((r.federalPerPeriod ?? 0) + (r.hiStatePerPeriod ?? 0) + (r.hiLocalPerPeriod ?? 0))}</p>
+                <p>Federal Income: {(r.federalPct ?? 0).toFixed(2)}%  {usd(r.federalPerPeriod ?? 0)}</p>
+                <p>State Income: {(r.statePct ?? 0).toFixed(2)}%  {usd(r.hiStatePerPeriod ?? 0)}</p>
+                <p>Local Income: 0.00%  {usd(0)}</p>
+                <p>FICA and State Insurance Taxes: {(r.ficaPct ?? 0).toFixed(2)}%  {usd(r.ficaPerPeriod ?? 0)}</p>
+                <p>Social Security: 6.20%  {usd(r.socialSecurityPerPeriod ?? 0)}</p>
+                <p>Medicare: 1.45%  {usd(r.medicarePerPeriod ?? 0)}</p>
+                <p>State Disability Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Unemployment Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Family Leave Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Workers Compensation Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>Pre-Tax Deductions: 0.00%  {usd(0)}</p>
+                <p>Post-Tax Deductions: 0.00%  {usd(0)}</p>
+                <p>Take Home Salary: {(r.takeHomePct ?? 0).toFixed(2)}%  {usd(r.perPeriodTakeHome ?? 0)}</p>
+                <p>Annual Take-Home: {usd(r.annualTakeHome ?? 0)}</p>
+                <p>Monthly Net Pay: {usd(r.monthlyNet ?? 0)}</p>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-center">
+                  <svg viewBox="0 0 120 120" className="h-36 w-36">
+                    <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                    {stateGraphSlices.map((slice) => (
+                      <circle key={slice.key} cx="60" cy="60" r="42" fill="none" stroke={slice.color} strokeWidth="16"
+                        strokeDasharray={`${slice.dash} ${stateCircumference - slice.dash}`}
+                        strokeDashoffset={-slice.offset} transform="rotate(-90 60 60)" />
+                    ))}
+                  </svg>
+                </div>
+                <div className="space-y-1 text-xs">
+                  {stateGraphItems.map((item) => (
+                    <div key={item.key} className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                        {item.label}
+                      </span>
+                      <span>{usd(item.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : isNebraska ? (
+          <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+            <div className="mb-3 text-center">
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Your estimated {payFreq === 'daily' ? 'daily' : payFreq === 'weekly' ? 'weekly' : payFreq === 'biweekly' ? 'bi-weekly' : payFreq === 'semimonthly' ? 'semi-monthly' : payFreq === 'monthly' ? 'monthly' : payFreq === 'annual' ? 'annual' : 'semi-monthly'} take home pay:</p>
+              <p className="text-3xl font-bold">{usd(r.perPeriodTakeHome ?? 0)}</p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+              <div className="space-y-1 text-sm">
+                <p>Where is your money going?</p>
+                <p>Gross Paycheck: {usd(r.grossPerPeriod ?? 0)}</p>
+                <p>Taxes: {(r.taxesPct ?? 0).toFixed(2)}%  {usd((r.federalPerPeriod ?? 0) + (r.neStatePerPeriod ?? 0) + (r.neLocalPerPeriod ?? 0))}</p>
+                <p>Federal Income: {(r.federalPct ?? 0).toFixed(2)}%  {usd(r.federalPerPeriod ?? 0)}</p>
+                <p>State Income: {(r.statePct ?? 0).toFixed(2)}%  {usd(r.neStatePerPeriod ?? 0)}</p>
+                <p>Local Income: 0.00%  {usd(0)}</p>
+                <p>FICA and State Insurance Taxes: {(r.ficaPct ?? 0).toFixed(2)}%  {usd(r.ficaPerPeriod ?? 0)}</p>
+                <p>Social Security: 6.20%  {usd(r.socialSecurityPerPeriod ?? 0)}</p>
+                <p>Medicare: 1.45%  {usd(r.medicarePerPeriod ?? 0)}</p>
+                <p>State Disability Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Unemployment Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Family Leave Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>State Workers Compensation Insurance Tax: 0.00%  {usd(0)}</p>
+                <p>Pre-Tax Deductions: 0.00%  {usd(0)}</p>
+                <p>Post-Tax Deductions: 0.00%  {usd(0)}</p>
+                <p>Take Home Salary: {(r.takeHomePct ?? 0).toFixed(2)}%  {usd(r.perPeriodTakeHome ?? 0)}</p>
+                <p>Annual Take-Home: {usd(r.annualTakeHome ?? 0)}</p>
+                <p>Monthly Net Pay: {usd(r.monthlyNet ?? 0)}</p>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-center">
+                  <svg viewBox="0 0 120 120" className="h-36 w-36">
+                    <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                    {stateGraphSlices.map((slice) => (
+                      <circle key={slice.key} cx="60" cy="60" r="42" fill="none" stroke={slice.color} strokeWidth="16"
+                        strokeDasharray={`${slice.dash} ${stateCircumference - slice.dash}`}
+                        strokeDashoffset={-slice.offset} transform="rotate(-90 60 60)" />
+                    ))}
+                  </svg>
+                </div>
+                <div className="space-y-1 text-xs">
+                  {stateGraphItems.map((item) => (
+                    <div key={item.key} className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                        {item.label}
+                      </span>
+                      <span>{usd(item.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : isWashington ? (
+          <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+            <div className="mb-3 text-center">
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Your estimated {payFreq === 'daily' ? 'daily' : payFreq === 'weekly' ? 'weekly' : payFreq === 'biweekly' ? 'bi-weekly' : payFreq === 'semimonthly' ? 'semi-monthly' : payFreq === 'monthly' ? 'monthly' : payFreq === 'annual' ? 'annual' : 'semi-monthly'} take home pay:</p>
+              <p className="text-3xl font-bold">{usd(r.perPeriodTakeHome ?? 0)}</p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+              <div className="space-y-1 text-sm">
+                <p>Where is your money going?</p>
+                <p>Gross Paycheck: {usd(r.grossPerPeriod ?? 0)}</p>
+                <p>Taxes: {(r.taxesPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.federalPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Federal Income: {(r.federalPct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.federalPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;State Income: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;Local Income: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>FICA and State Insurance Taxes: {(r.ficaAndStatePct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.ficaPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Social Security: 6.20%&nbsp;&nbsp;{usd(r.socialSecurityPerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;Medicare: 1.45%&nbsp;&nbsp;{usd(r.medicarePerPeriod ?? 0)}</p>
+                <p>&nbsp;&nbsp;State Disability Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Unemployment Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Family Leave Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>&nbsp;&nbsp;State Workers Compensation Insurance Tax: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Pre-Tax Deductions: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Post-Tax Deductions: 0.00%&nbsp;&nbsp;{usd(0)}</p>
+                <p>Take Home Salary: {(r.takeHomePct ?? 0).toFixed(2)}%&nbsp;&nbsp;{usd(r.perPeriodTakeHome ?? 0)}</p>
+                <p>Annual Take-Home: {usd(r.annualTakeHome ?? 0)}</p>
+                <p>Monthly Net Pay: {usd(r.monthlyNet ?? 0)}</p>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-center">
+                  <svg viewBox="0 0 120 120" className="h-36 w-36">
+                    <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                    {stateGraphSlices.map((slice) => (
+                      <circle key={slice.key} cx="60" cy="60" r="42" fill="none" stroke={slice.color} strokeWidth="16"
+                        strokeDasharray={`${slice.dash} ${stateCircumference - slice.dash}`}
+                        strokeDashoffset={-slice.offset} transform="rotate(-90 60 60)" />
+                    ))}
+                  </svg>
+                </div>
+                <div className="space-y-1 text-xs">
+                  {stateGraphItems.map((item) => (
+                    <div key={item.key} className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                        {item.label}
+                      </span>
+                      <span>{usd(item.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         ) : isZeroStateTaxCalc ? (
           <div className={`rounded-2xl p-4 md:col-span-2 ${isDark ? 'bg-slate-900 text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+            <div className="mb-3 text-center">
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Your estimated {payFreq === 'daily' ? 'daily' : payFreq === 'weekly' ? 'weekly' : payFreq === 'biweekly' ? 'bi-weekly' : payFreq === 'semimonthly' ? 'semi-monthly' : payFreq === 'monthly' ? 'monthly' : payFreq === 'annual' ? 'annual' : 'semi-monthly'} take home pay:</p>
+              <p className="text-3xl font-bold">{usd(r.perPeriodTakeHome ?? 0)}</p>
+            </div>
             <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
               <div className="space-y-1 text-sm">
                 <p>Where is your money going?</p>
@@ -3719,6 +4531,1332 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
           </article>
         </>
       )}
+
+      {isNebraska && (
+        <>
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <h2 className="text-2xl font-bold pt-2 text-white">The Anatomy of a Nebraska Paycheck</h2>
+              <p>Every pay period starts with one figure: gross pay. That is the agreed amount before anything is deducted. What you actually receive is net pay, which is the amount left after federal taxes, Nebraska state income tax, FICA contributions, and voluntary deductions have been applied.</p>
+              <p>A Nebraska paycheck calculator runs all of this math instantly. However, the numbers only become useful when you understand what is driving them. Your paycheck is built in layers, and each layer affects the final deposit.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Federal Income Tax: The First and Largest Cut</h2>
+              <p>The federal government does not take one flat percentage from everyone. It uses a bracket system. The more you earn, the higher the rate applied to each additional dollar, with rates running from 10% at the entry level up to 37% at the top.</p>
+              <p>Your filing status shapes everything here. A single filer earning $60,000 may land in a different withholding position than a married couple earning the same combined income. Your W-4 tells your employer how much to withhold each period, so it should be reviewed after major life changes.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">FICA: Social Security and Medicare</h2>
+              <p>Before Nebraska gets involved, two federal programs take a fixed cut of most paychecks. Social Security and Medicare are grouped together as FICA taxes. They apply to W-2 employees across the country.</p>
+              <p>Social Security takes 6.2% from every paycheck until the annual wage base is reached. Medicare runs at 1.45% with no basic ceiling, and higher earners may also face an Additional Medicare Tax.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">FICA Deductions on a Nebraska Paycheck</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">FICA Deduction</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Rate or Rule</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Social Security Tax','6.2% up to the annual wage base'],
+                      ['Medicare Tax','1.45% on wages'],
+                      ['Additional Medicare Tax','0.9% above certain high-income thresholds'],
+                      ['Combined Standard FICA','7.65% before Additional Medicare Tax'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Nebraska State Income Tax: What the Cornhusker State Keeps</h2>
+              <p>Nebraska runs its own progressive income tax structure. These brackets are separate from federal brackets and are calculated under state rules. Understanding this helps reduce confusion when using any Nebraska income tax calculator.</p>
+              <p>For married couples filing jointly, the brackets are wider, but the top rate remains the same. Nebraska has also been cutting rates under a phased plan, so live rates should always be checked before locking in estimates.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Nebraska Income Tax Breakdown</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Chargeable Income (Single)</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Tax Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['$0 – $3,699','2.46%'],
+                      ['$3,700 – $22,169','3.51%'],
+                      ['$22,170 – $35,729','5.01%'],
+                      ['Over $35,730','5.84%'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Nebraska Standard Deduction</h3>
+              <p>Single filers deduct $14,600 and married couples filing jointly deduct $29,200. Nebraska follows the federal standard deduction rather than running a separate state deduction calculation. A reliable Nebraska net pay calculator should factor this in automatically.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Nebraska Paycheck After Taxes: A Real-World Breakdown</h2>
+              <p>Numbers make more sense when attached to a real scenario. Consider a single filer earning a $55,000 salary with biweekly pay. Gross pay per check is $2,115.38.</p>
+              <p>Federal tax takes about $210, Social Security takes $131, Medicare takes $31, and Nebraska state tax adds about $98. Around $1,645 reaches the bank account, meaning nearly $470 is deducted before any bill is paid.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Nebraska Paycheck Example</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Payroll Item</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Estimated Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Annual Salary','$55,000'],
+                      ['Pay Frequency','Biweekly'],
+                      ['Gross Pay Per Check','$2,115.38'],
+                      ['Federal Tax','About $210'],
+                      ['Social Security Tax','About $131'],
+                      ['Medicare Tax','About $31'],
+                      ['Nebraska State Tax','About $98'],
+                      ['Estimated Take-Home Pay','About $1,645'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Hourly Workers: How the Nebraska Hourly Paycheck Calculator Works Differently</h2>
+              <p>Salaried employees usually have a fixed gross amount each pay period. Hourly workers do not. Their gross pay changes based on hours worked, overtime, shift differentials, and tip income where applicable.</p>
+              <p>A Nebraska hourly paycheck calculator multiplies the hourly rate by hours worked for the pay period. Then it applies the same federal and Nebraska withholding rules that salaried workers face. Overtime, variable hours, and tip income can all change the final estimate.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Overtime and Variable Hours</h3>
+              <p>Once a covered employee works more than 40 hours in a workweek, federal law generally requires overtime pay at one and a half times the regular rate. That higher gross pay may also increase withholding. Variable hours make budgeting trickier because a light week and a heavy week can create very different deposits.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Tip Income</h3>
+              <p>Tip income is taxable. Servers, bartenders, and other tipped workers in Nebraska should include tips when estimating their true Nebraska paycheck after taxes. Base wage alone does not show the full income picture.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Pre-Tax Deductions: The Legal Way to Keep More</h2>
+              <p>Pre-tax deductions reduce chargeable income before federal and Nebraska state tax are calculated. That means they can lower your tax bill in real time, not only when filing a return. Many workers overlook this powerful paycheck lever.</p>
+              <p>Common pre-tax deductions include 401(k) contributions, employer health insurance premiums, HSA deposits, and FSA contributions. A Nebraska payroll calculator that includes these deductions can show a more accurate net pay figure.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Common Pre-Tax Deductions in Nebraska</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Pre-Tax Deduction</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Why It Matters</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['401(k) Contributions','Reduces chargeable income and supports retirement savings'],
+                      ['Employer Health Insurance Premiums','May be deducted before taxes through payroll'],
+                      ['HSA Deposits','Can offer triple tax advantages for qualified medical expenses'],
+                      ['FSA Contributions','May reduce taxable income for healthcare or dependent care'],
+                      ['Pre-Tax Benefit Plans','Can lower withholding and improve paycheck planning'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Pay Frequency and What It Does to Your Nebraska Paycheck</h2>
+              <p>The same annual salary produces different per-period amounts depending on how often your employer pays you. Weekly, biweekly, semi-monthly, and monthly schedules divide income differently across the year.</p>
+              <p>Annual tax owed does not usually change because of pay frequency alone. However, withholding calculations can annualize pay differently across schedules, which may cause slight over-withholding or under-withholding during the year.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Nebraska Pay Frequency Comparison</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Pay Frequency</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Pay Periods Per Year</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Paycheck Effect</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Weekly','52','Smallest individual checks, most frequent deposits'],
+                      ['Biweekly','26','Common schedule with two months having three checks'],
+                      ['Semi-Monthly','24','Slightly larger checks than biweekly at the same salary'],
+                      ['Monthly','12','Largest deposits, least frequent pay schedule'],
+                    ].map(([a,b,c]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                        <td className="border border-slate-500 px-3 py-2">{c}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Practical Steps to Get More from Every Nebraska Paycheck</h2>
+              <p>You can improve paycheck planning by reviewing your tax forms, benefits, and payroll details. Some deductions are mandatory, but others can be adjusted through smart benefit choices and withholding updates.</p>
+              <p>Strong paycheck habits include updating your W-4 after life changes, enrolling in pre-tax benefits, checking each pay stub, estimating take-home pay before accepting an offer, and planning ahead for bonus withholding.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Nebraska Paycheck Planning Steps</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Step</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Why It Helps</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Update Your W-4 After Life Changes','Keeps withholding aligned with your real tax situation'],
+                      ['Use Pre-Tax Benefits','Reduces chargeable income before taxes are calculated'],
+                      ['Check Each Pay Stub','Helps catch payroll errors early'],
+                      ['Estimate Before Accepting a Job Offer','Compares real take-home pay, not only salary'],
+                      ['Understand Bonus Withholding','Prevents surprise when bonus deposits look smaller'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Conclusion</h2>
+              <p>Your Nebraska paycheck is the product of overlapping federal rules, state brackets, mandatory programs, and personal payroll choices. The gap between gross and net is not random. It is a system with moving parts.</p>
+              <p>Use a Nebraska paycheck calculator as your baseline. Then refine it by updating your W-4, maximizing pre-tax contributions, and verifying your pay stub each period. Small changes repeated across 26 pay periods can add up to numbers worth caring about.</p>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">FAQs</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <h3 className="text-xl font-semibold pt-2 text-white">What is Nebraska&apos;s state income tax rate?</h3>
+              <p>Nebraska uses a tiered bracket system, not a flat rate. Single filers crossing $35,730 in chargeable income reach the 5.84% bracket for income above that line.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How much of my Nebraska paycheck goes to taxes?</h3>
+              <p>A rough range is 20% to 32% of gross pay for federal and state taxes combined. The exact amount depends on income, filing status, deductions, and pre-tax benefit use.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does Nebraska have local income tax?</h3>
+              <p>No. Nebraska does not have local income tax at the city or county level. Most Nebraska employees mainly need to account for federal and state withholdings.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How does a Nebraska hourly paycheck calculator work?</h3>
+              <p>It multiplies your hourly rate by hours worked for the pay period. Then it applies federal and Nebraska withholding calculations, including overtime rates when applicable, to estimate net pay.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Can I reduce Nebraska state income tax withholding legally?</h3>
+              <p>Yes. Pre-tax tools such as 401(k) contributions, HSA deposits, FSA elections, and employer health premiums can reduce chargeable income before Nebraska applies its tax brackets.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Are bonuses taxed differently in Nebraska?</h3>
+              <p>Nebraska treats bonus income like regular wages under the same state brackets. Federally, bonuses may face a flat supplemental withholding rate, which can make the actual deposit feel smaller.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How accurate are Nebraska paycheck calculators online?</h3>
+              <p>They can be reliable estimates when you enter accurate gross pay, filing status, pay frequency, and pre-tax deductions. Complex cases with multiple income sources may need professional tax review.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">What is take-home pay vs net pay?</h3>
+              <p>Take-home pay and net pay mean the same thing. They describe the amount left after federal taxes, Nebraska state income tax, FICA, and voluntary deductions are removed from gross pay.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">OBBBA Tax Calculators</h3>
+              <p>OBBBA tools can support different paycheck and salary planning needs across the USA. You can use the <a href="https://www.obbacalculators.com/illinois-paycheck-calculator" className="text-cyan-400 hover:underline">Illinois Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/california-paycheck-calculator" className="text-cyan-400 hover:underline">California Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/washington-paycheck-calculator" className="text-cyan-400 hover:underline">Washington Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/hawaii-paycheck-calculator" className="text-cyan-400 hover:underline">Hawaii Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/virginia-paycheck-calculator" className="text-cyan-400 hover:underline">Virginia Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/salary-calculator" className="text-cyan-400 hover:underline">Salary Calculator</a>, <a href="https://www.obbacalculators.com/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</a>, and <a href="https://www.obbacalculators.com/no-tax-on-overtime-calculator" className="text-cyan-400 hover:underline">No Tax on Overtime</a> when you want a clearer view of wages, overtime, salary, and take-home pay.</p>
+            </div>
+          </article>
+        </>
+      )}
+
+      {isVirginia && (
+        <>
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <h2 className="text-2xl font-bold pt-2 text-white">How a Virginia Paycheck Actually Works</h2>
+              <p>Your employer calculates gross pay first. Gross pay is the agreed wage or salary before any withholdings are removed. From that gross figure, several deductions are applied before the remaining amount reaches your account as take-home pay.</p>
+              <p>Two sets of hands reach into every Virginia paycheck. The federal government applies the same payroll rules used across all states. Then Virginia applies its own state income tax rules. A Virginia salary calculator or paycheck estimator handles this math automatically, but understanding the inputs makes you a smarter employee and a sharper negotiator.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Federal Taxes Taken from Every Virginia Paycheck</h2>
+              <p>Before Virginia gets its cut, the federal government takes the first slice. These deductions include federal income tax, Social Security tax, and Medicare tax. Together, they can make a clear difference between your salary offer and your actual deposit.</p>
+              <p>Federal taxes are based on income, filing status, W-4 details, and annual tax rules. Social Security and Medicare are also withheld from most W-2 paychecks. When combined, these federal deductions can remove a meaningful share of your gross earnings before state tax even enters the picture.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Federal Tax</h3>
+              <p>Federal income tax uses brackets ranging from 10% to 37%, depending on what you earn and how you file. Your W-4 tells your employer how much to withhold from each check. Many people fill it out once when hired and forget it exists. That can be a mistake because marriage, a new child, a side gig, or a second job can shift your tax situation.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Social Security Tax</h3>
+              <p>Social Security tax is withheld at 6.2% of gross wages up to the annual wage base. This deduction applies automatically to most W-2 employees and supports federal retirement and disability programs.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Medicare Tax</h3>
+              <p>Medicare tax is withheld at 1.45% on wages, with no basic wage cap. Higher earners may also face an Additional Medicare Tax of 0.9% above certain income thresholds. When Social Security and Medicare are combined, FICA usually equals 7.65% of wages before federal income tax, Virginia tax, and other deductions are considered.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Virginia State Income Tax: What the Commonwealth Takes</h2>
+              <p>Virginia has its own state tax brackets, separate from the federal tax system. These brackets are calculated under Virginia rules, not IRS rules. That is why a Virginia income tax calculator must include both federal and state details to estimate take-home pay properly.</p>
+              <p>Most full-time salaried workers reach Virginia&apos;s higher state bracket fairly quickly. However, standard deductions and exemptions reduce chargeable income before the state applies its tax rates. This is why a full Virginia net pay calculator is more accurate than a simple flat-rate estimate.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Virginia State Income Tax Brackets</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Chargeable Income</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Tax Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['$0 – $3,000','2%'],
+                      ['$3,001 – $5,000','3%'],
+                      ['$5,001 – $17,000','5%'],
+                      ['Over $17,000','5.75%'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Standard Deductions in Virginia</h3>
+              <p>Before Virginia applies tax brackets, standard deductions reduce chargeable income. Single filers receive an $8,000 standard deduction, while married couples filing jointly receive $16,000. Personal exemptions of $930 per exemption also apply. These figures help explain why calculated take-home pay can differ from a rough state-tax estimate.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Virginia Paycheck After Taxes: A Real-World Example</h2>
+              <p>A real example makes paycheck deductions easier to understand. Suppose a worker earns a $70,000 salary, files as single, and gets paid biweekly. Their gross paycheck would be around $2,692.31 before taxes and deductions.</p>
+              <p>Federal income tax is roughly $287, Social Security takes about $167, Medicare takes about $39, and Virginia adds about $138. The estimated amount landing in the account is around $2,061. That means more than $600 disappears before one bill is paid.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Virginia Paycheck Example</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Payroll Item</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Estimated Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Annual Salary','$70,000'],
+                      ['Pay Frequency','Biweekly'],
+                      ['Gross Pay Per Check','$2,692.31'],
+                      ['Federal Income Tax','About $287'],
+                      ['Social Security Tax','About $167'],
+                      ['Medicare Tax','About $39'],
+                      ['Virginia State Tax','About $138'],
+                      ['Estimated Net Pay','About $2,061'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Pre-Tax Deductions That Can Increase Your Take-Home Pay</h2>
+              <p>Pre-tax deductions can reduce your chargeable income. This means they may lower federal and state withholding before your paycheck is finalized. A basic Virginia wage calculator may miss this detail if it does not allow benefit inputs.</p>
+              <p>Common pre-tax deductions include 401(k), 403(b), health insurance premiums, HSA deposits, FSA contributions, dental insurance, and vision premiums. If you contribute $300 per paycheck to a 401(k), you are not only saving for retirement. You are also lowering chargeable income for that pay period.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Common Pre-Tax Deductions in Virginia</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Pre-Tax Deduction</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">How It Helps</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['401(k) Contributions','Reduces taxable income and supports retirement savings'],
+                      ['403(b) Contributions','Helps eligible workers save for retirement before taxes'],
+                      ['Health Insurance Premiums','Reduces taxable wages when paid through payroll'],
+                      ['HSA Deposits','Can offer tax advantages for qualified healthcare costs'],
+                      ['FSA Contributions','Helps pay healthcare or dependent care costs pre-tax'],
+                      ['Dental and Vision Premiums','May reduce taxable income when payroll deducted'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Local Taxes in Virginia: The City and County Factor</h2>
+              <p>Virginia does not impose a statewide local income tax. However, some localities may assess personal property taxes and other levies that affect broader financial planning. These may not always appear as paycheck deductions, but they still shape your real cost of living.</p>
+              <p>Workers in Northern Virginia, especially around Fairfax, Arlington, and Alexandria, often face higher living costs. If you work near Washington, D.C., or commute across state lines, withholding can become more complex. In those cases, a Virginia payroll calculator may need to consider reciprocity or dual-state filing issues.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">How Pay Frequency Affects Your Virginia Paycheck</h2>
+              <p>Pay frequency changes the size of each paycheck, even when annual salary stays the same. Weekly, biweekly, semi-monthly, and monthly pay schedules divide income differently across the year. This affects how much you see in each deposit.</p>
+              <p>Biweekly workers usually receive 26 paychecks per year. Semi-monthly workers usually receive 24. At the same annual salary, semi-monthly checks are slightly larger because the yearly salary is divided into fewer payments. However, the annual tax owed usually depends on total yearly income, not just one paycheck.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Pay Frequency Comparison</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Pay Frequency</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Paychecks Per Year</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Effect on Each Check</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Weekly','52','Smaller checks, more frequent deposits'],
+                      ['Biweekly','26','Common schedule with two extra check months'],
+                      ['Semi-Monthly','24','Larger checks than biweekly at same salary'],
+                      ['Monthly','12','Largest checks, least frequent deposits'],
+                    ].map(([a,b,c]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                        <td className="border border-slate-500 px-3 py-2">{c}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Practical Tips to Optimize Your Virginia Paycheck</h2>
+              <p>Your paycheck is not fully fixed. Some parts are required, but others can be adjusted through forms, benefits, and planning choices. Reviewing these details can help you reduce surprises and improve monthly budgeting.</p>
+              <p>Useful steps include reviewing your W-4 each year, maximizing pre-tax benefits, understanding bonus withholding, checking every pay stub, and using a Virginia paycheck after-taxes calculator before negotiating a new salary or job offer.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Virginia Paycheck Planning Tips</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Tip</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Why It Matters</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Review Your W-4 Annually','Life changes can shift withholding needs'],
+                      ['Use Pre-Tax Benefits','May reduce chargeable income'],
+                      ['Understand Bonus Withholding','Bonuses may be withheld differently federally'],
+                      ['Check Pay Stubs Often','Payroll errors can happen'],
+                      ['Estimate Before Negotiating','Net pay gives a clearer offer comparison'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Conclusion</h2>
+              <p>Your Virginia paycheck is the result of layered rules. Federal taxes, state brackets, voluntary deductions, and pay period math all shape the final deposit. Once you understand these pieces, your paycheck becomes easier to read.</p>
+              <p>Use a Virginia paycheck calculator as a starting point. Then refine your estimate with actual deductions, filing status, and pay frequency. Review your W-4 each year, use pre-tax accounts where possible, and treat your pay stub as a serious financial document.</p>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">FAQs</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <h3 className="text-xl font-semibold pt-2 text-white">What is the Virginia state income tax rate?</h3>
+              <p>Virginia uses a tiered tax bracket system, not a flat rate. Most full-time workers reach the 5.75% bracket for chargeable income above $17,000 after deductions are considered.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How much of my paycheck goes to taxes in Virginia?</h3>
+              <p>A common rough range is 20% to 30% of gross pay for federal and state taxes combined. The exact amount depends on income, filing status, deductions, and withholding choices.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does Virginia have local income tax?</h3>
+              <p>Virginia does not have a statewide local income tax. However, some localities may have other levies or costs that affect overall finances.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How do I use a Virginia paycheck calculator?</h3>
+              <p>Enter your gross pay, pay frequency, filing status, allowances, and any pre-tax deductions. The calculator estimates federal tax, FICA, Virginia state tax, and net pay.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Can I reduce what&apos;s withheld from my Virginia paycheck?</h3>
+              <p>Yes, you can legally reduce withholding by updating your W-4, contributing to pre-tax accounts such as a 401(k), HSA, or FSA, and claiming eligible deductions.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Why does my take-home pay change when I get a raise?</h3>
+              <p>A raise can push more of your income into higher tax brackets. This can increase the marginal tax rate on the additional earnings, even though the raise still increases gross income.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Are bonuses taxed differently in Virginia?</h3>
+              <p>Virginia generally taxes bonuses under the same state brackets as regular pay. Federally, bonuses may be subject to a flat supplemental withholding rate, which can make the check feel smaller than expected.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">OBBBA Tax Calculators</h3>
+              <p>OBBBA tools can support different paycheck and salary planning needs across the USA. You can use the <a href="https://www.obbacalculators.com/illinois-paycheck-calculator" className="text-cyan-400 hover:underline">Illinois Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/california-paycheck-calculator" className="text-cyan-400 hover:underline">California Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/washington-paycheck-calculator" className="text-cyan-400 hover:underline">Washington Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/hawaii-paycheck-calculator" className="text-cyan-400 hover:underline">Hawaii Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/nebraska-paycheck-calculator" className="text-cyan-400 hover:underline">Nebraska Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/salary-calculator" className="text-cyan-400 hover:underline">Salary Calculator</a>, <a href="https://www.obbacalculators.com/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</a>, and <a href="https://www.obbacalculators.com/no-tax-on-overtime-calculator" className="text-cyan-400 hover:underline">No Tax on Overtime</a> when you want a clearer view of wages, overtime, salary, and take-home pay.</p>
+            </div>
+          </article>
+        </>
+      )}
+
+      {isIndiana && (
+        <>
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <h2 className="text-2xl font-bold pt-2 text-white">Understanding Paychecks in Indiana</h2>
+              <p>A large portion of the workforce evaluates pay rates without considering the true impact of payroll deductions. Your paycheck is subject to several payroll withholdings that reduce your gross earnings before your final payout.</p>
+              <p>These deductions can include federal income tax, Social Security tax, Medicare tax, Indiana state income tax, retirement contributions, health insurance premiums, and other voluntary deductions. An Indiana paycheck calculator helps break down these deductions so you can clearly see where your money goes.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Common Indiana Paycheck Deductions</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Deduction</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">What It Means</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Federal Income Tax','Withheld according to your tax bracket to fund national services.'],
+                      ['Social Security Tax','A federal tax deduction dedicated to future retirement and disability benefits.'],
+                      ['Medicare Tax','A required contribution that funds healthcare programs for older adults.'],
+                      ['Indiana State Income Tax','A flat-rate state tax applied to resident income.'],
+                      ['Retirement Contributions','Pre-tax allocations to funds such as 401(k) or IRA.'],
+                      ['Health Insurance Premiums','Your out-of-pocket share for employer-provided medical coverage.'],
+                      ['Other Voluntary Deductions','Additional benefits such as life insurance or union dues.'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">How Indiana State Income Tax Works</h2>
+              <p>Indiana uses a flat state income tax system. This means most taxpayers are subject to the same state income tax rate, regardless of their income bracket.</p>
+              <p>However, individual counties may charge extra local income taxes that can affect your final take-home pay. Because tax rules and rates may change, using an updated Indiana Paycheck Calculator helps keep your estimate aligned with current payroll standards.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Key Factors Influencing Your Net Pay</h2>
+              <p>Your final paycheck is determined by several important variables. These include your filing status, gross income, pay frequency, pre-tax deductions, local county taxes, and additional withholding choices.</p>
+              <p>Even small updates to these fields can change your final paycheck amount. For example, a higher retirement contribution may reduce today&apos;s take-home pay, while a county tax difference may slightly change your net earnings.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Key Factors That Affect Indiana Net Pay</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Factor</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">How It Affects Your Paycheck</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Filing Status & Gross Income','Determines your tax bracket and total base earnings.'],
+                      ['Pay Frequency','Controls how often you are paid.'],
+                      ['Pre-Tax Deductions','Includes retirement savings adjustments or health insurance costs.'],
+                      ['Local County Taxes','Adds county-level tax rates where applicable.'],
+                      ['Additional Withholdings','Optional changes specified on your W-4.'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Step-by-Step Guide to Using the Calculator</h2>
+              <p>Calculating your take-home pay only takes a few moments when your information is ready. The calculator uses your income, payment cycle, filing status, and deductions to estimate your final paycheck.</p>
+              <p>To get the best result, enter accurate details from your salary offer, pay stub, or employer benefits package. This keeps the calculation practical and closer to your real payroll outcome.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Step 1: Input Your Gross Income</h3>
+              <p>Enter your base salary or hourly pre-tax wages before taxes or deductions are taken out.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Step 2: Select Your Pay Cycle</h3>
+              <p>Choose your payroll schedule, such as weekly, biweekly, semi-monthly, or monthly.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Step 3: Define Your Filing Status</h3>
+              <p>Select your matching federal tax classification, such as single, married filing jointly, married filing separately, or head of household.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Step 4: Include Deductions</h3>
+              <p>Add any pre-tax allocations, such as healthcare premiums, pension savings, 401(k) contributions, IRA contributions, or other benefit deductions.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Step 5: Review Your Estimated Breakdown</h3>
+              <p>The tool will estimate your federal tax withholding, state tax, payroll taxes, total deductions, and final net pay.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Why Use an Indiana Paycheck Calculator?</h2>
+              <p>A paycheck calculator offers practical benefits for employees, job seekers, freelancers, HR teams, and small business owners. It turns complicated payroll numbers into a clearer estimate.</p>
+              <p>Instead of relying on rough guesses, you can use the calculator to plan a realistic budget, compare job offers, prepare for tax season, and track how income changes affect take-home pay.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Improved Budget Planning</h3>
+              <p>Knowing your expected net income helps you build a realistic monthly budget and avoid overspending.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Compare Job Offers</h3>
+              <p>When evaluating job opportunities, comparing net pay instead of gross salary gives a more accurate picture of compensation.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Prepare for Tax Season</h3>
+              <p>Tracking your withholding year-round can help you avoid surprises during tax filing season.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Track Income Changes</h3>
+              <p>You can quickly estimate how salary changes, bonuses, and work hours affect your take-home pay.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Federal Taxation &amp; Statutory Payroll Withholdings</h2>
+              <p>Along with Indiana state taxes, most employees are also subject to federal payroll assessments. These federal deductions can significantly affect the amount deposited into your account.</p>
+              <p>The main federal withholdings include Social Security tax, Medicare tax, and federal income tax. These amounts vary based on income, filing status, tax brackets, and W-4 settings.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Federal Payroll Withholdings</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Federal Withholding</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Social Security Tax','Funds federal retirement and disability safety programs for eligible workers and dependents.'],
+                      ['Medicare Tax','Supports essential healthcare coverage, mainly for older adults and eligible individuals.'],
+                      ['Federal Income Tax','Withholding varies based on filing status, income brackets, and W-4 settings.'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Illustrative Case Study: Indiana Payroll Calculation</h2>
+              <p>A simple case study can show how paycheck calculations work in practice. Suppose an employee earns a fixed annual salary and is paid every two weeks.</p>
+              <p>The final net paycheck will depend on federal tax withholding, Social Security tax, Medicare tax, Indiana state tax, county taxes, and employer benefit deductions.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Indiana Payroll Calculation Example</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Payroll Metric</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Baseline Criteria</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Annual Base Salary','$60,000'],
+                      ['Payment Frequency','Biweekly'],
+                      ['Tax Classification','Single'],
+                      ['State Domicile','Indiana'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p>Based on these metrics, a payroll engine can project gross pay per period, federal income tax withholding, Social Security tax, Medicare tax, Indiana state tax, local county tax, and the final net paycheck amount. Final outcomes may vary depending on county tax rates and individual workplace benefits.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Prevalent Payroll Pitfalls to Circumvent</h2>
+              <p>Paycheck estimates can become inaccurate when important payroll details are missing. Many workers focus only on gross salary and forget taxes, deductions, county rates, or variable income.</p>
+              <p>Avoiding these mistakes helps you maintain better budgeting accuracy. It also prevents your paycheck estimate from becoming too optimistic.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Common Payroll Mistakes in Indiana</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Payroll Mistake</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Why It Matters</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Overlooking Municipal or County Levies','Local income tax rates can vary across Indiana counties.'],
+                      ['Neglecting Pre-Tax Advantages','Retirement contributions and health accounts may reduce taxable income.'],
+                      ['Using Obsolete Tax Data','Payroll rules can change, so current-year values matter.'],
+                      ['Misjudging Variable Compensation','Overtime and bonuses increase gross earnings and may change withholding.'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Strategic Adjustments to Optimize Net Remuneration</h2>
+              <p>You can improve paycheck planning by reviewing your benefits, tax forms, and deductions throughout the year. Small payroll adjustments can create better clarity and reduce tax-time surprises.</p>
+              <p>Useful strategies include using employer retirement matches, reviewing W-4 details, checking available tax credits, auditing pay stubs, and evaluating healthcare options during open enrollment.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Ways to Improve Paycheck Planning</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Strategy</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Benefit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Use Employer-Matched Retirement Contributions','Helps build retirement savings while using workplace benefits.'],
+                      ['Review W-4 Allocations Annually','Helps keep tax withholding aligned with your situation.'],
+                      ['Look for Available Tax Credits','May reduce your final tax liability.'],
+                      ['Audit Pay Stubs Regularly','Helps confirm deductions are accurate.'],
+                      ['Review Workplace Benefits','Helps choose useful healthcare and flexible benefit options.'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Intended Audience</h2>
+              <p>This payroll evaluation utility is useful for many professionals. It can help full-time workers, part-time workers, hourly employees, salaried professionals, job seekers, freelancers, HR coordinators, and small business owners.</p>
+              <p>Anyone who wants to understand the difference between gross income and take-home pay can benefit from an Indiana Paycheck Calculator. It is especially useful when comparing job offers, reviewing raises, or planning a monthly budget.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Summary Conclusion</h2>
+              <p>Strong financial planning begins with payroll knowledge. An easy-to-use paycheck calculator bridges the gap between gross revenue and actual net take-home income.</p>
+              <p>With clearer paycheck estimates, you can balance budgets, compare job opportunities, prepare for taxes, and work toward long-term financial goals with more confidence.</p>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">Frequently Asked Questions</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <h3 className="text-xl font-semibold pt-2 text-white">What is an Indiana Paycheck Calculator?</h3>
+              <p>An Indiana Paycheck Calculator shows your estimated take-home pay after taxes and deductions, including federal tax, Indiana state tax, Social Security, and Medicare.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How accurate is an Indiana Paycheck Calculator?</h3>
+              <p>Most Indiana paycheck calculators provide accurate estimates based on your inputs. However, the final paycheck amount may differ because of employer deductions, benefits, local taxes, or additional payroll rules.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does Indiana have a state income tax?</h3>
+              <p>Yes. Indiana charges a state income tax, and some counties also charge local income taxes that can affect your overall paycheck.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Can I calculate my paycheck if I am paid hourly?</h3>
+              <p>Yes. You can enter your hourly rate, hours worked, and pay frequency to estimate your net pay.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does the calculator include overtime pay?</h3>
+              <p>Yes, most calculators allow you to include overtime pay so you can get a more accurate estimate of your total take-home earnings.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Why is my take-home pay lower than my gross pay?</h3>
+              <p>Your take-home pay is lower than your gross pay because taxes and deductions reduce the amount you actually receive.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Can I use this calculator before accepting a job offer?</h3>
+              <p>Yes. You can use an Indiana Paycheck Calculator to compare job offers based on estimated net pay instead of gross salary alone.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How often should I check my paycheck calculations?</h3>
+              <p>You should review your paycheck after raises, job changes, benefit changes, W-4 updates, or major life events.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">OBBBA Tax Calculators</h3>
+              <p>OBBBA tools can support different paycheck and salary planning needs across the USA. You can use the <a href="https://www.obbacalculators.com/illinois-paycheck-calculator" className="text-cyan-400 hover:underline">Illinois Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/california-paycheck-calculator" className="text-cyan-400 hover:underline">California Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/washington-paycheck-calculator" className="text-cyan-400 hover:underline">Washington Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/virginia-paycheck-calculator" className="text-cyan-400 hover:underline">Virginia Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/hawaii-paycheck-calculator" className="text-cyan-400 hover:underline">Hawaii Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/nebraska-paycheck-calculator" className="text-cyan-400 hover:underline">Nebraska Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/salary-calculator" className="text-cyan-400 hover:underline">Salary Calculator</a>, <a href="https://www.obbacalculators.com/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</a>, and <a href="https://www.obbacalculators.com/no-tax-on-overtime-calculator" className="text-cyan-400 hover:underline">No Tax on Overtime</a> when you want a clearer view of wages, overtime, salary, and take-home pay.</p>
+            </div>
+          </article>
+        </>
+      )}
+
+      {isHawaii && (
+        <>
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <h2 className="text-2xl font-bold pt-2 text-white">A Step-by-Step Guide to Using the Hawaii Paycheck Calculator</h2>
+              <p>The Hawaii Paycheck Calculator is useful because it turns complex paycheck math into a simple estimate. It helps you understand how much money may remain after federal taxes, Hawaii state taxes, Social Security, Medicare, insurance, retirement contributions, and other deductions.</p>
+              <p>This tool is especially helpful in Hawaii, where the cost of living can be high. By estimating your take-home pay before payday, you can plan your monthly budget more wisely and avoid confusion about your actual earnings.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Understanding How the Hawaii Paycheck Calculator Works</h2>
+              <p>The Hawaii Paycheck Calculator works by using basic salary details, including pay rate, hours worked, and pay period. After you enter this information, the calculator estimates your gross income and then subtracts taxes and deductions step by step.</p>
+              <p>First, it calculates your total income before taxes. Then it estimates federal income tax based on tax brackets and filing status. After that, it applies Hawaii state tax rules, Social Security tax, Medicare tax, and any extra deductions. The final result is your estimated net pay.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Key Factors Affecting Pay in Hawaii</h2>
+              <p>Several important factors affect your final paycheck in Hawaii. Gross income is one of the biggest factors because higher earnings usually create higher tax deductions. Your income may come from hourly wages, fixed salary, overtime pay, or other compensation.</p>
+              <p>Filing status also matters because single, married, and head-of-household filers can have different tax outcomes. Hours worked, overtime, retirement contributions, insurance premiums, and other deductions can also change your final take-home amount.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Key Factors That Affect Hawaii Paychecks</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Factor</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">How It Affects Your Paycheck</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Gross Income','Higher income can increase tax withholding.'],
+                      ['Filing Status','Different filing statuses can change federal tax withholding.'],
+                      ['Hours Worked','More hours can increase gross income and deductions.'],
+                      ['Overtime Pay','Extra income may increase taxes and final net pay.'],
+                      ['Retirement Contributions','Pre-tax savings may reduce taxable income.'],
+                      ['Health Insurance Premiums','Employer health plans may reduce take-home pay.'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Understanding Taxes and Deductions</h2>
+              <p>One of the most important parts of a paycheck is understanding deductions. The Hawaii Paycheck Calculator explains these amounts clearly, so employees can see where their money goes before receiving their final pay.</p>
+              <p>For most workers, the biggest deduction is federal income tax. Hawaii state tax is also applied because Hawaii uses a progressive state income tax system. Other common deductions include Social Security, Medicare, insurance payments, retirement contributions, and other workplace benefits.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Common Hawaii Paycheck Deductions</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Deduction</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">What It Means</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Federal Income Tax','Tax withheld based on income and filing status.'],
+                      ['Hawaii State Income Tax','State tax based on Hawaii tax brackets and rules.'],
+                      ['Social Security Tax','Payroll tax that supports retirement and disability benefits.'],
+                      ['Medicare Tax','Payroll tax that supports healthcare programs.'],
+                      ['Retirement Contributions','Money placed into retirement accounts.'],
+                      ['Health Insurance Premiums','Employee share of medical insurance costs.'],
+                      ['Other Deductions','May include union dues, insurance, or benefit costs.'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Benefits of Using the Hawaii Paycheck Calculator</h2>
+              <p>Using the Hawaii Paycheck Calculator gives workers better financial clarity. It helps you understand exactly how much money may remain once taxes and deductions are subtracted from your gross income.</p>
+              <p>The calculator also improves financial planning. When you know your estimated net income, you can build a more accurate monthly budget. It also saves time because you do not need to calculate taxes and deductions manually.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Using the Calculator Correctly</h2>
+              <p>Using the Hawaii Paycheck Calculator is simple when you enter accurate details. Start by adding your gross salary or hourly wage. Then enter your hours worked, pay frequency, filing status, and deductions.</p>
+              <p>After the information is entered, the calculator estimates your take-home pay automatically. For the best result, all inputs should be accurate. Even small mistakes in pay rate, hours, deductions, or filing status can change the final result.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Why Hawaii Wage Calculators Are Used by Workers</h2>
+              <p>A Hawaii wage calculator is helpful in many real-life situations. Workers often use it when starting a new job, negotiating salary, checking overtime compensation, updating tax withholding, or planning a household budget.</p>
+              <p>Knowing your paycheck before payday helps you make smarter financial choices. It also helps you avoid overspending because your budget is based on estimated net income instead of gross income.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Common Reasons to Use a Hawaii Wage Calculator</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Situation</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Why It Helps</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Taking a New Job','Helps estimate real take-home pay before accepting an offer.'],
+                      ['Salary Negotiations','Helps compare net income instead of only gross salary.'],
+                      ['Overtime Planning','Shows how extra hours may affect your paycheck.'],
+                      ['Changing Tax Withholding','Helps preview possible paycheck changes.'],
+                      ['Home Budget Planning','Helps plan bills, rent, food, and savings.'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Hawaii Paycheck Calculation Example</h2>
+              <p>A simple example can show how a Hawaii paycheck estimate works. Suppose an employee earns a yearly salary and receives pay every two weeks. The calculator uses that income and pay frequency to estimate deductions.</p>
+              <p>The final paycheck estimate may include federal income tax withholding, Hawaii state income tax, Social Security deductions, Medicare deductions, and any added payroll deductions. Actual amounts may change depending on tax elections, employer benefits, and personal deductions.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Hawaii Paycheck Calculation Example</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Specifics</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Salary Per Year','$65,000'],
+                      ['Filing Status','Single'],
+                      ['Pay Period','Every two weeks'],
+                      ['State','Hawaii'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Estimated Payroll Breakdown</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Deduction or Result</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Federal Income Tax Withholding','Estimated federal tax deduction'],
+                      ['Hawaii State Income Tax','Estimated state tax deduction'],
+                      ['Social Security Deductions','Estimated Social Security payroll tax'],
+                      ['Medicare Deductions','Estimated Medicare payroll tax'],
+                      ['Calculated Take-Home Income','Estimated net pay after deductions'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Conclusion</h2>
+              <p>A Hawaii Paycheck Calculator can be a useful tool for understanding income and managing finances effectively. It makes complex tax calculations easier and helps workers understand their take-home pay.</p>
+              <p>By using it regularly, employees can make wiser financial choices, plan monthly costs, and stay better informed about their income. A reliable paycheck estimate gives you a clearer way to manage money throughout the year.</p>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">FAQs</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <h3 className="text-xl font-semibold pt-2 text-white">What is a Hawaii Paycheck Calculator?</h3>
+              <p>A Hawaii Paycheck Calculator is a payroll tool that estimates an employee&apos;s paycheck after taxes and deductions. It helps workers understand how much income remains after federal tax, Hawaii state tax, Social Security, Medicare, insurance, retirement plans, and other deductions.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Is the Hawaii Paycheck Calculator accurate?</h3>
+              <p>Yes, it can provide a strong estimate when standard tax rates and common deductions are used. However, actual paycheck amounts may differ slightly because of employer policies, workplace benefits, extra deductions, or special payroll rules.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">What is the difference between Hawaii and other states when calculating paychecks?</h3>
+              <p>Hawaii has its own state tax system, tax brackets, and exemptions. This can make Hawaii paycheck calculations different from states with no income tax or states with different tax structures.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Can hourly workers use the Hawaii Paycheck Calculator?</h3>
+              <p>Yes, hourly workers can use the calculator by entering their hourly pay rate and the number of hours worked. The calculator can then estimate both gross pay and net pay.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does this calculator include all deductions?</h3>
+              <p>The calculator includes common deductions such as federal tax, Hawaii state tax, Social Security, and Medicare. Some personal insurance benefits, union fees, or special deductions may need to be added separately for better accuracy.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">OBBBA Tax Calculators</h3>
+              <p>OBBBA tools can support different paycheck and salary planning needs across the USA. You can use the <a href="https://www.obbacalculators.com/illinois-paycheck-calculator" className="text-cyan-400 hover:underline">Illinois Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/california-paycheck-calculator" className="text-cyan-400 hover:underline">California Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/washington-paycheck-calculator" className="text-cyan-400 hover:underline">Washington Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/virginia-paycheck-calculator" className="text-cyan-400 hover:underline">Virginia Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/nebraska-paycheck-calculator" className="text-cyan-400 hover:underline">Nebraska Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/salary-calculator" className="text-cyan-400 hover:underline">Salary Calculator</a>, <a href="https://www.obbacalculators.com/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</a>, and <a href="https://www.obbacalculators.com/no-tax-on-overtime-calculator" className="text-cyan-400 hover:underline">No Tax on Overtime</a> when you want a clearer view of wages, overtime, salary, and take-home pay.</p>
+            </div>
+          </article>
+        </>
+      )}
+
+      {isWashington && (
+        <>
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <p>In Washington, paycheck planning has a special twist. The state has no state income tax, yet your check can still shrink because of federal income tax, FICA taxes, payroll deductions, Washington Paid Family and Medical Leave, and other Washington state payroll deductions. A clear Washington take-home pay calculator helps you estimate your take-home pay in Washington without waiting for payday. For a quick estimate, this Washington Paycheck Calculator can help you compare gross pay with take-home pay in a cleaner way.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Understanding How Your Washington Paycheck Calculator Works</h2>
+              <p>A Washington paycheck calculator starts with your income, then subtracts the amounts that usually come out of wages. These may include federal tax withholding, Social Security tax, Medicare tax, pre-tax deductions, post-tax deductions, and state payroll items like WA PFML. The result is your net income, which is the money you can use for real-life expenses.</p>
+              <p>However, Washington is not a "nothing comes out" state. That idea sounds nice, but it is only half true. There is Washington no state income tax, but workers still pay federal taxes and payroll-related deductions. If you want a broader comparison, a general <a href="https://www.obbacalculators.com/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</a> helps you see how Washington differs from other paycheck situations across the USA.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Washington Paycheck Calculator Terms</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Paycheck Term</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Simple Meaning</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Why It Matters</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Gross pay','Pay before deductions','It starts the paycheck calculation'],
+                      ['Net pay','Pay after deductions','It is your real take-home amount'],
+                      ['Federal income tax','IRS tax withheld from wages','It depends on income and W-4 details'],
+                      ['FICA taxes','Social Security and Medicare taxes','These are required payroll taxes'],
+                      ['Washington PFML deduction','Paid leave premium withholding','It can reduce your paycheck'],
+                      ['Pre-tax deductions','Deductions before some taxes','They may reduce taxable wages'],
+                      ['Post-tax deductions','Deductions after taxes','They lower your final deposit'],
+                    ].map(([a,b,c]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                        <td className="border border-slate-500 px-3 py-2">{c}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">The Basics of Gross Versus Net Pay</h3>
+              <p>Every paycheck begins with gross pay, but your budget lives on net pay. Gross versus net pay simply means the difference between what you earn before deductions and what you keep after them. For example, if your gross paycheck is $2,500, your final deposit may be lower because of federal taxes on Washington paycheck, Social Security and Medicare deductions, retirement savings, insurance, and Washington employee payroll deductions. This is why a Washington gross to net calculator is useful. It keeps your expectations grounded.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Why Washington Tax Laws Simplify Your Calculations</h3>
+              <p>Washington makes state income tax planning easier because it has no state income tax on wages. The Washington Department of Revenue states that Washington does not have an individual income tax, which means your regular wage paycheck does not face a state wage income tax. However, simple does not mean empty. Your Washington paycheck after taxes can still include federal income tax, FICA taxes, WA PFML tax, and possibly Washington workers compensation deduction. Workers comparing no-income-tax states may also review the <a href="https://www.obbacalculators.com/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</a> or <a href="https://www.obbacalculators.com/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</a>, because those states also shape paychecks differently from high-tax states.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Key Factors That Influence Your Take-Home Pay</h2>
+              <p>Your take-home pay depends on more than your wage rate. Your filing status, W-4 form, pay frequency, benefits, overtime, bonus pay, and deductions all change the final number. A Washington net pay calculator brings these pieces together, like a dashboard for your paycheck.</p>
+              <p>Because Washington has Washington no state income tax, many workers expect a larger check. Often, that can happen compared with some states. Yet your paycheck may still feel smaller than your salary suggests. That is usually because of federal income tax withholding, FICA taxes, retirement contributions, health insurance premiums, Washington PFML deductions, and other benefit costs.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Key Factors That Affect Washington Take-Home Pay</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Factor</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">How It Changes Your Paycheck</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Example</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Filing status','Changes federal withholding','Single and married workers may differ'],
+                      ['W-4 form','Guides IRS withholding','Dependents can change the estimate'],
+                      ['FICA taxes','Reduces wages for federal programs','Social Security and Medicare apply'],
+                      ['WA PFML','Adds a Washington payroll deduction','Paid leave premiums may be withheld'],
+                      ['Pay frequency','Changes each paycheck size','Biweekly differs from monthly'],
+                      ['Benefit contributions','Reduce final pay','Insurance and retirement can lower deposits'],
+                    ].map(([a,b,c]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                        <td className="border border-slate-500 px-3 py-2">{c}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Federal Income Tax Withholding Requirements</h3>
+              <p>Federal tax is usually the biggest tax line on a Washington paycheck. Your employer uses your W-4 form, filing status, dependents, extra withholding, and taxable income to estimate federal income tax withholding. This is why two people with the same salary income may receive different deposits. The IRS updates tax brackets, so your estimate should use current rules. In simple terms, a Washington paycheck tax calculator helps you see how much federal tax may come out before you spend money that is not really yours yet.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">FICA Taxes: Social Security and Medicare Contributions</h3>
+              <p>FICA taxes include Social Security tax and Medicare tax. These taxes apply in Washington just as they do in every other state. For 2026, the Social Security wage base is $184,500, and the employee Social Security tax rate is 6.2%. Medicare tax is generally 1.45% for employees, with an additional Medicare tax applying above certain wage levels. So, when people ask how much tax comes out of paycheck in Washington, the answer still includes FICA. No state income tax does not erase federal payroll taxes.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">The Impact of Pre-Tax and Post-Tax Deductions</h3>
+              <p>Deductions can make two workers with the same wage take home different amounts. Pre-tax deductions may include 401(k) contribution, 403(b) contribution, flexible spending account, FSA, health savings account, and HSA contributions. Post-tax deductions may include some insurance payments, union dues, or other voluntary items. A Washington payroll deduction calculator helps you see how these choices affect monthly net pay. If your job offer is in California instead, the <a href="https://www.obbacalculators.com/california-paycheck-calculator" className="text-cyan-400 hover:underline">California Paycheck Calculator</a> can show how deductions interact with a very different state tax system.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">How to Use a Washington Paycheck Tax Calculator Effectively</h2>
+              <p>A calculator works best when you feed it real numbers. Entering rough guesses may still give an answer, but it may not give a useful one. Your gross salary, hourly wage, pay period, pay schedule, deductions, and tax settings should match your actual job details.</p>
+              <p>However, do not treat the result like a sacred stone tablet. Payroll systems can vary. Benefit timing, overtime, bonus payments, Washington Paid Family and Medical Leave, and employer-specific deductions can slightly change your actual deposit. A good paycheck calculator Washington estimate should guide your planning, not replace your pay stub.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Gathering Necessary Financial Documentation</h3>
+              <p>Good paycheck planning starts with the right paperwork. You should know your gross pay, work hours, pay frequency, benefits, retirement amounts, and W-4 details before using a Washington payroll calculator. Your latest pay stub can help, especially if you already work in Washington. It shows real paycheck deductions, employer benefit costs, Washington payroll withholding, and current Washington state payroll deductions. Think of the pay stub as the receipt for your labor. It tells you where each dollar went.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Inputting Your Salary and Pay Frequency Details</h3>
+              <p>Your income type changes how you should enter information. If you earn a fixed salary, enter your annual gross salary. If you work hourly, enter your hourly wage, expected hours, and any overtime hours. Then choose weekly pay, bi-weekly pay, semi-monthly pay, or monthly pay. A weekly paycheck calculator Washington gives a different view from a monthly paycheck calculator Washington, even if yearly income stays the same. For salary conversions, the <a href="https://www.obbacalculators.com/salary-calculator" className="text-cyan-400 hover:underline">Salary Calculator</a> can help you compare yearly, monthly, biweekly, and hourly amounts.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Adjusting for Filing Status and Allowances</h3>
+              <p>Your filing status can change your federal withholding. Single, married filing jointly, and head of household can produce different paycheck results. Your W-4 choices can also change whether your employer withholds more or less. This matters during tax season, especially if you usually owe money or receive a large refund. A Washington W-4 paycheck estimate helps you test different settings before making changes. It is like trying on shoes before walking all day in them.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Common Deductions That Affect Your Final Paycheck</h2>
+              <p>Your paycheck deductions can be mandatory or optional. Federal taxes and FICA taxes are usually mandatory. Some Washington payroll items, such as Washington Paid Family and Medical Leave, may also appear. Optional deductions may include insurance, retirement savings, or union dues.</p>
+              <p>Because deductions vary by employer, paycheck estimates can differ across jobs. A Seattle tech worker, a Spokane healthcare employee, and a Vancouver warehouse worker may all have different benefit packages. This is why a paycheck tax calculator for Washington employees should leave room for both required deductions and personal choices.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Common Washington Paycheck Deductions</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Deduction Type</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Common Example</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Effect on Paycheck</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Health insurance premiums','Medical, dental, vision','Reduces take-home pay'],
+                      ['Retirement contributions','401(k) or 403(b)','Lowers current deposit'],
+                      ['FSA','Medical spending account','May reduce taxable wages'],
+                      ['HSA','Health savings account','Can support future healthcare costs'],
+                      ['WA PFML','Paid leave premium','Washington payroll deduction'],
+                      ['Union dues','Workplace membership cost','Often post-tax or payroll-based'],
+                    ].map(([a,b,c]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                        <td className="border border-slate-500 px-3 py-2">{c}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Health Insurance Premiums and Benefit Contributions</h3>
+              <p>Health benefits can protect you from expensive medical bills, but they can reduce your paycheck today. Health insurance premiums, dental insurance, vision insurance, and other benefit contributions may come out every pay period. A worker may earn strong wages but still feel pinched because family coverage costs more than expected. That does not mean the benefit is useless. It means your Washington salary after tax should include benefit costs, not just taxes. Good planning starts with the real number, not the glossy salary figure.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Retirement Plan Contributions Like 401(k) or 403(b)</h3>
+              <p>Retirement contributions can make today&apos;s paycheck smaller while helping tomorrow&apos;s money grow. A 401(k) contribution or 403(b) contribution may reduce your current take-home salary, but it can support long-term savings and future financial stability. For example, contributing 5% may feel like a tiny leak from each paycheck, yet it can become a strong reservoir over time. If you want to compare Washington with another state, the <a href="https://www.obbacalculators.com/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</a> can show how state differences change paycheck math.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Flexible Spending Accounts and Health Savings Accounts</h3>
+              <p>Health savings tools can be boring on paper but useful in real life. A flexible spending account, FSA, health savings account, or HSA may help you set aside money for qualified medical costs. These accounts can also affect taxable wages, depending on plan rules. That means they can change your Washington paycheck after taxes and your final net income. If you have predictable medical costs, these accounts can feel like putting an umbrella in your car before the rain starts. Not exciting, but very smart.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Navigating Paycheck Calculator Washington Results for Financial Planning</h2>
+              <p>A paycheck estimate is most useful when it turns into action. Once you know your annual take-home pay or monthly net pay, you can build a budget that fits real income. This helps with rent, utilities, food, insurance, childcare, savings, and debt payments.</p>
+              <p>However, Washington costs can vary sharply by city. A paycheck calculator for Seattle workers may feel different from a paycheck calculator for Spokane employees, even with similar wages. Seattle housing can swallow more of your check, while Spokane or Tacoma may offer different spending patterns. A paycheck planning tool Washington helps you look beyond taxes and think about daily life.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Budgeting Based on Your Estimated Net Income</h3>
+              <p>A useful budget begins with net pay, not dreams. Your Washington net salary estimator can show what you may actually receive each pay period. From there, you can plan household spending, emergency savings, debt payments, and savings goals. For example, if your rent takes half your monthly net pay, your budget may need a reset. That is not failure. That is information. If you work in another state later, tools like the <a href="https://www.obbacalculators.com/virginia-paycheck-calculator" className="text-cyan-400 hover:underline">Virginia Paycheck Calculator</a> or <a href="https://www.obbacalculators.com/nebraska-paycheck-calculator" className="text-cyan-400 hover:underline">Nebraska Paycheck Calculator</a> can help compare future offers.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Adjusting Your Withholdings for Tax Season</h3>
+              <p>Tax season should not feel like a jump scare. If you owed money last year, your W-4 may need changes. If your refund was huge, you may have withheld too much throughout the year. W-4 adjustments, additional withholding, and better income estimates can help balance your paycheck and tax return. A Washington tax withholding calculator can show how changes may affect your deposit. Since Washington has no Washington state income tax on wages, your main withholding focus is usually federal tax and payroll deductions.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Planning for Bonuses and Overtime Pay</h3>
+              <p>Extra income can be helpful, but it can also confuse paycheck planning. Bonuses, bonus pay, supplemental wages, and overtime pay may be withheld differently from regular wages. That can make a bonus check look smaller than expected. A Washington bonus paycheck calculator or Washington overtime paycheck calculator helps you plan before the money arrives. If overtime is a regular part of your income, the <a href="https://www.obbacalculators.com/no-tax-on-overtime-calculator" className="text-cyan-400 hover:underline">No Tax on Overtime</a> tool can help you review overtime-focused scenarios. Workers comparing island-state wages can also use the <a href="https://www.obbacalculators.com/hawaii-paycheck-calculator" className="text-cyan-400 hover:underline">Hawaii Paycheck Calculator</a> for a very different cost-of-living picture.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Conclusion</h2>
+              <p>A Washington Paycheck Calculator helps you understand your real earnings before payday. It shows how gross pay becomes net pay after federal income tax, FICA taxes, Washington PFML, benefits, retirement savings, and other deductions. Washington&apos;s no state income tax rule makes paycheck math simpler, but it does not remove every deduction.</p>
+              <p>That clarity matters. You can plan rent, groceries, debt payments, savings, and family expenses with fewer surprises. Whether you need a Washington hourly paycheck calculator, Washington salary paycheck calculator, Washington wage calculator, or Washington after-tax calculator, the goal is the same. You want a realistic number that helps you make better money decisions.</p>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">FAQ</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <p>Paycheck questions are common because wages and deductions rarely move in a straight line. Your salary may look simple, but payroll can add federal taxes, benefit costs, retirement savings, paid leave premiums, and other deductions before money reaches you.</p>
+              <p>These answers explain the most common questions Washington workers ask. They also help you use a Washington income calculator, Washington payroll tax calculator, or Washington gross to net calculator with more confidence.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does living in Washington mean I don&apos;t pay any income tax?</h3>
+              <p>Living in Washington means you generally do not pay state individual income tax on wages, because Washington has no state income tax. However, you may still pay federal income tax, FICA taxes, and certain Washington state payroll deductions. So, Washington paycheck with no state income tax does not mean your paycheck has zero deductions. It means state wage income tax is not part of the normal paycheck calculation.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">What is the main difference between gross pay and net pay on my Washington paycheck?</h3>
+              <p>The main difference is what happens before and after deductions. Gross pay is your earnings before taxes and deductions. Net pay is what remains after federal tax withholding, Social Security tax, Medicare tax, Washington PFML deduction, insurance, retirement savings, and other paycheck deductions. In plain terms, gross pay is the headline number. Net pay is the money you can actually use.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How do FICA taxes work for employees in cities like Seattle or Spokane?</h3>
+              <p>FICA taxes work the same across Washington cities, including Seattle, Spokane, Tacoma, and Vancouver. Employees pay Social Security and Medicare taxes through payroll withholding. This means a Seattle paycheck, Spokane paycheck, Tacoma paycheck, or Vancouver paycheck can all include the same federal payroll tax structure. Local living costs may differ, but FICA rules do not change just because your city changes.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Can I use a calculator to see how a 401(k) contribution changes my take-home pay?</h3>
+              <p>Yes, a calculator can help you see how 401(k) deductions affect your paycheck. A higher contribution can reduce your current take-home pay, but it may improve retirement savings. Some contributions may also reduce certain taxable wages. This is why a Washington payroll deduction calculator is helpful. It lets you test different savings levels before changing your payroll setup.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Why should I use a Washington paycheck calculator if my salary stays the same every year?</h3>
+              <p>Even if your salary stays the same, your deductions may change. Insurance premiums can rise. Retirement contributions can change. Federal tax brackets can update. WA PFML rates can change too. Because of this, your paycheck may shift even when your salary does not. A fresh hourly paycheck estimate Washington or salary estimate helps you avoid stale numbers.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How do I adjust my withholdings if I find I owe money during tax season?</h3>
+              <p>If you owe money during tax season, review your W-4 and consider updating your withholding. You may need fewer reductions, more accurate income details, or extra withholding. A Washington W-4 paycheck estimate can help you see how changes may affect each paycheck. However, your employer&apos;s payroll department or a qualified tax professional can help if your situation is complex.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does the calculator account for irregular income like bonuses or overtime?</h3>
+              <p>A good calculator can estimate irregular income if you enter it correctly. Overtime hours, bonus pay, and supplemental wages can change withholding and final net income. This matters if extra income appears often. A Washington overtime paycheck calculator helps you plan extra hours, while a Washington bonus paycheck calculator helps you estimate bonus deposits before spending them in your head.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">OBBBA Tax Calculators</h3>
+              <p>OBBBA tools can support different paycheck and salary planning needs across the USA. Along with this Washington Paycheck Calculator, you can use the <a href="https://www.obbacalculators.com/illinois-paycheck-calculator" className="text-cyan-400 hover:underline">Illinois Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/california-paycheck-calculator" className="text-cyan-400 hover:underline">California Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/virginia-paycheck-calculator" className="text-cyan-400 hover:underline">Virginia Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/hawaii-paycheck-calculator" className="text-cyan-400 hover:underline">Hawaii Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/nebraska-paycheck-calculator" className="text-cyan-400 hover:underline">Nebraska Paycheck Calculator</a>, <a href="https://www.obbacalculators.com/salary-calculator" className="text-cyan-400 hover:underline">Salary Calculator</a>, <a href="https://www.obbacalculators.com/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</a>, and <a href="https://www.obbacalculators.com/no-tax-on-overtime-calculator" className="text-cyan-400 hover:underline">No Tax on Overtime</a> when you want a clearer view of wages, overtime, salary, and take-home pay.</p>
+            </div>
+          </article>
+        </>
+      )}
+
+      {isIllinois && (
+        <>
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <p>For many workers, the hardest question is simple: how much tax comes out of paycheck in Illinois? The answer depends on your income, pay frequency, filing status, federal tax withholding, Illinois tax withholding, FICA taxes, and deductions. A strong Illinois paycheck calculator works like a financial flashlight. It shines on the gap between gross salary and net income, so you know what you can actually spend, save, or invest.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Understanding How the Illinois Paycheck Calculator Works</h2>
+              <p>An Illinois Paycheck Calculator starts with your earnings and then subtracts the amounts that normally come out of wages. These amounts may include federal income tax, Illinois state income tax, Social Security tax, Medicare tax, and common paycheck deductions. The result is your net pay, which is the money you usually receive through direct deposit or a paper check.</p>
+              <p>However, every paycheck has its own fingerprint. A worker in Chicago may earn the same gross paycheck as a worker in Springfield, yet their final deposit may differ because of benefits, retirement savings, insurance, or W-4 form details. That is why a paycheck calculator Illinois tool is useful for real planning. It helps you estimate your take-home pay in Illinois instead of guessing from your salary alone.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Illinois Paycheck Calculator Terms</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Paycheck Item</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">What It Means</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Why It Changes Your Pay</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Gross pay','Pay before deductions','It is the starting amount'],
+                      ['Net pay','Pay after deductions','It is your real deposit'],
+                      ['Federal income tax','IRS withholding','It changes with income and filing details'],
+                      ['Illinois income tax','State tax withholding','Illinois uses a flat state tax rate'],
+                      ['FICA taxes','Social Security and Medicare','These are mandatory payroll taxes'],
+                      ['Pre-tax deductions','Deductions before some taxes','They may reduce taxable wages'],
+                      ['Post-tax deductions','Deductions after taxes','They lower final take-home pay'],
+                    ].map(([a,b,c]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                        <td className="border border-slate-500 px-3 py-2">{c}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Why Illinois is Unique for Tax Purposes</h3>
+              <p>Illinois is different because it uses a flat income tax rate instead of several state tax brackets. This means Illinois state tax is simpler than states with progressive tax systems. Still, simple does not always mean painless. Your Illinois paycheck after taxes also depends on federal withholding, benefits, IL-W-4 form details, and payroll deductions. If you compare Illinois with states that do not tax wages, the difference becomes clear. A worker moving from Texas may use the <a href="https://www.obbacalculators.com/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</a>, while someone comparing Florida income can check the <a href="https://www.obbacalculators.com/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</a>. These comparisons show why state rules matter when you calculate your real take-home salary.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">The Role of Federal Taxes in Your Take-Home Pay</h3>
+              <p>Federal tax plays a major role in your paycheck because it often takes one of the largest slices. Your employer uses your W-4 form, filing status, dependents, and income level to estimate federal income tax withholding. This is why two workers with the same salary income may receive different checks. The calculator looks at your taxable income, federal obligations, and federal withholding rules to estimate your final amount. In plain English, federal tax is the big gate your paycheck passes through before Illinois tax and other deductions finish the job.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How Illinois State Income Tax Affects Your Paycheck</h3>
+              <p>Illinois state income tax reduces your paycheck because employers withhold it from most taxable wages. The state uses a 4.95% income tax rate for regular individual income, so your Illinois state income tax deduction is an important part of the paycheck estimate. This is where an Illinois tax withholding calculator becomes helpful. It lets you see Illinois paycheck with state income tax instead of only seeing federal deductions. For workers who want a broader estimate beyond one state, the <a href="https://www.obbacalculators.com/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</a> can help compare different income situations.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">How to Use an Illinois Paycheck Calculator Effectively</h2>
+              <p>A calculator gives better results when you enter clean information. Think of it like cooking. If the ingredients are wrong, the final dish will not taste right. Your gross pay, work hours, pay frequency, deductions, and tax settings must match your real job details. Otherwise, your paycheck estimate may look neat but still miss the mark.</p>
+              <p>The best way to use an Illinois take-home pay calculator is to treat it like a planning tool, not a crystal ball. It can help you plan rent, bills, groceries, debt payments, and savings. However, your employer's payroll system may still produce a slightly different number. That can happen because of benefit timing, post-tax deductions, bonus payments, or changes in Illinois tax laws.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Inputting Your Gross Income and Pay Frequency</h3>
+              <p>Your gross pay is the first number you enter. If you are salaried, use your annual gross salary. If you work hourly, enter your hourly wage, regular hours, and any extra time. Then choose your pay frequency, such as weekly pay, bi-weekly pay, semi-monthly pay, or monthly pay. This matters because the same annual income looks different across pay periods. A weekly paycheck calculator Illinois shows smaller but more frequent checks. A monthly paycheck calculator Illinois shows larger checks, but they arrive less often.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Accounting for Pre-Tax and Post-Tax Deductions</h3>
+              <p>Deductions are where many paycheck estimates go sideways. Pre-tax deductions may reduce your taxable wages before some taxes are calculated. These can include 401(k) contribution, 403(b) contribution, health savings account, HSA, flexible spending account, and FSA amounts. Post-tax deductions may include certain insurance costs, union dues, or other payments taken after taxes. If you forget these, your Illinois gross to net calculator result may look higher than your real check. A careful estimate includes both pre-tax benefit deductions and post-tax payroll deductions.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Health Insurance and Retirement Contributions</h3>
+              <p>Benefits can protect your future, but they also change your paycheck today. Health insurance premiums, dental coverage, vision plans, and retirement savings can reduce your final deposit. That does not mean they are bad. A 401(k) can feel like a small leak in today's paycheck, but it may become a reservoir later. If you want to compare your annual earnings with your paycheck rhythm, a <a href="https://www.obbacalculators.com/salary-calculator" className="text-cyan-400 hover:underline">Salary Calculator</a> can help you understand salary amounts by payment frequency. This is useful when planning annual take-home pay, monthly net pay, and long-term savings.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Understanding Voluntary Deductions</h3>
+              <p>Voluntary deductions are amounts you choose through your employer. These may include retirement contributions, life insurance, union dues, commuter benefits, or extra savings programs. They can look small alone, but together they may quietly reshape your net income. For example, a worker may earn a solid salary but still feel squeezed because several voluntary deductions come out every pay period. An Illinois payroll deduction calculator helps you see those details before they surprise you. It also supports better financial planning, especially when you are building a monthly budget.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Key Factors Influencing Your Net Pay</h2>
+              <p>Your net pay is shaped by taxes, deductions, income type, and pay timing. It is not just one calculation. It is a chain. First comes your gross paycheck. Then payroll applies federal tax, Illinois tax, FICA taxes, benefits, and other deductions. The final number is your take-home pay.</p>
+              <p>Because of this, a good Illinois net pay calculator should include the full paycheck journey. It should help you calculate net pay in Illinois, understand your Illinois salary after tax, and plan around real spending money. This is especially useful if you work overtime, receive bonuses, or compare job offers in different states.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">Key Factors That Affect Illinois Net Pay</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Factor</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">How It Affects Your Paycheck</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Example</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Filing status','Changes federal withholding','Single and married workers may differ'],
+                      ['Illinois state tax withholding','Reduces Illinois taxable wages','Applies to most Illinois wage income'],
+                      ['FICA taxes','Funds Social Security and Medicare','Usually appears on each check'],
+                      ['Retirement contributions','Lowers current take-home pay','May improve future savings'],
+                      ['Pay period','Changes each check amount','Biweekly differs from semi-monthly'],
+                      ['Bonus pay','May use supplemental withholding','Bonus checks can look smaller'],
+                    ].map(([a,b,c]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                        <td className="border border-slate-500 px-3 py-2">{c}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Federal Income Tax Withholding Explained</h3>
+              <p>Federal income tax withholding is the amount your employer sends to the IRS from your paycheck. It is based on your W-4 form, income, dependents, and filing status. This withholding is not always your final tax bill. It is an estimate paid throughout the year. If too much is withheld, you may receive a refund. If too little is withheld, you may owe during tax season. That is why W-4 adjustments matter. They help your paycheck and yearly tax return stay closer together.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Illinois State Income Tax Withholding Explained</h3>
+              <p>Illinois state tax withholding is the amount your employer withholds for state income tax. Illinois uses the IL-W-4 form to help employers calculate state withholding. This form is different from the federal W-4. If your household changes, your income grows, or you take a second job, you may need IL-W-4 form adjustments. A good Illinois W-4 paycheck estimate can help you spot whether your withholding looks reasonable. It is not glamorous work, but it can save you a headache later.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">FICA Taxes: Social Security and Medicare</h3>
+              <p>FICA taxes include Social Security tax and Medicare tax. These taxes are separate from federal and Illinois income tax. Social Security tax has a wage base limit, while Medicare tax usually applies to all covered wages. For employees, Social Security tax is 6.2% up to the wage base, and Medicare tax is 1.45% on wages. These Social Security and Medicare deductions can make your paycheck lower than expected, especially if you only looked at your salary offer. In simple words, FICA is one of the toll booths your paycheck passes through.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Current Tax Rates and Wage Bases</h3>
+              <p>Current tax figures matter because payroll rules change. For 2026, Illinois withholding guidance lists a 4.95% income tax rate and a $2,925 exemption allowance. The Social Security wage base for 2026 is $184,500. Federal income tax rates for 2026 range from 10% to 37%, depending on taxable income and filing status. These numbers help an Illinois after-tax calculator give a more useful estimate. They also make a paycheck tax calculator for Illinois employees more reliable for planning.</p>
+
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <caption className="text-left font-semibold text-sm mb-2 text-white">2026 Payroll Details for Illinois Paycheck Estimate</caption>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">2026 Payroll Detail</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Current Figure</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Illinois income tax rate','4.95%'],
+                      ['Illinois exemption allowance','$2,925'],
+                      ['Employee Social Security tax','6.2%'],
+                      ['2026 Social Security wage base','$184,500'],
+                      ['Employee Medicare tax','1.45%'],
+                      ['Federal income tax rates','10% to 37%'],
+                    ].map(([a,b]) => (
+                      <tr key={a} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{a}</td>
+                        <td className="border border-slate-500 px-3 py-2">{b}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">The Impact of Filing Status and Allowances</h3>
+              <p>Your filing status affects how much federal tax is withheld. Single, married filing jointly, and head of household can produce different paycheck results. Illinois allowances can also affect state withholding through your Illinois W-4 form. If the forms are outdated, your paycheck may not match your real tax situation. This is common after marriage, divorce, a new child, a second job, or a raise. Small form changes can create a noticeable shift in your monthly net pay.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Common Mistakes When Calculating Your Paycheck</h2>
+              <p>Paycheck mistakes often come from tiny details. People enter the right salary but choose the wrong pay schedule. They remember federal tax but forget Illinois tax. They include regular wages but ignore overtime pay or bonuses. These mistakes can turn a helpful estimate into a misleading number.</p>
+              <p>The smarter move is to treat your calculator result as a paycheck rehearsal. You enter the right data, review each deduction, and test different income scenarios. If you work extra hours often, the <a href="https://www.obbacalculators.com/no-tax-on-overtime-calculator" className="text-cyan-400 hover:underline">No Tax on Overtime</a> tool can help you think about overtime planning. If you compare nearby states, the <a href="https://www.obbacalculators.com/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</a> can give another useful view.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Overlooking Supplemental Pay and Bonuses</h3>
+              <p>Bonus checks can surprise you because bonuses and supplemental wages may be withheld differently from regular wages. That does not always mean your final yearly tax is higher on the bonus. It means payroll may withhold differently when the bonus is paid. An Illinois bonus paycheck calculator helps you plan before the money arrives. For example, a $2,000 bonus will not usually land as a full $2,000 deposit. Taxes and deductions still take their share.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Miscalculating Pay Periods Throughout the Year</h3>
+              <p>Pay periods can be sneaky. A biweekly worker usually receives 26 paychecks per year, while a semi-monthly worker usually receives 24. Those two schedules are not the same. If you use a biweekly paycheck calculator Illinois for a semi-monthly job, your budget may drift out of shape. The same issue happens when workers confuse weekly, monthly, and semi-monthly pay. Your pay schedule controls how your annual income is sliced, so it deserves attention.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Ignoring Changes in Tax Brackets</h3>
+              <p>Federal tax brackets can change from year to year. Your income can also change because of raises, overtime, job switches, or side income. If your old estimate still sits in your mind, it may be stale bread. A fresh Illinois income calculator helps you see your new paycheck based on current income. This matters more if you move from hourly to salary or receive a large raise. A new estimate helps protect your personal finances from guesswork.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Forgetting Illinois State Tax Withholding</h3>
+              <p>Workers moving from states with no income tax may forget Illinois withholding. That can make their expected paycheck look too high. Illinois does tax wage income, so Illinois paycheck with state income tax should be part of every estimate. This is why a paycheck calculator for Chicago workers, paycheck calculator for Springfield employees, Aurora Illinois paycheck calculator, and Naperville paycheck calculator should include state tax. If you compare Illinois with Washington or Florida, the <a href="https://www.obbacalculators.com/washington-paycheck-calculator" className="text-cyan-400 hover:underline">Washington Paycheck Calculator</a> shows how different state systems can change take-home pay.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Conclusion</h2>
+              <p>An Illinois Paycheck Calculator helps you understand what your paycheck may look like after taxes and deductions. It connects your gross pay with your real take-home pay. It also explains why federal income tax, Illinois state income tax, FICA taxes, and payroll deductions can reduce your final deposit.</p>
+              <p>That clarity matters in daily life. You can plan rent, food, bills, fuel, savings, and emergency money with more confidence. You can also compare job offers without being fooled by a shiny salary number. Whether you need an Illinois salary paycheck calculator, Illinois hourly paycheck calculator, Illinois wage calculator, or Illinois net salary estimator, the goal is the same. You want the real number that reaches your pocket.</p>
+            </div>
+          </article>
+
+          <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-white">FAQ</h2>
+            <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <p>Paycheck questions are common because payroll has many moving parts. Your salary may look simple, but taxes and deductions can make the final deposit feel confusing. A calculator helps, but knowing the "why" behind the number helps even more.</p>
+              <p>These answers explain the main questions Illinois workers often ask. They also help you use an Illinois payroll calculator, Illinois tax withholding calculator, or Illinois gross to net calculator with better accuracy.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does Illinois have a state income tax?</h3>
+              <p>Yes, Illinois has a state income tax. Illinois uses a flat income tax rate, which means the same general state tax rate applies to most regular individual income. Because of this, your Illinois paycheck after taxes should include Illinois income tax, federal tax, and FICA taxes. If you skip state tax, your estimate may look higher than your real paycheck.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How accurate is an Illinois paycheck calculator for estimating my take-home pay?</h3>
+              <p>An Illinois paycheck calculator can be very useful when your inputs are correct. It becomes more accurate when you enter the right gross pay, pay frequency, deductions, filing status, and withholding details. Still, your actual paycheck can vary because of employer payroll settings, benefit timing, post-tax deductions, overtime, or bonus payments. Treat the result as a strong estimate, not a payroll guarantee.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">What are FICA taxes, and why are they taken out of my check?</h3>
+              <p>FICA taxes are payroll taxes for Social Security and Medicare. Your employer withholds Social Security tax and Medicare tax from your wages. These taxes are separate from federal income tax and Illinois state income tax. They appear on most employee paychecks and reduce your final net pay.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How do pre-tax deductions like a 401(k) affect my Illinois paycheck?</h3>
+              <p>A 401(k) contribution can reduce your current paycheck because money is taken out for retirement. In many cases, it may also lower certain taxable income amounts. That means your take-home pay may fall, but your retirement savings can grow. The same idea may apply to some 403(b) contribution, FSA, HSA, and other pre-tax deductions.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does my filing status change how much I am paid in Illinois?</h3>
+              <p>Your filing status does not change your actual wage rate, but it can change your withholding. This mainly affects federal income tax withholding. A single worker and a married worker can have different withholding even with the same income. Illinois withholding may also change through your IL-W-4 form and allowances.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Why does my pay frequency matter when using an Illinois paycheck calculator?</h3>
+              <p>Your pay frequency changes how your yearly income is divided. Weekly pay creates more checks, while monthly pay creates fewer checks. Bi-weekly pay usually creates 26 checks per year, while semi-monthly pay usually creates 24. That difference can affect your monthly budget, especially when rent, loans, and bills arrive on fixed dates.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Are bonuses taxed differently than regular salary in Illinois?</h3>
+              <p>Bonuses may be withheld differently because they are often treated as supplemental wages for payroll purposes. This can make a bonus check look smaller than expected. However, withholding is not always the same as your final yearly tax. When you file your return, your total income and tax situation are reviewed together.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">What should I do if my actual paycheck doesn&apos;t match the Illinois paycheck calculator results?</h3>
+              <p>First, compare your pay stub with the details you entered. Check gross pay, hours, deductions, federal tax withholding, Illinois tax withholding, benefits, and retirement contributions. Then review your W-4 form and IL-W-4 form. If the numbers still look wrong, contact payroll. A small setup issue can repeat every pay period if nobody catches it.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">OBBBA Tax Calculators</h3>
+              <p>OBBBA tools can help you compare paycheck estimates across different states and income situations. You can use the <a href="https://www.obbacalculators.com/illinois-paycheck-calculator" className="text-cyan-400 hover:underline">Illinois Paycheck Calculator</a> for Illinois wages, the <a href="https://www.obbacalculators.com/california-paycheck-calculator" className="text-cyan-400 hover:underline">California Paycheck Calculator</a> for California income, the <a href="https://www.obbacalculators.com/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</a> for Texas earnings, the <a href="https://www.obbacalculators.com/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</a> for Florida workers, the <a href="https://www.obbacalculators.com/washington-paycheck-calculator" className="text-cyan-400 hover:underline">Washington Paycheck Calculator</a> for Washington pay, the <a href="https://www.obbacalculators.com/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</a> for Indiana estimates, the <a href="https://www.obbacalculators.com/virginia-paycheck-calculator" className="text-cyan-400 hover:underline">Virginia Paycheck Calculator</a> for Virginia wages, the <a href="https://www.obbacalculators.com/hawaii-paycheck-calculator" className="text-cyan-400 hover:underline">Hawaii Paycheck Calculator</a> for Hawaii income, the <a href="https://www.obbacalculators.com/nebraska-paycheck-calculator" className="text-cyan-400 hover:underline">Nebraska Paycheck Calculator</a> for Nebraska earnings, the <a href="https://www.obbacalculators.com/salary-calculator" className="text-cyan-400 hover:underline">Salary Calculator</a> for salary conversions, the <a href="https://www.obbacalculators.com/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</a> for general paycheck planning, and the <a href="https://www.obbacalculators.com/no-tax-on-overtime-calculator" className="text-cyan-400 hover:underline">No Tax on Overtime</a> tool for overtime-focused estimates.</p>
+            </div>
+          </article>
+        </>
+      )}
     </main>
   );
 }
@@ -3849,6 +5987,12 @@ function AboutUsPage({ isDark }) {
             <Link to="/texas-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Texas Paycheck Calculator</Link>
             <Link to="/florida-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Florida Paycheck Calculator</Link>
             <Link to="/california-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open California Paycheck Calculator</Link>
+            <Link to="/illinois-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Illinois Paycheck Calculator</Link>
+            <Link to="/washington-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Washington Paycheck Calculator</Link>
+            <Link to="/indiana-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Indiana Paycheck Calculator</Link>
+            <Link to="/virginia-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Virginia Paycheck Calculator</Link>
+            <Link to="/hawaii-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Hawaii Paycheck Calculator</Link>
+            <Link to="/nebraska-paycheck-calculator" className="rounded-xl bg-cyan-500 px-4 py-2 text-center font-semibold text-slate-950">Open Nebraska Paycheck Calculator</Link>
           </div>
 
           <h2 className="text-xl font-bold">Methodology and Scope</h2>
@@ -3895,6 +6039,7 @@ function CalcShell({ title, children, isDark }) { return <main className="mx-aut
 export default function App() {
   const [isDark, setIsDark] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [footerMoreOpen, setFooterMoreOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -3933,6 +6078,36 @@ export default function App() {
         title: 'California Paycheck Calculator | Estimate Take-Home Pay',
         description: 'Use this California Paycheck Calculator to estimate your take-home pay after federal tax, California income tax, SDI, FICA, and payroll deductions.',
         canonicalPath: '/california-paycheck-calculator',
+      },
+      '/illinois-paycheck-calculator': {
+        title: 'Illinois Paycheck Calculator - Estimate Your Take-Home Pay',
+        description: 'Use this Illinois Paycheck Calculator to estimate your take-home pay after federal tax, Illinois flat 4.95% state income tax, and FICA deductions.',
+        canonicalPath: '/illinois-paycheck-calculator',
+      },
+      '/washington-paycheck-calculator': {
+        title: 'Washington Paycheck Calculator - Estimate Your Take-Home Pay',
+        description: 'Use this Washington Paycheck Calculator to estimate take-home pay after federal tax, WA Cares Fund (0.58%), Paid Family & Medical Leave (0.53%), and FICA deductions.',
+        canonicalPath: '/washington-paycheck-calculator',
+      },
+      '/indiana-paycheck-calculator': {
+        title: 'Indiana Paycheck Calculator - Estimate Your Take-Home Pay',
+        description: 'Use this Indiana Paycheck Calculator to estimate your take-home pay after federal tax, Indiana flat 3.05% state income tax, and FICA deductions.',
+        canonicalPath: '/indiana-paycheck-calculator',
+      },
+      '/virginia-paycheck-calculator': {
+        title: 'Virginia Paycheck Calculator - Estimate Your Take-Home Pay',
+        description: 'Use this Virginia Paycheck Calculator to estimate your take-home pay after federal tax, Virginia progressive state income tax, and FICA deductions.',
+        canonicalPath: '/virginia-paycheck-calculator',
+      },
+      '/hawaii-paycheck-calculator': {
+        title: 'Hawaii Paycheck Calculator - Estimate Your Take-Home Pay',
+        description: 'Use this Hawaii Paycheck Calculator to estimate your take-home pay after federal tax, Hawaii progressive state income tax, and FICA deductions.',
+        canonicalPath: '/hawaii-paycheck-calculator',
+      },
+      '/nebraska-paycheck-calculator': {
+        title: 'Nebraska Paycheck Calculator - Estimate Your Take-Home Pay',
+        description: 'Use this Nebraska Paycheck Calculator to estimate your take-home pay after federal tax, Nebraska progressive state income tax, and FICA deductions.',
+        canonicalPath: '/nebraska-paycheck-calculator',
       },
       '/faq': {
         title: 'FAQ - OBBBA Tax Calculators',
@@ -4011,6 +6186,12 @@ export default function App() {
       '/texas-paycheck-calculator': 'Texas Paycheck Calculator',
       '/florida-paycheck-calculator': 'Florida Paycheck Calculator',
       '/california-paycheck-calculator': 'California Paycheck Calculator',
+      '/illinois-paycheck-calculator': 'Illinois Paycheck Calculator',
+      '/washington-paycheck-calculator': 'Washington Paycheck Calculator',
+      '/indiana-paycheck-calculator': 'Indiana Paycheck Calculator',
+      '/virginia-paycheck-calculator': 'Virginia Paycheck Calculator',
+      '/hawaii-paycheck-calculator': 'Hawaii Paycheck Calculator',
+      '/nebraska-paycheck-calculator': 'Nebraska Paycheck Calculator',
       '/faq': 'FAQ',
       '/faqs': 'FAQ',
       '/about-us': 'About Us',
@@ -4092,6 +6273,12 @@ export default function App() {
           <Route path="/texas-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Texas" />} />
           <Route path="/florida-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Florida" />} />
           <Route path="/california-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="California" />} />
+          <Route path="/illinois-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Illinois" />} />
+          <Route path="/washington-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Washington" />} />
+          <Route path="/indiana-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Indiana" />} />
+          <Route path="/virginia-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Virginia" />} />
+          <Route path="/hawaii-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Hawaii" />} />
+          <Route path="/nebraska-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Nebraska" />} />
           <Route path="/about-us" element={<AboutUsPage isDark={isDark} />} />
           <Route path="/faq" element={<FAQPage isDark={isDark} />} />
           <Route path="/faqs" element={<FAQPage isDark={isDark} />} />
@@ -4118,9 +6305,26 @@ export default function App() {
                 <p><Link to="/paycheck-calculator" className="hover:text-cyan-400">Paycheck Calculator</Link></p>
                 <p><Link to="/texas-paycheck-calculator" className="hover:text-cyan-400">Texas Paycheck</Link></p>
                 <p><Link to="/florida-paycheck-calculator" className="hover:text-cyan-400">Florida Paycheck</Link></p>
-                <p><Link to="/california-paycheck-calculator" className="hover:text-cyan-400">California Paycheck</Link></p>
-                <p><Link to="/faq" className="hover:text-cyan-400">FAQ</Link></p>
-                <p><Link to="/about-us" className="hover:text-cyan-400">About Us</Link></p>
+                {footerMoreOpen && (
+                  <>
+                    <p><Link to="/california-paycheck-calculator" className="hover:text-cyan-400">California Paycheck</Link></p>
+                    <p><Link to="/illinois-paycheck-calculator" className="hover:text-cyan-400">Illinois Paycheck</Link></p>
+                    <p><Link to="/washington-paycheck-calculator" className="hover:text-cyan-400">Washington Paycheck</Link></p>
+                    <p><Link to="/indiana-paycheck-calculator" className="hover:text-cyan-400">Indiana Paycheck</Link></p>
+                    <p><Link to="/virginia-paycheck-calculator" className="hover:text-cyan-400">Virginia Paycheck</Link></p>
+                    <p><Link to="/hawaii-paycheck-calculator" className="hover:text-cyan-400">Hawaii Paycheck</Link></p>
+                    <p><Link to="/nebraska-paycheck-calculator" className="hover:text-cyan-400">Nebraska Paycheck</Link></p>
+                    <p><Link to="/faq" className="hover:text-cyan-400">FAQ</Link></p>
+                    <p><Link to="/about-us" className="hover:text-cyan-400">About Us</Link></p>
+                  </>
+                )}
+                <button
+                  onClick={() => setFooterMoreOpen(!footerMoreOpen)}
+                  className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm mt-1"
+                >
+                  {footerMoreOpen ? 'See Less' : 'See More'}
+                  <ChevronDown size={13} className={`transition-transform duration-200 ${footerMoreOpen ? 'rotate-180' : ''}`} />
+                </button>
               </div>
             </div>
             <div className="space-y-3">
