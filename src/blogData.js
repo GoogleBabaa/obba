@@ -7,7 +7,7 @@ export const blogs = [
     content: `
 <h2>What Is FICA Tax?</h2>
 <p>FICA stands for the Federal Insurance Contributions Act. It is a federal payroll tax that funds two major U.S. social programs: Social Security and Medicare. Every time you receive a paycheck, a portion of your gross earnings is automatically withheld for FICA before you ever see the money.</p>
-<p>Unlike federal income tax, which varies based on your filing status and deductions, FICA is a flat percentage applied to all covered wages. There is no way to opt out of FICA if you are a W-2 employee in the United States.</p>
+<p>Unlike <a href="/blogs/how-federal-income-tax-brackets-work" class="text-cyan-400 hover:underline">federal income tax</a>, which varies based on your filing status and deductions, FICA is a flat percentage applied to all covered wages. There is no way to opt out of FICA if you are a W-2 employee in the United States.</p>
 
 <h2>How Much Is FICA Tax?</h2>
 <p>FICA is split into two parts:</p>
@@ -15,7 +15,7 @@ export const blogs = [
   <li><strong>Social Security Tax:</strong> 6.2% on wages up to the annual wage base limit ($176,100 in 2025)</li>
   <li><strong>Medicare Tax:</strong> 1.45% on all wages with no cap</li>
 </ul>
-<p>Together, that is 7.65% taken from your paycheck every pay period. Your employer also matches this 7.65%, meaning the total contribution per employee is 15.3% of gross wages.</p>
+<p>Together, that is 7.65% taken from your paycheck every pay period. Your employer also matches this 7.65%, meaning the total contribution per employee is 15.3% of gross wages. If you work overtime hours, our <a href="/overtime" class="text-cyan-400 hover:underline">no tax on overtime calculator</a> shows exactly how FICA applies to those extra earnings.</p>
 
 <h2>What Does FICA Fund?</h2>
 <p>The Social Security portion funds retirement benefits, disability payments, and survivor benefits for families of deceased workers. The Medicare portion funds hospital insurance for people aged 65 and older, as well as some younger individuals with disabilities.</p>
@@ -31,7 +31,7 @@ export const blogs = [
 <p>On your pay stub, FICA appears as two separate line items: "Social Security" or "OASDI" and "Medicare." Check these numbers against your gross pay to verify your employer is withholding the correct amounts.</p>
 
 <h2>Key Takeaway</h2>
-<p>FICA is not optional, but understanding it helps you plan better. Use a paycheck calculator to see exactly how FICA affects your take-home pay based on your gross salary and pay frequency.</p>
+<p>FICA is not optional, but understanding it helps you plan better. Use a <a href="/paycheck-calculator" class="text-cyan-400 hover:underline">paycheck calculator</a> to see exactly how FICA affects your take-home pay based on your gross salary and pay frequency. You can also use a <a href="/salary-calculator" class="text-cyan-400 hover:underline">salary calculator</a> to estimate your full annual take-home after FICA and all other deductions.</p>
     `,
   },
   {
@@ -73,8 +73,8 @@ export const blogs = [
 <p>For example, someone earning $80,000 as a single filer in 2026 would have a marginal rate of 22% but an effective rate closer to 12% to 14% after accounting for the standard deduction and lower bracket protection.</p>
 
 <h2>Why This Matters for Paycheck Planning</h2>
-<p>Understanding your marginal rate helps you make smarter decisions about pre-tax deductions like 401(k) contributions, HSA contributions, and other benefits. Every pre-tax dollar you contribute reduces your taxable income at your marginal rate — which is your highest rate.</p>
-<p>Use a paycheck calculator to see how different contribution levels affect your take-home pay and your estimated federal tax bill across the year.</p>
+<p>Understanding your marginal rate helps you make smarter decisions about pre-tax deductions like 401(k) contributions, HSA contributions, and other benefits. Every pre-tax dollar you contribute reduces your taxable income at your marginal rate — which is your highest rate. Keep in mind that <a href="/blogs/what-is-fica-tax" class="text-cyan-400 hover:underline">FICA taxes</a> are calculated separately and apply to all wages regardless of your income tax bracket.</p>
+<p>Use a <a href="/paycheck-calculator" class="text-cyan-400 hover:underline">paycheck calculator</a> to see how different contribution levels affect your take-home pay and your estimated federal tax bill across the year. If overtime is part of your income, our <a href="/overtime" class="text-cyan-400 hover:underline">no tax on overtime calculator</a> shows how extra hours interact with your bracket — and a <a href="/salary-calculator" class="text-cyan-400 hover:underline">salary calculator</a> can project your full annual income across all sources.</p>
     `,
   },
 ];
