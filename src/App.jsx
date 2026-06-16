@@ -5698,6 +5698,15 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
         <>
           <article className="rounded-3xl border border-white/10 p-6 sm:p-8 mt-6">
             <div className={`space-y-4 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <h2 className="text-2xl font-bold pt-2 text-white">Illinois Paycheck Quick Facts</h2>
+              <ul className="list-disc pl-5 space-y-2">
+                <li><strong>State Income Tax Rate:</strong> 4.95%</li>
+                <li><strong>Local Income Tax:</strong> None</li>
+                <li><strong>Median Household Income:</strong> $83,211</li>
+                <li><strong>Supported Pay Frequencies:</strong> Weekly, Bi-Weekly, Semi-Monthly, and Monthly</li>
+                <li><strong>Common Payroll Deductions:</strong> Federal Income Tax, Social Security, Medicare, Retirement Contributions, and Health Insurance</li>
+              </ul>
+
               <p>For many workers, the hardest question is simple: how much tax comes out of paycheck in Illinois? The answer depends on your income, pay frequency, filing status, federal tax withholding, Illinois tax withholding, FICA taxes, and deductions. A strong Illinois paycheck calculator works like a financial flashlight. It shines on the gap between gross salary and net income, so you know what you can actually spend, save, or invest.</p>
 
               <h2 className="text-2xl font-bold pt-2 text-white">Understanding How the Illinois Paycheck Calculator Works</h2>
@@ -5742,6 +5751,36 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
 
               <h3 className="text-xl font-semibold pt-2 text-white">How Illinois State Income Tax Affects Your Paycheck</h3>
               <p>Illinois state income tax reduces your paycheck because employers withhold it from most taxable wages. The state uses a 4.95% income tax rate for regular individual income, so your Illinois state income tax deduction is an important part of the paycheck estimate. This is where an Illinois tax withholding calculator becomes helpful. It lets you see Illinois paycheck with state income tax instead of only seeing federal deductions. For workers who want a broader estimate beyond one state, the <Link to="/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</Link> can help compare different income situations.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Illinois Salary and Take-Home Pay Examples</h2>
+              <p>The following examples provide a general estimate of how taxes and deductions may affect your take-home pay in Illinois.</p>
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Annual Salary</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Estimated Monthly Take Home Pay</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['$40,000', '$2,650 - $2,850'],
+                      ['$60,000', '$3,850 - $4,150'],
+                      ['$80,000', '$5,000 - $5,400'],
+                      ['$100,000', '$6,100 - $6,700'],
+                    ].map(([salary, takehome]) => (
+                      <tr key={salary} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{salary}</td>
+                        <td className="border border-slate-500 px-3 py-2">{takehome}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p>Actual take-home pay depends on your filing status, retirement contributions, insurance deductions, and other payroll adjustments.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Illinois Salary Calculator vs Illinois Paycheck Calculator</h2>
+              <p>Many workers confuse a salary calculator with a paycheck calculator. A <Link to="/salary-calculator" className="text-cyan-400 hover:underline">salary calculator</Link> focuses on annual, monthly, or hourly earnings, while an Illinois paycheck calculator estimates the amount you actually receive after taxes and deductions. Using both tools can help you better understand your income and financial planning.</p>
 
               <h2 className="text-2xl font-bold pt-2 text-white">How to Use an Illinois Paycheck Calculator Effectively</h2>
               <p>A calculator gives better results when you enter clean information. Think of it like cooking. If the ingredients are wrong, the final dish will not taste right. Your gross pay, work hours, pay frequency, deductions, and tax settings must match your real job details. Otherwise, your paycheck estimate may look neat but still miss the mark.</p>
@@ -5834,6 +5873,32 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
               <h3 className="text-xl font-semibold pt-2 text-white">The Impact of Filing Status and Allowances</h3>
               <p>Your filing status affects how much federal tax is withheld. Single, married filing jointly, and head of household can produce different paycheck results. Illinois allowances can also affect state withholding through your Illinois W-4 form. If the forms are outdated, your paycheck may not match your real tax situation. This is common after marriage, divorce, a new child, a second job, or a raise. Small form changes can create a noticeable shift in your monthly net pay.</p>
 
+              <h2 className="text-2xl font-bold pt-2 text-white">Illinois Paycheck Tax Breakdown</h2>
+              <div className="overflow-x-auto">
+                <table className={`w-full text-xs border-collapse ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  <thead>
+                    <tr className={isDark ? 'bg-slate-700' : 'bg-slate-200'}>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Tax Type</th>
+                      <th className="border border-slate-500 px-3 py-2 text-left">Typical Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Federal Income Tax', 'Varies by Income'],
+                      ['Illinois State Tax', '4.95%'],
+                      ['Social Security Tax', '6.2%'],
+                      ['Medicare Tax', '1.45%'],
+                    ].map(([tax, rate]) => (
+                      <tr key={tax} className={isDark ? 'even:bg-slate-800' : 'even:bg-slate-50'}>
+                        <td className="border border-slate-500 px-3 py-2">{tax}</td>
+                        <td className="border border-slate-500 px-3 py-2">{rate}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p>The Illinois Paycheck Calculator automatically estimates these deductions to provide a more accurate net pay estimate.</p>
+
               <h2 className="text-2xl font-bold pt-2 text-white">Common Mistakes When Calculating Your Paycheck</h2>
               <p>Paycheck mistakes often come from tiny details. People enter the right salary but choose the wrong pay schedule. They remember federal tax but forget Illinois tax. They include regular wages but ignore overtime pay or bonuses. These mistakes can turn a helpful estimate into a misleading number.</p>
               <p>The smarter move is to treat your calculator result as a paycheck rehearsal. You enter the right data, review each deduction, and test different income scenarios. If you work extra hours often, the <Link to="/overtime" className="text-cyan-400 hover:underline">No Tax on Overtime</Link> tool can help you think about overtime planning. If you compare nearby states, the <Link to="/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</Link> can give another useful view.</p>
@@ -5849,6 +5914,27 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
 
               <h3 className="text-xl font-semibold pt-2 text-white">Forgetting Illinois State Tax Withholding</h3>
               <p>Workers moving from states with no income tax may forget Illinois withholding. That can make their expected paycheck look too high. Illinois does tax wage income, so Illinois paycheck with state income tax should be part of every estimate. This is why a paycheck calculator for Chicago workers, paycheck calculator for Springfield employees, Aurora Illinois paycheck calculator, and Naperville paycheck calculator should include state tax. If you compare Illinois with Washington or Florida, the <Link to="/washington-paycheck-calculator" className="text-cyan-400 hover:underline">Washington Paycheck Calculator</Link> shows how different state systems can change take-home pay.</p>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Related Paycheck Calculators</h2>
+              <ul className="list-disc pl-5 space-y-2">
+                <li><Link to="/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</Link></li>
+                <li><Link to="/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</Link></li>
+                <li><Link to="/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</Link></li>
+                <li><Link to="/california-paycheck-calculator" className="text-cyan-400 hover:underline">California Paycheck Calculator</Link></li>
+                <li><Link to="/washington-paycheck-calculator" className="text-cyan-400 hover:underline">Washington Paycheck Calculator</Link></li>
+                <li><Link to="/virginia-paycheck-calculator" className="text-cyan-400 hover:underline">Virginia Paycheck Calculator</Link></li>
+              </ul>
+
+              <h2 className="text-2xl font-bold pt-2 text-white">Sources and Tax References</h2>
+              <p>The calculations and estimates provided on this page are based on publicly available tax and payroll information from trusted government agencies and payroll resources.</p>
+              <p className="font-medium">References:</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Internal Revenue Service (IRS)</li>
+                <li>Illinois Department of Revenue</li>
+                <li>Social Security Administration</li>
+                <li>U.S. Department of Labor</li>
+              </ul>
+              <p>Tax laws and withholding requirements may change over time. For personalized tax advice, consult a qualified tax professional.</p>
 
               <h2 className="text-2xl font-bold pt-2 text-white">Conclusion</h2>
               <p>An Illinois Paycheck Calculator helps you understand what your paycheck may look like after taxes and deductions. It connects your gross pay with your real take-home pay. It also explains why federal income tax, Illinois state income tax, FICA taxes, and payroll deductions can reduce your final deposit.</p>
@@ -5885,6 +5971,15 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
 
               <h3 className="text-xl font-semibold pt-2 text-white">What should I do if my actual paycheck doesn&apos;t match the Illinois paycheck calculator results?</h3>
               <p>First, compare your pay stub with the details you entered. Check gross pay, hours, deductions, federal tax withholding, Illinois tax withholding, benefits, and retirement contributions. Then review your W-4 form and IL-W-4 form. If the numbers still look wrong, contact payroll. A small setup issue can repeat every pay period if nobody catches it.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Is Illinois a good state for employees?</h3>
+              <p>Illinois offers a simple flat income tax structure, making paycheck calculations easier than in many states with multiple tax brackets.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">Does Illinois have local income tax?</h3>
+              <p>No. Illinois does not impose local income taxes at the city level, which simplifies payroll deductions for employees.</p>
+
+              <h3 className="text-xl font-semibold pt-2 text-white">How accurate is an Illinois Paycheck Calculator?</h3>
+              <p>An Illinois Paycheck Calculator provides a close estimate of your take-home pay based on salary, filing status, deductions, and tax rates. Actual paycheck amounts may vary depending on employer-specific deductions.</p>
 
               <h3 className="text-xl font-semibold pt-2 text-white">OBBBA Tax Calculators</h3>
               <p>OBBBA tools can help you compare paycheck estimates across different states and income situations. You can use the <Link to="/illinois-paycheck-calculator" className="text-cyan-400 hover:underline">Illinois Paycheck Calculator</Link> for Illinois wages, the <Link to="/california-paycheck-calculator" className="text-cyan-400 hover:underline">California Paycheck Calculator</Link> for California income, the <Link to="/texas-paycheck-calculator" className="text-cyan-400 hover:underline">Texas Paycheck Calculator</Link> for Texas earnings, the <Link to="/florida-paycheck-calculator" className="text-cyan-400 hover:underline">Florida Paycheck Calculator</Link> for Florida workers, the <Link to="/washington-paycheck-calculator" className="text-cyan-400 hover:underline">Washington Paycheck Calculator</Link> for Washington pay, the <Link to="/indiana-paycheck-calculator" className="text-cyan-400 hover:underline">Indiana Paycheck Calculator</Link> for Indiana estimates, the <Link to="/virginia-paycheck-calculator" className="text-cyan-400 hover:underline">Virginia Paycheck Calculator</Link> for Virginia wages, the <Link to="/hawaii-paycheck-calculator" className="text-cyan-400 hover:underline">Hawaii Paycheck Calculator</Link> for Hawaii income, the <Link to="/nebraska-paycheck-calculator" className="text-cyan-400 hover:underline">Nebraska Paycheck Calculator</Link> for Nebraska earnings, the <Link to="/salary-calculator" className="text-cyan-400 hover:underline">Salary Calculator</Link> for salary conversions, the <Link to="/paycheck-calculator" className="text-cyan-400 hover:underline">Paycheck Calculator</Link> for general paycheck planning, and the <Link to="/overtime" className="text-cyan-400 hover:underline">No Tax on Overtime</Link> tool for overtime-focused estimates.</p>
