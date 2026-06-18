@@ -1,0 +1,120 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { pageSeoByPath, SITE_URL } from '../src/seoConfig.js';
+import { blogs } from '../src/blogData.js';
+
+const distDir = path.resolve('dist');
+const baseIndexPath = path.join(distDir, 'index.html');
+const today = new Date().toISOString().slice(0, 10);
+
+if (!fs.existsSync(baseIndexPath)) {
+  throw new Error('dist/index.html not found. Run vite build before prerendering SEO pages.');
+}
+
+const baseHtml = fs.readFileSync(baseIndexPath, 'utf8');
+
+function escapeHtml(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function jsonLd(data) {
+  return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
+function normalizePath(routePath) {
+  if (routePath === '/') return '/';
+  return `/${routePath.replace(/^\/+|\/+$/g, '')}`;
+}
+
+function routeToFile(routePath) {
+  if (routePath === '/') return baseIndexPath;
+  return path.join(distDir, routePath.replace(/^\//, ''), 'index.html');
+}
+
+function stripExistingSeo(head) {
+  return head
+    .replace(/\s*<title>[\s\S]*?<\/title>/i, '')
+    .replace(/\s*<meta\s+name=["']description["'][^>]*>/gi, '')
+    .replace(/\s*<meta\s+name=["']keywords["'][^>]*>/gi, '')
+    .replace(/\s*<meta\s+name=["']robots["'][^>]*>/gi, '')
+    .replace(/\s*<meta\s+property=["']og:[^"']+["'][^>]*>/gi, '')
+    .replace(/\s*<meta\s+name=["']twitter:[^"']+["'][^>]*>/gi, '')
+    .replace(/\s*<link\s+rel=["']canonical["'][^>]*>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']page-webpage-schema["'][\s\S]*?<\/script>/gi, '');
+}
+
+function buildSeoTags(seo) {
+  const canonicalUrl = `${SITE_URL}${seo.canonicalPath}`;
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: seo.title,
+    description: seo.description,
+    url: canonicalUrl,
+    inLanguage: 'en-US',
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'OBBBA Tax Calculators',
+      url: SITE_URL,
+    },
+  };
+
+  const keywords = seo.keywords ? `\n    <meta name="keywords" content="${escapeHtml(seo.keywords)}" />` : '';
+
+  return `
+    <title>${escapeHtml(seo.title)}</title>
+    <meta name="description" content="${escapeHtml(seo.description)}" />${keywords}
+    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+    <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
+    <meta property="og:title" content="${escapeHtml(seo.title)}" />
+    <meta property="og:description" content="${escapeHtml(seo.description)}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
+    <meta property="og:site_name" content="OBBBA Tax Calculators" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${escapeHtml(seo.title)}" />
+    <meta name="twitter:description" content="${escapeHtml(seo.description)}" />
+    <script type="application/ld+json" id="page-webpage-schema">${jsonLd(schema)}</script>`;
+}
+
+function renderHtml(seo) {
+  return baseHtml.replace(/<head>([\s\S]*?)<\/head>/i, (_match, headContent) => {
+    const cleanedHead = stripExistingSeo(headContent);
+    return `<head>${buildSeoTags(seo)}${cleanedHead}\n  </head>`;
+  });
+}
+
+const routes = new Map(Object.entries(pageSeoByPath));
+for (const post of blogs) {
+  routes.set(`/blogs/${post.slug}`, {
+    title: `${post.title} | OBBA Calculators`,
+    description: post.excerpt,
+    canonicalPath: `/blogs/${post.slug}`,
+  });
+}
+
+for (const [rawPath, seo] of routes) {
+  const routePath = normalizePath(rawPath);
+  const filePath = routeToFile(routePath);
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, renderHtml(seo), 'utf8');
+}
+
+const sitemapEntries = [...routes.values()]
+  .filter((seo, index, list) => list.findIndex((item) => item.canonicalPath === seo.canonicalPath) === index)
+  .map((seo) => {
+    const priority = seo.canonicalPath === '/' ? '1.0' : seo.canonicalPath.startsWith('/blogs/') ? '0.7' : '0.9';
+    const changefreq = seo.canonicalPath.startsWith('/blogs/') ? 'monthly' : 'weekly';
+    return `  <url>\n    <loc>${SITE_URL}${seo.canonicalPath}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+  })
+  .join('\n');
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n`;
+fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap, 'utf8');
+fs.writeFileSync(path.join('public', 'sitemap.xml'), sitemap, 'utf8');
+
+console.log(`Prerendered SEO HTML for ${routes.size} routes.`);

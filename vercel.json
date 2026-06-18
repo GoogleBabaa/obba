@@ -3,9 +3,28 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/overtime", "destination": "/overtime/index.html" },
+    { "source": "/salary-calculator", "destination": "/salary-calculator/index.html" },
+    { "source": "/paycheck-calculator", "destination": "/paycheck-calculator/index.html" },
+    { "source": "/texas-paycheck-calculator", "destination": "/texas-paycheck-calculator/index.html" },
+    { "source": "/florida-paycheck-calculator", "destination": "/florida-paycheck-calculator/index.html" },
+    { "source": "/california-paycheck-calculator", "destination": "/california-paycheck-calculator/index.html" },
+    { "source": "/illinois-paycheck-calculator", "destination": "/illinois-paycheck-calculator/index.html" },
+    { "source": "/washington-paycheck-calculator", "destination": "/washington-paycheck-calculator/index.html" },
+    { "source": "/indiana-paycheck-calculator", "destination": "/indiana-paycheck-calculator/index.html" },
+    { "source": "/virginia-paycheck-calculator", "destination": "/virginia-paycheck-calculator/index.html" },
+    { "source": "/hawaii-paycheck-calculator", "destination": "/hawaii-paycheck-calculator/index.html" },
+    { "source": "/nebraska-paycheck-calculator", "destination": "/nebraska-paycheck-calculator/index.html" },
+    { "source": "/faq", "destination": "/faq/index.html" },
+    { "source": "/faqs", "destination": "/faqs/index.html" },
+    { "source": "/about-us", "destination": "/about-us/index.html" },
+    { "source": "/privacy-policy", "destination": "/privacy-policy/index.html" },
+    { "source": "/terms-conditions", "destination": "/terms-conditions/index.html" },
+    { "source": "/contact-us", "destination": "/contact-us/index.html" },
+    { "source": "/blogs", "destination": "/blogs/index.html" },
+    { "source": "/blogs/what-is-fica-tax", "destination": "/blogs/what-is-fica-tax/index.html" },
+    { "source": "/blogs/how-federal-income-tax-brackets-work", "destination": "/blogs/how-federal-income-tax-brackets-work/index.html" },
+    { "source": "/blogs/florida-paycheck-calculator-guide", "destination": "/blogs/florida-paycheck-calculator-guide/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
