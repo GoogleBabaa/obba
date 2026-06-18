@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { BarChart3, ChevronDown, Menu, Moon, Sun, X } from 'lucide-react';
 import { breadcrumbLabelsByPath, pageSeoByPath } from './seoConfig';
+import { blogs } from './blogData';
 const FAQPage = lazy(() => import('./FAQPage'));
 const BlogsPage = lazy(() => import('./BlogsPage'));
 const BlogPost = lazy(() => import('./BlogPost'));
@@ -6594,7 +6595,9 @@ export default function App() {
     if (old) old.remove();
 
     const path = location.pathname;
-    const pageLabel = breadcrumbLabelsByPath[path];
+    const blogSlug = path.startsWith('/blogs/') ? path.split('/').filter(Boolean).at(-1) : null;
+    const blogPost = blogSlug ? blogs.find((post) => post.slug === blogSlug) : null;
+    const pageLabel = blogPost?.title || breadcrumbLabelsByPath[path];
     if (!pageLabel) return;
 
     const items = [
@@ -6612,7 +6615,20 @@ export default function App() {
       },
     ];
 
-    if (path !== '/') {
+    if (blogPost) {
+      items.push({
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Knowledge Hub',
+        item: `${window.location.origin}/blogs`,
+      });
+      items.push({
+        '@type': 'ListItem',
+        position: 4,
+        name: pageLabel,
+        item: `${window.location.origin}${path}`,
+      });
+    } else if (path !== '/') {
       items.push({
         '@type': 'ListItem',
         position: 3,
