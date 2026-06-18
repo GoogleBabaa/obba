@@ -118,3 +118,26 @@ export const pageSeoByPath = {
     canonicalPath: '/blogs',
   },
 };
+
+export const breadcrumbLabelsByPath = {
+  '/': 'Home',
+  '/overtime': 'No Tax on Overtime Calculator',
+  '/salary-calculator': 'Salary Calculator',
+  '/paycheck-calculator': 'Paycheck Calculator',
+  '/texas-paycheck-calculator': 'Texas Paycheck Calculator',
+  '/florida-paycheck-calculator': 'Florida Paycheck Calculator',
+  '/california-paycheck-calculator': 'California Paycheck Calculator',
+  '/illinois-paycheck-calculator': 'Illinois Paycheck Calculator',
+  '/washington-paycheck-calculator': 'Washington Paycheck Calculator',
+  '/indiana-paycheck-calculator': 'Indiana Paycheck Calculator',
+  '/virginia-paycheck-calculator': 'Virginia Paycheck Calculator',
+  '/hawaii-paycheck-calculator': 'Hawaii Paycheck Calculator',
+  '/nebraska-paycheck-calculator': 'Nebraska Paycheck Calculator',
+  '/faq': 'FAQ',
+  '/faqs': 'FAQ',
+  '/about-us': 'About Us',
+  '/privacy-policy': 'Privacy Policy',
+  '/terms-conditions': 'Terms & Conditions',
+  '/contact-us': 'Contact Us',
+  '/blogs': 'Knowledge Hub',
+};

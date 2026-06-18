@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { pageSeoByPath, SITE_URL } from '../src/seoConfig.js';
+import { breadcrumbLabelsByPath, pageSeoByPath, SITE_URL } from '../src/seoConfig.js';
 import { blogs } from '../src/blogData.js';
 
 const distDir = path.resolve('dist');
@@ -47,6 +47,59 @@ function stripExistingSeo(head) {
     .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']page-webpage-schema["'][\s\S]*?<\/script>/gi, '');
 }
 
+function buildBreadcrumbSchema(seo) {
+  const pathLabel = breadcrumbLabelsByPath[seo.canonicalPath] || seo.title.replace(/\s*\|\s*OBBA Calculators$/, '');
+  const items = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Website',
+      item: `${SITE_URL}/`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Home',
+      item: `${SITE_URL}/`,
+    },
+  ];
+
+  if (seo.canonicalPath.startsWith('/blogs/')) {
+    items.push({
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Knowledge Hub',
+      item: `${SITE_URL}/blogs`,
+    });
+    items.push({
+      '@type': 'ListItem',
+      position: 4,
+      name: pathLabel,
+      item: `${SITE_URL}${seo.canonicalPath}`,
+    });
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items,
+    };
+  }
+
+  if (seo.canonicalPath !== '/') {
+    items.push({
+      '@type': 'ListItem',
+      position: 3,
+      name: pathLabel,
+      item: `${SITE_URL}${seo.canonicalPath}`,
+    });
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items,
+  };
+}
+
 function buildSeoTags(seo) {
   const canonicalUrl = `${SITE_URL}${seo.canonicalPath}`;
   const schema = {
@@ -78,7 +131,8 @@ function buildSeoTags(seo) {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeHtml(seo.title)}" />
     <meta name="twitter:description" content="${escapeHtml(seo.description)}" />
-    <script type="application/ld+json" id="page-webpage-schema">${jsonLd(schema)}</script>`;
+    <script type="application/ld+json" id="page-webpage-schema">${jsonLd(schema)}</script>
+    <script type="application/ld+json" id="breadcrumb-schema">${jsonLd(buildBreadcrumbSchema(seo))}</script>`;
 }
 
 function renderHtml(seo) {

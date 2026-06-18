@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { BarChart3, ChevronDown, Menu, Moon, Sun, X } from 'lucide-react';
-import { pageSeoByPath } from './seoConfig';
+import { breadcrumbLabelsByPath, pageSeoByPath } from './seoConfig';
 const FAQPage = lazy(() => import('./FAQPage'));
 const BlogsPage = lazy(() => import('./BlogsPage'));
 const BlogPost = lazy(() => import('./BlogPost'));
@@ -6593,30 +6593,8 @@ export default function App() {
     const old = document.getElementById(breadcrumbId);
     if (old) old.remove();
 
-    const labels = {
-      '/': 'Home',
-      '/overtime': 'No Tax on Overtime Calculator',
-      '/salary-calculator': 'Salary Calculator',
-      '/paycheck-calculator': 'Paycheck Calculator',
-      '/texas-paycheck-calculator': 'Texas Paycheck Calculator',
-      '/florida-paycheck-calculator': 'Florida Paycheck Calculator',
-      '/california-paycheck-calculator': 'California Paycheck Calculator',
-      '/illinois-paycheck-calculator': 'Illinois Paycheck Calculator',
-      '/washington-paycheck-calculator': 'Washington Paycheck Calculator',
-      '/indiana-paycheck-calculator': 'Indiana Paycheck Calculator',
-      '/virginia-paycheck-calculator': 'Virginia Paycheck Calculator',
-      '/hawaii-paycheck-calculator': 'Hawaii Paycheck Calculator',
-      '/nebraska-paycheck-calculator': 'Nebraska Paycheck Calculator',
-      '/faq': 'FAQ',
-      '/faqs': 'FAQ',
-      '/about-us': 'About Us',
-      '/privacy-policy': 'Privacy Policy',
-      '/terms-conditions': 'Terms & Conditions',
-      '/contact-us': 'Contact Us',
-    };
-
     const path = location.pathname;
-    const pageLabel = labels[path];
+    const pageLabel = breadcrumbLabelsByPath[path];
     if (!pageLabel) return;
 
     const items = [
