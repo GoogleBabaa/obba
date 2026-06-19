@@ -23,7 +23,6 @@
     { "source": "/blogs", "destination": "/blogs/index.html" },
     { "source": "/blogs/what-is-fica-tax", "destination": "/blogs/what-is-fica-tax/index.html" },
     { "source": "/blogs/how-federal-income-tax-brackets-work", "destination": "/blogs/how-federal-income-tax-brackets-work/index.html" },
-    { "source": "/blogs/florida-paycheck-calculator-guide", "destination": "/blogs/florida-paycheck-calculator-guide/index.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/blogs/florida-paycheck-calculator-guide", "destination": "/blogs/florida-paycheck-calculator-guide/index.html" }
   ]
 }
