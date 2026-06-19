@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { breadcrumbLabelsByPath, pageSeoByPath, SITE_URL } from '../src/seoConfig.js';
-import { blogs } from '../src/blogData.js';
 
 const distDir = path.resolve('dist');
 const baseIndexPath = path.join(distDir, 'index.html');
@@ -64,26 +63,6 @@ function buildBreadcrumbSchema(seo) {
     },
   ];
 
-  if (seo.canonicalPath.startsWith('/blogs/')) {
-    items.push({
-      '@type': 'ListItem',
-      position: 3,
-      name: 'Knowledge Hub',
-      item: `${SITE_URL}/blogs`,
-    });
-    items.push({
-      '@type': 'ListItem',
-      position: 4,
-      name: pathLabel,
-      item: `${SITE_URL}${seo.canonicalPath}`,
-    });
-    return {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: items,
-    };
-  }
-
   if (seo.canonicalPath !== '/') {
     items.push({
       '@type': 'ListItem',
@@ -143,13 +122,6 @@ function renderHtml(seo) {
 }
 
 const routes = new Map(Object.entries(pageSeoByPath));
-for (const post of blogs) {
-  routes.set(`/blogs/${post.slug}`, {
-    title: `${post.title} | OBBA Calculators`,
-    description: post.excerpt,
-    canonicalPath: `/blogs/${post.slug}`,
-  });
-}
 
 for (const [rawPath, seo] of routes) {
   const routePath = normalizePath(rawPath);
@@ -161,8 +133,8 @@ for (const [rawPath, seo] of routes) {
 const sitemapEntries = [...routes.values()]
   .filter((seo, index, list) => list.findIndex((item) => item.canonicalPath === seo.canonicalPath) === index)
   .map((seo) => {
-    const priority = seo.canonicalPath === '/' ? '1.0' : seo.canonicalPath.startsWith('/blogs/') ? '0.7' : '0.9';
-    const changefreq = seo.canonicalPath.startsWith('/blogs/') ? 'monthly' : 'weekly';
+    const priority = seo.canonicalPath === '/' ? '1.0' : '0.9';
+    const changefreq = 'weekly';
     return `  <url>\n    <loc>${SITE_URL}${seo.canonicalPath}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
   })
   .join('\n');

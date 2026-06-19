@@ -2,10 +2,7 @@ import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { BarChart3, ChevronDown, Menu, Moon, Sun, X } from 'lucide-react';
 import { breadcrumbLabelsByPath, pageSeoByPath } from './seoConfig';
-import { blogs } from './blogData';
 const FAQPage = lazy(() => import('./FAQPage'));
-const BlogsPage = lazy(() => import('./BlogsPage'));
-const BlogPost = lazy(() => import('./BlogPost'));
 
 const BRACKETS = {
   single: [
@@ -514,7 +511,7 @@ function ficaForAnnualWages(annualWages, status) {
 
 function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
   const allLinks = [
-    ['Home', '/'], ['Overtime', '/overtime'], ['Salary', '/salary-calculator'], ['Paycheck', '/paycheck-calculator'], ['Texas Paycheck', '/texas-paycheck-calculator'], ['Florida Paycheck', '/florida-paycheck-calculator'], ['California Paycheck', '/california-paycheck-calculator'], ['Illinois Paycheck', '/illinois-paycheck-calculator'], ['Washington Paycheck', '/washington-paycheck-calculator'], ['Indiana Paycheck', '/indiana-paycheck-calculator'], ['Virginia Paycheck', '/virginia-paycheck-calculator'], ['Hawaii Paycheck', '/hawaii-paycheck-calculator'], ['Nebraska Paycheck', '/nebraska-paycheck-calculator'], ['Knowledge Hub', '/blogs'],
+    ['Home', '/'], ['Overtime', '/overtime'], ['Salary', '/salary-calculator'], ['Paycheck', '/paycheck-calculator'], ['Texas Paycheck', '/texas-paycheck-calculator'], ['Florida Paycheck', '/florida-paycheck-calculator'], ['California Paycheck', '/california-paycheck-calculator'], ['Illinois Paycheck', '/illinois-paycheck-calculator'], ['Washington Paycheck', '/washington-paycheck-calculator'], ['Indiana Paycheck', '/indiana-paycheck-calculator'], ['Virginia Paycheck', '/virginia-paycheck-calculator'], ['Hawaii Paycheck', '/hawaii-paycheck-calculator'], ['Nebraska Paycheck', '/nebraska-paycheck-calculator'],
   ];
   const mainLinks = allLinks.slice(0, 6);
   const moreLinks = allLinks.slice(6);
@@ -6595,9 +6592,7 @@ export default function App() {
     if (old) old.remove();
 
     const path = location.pathname;
-    const blogSlug = path.startsWith('/blogs/') ? path.split('/').filter(Boolean).at(-1) : null;
-    const blogPost = blogSlug ? blogs.find((post) => post.slug === blogSlug) : null;
-    const pageLabel = blogPost?.title || breadcrumbLabelsByPath[path];
+    const pageLabel = breadcrumbLabelsByPath[path];
     if (!pageLabel) return;
 
     const items = [
@@ -6615,20 +6610,7 @@ export default function App() {
       },
     ];
 
-    if (blogPost) {
-      items.push({
-        '@type': 'ListItem',
-        position: 3,
-        name: 'Knowledge Hub',
-        item: `${window.location.origin}/blogs`,
-      });
-      items.push({
-        '@type': 'ListItem',
-        position: 4,
-        name: pageLabel,
-        item: `${window.location.origin}${path}`,
-      });
-    } else if (path !== '/') {
+    if (path !== '/') {
       items.push({
         '@type': 'ListItem',
         position: 3,
@@ -6693,8 +6675,6 @@ export default function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicyPage isDark={isDark} />} />
           <Route path="/terms-conditions" element={<TermsConditionsPage isDark={isDark} />} />
           <Route path="/contact-us" element={<ContactUsPage isDark={isDark} />} />
-          <Route path="/blogs" element={<BlogsPage isDark={isDark} />} />
-          <Route path="/blogs/:slug" element={<BlogPost isDark={isDark} />} />
         </Routes>
       </Suspense>
       <footer className={`border-t ${isDark ? 'border-white/10 bg-slate-950/90' : 'border-slate-200 bg-slate-50'} py-10`}>
@@ -6725,7 +6705,6 @@ export default function App() {
                     <p><Link to="/hawaii-paycheck-calculator" className="hover:text-cyan-400">Hawaii Paycheck</Link></p>
                     <p><Link to="/nebraska-paycheck-calculator" className="hover:text-cyan-400">Nebraska Paycheck</Link></p>
                     <p><Link to="/faq" className="hover:text-cyan-400">FAQ</Link></p>
-                    <p><Link to="/blogs" className="hover:text-cyan-400">Knowledge Hub</Link></p>
                     <p><Link to="/about-us" className="hover:text-cyan-400">About Us</Link></p>
                   </>
                 )}

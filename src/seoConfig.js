@@ -105,12 +105,6 @@ export const pageSeoByPath = {
     description: 'Contact OBBBA Tax Calculators for support, corrections, policy requests, and calculator feedback across overtime, salary, and paycheck tools.',
     canonicalPath: '/contact-us',
   },
-  '/blogs': {
-    title: 'Knowledge Hub - Tax Calculator Guides & Articles',
-    description: 'Read guides on how to use tax calculators, understand payroll deductions, federal income tax brackets, and overtime calculations.',
-    keywords: 'How to use calculators',
-    canonicalPath: '/blogs',
-  },
 };
 
 export const breadcrumbLabelsByPath = {
@@ -132,5 +126,4 @@ export const breadcrumbLabelsByPath = {
   '/privacy-policy': 'Privacy Policy',
   '/terms-conditions': 'Terms & Conditions',
   '/contact-us': 'Contact Us',
-  '/blogs': 'Knowledge Hub',
 };
