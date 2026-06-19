@@ -85,12 +85,6 @@ export const pageSeoByPath = {
     keywords: 'How to use calculators, paycheck calculator guide, frequently asked questions',
     canonicalPath: '/faq',
   },
-  '/faqs': {
-    title: 'FAQ - OBBBA Tax Calculators',
-    description: 'Read frequently asked questions for OBBBA Tax Calculators covering overtime, salary, paycheck, Texas, and Florida paycheck estimation workflows.',
-    keywords: 'How to use calculators, paycheck calculator guide, frequently asked questions',
-    canonicalPath: '/faq',
-  },
   '/about-us': {
     title: 'About Us - OBBBA Tax Calculators',
     description: 'Learn about OBBBA Tax Calculators, our estimate methodology, active tools, SEO-focused resources, and planning scope for federal payroll calculations.',
@@ -134,7 +128,6 @@ export const breadcrumbLabelsByPath = {
   '/hawaii-paycheck-calculator': 'Hawaii Paycheck Calculator',
   '/nebraska-paycheck-calculator': 'Nebraska Paycheck Calculator',
   '/faq': 'FAQ',
-  '/faqs': 'FAQ',
   '/about-us': 'About Us',
   '/privacy-policy': 'Privacy Policy',
   '/terms-conditions': 'Terms & Conditions',

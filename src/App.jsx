@@ -6690,7 +6690,6 @@ export default function App() {
           <Route path="/nebraska-paycheck-calculator" element={<StatePaycheckCalculatorPage isDark={isDark} stateName="Nebraska" />} />
           <Route path="/about-us" element={<AboutUsPage isDark={isDark} />} />
           <Route path="/faq" element={<FAQPage isDark={isDark} />} />
-          <Route path="/faqs" element={<FAQPage isDark={isDark} />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage isDark={isDark} />} />
           <Route path="/terms-conditions" element={<TermsConditionsPage isDark={isDark} />} />
           <Route path="/contact-us" element={<ContactUsPage isDark={isDark} />} />

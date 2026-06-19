@@ -16,7 +16,6 @@
     { "source": "/hawaii-paycheck-calculator", "destination": "/hawaii-paycheck-calculator/index.html" },
     { "source": "/nebraska-paycheck-calculator", "destination": "/nebraska-paycheck-calculator/index.html" },
     { "source": "/faq", "destination": "/faq/index.html" },
-    { "source": "/faqs", "destination": "/faqs/index.html" },
     { "source": "/about-us", "destination": "/about-us/index.html" },
     { "source": "/privacy-policy", "destination": "/privacy-policy/index.html" },
     { "source": "/terms-conditions", "destination": "/terms-conditions/index.html" },
