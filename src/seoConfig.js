@@ -3,7 +3,7 @@ export const SITE_URL = 'https://www.obbacalculators.com';
 export const pageSeoByPath = {
   '/': {
     title: 'Best Paycheck & Tax Calculators 2026 | OBBA',
-    description: 'Calculate paychecks, taxes, payroll, and income instantly. Free U.S. calculators with fast, accurate results for smarter planning.',
+    description: 'See your real take-home pay in seconds with OBBA Calculators - paycheck, salary, overtime, state taxes, and money-saving tools in one modern view.',
     keywords: 'Tax Calculator',
     canonicalPath: '/',
   },
@@ -24,6 +24,12 @@ export const pageSeoByPath = {
     description: 'A Salary Paycheck Calculator estimates take-home pay after federal taxes, state taxes, FICA, and deductions. Enter salary, pay frequency, and filing status for a clear net pay estimate.',
     keywords: 'Paycheck Calculator',
     canonicalPath: '/paycheck-calculator',
+  },
+  '/states': {
+    title: 'State Paycheck Calculators | OBBA',
+    description: 'Choose a state paycheck calculator for Texas, Florida, California, Illinois, Washington, Indiana, Virginia, Hawaii, or Nebraska.',
+    keywords: 'State paycheck calculators',
+    canonicalPath: '/states',
   },
   '/texas-paycheck-calculator': {
     title: 'Texas Paycheck Calculator - Texas Pay Calculator & Take Home Pay',
@@ -112,6 +118,7 @@ export const breadcrumbLabelsByPath = {
   '/overtime': 'No Tax on Overtime Calculator',
   '/salary-calculator': 'Salary Calculator',
   '/paycheck-calculator': 'Paycheck Calculator',
+  '/states': 'State Paycheck Calculators',
   '/texas-paycheck-calculator': 'Texas Paycheck Calculator',
   '/florida-paycheck-calculator': 'Florida Paycheck Calculator',
   '/california-paycheck-calculator': 'California Paycheck Calculator',

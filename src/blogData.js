@@ -1,0 +1,55 @@
+export const blogPosts = [
+  {
+    slug: 'florida-paycheck-calculator-guide',
+    title: 'Florida Paycheck Calculator Guide',
+    description: 'Understand Florida take-home pay, federal withholding, FICA, and paycheck planning.',
+    date: 'June 20, 2026',
+    gradient: 'linear-gradient(135deg,#14b8a6,#0f766e)',
+    accentBg: '#dbeafe',
+    accent: '#2563eb',
+    popular: true,
+    calculatorPath: '/florida-paycheck-calculator',
+    calculatorLabel: 'Florida Paycheck Calculator',
+    sections: [
+      ['Understanding Your Florida Paycheck', 'Florida has no state income tax, so most paycheck estimates focus on federal income tax, Social Security, Medicare, and any voluntary deductions.'],
+      ['Key Takeaways', 'Gross pay is your pay before deductions. Net pay is the amount you take home after federal withholding, FICA taxes, and benefits deductions.'],
+      ['FAQ', 'Use the calculator whenever your salary, pay frequency, filing status, or deductions change. Results are estimates for planning, not tax advice.'],
+    ],
+  },
+  {
+    slug: 'texas-paycheck-calculator-guide',
+    title: 'Texas Paycheck Calculator Guide',
+    description: 'Estimate Texas net pay with federal taxes and no state income tax withholding.',
+    date: 'June 18, 2026',
+    gradient: 'linear-gradient(135deg,#1e3a8a,#1e293b)',
+    accentBg: '#ffedd5',
+    accent: '#ea580c',
+    popular: true,
+    calculatorPath: '/texas-paycheck-calculator',
+    calculatorLabel: 'Texas Paycheck Calculator',
+    sections: [
+      ['Understanding Your Texas Paycheck', 'Texas has no state income tax, so paycheck planning usually centers on federal withholding, FICA, and payroll deductions.'],
+      ['Key Takeaways', 'Your net pay depends on gross earnings, filing status, pay frequency, and pre-tax or post-tax deductions.'],
+      ['FAQ', 'Use the Texas calculator for W-2 paycheck estimates and consult a tax professional for complex cases.'],
+    ],
+  },
+  {
+    slug: 'salary-calculator-guide',
+    title: 'Salary Calculator Guide',
+    description: 'Convert annual salary into monthly, biweekly, weekly, and hourly pay estimates.',
+    date: 'June 15, 2026',
+    gradient: 'linear-gradient(135deg,#e2e8f0,#94a3b8)',
+    accentBg: '#dcfce7',
+    accent: '#16a34a',
+    popular: true,
+    calculatorPath: '/salary-calculator',
+    calculatorLabel: 'Salary Calculator',
+    sections: [
+      ['Understanding Salary Conversion', 'A salary calculator converts annual income into monthly, biweekly, weekly, daily, or hourly estimates.'],
+      ['Key Takeaways', 'Pay frequency changes paycheck size but not total annual salary. Taxes and deductions determine take-home pay.'],
+      ['FAQ', 'Use salary estimates to compare offers, plan budgets, and understand gross pay before deductions.'],
+    ],
+  },
+];
+
+export const getBlogPostBySlug = (slug) => blogPosts.find((post) => post.slug === slug) ?? blogPosts[0];

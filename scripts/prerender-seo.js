@@ -5,6 +5,9 @@ import { breadcrumbLabelsByPath, pageSeoByPath, SITE_URL } from '../src/seoConfi
 const distDir = path.resolve('dist');
 const baseIndexPath = path.join(distDir, 'index.html');
 const today = new Date().toISOString().slice(0, 10);
+const SITE_NAME = 'OBBA Calculators';
+const SHARE_CARD_URL = `${SITE_URL}/share-card.png`;
+const SHARE_CARD_ALT = 'OBBA Calculators paycheck and tax calculator share card';
 
 if (!fs.existsSync(baseIndexPath)) {
   throw new Error('dist/index.html not found. Run vite build before prerendering SEO pages.');
@@ -90,7 +93,7 @@ function buildSeoTags(seo) {
     inLanguage: 'en-US',
     isPartOf: {
       '@type': 'WebSite',
-      name: 'OBBBA Tax Calculators',
+      name: SITE_NAME,
       url: SITE_URL,
     },
   };
@@ -106,10 +109,16 @@ function buildSeoTags(seo) {
     <meta property="og:description" content="${escapeHtml(seo.description)}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
-    <meta property="og:site_name" content="OBBBA Tax Calculators" />
+    <meta property="og:site_name" content="${escapeHtml(SITE_NAME)}" />
+    <meta property="og:image" content="${escapeHtml(SHARE_CARD_URL)}" />
+    <meta property="og:image:alt" content="${escapeHtml(SHARE_CARD_ALT)}" />
+    <meta property="og:image:width" content="1731" />
+    <meta property="og:image:height" content="909" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeHtml(seo.title)}" />
     <meta name="twitter:description" content="${escapeHtml(seo.description)}" />
+    <meta name="twitter:image" content="${escapeHtml(SHARE_CARD_URL)}" />
+    <meta name="twitter:image:alt" content="${escapeHtml(SHARE_CARD_ALT)}" />
     <script type="application/ld+json" id="page-webpage-schema">${jsonLd(schema)}</script>
     <script type="application/ld+json" id="breadcrumb-schema">${jsonLd(buildBreadcrumbSchema(seo))}</script>`;
 }

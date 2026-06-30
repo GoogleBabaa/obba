@@ -621,7 +621,7 @@ export default function FAQPage({ isDark }) {
           <p className={`mb-4 text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
             Website: <Link to="/" className="underline">obbacalculators.com</Link>
           </p>
-          <a href="mailto:obbacalculators@gmail.com" className="inline-block px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-all">
+          <a href="mailto:obbacalculators@gmail.com" target="_blank" rel="nofollow noopener noreferrer" className="inline-block px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-all">
             Contact Support
           </a>
         </div>
