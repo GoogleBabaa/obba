@@ -2335,9 +2335,9 @@ function SalaryCalculatorPage({ isDark }) {
   });
 
   useEffect(() => {
-    document.title = 'Salary Calculator - Convert Hourly, Monthly & Annual Pay';
+    document.title = 'Salary Calculator: Hourly, Weekly & Annual Pay Converter';
 
-    const metaDescriptionContent = 'Use our Salary Calculator to convert hourly, weekly, monthly, and annual pay into clear income estimates for USA workers.';
+    const metaDescriptionContent = 'Use our free Salary Calculator to convert hourly, daily, weekly, monthly, and annual pay. Estimate gross and net income and plan your budget with confidence.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -2356,7 +2356,7 @@ function SalaryCalculatorPage({ isDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Salary Calculator - Convert Hourly, Monthly & Annual Pay',
+      name: 'Salary Calculator: Hourly, Weekly & Annual Pay Converter',
       description: metaDescriptionContent,
       url: `${window.location.origin}/salary-calculator`,
       mainEntity: {
@@ -2521,9 +2521,12 @@ function SalaryCalculatorPage({ isDark }) {
         <section style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '28px 28px 24px', marginBottom: 16 }}>
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
-              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>Salary Calculator</h1>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.65, marginBottom: 16 }}>
-                Convert hourly, monthly, and annual pay into salary, overtime, taxes, and take-home pay estimates.
+              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>Salary Calculator: Convert Your Pay Into Hourly, Weekly, Monthly, and Annual Income</h1>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.7, marginBottom: 10 }}>
+                Knowing your exact income — not just the number on your offer letter — is the first step toward real financial planning. A salary calculator takes whatever pay figure you already know (hourly, weekly, monthly, or annual) and converts it into every other pay period, so you can budget accurately, compare job offers, and understand what actually lands in your bank account after deductions.
+              </p>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.7, marginBottom: 16 }}>
+                This guide walks through how salary calculations work, the formulas behind them, and how gross pay differs from net pay — the same logic used by payroll professionals and HR departments. Many people also use a <Link to="/paycheck-calculator" style={{ color: '#1a6fe8', fontWeight: 800 }}>Paycheck Calculator</Link> alongside salary calculations to estimate their actual take-home pay after taxes and deductions.
               </p>
               <div className="flex flex-wrap gap-3">
                 {['Instant Results', '2026 Ready', 'Hourly or Salary', 'No Sign Up'].map((tag) => (
@@ -2807,11 +2810,19 @@ function SalaryCalculatorPage({ isDark }) {
         <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="space-y-5">
             <article id="what-is-salary" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>What is Salary?</h2>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>Salary Calculator</h2>
               <div className="grid gap-5 md:grid-cols-[1fr_200px] md:items-start">
-                <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
-                  Salary is a fixed compensation amount paid over a regular schedule such as weekly, bi-weekly, semi-monthly, monthly, or annually. This calculator converts that pay into per-period earnings, adds overtime when needed, estimates federal payroll taxes, and shows take-home pay.
-                </p>
+                <div style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
+                  <p style={{ marginBottom: 12 }}>
+                    Knowing your exact income — not just the number on your offer letter — is the first step toward real financial planning. A salary calculator takes whatever pay figure you already know (hourly, weekly, monthly, or annual) and converts it into every other pay period, so you can budget accurately, compare job offers, and understand what actually lands in your bank account after deductions.
+                  </p>
+                  <p style={{ marginBottom: 12 }}>
+                    This guide walks through how salary calculations work, the formulas behind them, and how gross pay differs from net pay — the same logic used by payroll professionals and HR departments.
+                  </p>
+                  <p>
+                    Many people also use a <Link to="/paycheck-calculator" style={{ color: '#1a6fe8', fontWeight: 800 }}>Paycheck Calculator</Link> alongside salary calculations to estimate their actual take-home pay after taxes and deductions.
+                  </p>
+                </div>
                 <div style={{ height: 128, borderRadius: 10, background: 'linear-gradient(135deg,#12335b 0%,#1a6fe8 58%,#0f766e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <div style={{ textAlign: 'center' }}>
                     <svg width="62" height="48" viewBox="0 0 64 50" fill="none" aria-hidden="true">
@@ -2826,83 +2837,141 @@ function SalaryCalculatorPage({ isDark }) {
               </div>
             </article>
 
-            <article id="how-to-use-salary-calculator" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>How to Use Salary Calculator</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 18 }}>Follow these steps to estimate salary, overtime, taxes, and take-home pay.</p>
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-4" style={{ position: 'relative', marginBottom: 12 }}>
-                {[
-                  ['1', 'Choose Frequency', 'Daily, weekly, monthly, or annual pay.', 'M5 18h14M7 6h10M7 11h10'],
-                  ['2', 'Pick Pay Type', 'Hourly or salary compensation.', 'M12 4v16M6 8h12M6 16h12'],
-                  ['3', 'Enter Pay', 'Add amount and overtime values.', 'M7 7h10v10H7zM10 12h4'],
-                  ['4', 'Read Results', 'Review taxes and take-home pay.', 'M5 15l4 4L19 7'],
-                ].map(([numText, title, body, path]) => (
-                  <div key={title} style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
-                    <div style={{ width: 50, height: 50, margin: '0 auto 8px', background: 'rgba(26,111,232,.10)', border: '2px solid #bfdbfe', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={path} stroke="#1a6fe8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </div>
-                    <div style={{ width: 20, height: 20, background: '#1a6fe8', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 7px', fontSize: 11, fontWeight: 700, color: 'white' }}>{numText}</div>
-                    <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--text)', marginBottom: 3 }}>{title}</div>
-                    <div style={{ fontSize: 11, color: 'var(--text3)', lineHeight: 1.4 }}>{body}</div>
-                  </div>
-                ))}
+            <article id="how-salary-conversion-works" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>How Salary Conversion Works</h2>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 18, lineHeight: 1.75 }}>
+                Most salary calculators rely on a simple chain of multiplication and division. If you know your hourly rate, the calculator multiplies it by your weekly hours, then by the number of weeks you work in a year. If you know your annual salary, it works backward, dividing by 12 for monthly pay, by 52 for weekly pay, or by your total annual hours for an hourly equivalent.
+              </p>
+              <div style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', marginBottom: 14 }}>
+                <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 10 }}>Core formulas:</div>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.6 }}>
+                  {[
+                    'Annual salary = Hourly rate × Hours per week × Weeks per year',
+                    'Monthly salary = Annual salary ÷ 12',
+                    'Weekly salary = Annual salary ÷ 52',
+                    'Daily salary = Weekly salary ÷ Working days per week',
+                    'Hourly rate = Annual salary ÷ (Hours per week × Weeks per year)',
+                  ].map((formula) => (
+                    <li key={formula} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                      <span style={{ color: 'var(--text2)', flexShrink: 0 }}>●</span>
+                      <span>{formula}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <p style={{ fontSize: 12.5, color: 'var(--text2)', textAlign: 'center' }}>Results update instantly as you type.</p>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
+                Example: An employee earning $1,500 per week has an annual income of 1,500 × 52 = $78,000. Someone earning $30/hour on a standard 40-hour week earns roughly $62,400 a year, or about $5,200 a month.
+              </p>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginTop: 10 }}>
+                These figures represent gross pay — your earnings before anything is withheld. What you actually take home is a different, smaller number.
+              </p>
             </article>
 
             <article id="salary-pay-formula" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Salary Pay Formula</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 14 }}>The formula used in this calculator is:</p>
-              <div style={{ background: isDark ? 'rgba(26,111,232,.16)' : '#dbeafe', borderRadius: 8, padding: '13px 16px', marginBottom: 14, fontSize: 13.5, fontWeight: 800, color: isDark ? '#93c5fd' : '#1e40af', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <span style={{ color: isDark ? '#93c5fd' : '#1a6fe8', textDecoration: 'underline' }}>Base Pay</span><span style={{ color: 'var(--text2)' }}>▶</span><span>Salary Amount ÷ Pay Periods</span>
-              </div>
-              <div style={{ background: 'rgba(34,197,94,.13)', borderRadius: 8, padding: '13px 16px', fontSize: 13.5, fontWeight: 800, color: '#16a34a', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <span style={{ color: '#16a34a', textDecoration: 'underline' }}>Take Home</span><span style={{ color: 'var(--text2)' }}>▶</span><span>Gross Pay - Federal Tax - Social Security - Medicare</span>
-              </div>
-              <div style={{ marginTop: 14, background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 14px', fontSize: 13, color: 'var(--text2)', lineHeight: 1.75 }}>
-                <strong style={{ color: 'var(--text)' }}>Example:</strong> $60,000 annual salary ÷ 12 months = <strong style={{ color: 'var(--text)' }}>$5,000 base pay</strong><br />
-                Overtime: 1.5 × 10 hrs × $15 = <strong style={{ color: 'var(--text)' }}>$225 overtime pay</strong><br />
-                After estimated federal payroll taxes: <strong style={{ color: '#16a34a' }}>take-home pay is shown instantly</strong>
-              </div>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Gross Pay vs. Net Pay</h2>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 14, lineHeight: 1.75 }}>
+                Gross pay is the full amount your employer agrees to pay you, including base salary, bonuses, commissions, and overtime. Net pay — your take-home pay — is what remains after taxes and deductions are subtracted.
+              </p>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 12, lineHeight: 1.75 }}>To go from gross to net, payroll calculations generally follow this order:</p>
+              <ol style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.65 }}>
+                <li>Subtract pre-tax benefit contributions (retirement plans, some health insurance) to find taxable income.</li>
+                <li>Withhold federal, state, and local income tax.</li>
+                <li>Withhold FICA taxes — Medicare and Social Security.</li>
+                <li>Subtract post-tax deductions (Roth contributions, wage garnishments, etc.).</li>
+                <li>What&apos;s left is your net pay.</li>
+              </ol>
             </article>
 
-            <article id="salary-pay-standards" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>Salary Pay Standards in the USA</h2>
-              <div className="grid gap-5 md:grid-cols-[1fr_180px] md:items-start">
-                <div>
-                  <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginBottom: 14 }}>
-                    Salary pay is usually set as an annual compensation amount and distributed across a payroll schedule. Federal payroll estimates commonly include income tax, Social Security, and Medicare. Overtime eligibility can depend on job classification and wage rules.
-                  </p>
-                  <a href="https://www.dol.gov/agencies/whd/flsa" target="_blank" rel="nofollow noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 800, color: '#1a6fe8', border: '1px solid #bfdbfe', borderRadius: 7, padding: '8px 14px', background: isDark ? 'rgba(26,111,232,.14)' : '#eff6ff' }}>Learn More on DOL.gov</a>
-                </div>
-                <div style={{ height: 118, borderRadius: 10, background: '#1a1a2e', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                  <div style={{ textAlign: 'center', padding: 14 }}><div style={{ fontSize: 20, fontWeight: 900, color: 'white', letterSpacing: 3 }}>PAY</div><div style={{ fontSize: 8, color: 'rgba(255,255,255,0.55)', letterSpacing: 1, textTransform: 'uppercase', marginTop: 4, lineHeight: 1.4 }}>Salary<br />Standards</div></div>
-                  <div style={{ position: 'absolute', bottom: 8, right: 8, width: 26, height: 26, background: '#fbbf24', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 900, color: '#92400e' }}>$</div>
-                </div>
-              </div>
-            </article>
-
-            <article id="important-notes" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Important Notes</h2>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <article id="fica-tax" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>FICA: The Tax Everyone Pays</h2>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginBottom: 14 }}>
+                Every paycheck includes FICA withholding, split between employer and employee:
+              </p>
+              <div className="grid gap-3 md:grid-cols-2">
                 {[
-                  'This calculator estimates federal income tax, Social Security, and Medicare for salary planning.',
-                  'State tax is not included in this salary calculator.',
-                  'Benefits currently remain $0.00 because the existing calculator logic has no benefits input.',
-                  'Overtime amount is treated as the hourly overtime-rate input used with overtime hours and multiplier.',
-                ].map((note) => (
-                  <li key={note} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13.5, color: 'var(--text2)' }}><span style={{ marginTop: 3, color: 'var(--text2)', flexShrink: 0 }}>•</span>{note}</li>
+                  ['Social Security', '6.2% of wages, up to the annual wage base limit.'],
+                  ['Medicare', '1.45% of all wages, with an additional 0.9% for high earners (employee-paid only).'],
+                ].map(([label, body]) => (
+                  <div key={label} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '13px 15px' }}>
+                    <div style={{ fontSize: 13, fontWeight: 900, color: 'var(--text)', marginBottom: 6 }}>{label}</div>
+                    <div style={{ fontSize: 12.5, color: 'var(--text2)', lineHeight: 1.6 }}>{body}</div>
+                  </div>
+                ))}
+              </div>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginTop: 14 }}>
+                Unlike income tax, FICA rates are fixed by law and don&apos;t depend on your filing status.
+              </p>
+            </article>
+
+            <article id="reading-your-pay-stub" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Reading Your Pay Stub</h2>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 14, lineHeight: 1.75 }}>
+                A paycheck and a pay stub are not the same thing. The paycheck is the actual payment; the pay stub is the document explaining how that number was calculated. A typical pay stub includes:
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 14 }}>
+                {[
+                  'Pay period dates and hours worked',
+                  'Gross pay and net pay',
+                  'Federal, state, and local tax withholding',
+                  'Medicare and Social Security deductions',
+                  'Benefit deductions (health, dental, retirement)',
+                  'Year-to-date totals and PTO balances',
+                ].map((item) => (
+                  <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13.5, color: 'var(--text2)' }}><span style={{ marginTop: 3, color: 'var(--text2)', flexShrink: 0 }}>-</span>{item}</li>
                 ))}
               </ul>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
+                Keeping your pay stubs is a good habit — they&apos;re the first thing you&apos;ll need if a payment dispute ever comes up.
+              </p>
+            </article>
+
+            <article id="overtime-benefits-total-compensation" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Overtime, Benefits, and Total Compensation</h2>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 12, lineHeight: 1.75 }}>
+                Hourly employees who work beyond their standard schedule are typically paid overtime at 1.5× their regular rate. Someone earning $25/hour who works 10 overtime hours earns an extra $375 — overtime rate of $37.50 × 10 hours — on top of regular pay. An <Link to="/overtime" style={{ color: '#1a6fe8', fontWeight: 800 }}>Overtime Calculator</Link> can help employees estimate these additional earnings quickly and accurately.
+              </p>
+              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
+                Salary alone doesn&apos;t tell the whole story either. Total compensation includes benefits like health insurance, retirement matching, paid time off, and life insurance — all of which add real value beyond the number on your paycheck. When comparing two job offers, always weigh the full package, not just the base salary.
+              </p>
+            </article>
+
+            <article id="quick-reference-common-conversions" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>Quick Reference: Common Conversions</h2>
+              <div className="overflow-x-auto">
+                <table style={{ width: '100%', minWidth: 560, borderCollapse: 'collapse', fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ background: 'var(--surface-alt)' }}>
+                      {['If you earn...', 'Annual', 'Monthly', 'Weekly'].map((head) => (
+                        <th key={head} style={{ textAlign: 'left', padding: '10px 12px', borderBottom: '1px solid var(--border)', color: 'var(--text)', fontWeight: 900 }}>{head}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['$20/hour, 40 hrs/wk', '$41,600', '~$3,467', '$800'],
+                      ['$30/hour, 40 hrs/wk', '$62,400', '$5,200', '$1,200'],
+                      ['$72,000/year', '$72,000', '$6,000', '~$1,385'],
+                      ['$400/day, 20 days/mo', '~$96,000', '$8,000', '~$1,846'],
+                    ].map((row, index) => (
+                      <tr key={row[0]} style={{ borderBottom: index === 3 ? 0 : '1px solid var(--border)' }}>
+                        {row.map((cell, cellIndex) => (
+                          <td key={cell} style={{ padding: '10px 12px', color: cellIndex === 0 ? 'var(--text)' : 'var(--text2)', fontWeight: cellIndex === 0 ? 800 : 600 }}>{cell}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </article>
 
             <article id="salary-faq" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
               <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>Frequently Asked Questions</h2>
               <div className="grid gap-3 md:grid-cols-2">
                 {[
-                  ['Does this include state tax?', 'No. This salary calculator currently estimates federal income tax, Social Security, and Medicare only.'],
-                  ['Can I use hourly pay?', 'Yes. Select Hourly, enter the number of hours, and enter your hourly amount.'],
-                  ['What does overtime amount mean?', 'It is treated as the hourly overtime-rate input used with overtime hours and the selected multiplier.'],
-                  ['Why is benefits zero?', 'The current salary logic has no benefits input, so benefits are displayed as $0.00.'],
+                  ['How do I calculate my annual salary from an hourly wage?', 'Multiply your hourly rate by hours worked per week, then by weeks worked per year.'],
+                  ['Why is my net pay lower than my gross pay?', 'Taxes (federal, state, local), FICA contributions, and any benefit deductions are subtracted from gross pay before you receive it.'],
+                  ['Is overtime included in salary calculations?', 'Only if you work overtime hours — it is calculated separately at 1.5× your regular hourly rate and added to your base earnings.'],
+                  ['Does a salary calculator replace a tax professional?', 'No. These calculators provide estimates for budgeting and comparison purposes. For exact tax liability, consult a licensed accountant or tax advisor.'],
                 ].map(([q, a]) => (
                   <details key={q} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '13px 15px' }}>
                     <summary style={{ cursor: 'pointer', fontSize: 13.5, fontWeight: 800, color: 'var(--text)' }}>{q}</summary>
@@ -2961,11 +3030,13 @@ function SalaryCalculatorPage({ isDark }) {
               <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>On This Page</div>
               <div className="flex flex-col gap-2 text-sm">
                 {[
-                  ['#what-is-salary', 'What is Salary?'],
-                  ['#how-to-use-salary-calculator', 'How to Use Calculator'],
-                  ['#salary-pay-formula', 'Salary Pay Formula'],
-                  ['#salary-pay-standards', 'Salary Pay Standards'],
-                  ['#important-notes', 'Important Notes'],
+                  ['#what-is-salary', 'Salary Calculator'],
+                  ['#how-salary-conversion-works', 'How Conversion Works'],
+                  ['#salary-pay-formula', 'Gross vs. Net Pay'],
+                  ['#fica-tax', 'FICA Taxes'],
+                  ['#reading-your-pay-stub', 'Reading Your Pay Stub'],
+                  ['#overtime-benefits-total-compensation', 'Overtime & Benefits'],
+                  ['#quick-reference-common-conversions', 'Common Conversions'],
                   ['#salary-faq', 'Frequently Asked Questions'],
                 ].map(([href, label]) => (
                   <a key={href} href={href} style={{ color: 'var(--text2)', fontSize: 12.5, fontWeight: 700 }}>{label}</a>
@@ -6981,8 +7052,8 @@ export default function App() {
         canonicalPath: '/overtime',
       },
       '/salary-calculator': {
-        title: 'Salary Calculator - Convert Hourly, Monthly & Annual Pay',
-        description: 'Use our Salary Calculator to convert hourly, weekly, monthly, and annual pay into clear income estimates for USA workers.',
+        title: 'Salary Calculator: Hourly, Weekly & Annual Pay Converter',
+        description: 'Use our free Salary Calculator to convert hourly, daily, weekly, monthly, and annual pay. Estimate gross and net income and plan your budget with confidence.',
         keywords: 'Salary calculator',
         canonicalPath: '/salary-calculator',
       },
