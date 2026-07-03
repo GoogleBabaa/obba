@@ -6,11 +6,19 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/prerender-seo.js",
+    "newsletter:dry": "node scripts/send-newsletter.mjs --dry-run",
+    "newsletter:send": "node scripts/send-newsletter.mjs",
+    "welcome:dry": "node scripts/send-due-welcome-emails.mjs --dry-run",
+    "welcome:send": "node scripts/send-due-welcome-emails.mjs",
+    "welcome:worker": "node scripts/send-due-welcome-emails.mjs",
+    "mail:scheduled:dry": "node scripts/send-scheduled-mails.mjs --dry-run",
+    "mail:scheduled:send": "node scripts/send-scheduled-mails.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
     "canvas": "^3.2.3",
     "lucide-react": "^0.539.0",
+    "nodemailer": "^9.0.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.16.0"

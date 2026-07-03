@@ -1,5 +1,5 @@
 ﻿import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
-import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { BarChart3, ChevronDown, Landmark, Map, MapPin, Menu, Moon, Sun, X } from 'lucide-react';
 import { blogPosts } from './blogData';
 import { SITE_URL } from './seoConfig';
@@ -822,7 +822,10 @@ function HomePage({ isDark, setIsDark }) {
       .replace(/<span style="font-size:13px; color:#94a3b8;">Search calculators\.\.\.<\/span>/g, '<input data-obba-search="header" type="search" aria-label="Search calculators" placeholder="Search calculators..." style="width:100%; border:0; outline:0; background:transparent; font:inherit; font-size:13px; color:var(--text);" />')
       .replace(/<span style="font-size:14px; color:#94a3b8;">Search calculators\.\.\.<\/span>/g, '<input data-obba-search="hero" type="search" aria-label="Search calculators" placeholder="Search calculators..." style="width:100%; border:0; outline:0; background:transparent; font:inherit; font-size:14px; color:var(--text);" />')
       .replace(/<span style="font-size:13\.5px; color:#94a3b8;">Enter your email address<\/span>/g, '<input data-obba-email type="email" aria-label="Email address" placeholder="Enter your email address" style="width:100%; border:0; outline:0; background:transparent; font:inherit; font-size:13.5px; color:var(--text);" />')
-      .replace('</button>\n        </div>\n      </div>\n      <div style="flex:0 0 auto;">', `</button>\n        </div>\n        <div data-obba-newsletter-message style="margin-top:10px; font-size:13px; font-weight:600; color:${newsletterMessage.startsWith('Thanks') ? '#16a34a' : '#dc2626'};">${newsletterMessage}</div>\n      </div>\n      <div style="flex:0 0 auto;">`)
+      .replace(
+        /(<button style="background:#2563eb; color:#fff; border:none; border-radius:10px; padding:11px 26px; font-size:14px; font-weight:700; font-family:inherit; cursor:pointer;">Subscribe<\/button>\s*<\/div>)(\s*<\/div>\s*<div class="m-newsletter-img")/,
+        `$1<div data-obba-newsletter-message style="margin-top:10px; font-size:13px; font-weight:600; color:${newsletterMessage.startsWith('Thanks') || newsletterMessage.includes('already') ? '#16a34a' : '#dc2626'};">${newsletterMessage}</div>$2`
+      )
       .replace(/<!-- ========== ARTICLES \+ GUIDES ========== -->[\s\S]*?<\/section>\s*(?=<!-- ========== STATE TAX ========== -->)/, `<!-- ========== ARTICLES + BLOGS ========== -->\n  ${buildHomeBlogSection()}\n\n  `)
       .replace(/\u00c3\u00a2\u00c2\u00ad\u00c2\u0090/g, '★')
       .replace(/\u00c3\u00a2\u00c5\u201c\u00e2\u20ac\u00a2/g, 'x')
@@ -1051,15 +1054,45 @@ function HomePage({ isDark, setIsDark }) {
     navigate(routeForText(query || 'salary calculator'));
   };
 
-  const subscribeNewsletter = (source) => {
+  const subscribeNewsletter = async (source) => {
     const input = source?.closest('section')?.querySelector?.('[data-obba-email]') || document.querySelector('[data-obba-email]');
     const email = input?.value?.trim() || '';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setNewsletterMessage('Enter a valid email address.');
       return;
     }
-    setNewsletterMessage('Thanks. You are subscribed.');
-    input.value = '';
+    setNewsletterMessage('Saving...');
+    try {
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      const browserStateGuess = getBrowserStateGuess(timezone);
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          page: window.location.pathname,
+          pageTitle: document.title,
+          timezone,
+          browserStateCode: browserStateGuess.code,
+          browserStateName: browserStateGuess.name,
+          language: navigator.language || '',
+          referrer: document.referrer || '',
+          subscribedAt: new Date().toISOString(),
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setNewsletterMessage('Could not subscribe. Try again.');
+        return;
+      }
+      setNewsletterMessage('Thanks. You are subscribed.');
+      localStorage.setItem('obba-updates-email', email);
+      localStorage.setItem('obba-updates-popup-last-prompt-at', String(Date.now()));
+      localStorage.setItem('obba-updates-popup-last-submit-at', String(Date.now()));
+      input.value = '';
+    } catch {
+      setNewsletterMessage('Could not subscribe. Try again.');
+    }
   };
 
   const handleHomeClick = (event) => {
@@ -1108,7 +1141,7 @@ function HomePage({ isDark, setIsDark }) {
     }
     if (button && button.textContent.trim().toLowerCase() === 'subscribe') {
       event.preventDefault();
-      subscribeNewsletter(button);
+      void subscribeNewsletter(button);
       return;
     }
 
@@ -1146,7 +1179,7 @@ function HomePage({ isDark, setIsDark }) {
     }
     if (event.target.matches('[data-obba-email]')) {
       event.preventDefault();
-      subscribeNewsletter(event.target);
+      void subscribeNewsletter(event.target);
     }
   };
 
@@ -5651,6 +5684,72 @@ function PrivacyPolicyPage({ isDark }) {
   );
 }
 
+function UnsubscribePage({ isDark }) {
+  const [searchParams] = useSearchParams();
+  const [status, setStatus] = useState('working');
+
+  useEffect(() => {
+    const email = searchParams.get('email') || '';
+    const token = searchParams.get('token') || '';
+    if (!email || !token) {
+      setStatus('invalid');
+      return;
+    }
+
+    const unsubscribe = async () => {
+      try {
+        const response = await fetch(`/api/unsubscribe?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`);
+        setStatus(response.ok ? 'done' : 'invalid');
+      } catch {
+        setStatus('failed');
+      }
+    };
+
+    unsubscribe();
+  }, [searchParams]);
+
+  const copy = {
+    working: {
+      title: 'Unsubscribing...',
+      text: 'Please wait while we update your OBBA Calculators email preferences.',
+    },
+    done: {
+      title: 'You are unsubscribed',
+      text: 'You will no longer receive OBBA Calculators email updates at this address.',
+    },
+    invalid: {
+      title: 'Invalid unsubscribe link',
+      text: 'This unsubscribe link is missing information or has expired.',
+    },
+    failed: {
+      title: 'Could not unsubscribe',
+      text: 'The unsubscribe request could not be completed from this preview. Open the link on the deployed site or try again later.',
+    },
+  }[status];
+
+  return (
+    <main className="obba-page">
+      <section className="obba-card mx-auto max-w-2xl p-6 text-center sm:p-10">
+        <div className="obba-updates-mark mx-auto">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 7h16v11H4V7Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+            <path d="m4 8 8 6 8-6" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <p className="obba-updates-kicker">Email Preferences</p>
+        <h1 className="mt-2 text-3xl font-extrabold" style={{ color: 'var(--text)' }}>{copy.title}</h1>
+        <p className={`mx-auto mt-4 max-w-lg text-sm leading-7 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{copy.text}</p>
+        <Link
+          to="/"
+          className="mt-7 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-blue-600/20"
+        >
+          Back to Calculator
+        </Link>
+      </section>
+    </main>
+  );
+}
+
 function StatesPage() {
   return (
     <main className="obba-page">
@@ -6191,7 +6290,34 @@ function WashingtonPaycheckArticle({ isDark }) {
   );
 }
 
+const BROWSER_TIMEZONE_STATE_GUESSES = {
+  'America/Anchorage': ['AK', 'Alaska'],
+  'America/Adak': ['AK', 'Alaska'],
+  'Pacific/Honolulu': ['HI', 'Hawaii'],
+  'America/Phoenix': ['AZ', 'Arizona'],
+  'America/Boise': ['ID', 'Idaho'],
+  'America/Denver': ['CO', 'Colorado'],
+  'America/Chicago': ['IL', 'Illinois'],
+  'America/Indiana/Indianapolis': ['IN', 'Indiana'],
+  'America/Indiana/Knox': ['IN', 'Indiana'],
+  'America/Indiana/Marengo': ['IN', 'Indiana'],
+  'America/Indiana/Petersburg': ['IN', 'Indiana'],
+  'America/Indiana/Tell_City': ['IN', 'Indiana'],
+  'America/Indiana/Vevay': ['IN', 'Indiana'],
+  'America/Indiana/Vincennes': ['IN', 'Indiana'],
+  'America/Indiana/Winamac': ['IN', 'Indiana'],
+  'America/Detroit': ['MI', 'Michigan'],
+  'America/New_York': ['NY', 'New York'],
+  'America/Los_Angeles': ['CA', 'California'],
+};
+
+function getBrowserStateGuess(timezone = '') {
+  const [code = '', name = ''] = BROWSER_TIMEZONE_STATE_GUESSES[timezone] || [];
+  return { code, name };
+}
+
 function EmailUpdatesPopup() {
+  const location = useLocation();
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -6201,22 +6327,35 @@ function EmailUpdatesPopup() {
 
   useEffect(() => {
     let timerId;
+    let cancelled = false;
     try {
+      if (location.pathname.startsWith('/admin') || location.pathname === '/unsubscribe') return undefined;
+      const savedEmail = localStorage.getItem('obba-updates-email') || '';
+      const submittedAt = localStorage.getItem('obba-updates-popup-last-submit-at') || '';
+      if (savedEmail || submittedAt) return undefined;
+
       const now = Date.now();
       const lastPromptAt = Number(localStorage.getItem('obba-updates-popup-last-prompt-at') || 0);
       if (!lastPromptAt || now - lastPromptAt >= sevenDaysMs) {
-        timerId = window.setTimeout(() => {
-          setIsVisible(true);
-          localStorage.setItem('obba-updates-popup-last-prompt-at', String(Date.now()));
-        }, popupDelayMs);
+        fetch('/api/admin-config?public=1')
+          .then((response) => response.ok ? response.json() : { popupEnabled: true })
+          .catch(() => ({ popupEnabled: true }))
+          .then((config) => {
+            if (cancelled || config.popupEnabled === false) return;
+            timerId = window.setTimeout(() => {
+              setIsVisible(true);
+              localStorage.setItem('obba-updates-popup-last-prompt-at', String(Date.now()));
+            }, popupDelayMs);
+          });
       }
     } catch {
       timerId = window.setTimeout(() => setIsVisible(true), popupDelayMs);
     }
     return () => {
+      cancelled = true;
       if (timerId) window.clearTimeout(timerId);
     };
-  }, []);
+  }, [location.pathname]);
 
   const closePopup = () => {
     try {
@@ -6234,11 +6373,15 @@ function EmailUpdatesPopup() {
     }
     setIsSubmitting(true);
     try {
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      const browserStateGuess = getBrowserStateGuess(timezone);
       const payload = {
         email: cleanEmail,
         page: window.location.pathname,
         pageTitle: document.title,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+        timezone,
+        browserStateCode: browserStateGuess.code,
+        browserStateName: browserStateGuess.name,
         language: navigator.language || '',
         referrer: document.referrer || '',
         subscribedAt: new Date().toISOString(),
@@ -6294,6 +6437,525 @@ function EmailUpdatesPopup() {
         {message && <div className={`obba-updates-message ${message.startsWith('Thanks') ? 'success' : ''}`}>{message}</div>}
       </form>
     </div>
+  );
+}
+
+const ADMIN_MAIL_LABELS = {
+  '3days': '3 Days Return Email',
+  '7days': '7 Days Tips Email',
+  urgent: 'Urgent Email',
+};
+
+const ADMIN_GROUP_OPTIONS = [
+  ['all', 'All'],
+  ['state-california', 'California'],
+  ['state-florida', 'Florida'],
+  ['state-hawaii', 'Hawaii'],
+  ['state-illinois', 'Illinois'],
+  ['state-indiana', 'Indiana'],
+  ['state-nebraska', 'Nebraska'],
+  ['state-texas', 'Texas'],
+  ['state-virginia', 'Virginia'],
+  ['state-washington', 'Washington'],
+  ['common-future-states', 'Future States'],
+];
+
+function parsedToForm(parsed, key) {
+  return {
+    subject: parsed?.subject || '',
+    body: parsed?.body || '',
+    groups: parsed?.groups?.length ? parsed.groups : [parsed?.group || 'all'],
+    enabled: parsed?.enabled !== false,
+    campaignId: parsed?.campaignId || `${key}-v1`,
+    delayDays: Number(parsed?.delayDays || 0),
+    buttonText: parsed?.buttonText || 'Open OBBA Calculators',
+    buttonUrl: parsed?.buttonUrl || '/',
+  };
+}
+
+function AdminMailPage({ isDark }) {
+  const { type = '3days' } = useParams();
+  const key = ['3days', '7days', 'urgent'].includes(type) ? type : '3days';
+  const [authenticated, setAuthenticated] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [code, setCode] = useState('');
+  const [content, setContent] = useState('');
+  const [parsed, setParsed] = useState(null);
+  const [campaignForm, setCampaignForm] = useState(parsedToForm(null, key));
+  const [subscribers, setSubscribers] = useState([]);
+  const [adminConfig, setAdminConfig] = useState({ popupEnabled: true, mailEnabled: true });
+  const [campaignSummaries, setCampaignSummaries] = useState([]);
+  const [selectedCampaigns, setSelectedCampaigns] = useState(['3days', '7days', 'urgent']);
+  const [message, setMessage] = useState('');
+  const [isBusy, setIsBusy] = useState(false);
+
+  const loadAdminConfig = async () => {
+    const response = await fetch('/api/admin-config');
+    if (!response.ok) return;
+    const result = await response.json();
+    setAdminConfig({ popupEnabled: result.popupEnabled !== false, mailEnabled: result.mailEnabled !== false });
+  };
+
+  const loadCampaignSummaries = async () => {
+    const summaries = [];
+    for (const campaignKey of Object.keys(ADMIN_MAIL_LABELS)) {
+      const response = await fetch(`/api/admin-mail?type=${encodeURIComponent(campaignKey)}`);
+      if (!response.ok) continue;
+      const result = await response.json();
+      summaries.push({ key: campaignKey, parsed: result.parsed, content: result.content || '' });
+    }
+    setCampaignSummaries(summaries);
+  };
+
+  const loadSubscribers = async () => {
+    const response = await fetch('/api/admin-subscribers');
+    if (!response.ok) return;
+    const result = await response.json();
+    setSubscribers(result.subscribers || []);
+  };
+
+  const loadCampaign = async () => {
+    const response = await fetch(`/api/admin-mail?type=${encodeURIComponent(key)}`);
+    if (response.status === 401) {
+      setAuthenticated(false);
+      return;
+    }
+    const result = await response.json();
+    setAuthenticated(true);
+    setContent(result.content || '');
+    setParsed(result.parsed || null);
+    setCampaignForm(parsedToForm(result.parsed, key));
+    await loadAdminConfig();
+    await loadCampaignSummaries();
+    await loadSubscribers();
+  };
+
+  useEffect(() => {
+    const check = async () => {
+      try {
+        const response = await fetch('/api/admin-auth');
+        const result = await response.json();
+        setAuthenticated(Boolean(result.authenticated));
+        if (result.authenticated) await loadCampaign();
+      } catch {
+        setAuthenticated(false);
+      }
+    };
+    check();
+  }, [key]);
+
+  const requestOtp = async () => {
+    setIsBusy(true);
+    setMessage('');
+    try {
+      const response = await fetch('/api/admin-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'requestOtp' }),
+      });
+      setOtpSent(response.ok);
+      setMessage(response.ok ? 'OTP sent to your admin email.' : 'Could not send OTP.');
+    } catch {
+      setMessage('Could not send OTP.');
+    }
+    setIsBusy(false);
+  };
+
+  const verifyOtp = async (event) => {
+    event.preventDefault();
+    setIsBusy(true);
+    setMessage('');
+    try {
+      const response = await fetch('/api/admin-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'verifyOtp', code }),
+      });
+      if (!response.ok) {
+        setMessage('Invalid OTP.');
+        setIsBusy(false);
+        return;
+      }
+      setAuthenticated(true);
+      setMessage('Admin unlocked.');
+      await loadCampaign();
+    } catch {
+      setMessage('Could not verify OTP.');
+    }
+    setIsBusy(false);
+  };
+
+  const saveCampaign = async () => {
+    setIsBusy(true);
+    setMessage('');
+    try {
+      const response = await fetch(`/api/admin-mail?type=${encodeURIComponent(key)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ campaign: campaignForm }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        setMessage('Could not save file.');
+      } else {
+        setContent(result.content || '');
+        setParsed(result.parsed || null);
+        setCampaignForm(parsedToForm(result.parsed, key));
+        if (result.schedule?.ok) {
+          setMessage(`File saved. Worker scheduled after ${result.schedule.delay}.`);
+        } else if (result.schedule?.skipped || result.schedule?.error) {
+          setMessage(`File saved. Worker schedule needs setup: ${result.schedule.error || 'missing token'}.`);
+        } else {
+          setMessage('File saved.');
+        }
+      }
+    } catch {
+      setMessage('Could not save file.');
+    }
+    setIsBusy(false);
+  };
+
+  const dryRun = async () => {
+    setIsBusy(true);
+    setMessage('');
+    try {
+      const response = await fetch(`/api/send-scheduled-mails?type=${encodeURIComponent(key)}&dryRun=1`);
+      const result = await response.json();
+      if (!response.ok) {
+        setMessage('Could not run worker test.');
+      } else {
+        const stat = result.stats?.[0];
+        setMessage(`Worker dry-run: ${stat?.due ?? 0} due, ${stat?.sent ?? 0} would send.`);
+      }
+    } catch {
+      setMessage('Could not run worker test.');
+    }
+    setIsBusy(false);
+  };
+
+  const updateAdminConfig = async (patch) => {
+    setIsBusy(true);
+    setMessage('');
+    try {
+      const response = await fetch('/api/admin-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        setMessage('Could not update settings.');
+      } else {
+        setAdminConfig({ popupEnabled: result.popupEnabled !== false, mailEnabled: result.mailEnabled !== false });
+        setMessage('Settings updated.');
+      }
+    } catch {
+      setMessage('Could not update settings.');
+    }
+    setIsBusy(false);
+  };
+
+  const replaceMetaValue = (raw, field, value) => {
+    const line = `${field}: ${value}`;
+    const pattern = new RegExp(`^${field}:.*$`, 'm');
+    if (pattern.test(raw)) return raw.replace(pattern, line);
+    return raw.replace(/^---\s*\n/, `---\n${line}\n`);
+  };
+
+  const toggleCampaignEnabled = async (campaignKey, enabled) => {
+    const summary = campaignSummaries.find((item) => item.key === campaignKey);
+    if (!summary) return;
+    setIsBusy(true);
+    setMessage('');
+    try {
+      const nextContent = replaceMetaValue(summary.content, 'enabled', enabled ? 'true' : 'false');
+      const response = await fetch(`/api/admin-mail?type=${encodeURIComponent(campaignKey)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: nextContent }),
+      });
+      if (!response.ok) {
+        setMessage('Could not update campaign.');
+      } else {
+        if (campaignKey === key) {
+          const result = await response.json();
+          setContent(result.content || '');
+          setParsed(result.parsed || null);
+        }
+        await loadCampaignSummaries();
+        setMessage('Campaign updated.');
+      }
+    } catch {
+      setMessage('Could not update campaign.');
+    }
+    setIsBusy(false);
+  };
+
+  const toggleSelectedCampaign = (campaignKey) => {
+    setSelectedCampaigns((current) => (
+      current.includes(campaignKey)
+        ? current.filter((item) => item !== campaignKey)
+        : [...current, campaignKey]
+    ));
+  };
+
+  const dryRunSelected = async () => {
+    setIsBusy(true);
+    setMessage('');
+    try {
+      const stats = [];
+      for (const campaignKey of selectedCampaigns) {
+        const response = await fetch(`/api/send-scheduled-mails?type=${encodeURIComponent(campaignKey)}&dryRun=1`);
+        const result = await response.json();
+        if (!response.ok) throw new Error('worker_failed');
+        stats.push(result.stats?.[0]);
+      }
+      const summary = stats.map((stat) => `${stat?.key}: ${stat?.due ?? 0}`).join(', ');
+      setMessage(`Selected dry-run due counts: ${summary || 'none selected'}.`);
+    } catch {
+      setMessage('Could not run selected worker test.');
+    }
+    setIsBusy(false);
+  };
+
+  const updateCampaignField = (field, value) => {
+    setCampaignForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const toggleCampaignGroup = (group) => {
+    setCampaignForm((current) => {
+      let groups;
+      if (group === 'all') {
+        groups = current.groups.includes('all') ? [] : ['all'];
+      } else {
+        groups = current.groups.includes(group)
+          ? current.groups.filter((item) => item !== group)
+          : [...current.groups.filter((item) => item !== 'all'), group];
+      }
+      return { ...current, groups: groups.length ? groups : ['all'] };
+    });
+  };
+
+  if (!authenticated) {
+    return (
+      <main className="obba-page">
+        <section className="obba-card mx-auto max-w-xl p-6 sm:p-8">
+          <p className="obba-updates-kicker">Admin Mail Security</p>
+          <h1 className="mt-2 text-3xl font-extrabold" style={{ color: 'var(--text)' }}>Enter OTP to open mail files</h1>
+          <p className={`mt-3 text-sm leading-7 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            A 6-digit code will be sent to your official OBBA email. Local dev also accepts 000000 for testing.
+          </p>
+          <button type="button" onClick={requestOtp} disabled={isBusy} className="mt-6 rounded-xl bg-blue-600 px-5 py-3 text-sm font-extrabold text-white">
+            {isBusy ? 'Sending...' : otpSent ? 'Send OTP Again' : 'Send OTP'}
+          </button>
+          <form onSubmit={verifyOtp} className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto]">
+            <input value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="6 digit code" className="obba-input" inputMode="numeric" />
+            <button type="submit" disabled={isBusy || code.length !== 6} className="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-extrabold text-white disabled:opacity-60">Verify</button>
+          </form>
+          {message && <p className="mt-4 text-sm font-bold" style={{ color: message.includes('sent') ? '#16a34a' : 'var(--text2)' }}>{message}</p>}
+        </section>
+      </main>
+    );
+  }
+
+  return (
+    <main className="obba-page">
+      <section className="mb-6 grid gap-4 lg:grid-cols-2">
+        <div className="obba-card p-5">
+          <p className="obba-updates-kicker">Global Controls</p>
+          <h2 className="mt-1 text-2xl font-extrabold" style={{ color: 'var(--text)' }}>Site email settings</h2>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => updateAdminConfig({ popupEnabled: !adminConfig.popupEnabled })}
+              className={`rounded-2xl px-4 py-4 text-left text-sm font-extrabold ${adminConfig.popupEnabled ? 'bg-emerald-600 text-white' : 'border'}`}
+              style={adminConfig.popupEnabled ? {} : { borderColor: 'var(--border)', color: 'var(--text)' }}
+            >
+              Popup: {adminConfig.popupEnabled ? 'ON' : 'OFF'}
+              <span className="mt-1 block text-xs font-semibold opacity-80">Controls subscription popup visibility.</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => updateAdminConfig({ mailEnabled: !adminConfig.mailEnabled })}
+              className={`rounded-2xl px-4 py-4 text-left text-sm font-extrabold ${adminConfig.mailEnabled ? 'bg-emerald-600 text-white' : 'border'}`}
+              style={adminConfig.mailEnabled ? {} : { borderColor: 'var(--border)', color: 'var(--text)' }}
+            >
+              Mail System: {adminConfig.mailEnabled ? 'ON' : 'OFF'}
+              <span className="mt-1 block text-xs font-semibold opacity-80">Disables all sends except admin OTP.</span>
+            </button>
+          </div>
+        </div>
+        <div className="obba-card p-5">
+          <p className="obba-updates-kicker">Multi Select</p>
+          <h2 className="mt-1 text-2xl font-extrabold" style={{ color: 'var(--text)' }}>Test multiple campaigns</h2>
+          <div className="mt-5 flex flex-wrap gap-3">
+            {Object.entries(ADMIN_MAIL_LABELS).map(([campaignKey, label]) => (
+              <label key={campaignKey} className="inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
+                <input type="checkbox" checked={selectedCampaigns.includes(campaignKey)} onChange={() => toggleSelectedCampaign(campaignKey)} />
+                {label}
+              </label>
+            ))}
+          </div>
+          <button type="button" onClick={dryRunSelected} disabled={isBusy || selectedCampaigns.length === 0} className="mt-4 rounded-xl bg-blue-600 px-5 py-3 text-sm font-extrabold text-white disabled:opacity-60">Test Selected</button>
+        </div>
+      </section>
+      <section className="mb-6 grid gap-4 lg:grid-cols-3">
+        {campaignSummaries.map((summary) => (
+          <div key={summary.key} className="obba-card p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="obba-updates-kicker">{summary.key}</p>
+                <h3 className="mt-1 text-xl font-extrabold" style={{ color: 'var(--text)' }}>{ADMIN_MAIL_LABELS[summary.key]}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => toggleCampaignEnabled(summary.key, !summary.parsed?.enabled)}
+                className={`rounded-full px-4 py-2 text-xs font-extrabold ${summary.parsed?.enabled ? 'bg-emerald-600 text-white' : 'border'}`}
+                style={summary.parsed?.enabled ? {} : { borderColor: 'var(--border)', color: 'var(--text)' }}
+              >
+                {summary.parsed?.enabled ? 'ON' : 'OFF'}
+              </button>
+            </div>
+            <div className="mt-4 space-y-2 text-sm" style={{ color: 'var(--text2)' }}>
+              <p><strong>Subject:</strong> {summary.parsed?.subject}</p>
+              <p><strong>Groups:</strong> {(summary.parsed?.groups || [summary.parsed?.group]).join(', ')}</p>
+              <p><strong>Delay:</strong> {summary.parsed?.delayDays} days</p>
+              <p><strong>Button:</strong> {summary.parsed?.buttonText} → {summary.parsed?.buttonUrl}</p>
+            </div>
+            <Link to={`/admin/mail/${summary.key}`} className="mt-4 inline-flex rounded-xl border px-4 py-2 text-sm font-extrabold" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>Edit Section</Link>
+          </div>
+        ))}
+      </section>
+      <section className="grid gap-6 lg:grid-cols-[1fr_340px]">
+        <div className="obba-card p-5 sm:p-7">
+          <p className="obba-updates-kicker">Admin Mail File</p>
+          <h1 className="mt-2 text-3xl font-extrabold" style={{ color: 'var(--text)' }}>{ADMIN_MAIL_LABELS[key]}</h1>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {Object.entries(ADMIN_MAIL_LABELS).map(([itemKey, label]) => (
+              <Link key={itemKey} to={`/admin/mail/${itemKey}`} className={`rounded-xl px-4 py-2 text-sm font-extrabold ${itemKey === key ? 'bg-blue-600 text-white' : 'border'}`} style={itemKey === key ? {} : { borderColor: 'var(--border)', color: 'var(--text)' }}>{label}</Link>
+            ))}
+          </div>
+          <div className="mt-5 grid gap-4">
+            <label className="grid gap-2">
+              <span className="text-sm font-extrabold" style={{ color: 'var(--text)' }}>Subject</span>
+              <input
+                value={campaignForm.subject}
+                onChange={(event) => updateCampaignField('subject', event.target.value)}
+                className="obba-input"
+                placeholder="Email subject"
+              />
+            </label>
+            <label className="grid gap-2">
+              <span className="text-sm font-extrabold" style={{ color: 'var(--text)' }}>Body</span>
+              <textarea
+                value={campaignForm.body}
+                onChange={(event) => updateCampaignField('body', event.target.value)}
+                className="min-h-[260px] w-full rounded-2xl border p-4 text-sm leading-6 outline-none"
+                style={{ borderColor: 'var(--border)', background: 'var(--input)', color: 'var(--text)' }}
+                placeholder="Write the email body here"
+              />
+            </label>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="grid gap-2">
+                <span className="text-sm font-extrabold" style={{ color: 'var(--text)' }}>Button Label</span>
+                <input
+                  value={campaignForm.buttonText}
+                  onChange={(event) => updateCampaignField('buttonText', event.target.value)}
+                  className="obba-input"
+                  placeholder="Check Your Pay"
+                />
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-extrabold" style={{ color: 'var(--text)' }}>Button URL</span>
+                <input
+                  value={campaignForm.buttonUrl}
+                  onChange={(event) => updateCampaignField('buttonUrl', event.target.value)}
+                  className="obba-input"
+                  placeholder="https://www.obbacalculators.com/salary-calculator"
+                />
+              </label>
+            </div>
+            <div>
+              <span className="text-sm font-extrabold" style={{ color: 'var(--text)' }}>Send To</span>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {ADMIN_GROUP_OPTIONS.map(([groupValue, label]) => (
+                  <label key={groupValue} className="inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm font-bold" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
+                    <input type="checkbox" checked={campaignForm.groups.includes(groupValue)} onChange={() => toggleCampaignGroup(groupValue)} />
+                    {label}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <button type="button" onClick={saveCampaign} disabled={isBusy} className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-extrabold text-white">Save File</button>
+            <button type="button" onClick={dryRun} disabled={isBusy} className="rounded-xl border px-5 py-3 text-sm font-extrabold" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>Test Worker</button>
+          </div>
+          {message && <p className="mt-4 text-sm font-bold" style={{ color: message.includes('saved') || message.includes('dry-run') ? '#16a34a' : '#dc2626' }}>{message}</p>}
+        </div>
+        <aside className="obba-card p-5">
+          <h2 className="text-xl font-extrabold" style={{ color: 'var(--text)' }}>File Rules</h2>
+          <div className={`mt-4 space-y-3 text-sm leading-6 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            <p>Use the form fields only. The hidden file format is handled automatically.</p>
+            <p><strong>Send To</strong>: choose all users or one/multiple state groups.</p>
+            <p><strong>Delay</strong>: this section keeps its built-in timing: 3 days, 7 days, or urgent.</p>
+            <p><strong>ID</strong>: campaignId prevents duplicate sends. Change it later if you want to resend a new version.</p>
+            <p><strong>Variables</strong>: {'{{email}}'}, {'{{siteUrl}}'}, {'{{stateName}}'}, {'{{calculatorPath}}'}.</p>
+          </div>
+          {parsed && (
+            <div className="mt-5 rounded-2xl border p-4 text-sm" style={{ borderColor: 'var(--border)', background: 'var(--surface-alt)', color: 'var(--text2)' }}>
+              <p><strong>Subject:</strong> {parsed.subject}</p>
+              <p><strong>Groups:</strong> {(parsed.groups || [parsed.group]).join(', ')}</p>
+              <p><strong>Delay:</strong> {parsed.delayDays} days</p>
+              <p><strong>Enabled:</strong> {String(parsed.enabled)}</p>
+              <p><strong>ID:</strong> {parsed.campaignId}</p>
+            </div>
+          )}
+        </aside>
+      </section>
+      <section className="obba-card mt-6 p-5 sm:p-7">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="obba-updates-kicker">Subscribers</p>
+            <h2 className="mt-1 text-2xl font-extrabold" style={{ color: 'var(--text)' }}>Subscribed emails and locations</h2>
+          </div>
+          <button type="button" onClick={loadSubscribers} className="rounded-xl border px-4 py-2 text-sm font-extrabold" style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>Refresh List</button>
+        </div>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[860px] border-separate border-spacing-0 text-left text-sm">
+            <thead>
+              <tr style={{ color: 'var(--text2)' }}>
+                <th className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>Email</th>
+                <th className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>Location</th>
+                <th className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>Group</th>
+                <th className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>Page</th>
+                <th className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>Last Mail</th>
+                <th className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>Subscribed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {subscribers.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="px-3 py-5 text-center" style={{ color: 'var(--text2)' }}>No active subscribers found.</td>
+                </tr>
+              ) : subscribers.map((subscriber) => {
+                const locationText = [subscriber.city, subscriber.stateName || subscriber.stateCode, subscriber.country].filter(Boolean).join(', ') || subscriber.timezone || 'Unknown';
+                return (
+                  <tr key={subscriber.email} style={{ color: 'var(--text)' }}>
+                    <td className="border-b px-3 py-3 font-bold" style={{ borderColor: 'var(--border)' }}>{subscriber.email}</td>
+                    <td className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>{locationText}</td>
+                    <td className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>{subscriber.segmentKey || 'all'}</td>
+                    <td className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>{subscriber.page || subscriber.calculatorPath || '-'}</td>
+                    <td className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>{subscriber.lastMailAt ? `${new Date(subscriber.lastMailAt).toLocaleString()} (${subscriber.lastMailCampaign || 'mail'})` : '-'}</td>
+                    <td className="border-b px-3 py-3" style={{ borderColor: 'var(--border)' }}>{subscriber.subscribedAt ? new Date(subscriber.subscribedAt).toLocaleString() : '-'}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
   );
 }
 
@@ -6428,6 +7090,21 @@ export default function App() {
         keywords: 'How to use calculators',
         canonicalPath: '/blogs',
       },
+      '/admin/mail/3days': {
+        title: 'Admin Mail - 3 Days',
+        description: 'OBBA admin mail editor.',
+        canonicalPath: '/admin/mail/3days',
+      },
+      '/admin/mail/7days': {
+        title: 'Admin Mail - 7 Days',
+        description: 'OBBA admin mail editor.',
+        canonicalPath: '/admin/mail/7days',
+      },
+      '/admin/mail/urgent': {
+        title: 'Admin Mail - Urgent',
+        description: 'OBBA admin mail editor.',
+        canonicalPath: '/admin/mail/urgent',
+      },
     };
 
     const pageSeo = seoByPath[location.pathname];
@@ -6488,6 +7165,9 @@ export default function App() {
       '/privacy-policy': 'Privacy Policy',
       '/terms-conditions': 'Terms & Conditions',
       '/contact-us': 'Contact Us',
+      '/admin/mail/3days': 'Admin Mail',
+      '/admin/mail/7days': 'Admin Mail',
+      '/admin/mail/urgent': 'Admin Mail',
     };
 
     const path = location.pathname;
@@ -6576,6 +7256,8 @@ export default function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicyPage isDark={isDark} />} />
           <Route path="/terms-conditions" element={<TermsConditionsPage isDark={isDark} />} />
           <Route path="/contact-us" element={<ContactUsPage isDark={isDark} />} />
+          <Route path="/unsubscribe" element={<UnsubscribePage isDark={isDark} />} />
+          <Route path="/admin/mail/:type" element={<AdminMailPage isDark={isDark} />} />
           <Route path="/blogs" element={<BlogsPage isDark={isDark} />} />
           <Route path="/blogs/:slug" element={<BlogPost isDark={isDark} />} />
         </Routes>

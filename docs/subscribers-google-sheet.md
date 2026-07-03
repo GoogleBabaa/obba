@@ -7,7 +7,7 @@ Use this when you want `/api/subscribe` to save every signup into a Google Sheet
 Create a Google Sheet with this header row:
 
 ```csv
-email,subscribedAt,page,pageTitle,referrer,timezone,language,country,region,city,latitude,longitude,ip,userAgent
+email,subscribedAt,page,pageTitle,referrer,timezone,browserStateCode,browserStateName,stateCode,stateName,segmentType,segmentKey,segmentName,calculatorPath,unsupportedStateCode,unsupportedStateName,language,country,region,city,latitude,longitude,ip,userAgent
 ```
 
 ## Apps Script
@@ -25,6 +25,16 @@ function doPost(e) {
     data.pageTitle || '',
     data.referrer || '',
     data.timezone || '',
+    data.browserStateCode || '',
+    data.browserStateName || '',
+    data.stateCode || '',
+    data.stateName || '',
+    data.segmentType || '',
+    data.segmentKey || '',
+    data.segmentName || '',
+    data.calculatorPath || '',
+    data.unsupportedStateCode || '',
+    data.unsupportedStateName || '',
     data.language || '',
     data.country || '',
     data.region || '',
