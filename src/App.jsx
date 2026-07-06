@@ -1,4 +1,4 @@
-﻿import React, { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Link, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { BarChart3, ChevronDown, Landmark, Map, MapPin, Menu, Moon, Sun, X } from 'lucide-react';
 import { blogPosts } from './blogData';
@@ -2521,13 +2521,7 @@ function SalaryCalculatorPage({ isDark }) {
         <section style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '28px 28px 24px', marginBottom: 16 }}>
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
-              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>Salary Calculator: Convert Your Pay Into Hourly, Weekly, Monthly, and Annual Income</h1>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.7, marginBottom: 10 }}>
-                Knowing your exact income — not just the number on your offer letter — is the first step toward real financial planning. A salary calculator takes whatever pay figure you already know (hourly, weekly, monthly, or annual) and converts it into every other pay period, so you can budget accurately, compare job offers, and understand what actually lands in your bank account after deductions.
-              </p>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.7, marginBottom: 16 }}>
-                This guide walks through how salary calculations work, the formulas behind them, and how gross pay differs from net pay — the same logic used by payroll professionals and HR departments. Many people also use a <Link to="/paycheck-calculator" style={{ color: '#1a6fe8', fontWeight: 800 }}>Paycheck Calculator</Link> alongside salary calculations to estimate their actual take-home pay after taxes and deductions.
-              </p>
+              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Salary Calculator</h1>
               <div className="flex flex-wrap gap-3">
                 {['Instant Results', '2026 Ready', 'Hourly or Salary', 'No Sign Up'].map((tag) => (
                   <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: '#16a34a', fontWeight: 800 }}>
@@ -2810,7 +2804,7 @@ function SalaryCalculatorPage({ isDark }) {
         <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="space-y-5">
             <article id="what-is-salary" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>Salary Calculator</h2>
+              <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text)', marginBottom: 10 }}>Salary Calculator: Convert Your Pay Into Hourly, Weekly, Monthly, and Annual Income</h1>
               <div className="grid gap-5 md:grid-cols-[1fr_200px] md:items-start">
                 <div style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
                   <p style={{ marginBottom: 12 }}>
@@ -3251,6 +3245,198 @@ function PaycheckCalculatorPage({ isDark }) {
     ['Take Home', r.netPer, '#10b981'],
   ];
   const maxPaycheckBar = Math.max(...paycheckBarRows.map(([, value]) => value), 1);
+  const paycheckArticleSections = [
+    {
+      id: 'salary-paycheck-calculator-estimate',
+      title: 'Salary Paycheck Calculator: Estimate Your Take-Home Pay',
+      paragraphs: [
+        ['A Salary Paycheck Calculator lets you estimate your take-home pay before payday arrives. You enter your gross pay, annual salary, per-period salary, pay frequency, filing status, dependents, and W-4 form details. Then the calculator estimates payroll taxes, paycheck taxes, federal withholding, state withholding, income withholding, and common payroll deductions. In simple words, it shows your likely net paycheck amount.'],
+        ['This tool is useful because your salary is not the same as your spendable money. A $70,000 salary does not mean you take home $70,000. Your employer must withhold taxes and may also remove employee deductions, voluntary deductions, benefits deductions, and retirement amounts. A calculator helps you calculate your net pay without doing every tax step by hand.'],
+      ],
+    },
+    {
+      id: 'what-is-salary-paycheck-calculator',
+      title: 'What Is a Salary Paycheck Calculator?',
+      paragraphs: [
+        ['A Salary Paycheck Calculator is an online tool that turns your gross income into estimated net income. It uses your salary, tax location, pay period, and W-4 form information to estimate gross pay minus taxes and deductions. It can also show how tax withholding changes when you adjust your filing details, retirement contributions, or health benefits.'],
+        ['Think of it like a financial flashlight. Your salary is the room, but taxes and deductions hide in the corners. The calculator shines light on the full picture. It helps you understand how much tax is taken out of my paycheck, why your paycheck changes, and what your real monthly budget may look like.'],
+      ],
+    },
+    {
+      id: 'who-should-use-this-calculator',
+      title: 'Who Should Use This Calculator?',
+      paragraphs: [
+        ['You should use a paycheck estimator for employees if you work in the USA and want a clear employee paycheck estimate. It helps salaried employees, new hires, remote workers, people changing states, workers comparing offers, and anyone who wants to know salary after federal and state taxes before making money decisions.'],
+      ],
+    },
+    {
+      id: 'gross-pay-vs-net-pay',
+      title: 'Gross Pay vs Net Pay: What Is the Difference?',
+      paragraphs: [
+        ['Understanding the difference between gross pay and net pay is the first step in reading your paycheck. Gross pay is the full amount you earn before anything is taken out. Net pay is what you actually receive after federal taxes, state taxes, local taxes, FICA tax, insurance, retirement, and other deductions.'],
+        ['This simple idea controls the whole paycheck calculation. The basic paycheck calculation formula is gross pay minus taxes and deductions equals net pay. It sounds easy, but the details can get tricky. Your taxable income, tax brackets, filing status, dependents, and deductions all shape the final result.'],
+      ],
+      subsections: [
+        ['Gross Pay', 'Gross pay is your total pay before deductions. If your annual salary is $60,000 and you are paid twice per month, your per-period salary before taxes is $2,500. That amount is your gross paycheck before payroll taxes and deductions are removed.'],
+        ['Net Pay', 'Net pay is your final take-home pay after taxes and deductions. This is the money you use for rent, food, savings, debt payments, utilities, and daily spending. When people ask for a salary after taxes calculator, they usually want to know this number.'],
+      ],
+    },
+    {
+      id: 'how-to-calculate-your-salary-paycheck',
+      title: 'How to Calculate Your Salary Paycheck',
+      paragraphs: [
+        ['To calculate a salary paycheck, start with your annual salary and divide it by your yearly number of paychecks. A weekly paycheck usually means 52 paychecks per year. A biweekly paycheck usually means 26. A semi-monthly paycheck means 24. A monthly paycheck means 12. This gives your gross pay for each pay period.'],
+        ['After that, subtract paycheck taxes, FICA tax, pre-tax deductions, post-tax deductions, benefits deductions, and any other required amount. This gives your net pay. Manual math can feel like counting coins in the dark, so a calculator makes the job easier and more accurate.'],
+      ],
+    },
+    {
+      id: 'federal-income-tax-withholding',
+      title: 'How Federal Income Tax Withholding Works',
+      paragraphs: [
+        ['Federal income tax withholding from paycheck means your employer takes part of your pay and sends it to the IRS during the year. This is called federal withholding. Your withholding depends on your income, filing status, dependents, additional withholding, and information from your W-4 form. The IRS also provides a Tax Withholding Estimator to help workers review withholding at ', { text: 'IRS.gov', href: 'https://www.irs.gov/individuals/tax-withholding-estimator' }, '.'],
+        ['Withholding is not always your final tax bill. It is more like paying your yearly tax in small slices. If too much is withheld, you may get a refund. If too little is withheld, you may owe money later. This is why learning how paycheck withholding works can save you from a nasty tax surprise.'],
+      ],
+    },
+    {
+      id: 'federal-tax-brackets-2025-2026',
+      title: '2025–2026 Federal Tax Brackets',
+      paragraphs: [
+        ['The IRS uses progressive tax brackets, which means different parts of your taxable income may be taxed at different rates. You can review current federal rates through the official IRS page on ', { text: 'federal income tax rates and brackets', href: 'https://www.irs.gov/filing/federal-income-tax-rates-and-brackets' }, ', because bracket amounts can change by tax year.'],
+      ],
+    },
+    {
+      id: 'how-w4-affects-paycheck',
+      title: 'How W-4 Affects Your Paycheck',
+      paragraphs: [
+        ['Your W-4 form tells your employer how much federal tax to withhold. The 2020 W-4 removed old withholding allowances and now focuses on filing status, multiple jobs, dependents, deductions, extra income, and additional withholding. This is the heart of how W-4 affects paycheck and why a small form change can alter your net pay.'],
+      ],
+    },
+    {
+      id: 'fica-taxes-social-security-medicare',
+      title: 'FICA Taxes: Social Security and Medicare',
+      paragraphs: [
+        ['FICA tax stands for Federal Insurance Contributions Act tax. It includes Social Security tax and Medicare tax. These taxes are separate from federal income tax. Most U.S. employees see Social Security and Medicare deductions on every paycheck, even when their federal income tax withholding is low.'],
+        ['For 2026, the employee Social Security tax rate is 6.2%, and the Medicare tax rate is 1.45%, according to IRS guidance. The SSA lists the 2026 Social Security wage base as $184,500 on its official ', { text: 'Contribution and Benefit Base', href: 'https://www.ssa.gov/oact/cola/cbb.html' }, ' page. These details matter because they affect your taxable wages calculation and your final payroll tax estimate.'],
+      ],
+      subsections: [
+        ['Social Security Tax', 'Social Security tax helps fund Social Security benefits. Employees pay this tax on wages up to the yearly wage base limit. Once your earnings pass that limit, Social Security tax no longer applies to the extra wages for that year.'],
+        ['Medicare Tax', 'Medicare tax helps fund Medicare. Most employees pay 1.45% on wages. Higher earners may also face Additional Medicare Tax, so a strong paycheck calculator should account for higher-income situations when estimating paycheck taxes.'],
+      ],
+    },
+    {
+      id: 'state-and-local-taxes-on-paycheck',
+      title: 'State and Local Taxes on Your Paycheck',
+      paragraphs: [
+        ['State taxes and local taxes can change your paycheck more than many workers expect. Some states have no state income tax. Others have higher rates, city wage taxes, school district taxes, or special local rules. That is why salary after federal and state taxes can look very different across the country.'],
+        ['A person earning $80,000 in Florida may keep more than someone earning the same amount in New York, depending on deductions and local rules. This is where a state and local tax calculator becomes useful. It helps you see how location affects your paycheck before you accept a job, move, or change work states.'],
+      ],
+    },
+    {
+      id: 'paycheck-calculators-by-state',
+      title: 'Paycheck Calculators by State',
+      paragraphs: [
+        ['A paycheck calculator by state helps estimate state-specific withholding. Useful state pages may include California, Texas, Florida, New York, Illinois, Pennsylvania, Ohio, Washington, Georgia, North Carolina, New Jersey, Virginia, Michigan, and Colorado paycheck calculators.'],
+      ],
+    },
+    {
+      id: 'pay-frequency-effect',
+      title: 'Pay Frequency and Its Effect on Your Paycheck',
+      paragraphs: [
+        ['Pay frequency means how often you are paid. It does not usually change your total yearly salary, but it changes the size of each paycheck. This is why how pay frequency affects salary matters for budgeting. A $72,000 salary feels different when split into 52 checks instead of 12 checks.'],
+        ['Your rent, car payment, loan payment, and savings plan may work better with one schedule than another. Some people prefer smaller, frequent checks. Others prefer larger checks with fewer paydays. A calculator helps compare salary paid weekly vs biweekly, semi-monthly, and monthly pay.'],
+      ],
+      subsections: [
+        ['Weekly Pay', 'A weekly paycheck usually means 52 paychecks per year. Each check is smaller, but money arrives often. This can help with weekly bills, groceries, and short-term budgeting.'],
+        ['Biweekly Pay', 'A biweekly paycheck usually means 26 paychecks per year. It comes every two weeks. Many workers like it because two months in the year may include an extra paycheck.'],
+        ['Semi-Monthly Pay', 'A semi-monthly paycheck usually means 24 paychecks per year. It often arrives twice a month, such as on the 15th and last day. This schedule can match monthly bills better.'],
+        ['Monthly Pay', 'A monthly paycheck usually means 12 paychecks per year. Each check is larger, but you must budget carefully. One mistake can stretch your money thin before the next payday.'],
+        ['Biweekly vs Semi-Monthly Pay', 'The difference between biweekly and semi-monthly pay is timing and yearly paycheck count. Biweekly pay comes every two weeks and usually creates 26 checks per year. Semi-monthly pay comes twice per month and creates 24 checks per year.'],
+      ],
+    },
+    {
+      id: 'common-paycheck-deductions-withholdings',
+      title: 'Common Paycheck Deductions and Withholdings',
+      paragraphs: [
+        ['Payroll deductions are amounts removed from your paycheck before you receive your net pay. Some are required, like taxes. Others are chosen by you, like retirement contributions or health coverage. These deductions can lower your net paycheck amount, but some may also reduce your taxable income.'],
+        ['A pay stub can look confusing because it may show employee deductions, voluntary deductions, benefits deductions, income withholding, and year-to-date totals. Still, once you know the terms, the fog clears. Your paycheck becomes a map instead of a mystery.'],
+      ],
+      subsections: [
+        ['Pre-Tax Deductions', 'Pre-tax deductions are taken before certain taxes are calculated. Common examples include a traditional 401(k), health insurance, HSA, and FSA. A 401k deduction from paycheck, health insurance deduction from paycheck, or retirement contribution paycheck deduction may lower taxable wages.'],
+        ['Post-Tax Deductions', 'Post-tax deductions are taken after taxes are calculated. A Roth 401(k), some insurance payments, union dues, and certain workplace costs may fall here. The key idea in pre-tax vs post-tax deductions is timing, because timing can change taxable income.'],
+        ['Benefit Deductions', 'Benefit deductions are amounts taken for employee benefits. These may include medical, dental, vision, life insurance, disability insurance, retirement plans, HSA, or FSA. They reduce your paycheck, but they may protect your health and future finances.'],
+        ['Wage Garnishments', 'Wage garnishment is a required deduction usually ordered by a court or government agency. It may be used for child support, unpaid taxes, student loans, or other debts. It can reduce take-home pay even when your salary has not changed.'],
+      ],
+    },
+    {
+      id: 'bonus-overtime-extra-income',
+      title: 'Bonus Pay, Overtime, and Extra Income',
+      paragraphs: [
+        ['Extra income can change your paycheck in a hurry. Bonuses, commissions, tips, overtime, and other supplemental wages may increase gross pay, but they can also increase withholding. This is why a bonus can feel smaller than expected when it finally arrives.'],
+        ['A paycheck tool can help estimate bonus paycheck tax withholding and overtime income. It can also show how extra earnings may affect tax brackets, payroll taxes, and your yearly tax picture. More money is still good, but the tax bite can feel like a surprise guest at dinner.'],
+      ],
+      subsections: [
+        ['Are Bonuses Taxed Differently?', 'Bonuses can be treated as supplemental wages, and employers may withhold taxes differently from regular salary. This is often called bonus tax in everyday language, though your final tax depends on total yearly income.'],
+        ['Salary vs Hourly Paycheck', 'A salary paycheck is based on a fixed yearly amount, while an hourly paycheck depends on hours worked. If you want to compare salary to hourly, an hourly paycheck calculator can help you see how wages, overtime, and hours change your final pay.'],
+        ['Overtime and Take-Home Pay', 'Overtime can raise gross pay and net pay, but it may also raise withholding. Your final value depends on overtime rate, taxes, deductions, and pay frequency. A calculator can show whether extra hours truly fit your budget goals.'],
+      ],
+    },
+    {
+      id: 'how-to-read-paycheck-pay-stub',
+      title: 'How to Read a Paycheck or Pay Stub',
+      paragraphs: [
+        ['A paycheck is the payment you receive. A paycheck stub or pay stub explains how that payment was calculated. It shows your gross pay, taxes, deductions, and net pay. In many ways, the pay stub is the story behind the money.'],
+        ['Reading it well helps you catch mistakes. You can check hours, salary, tax withholding, insurance costs, retirement contributions, and year-to-date totals. When something looks off, your pay stub gives you the first clue.'],
+      ],
+      subsections: [
+        ['Information Found on a Paycheck', 'A paycheck may show your name, employer name, pay date, pay period, net pay amount, direct deposit details, and check number. If you receive direct deposit, the payment may be electronic, but the same basic information still matters.'],
+        ['Information Found on a Pay Stub', 'A pay stub usually shows gross pay, net pay, federal withholding, state withholding, FICA tax, Social Security tax, Medicare tax, insurance, retirement deductions, year-to-date earnings, and employer contributions.'],
+      ],
+    },
+    {
+      id: 'how-to-reduce-taxes-paycheck',
+      title: 'How to Reduce Taxes Taken Out of Your Paycheck',
+      paragraphs: [
+        ['You may be able to adjust taxes taken from your paycheck by reviewing your W-4 form, using eligible pre-tax benefits, checking filing status, and claiming credits when allowed. This does not mean avoiding tax. It means making withholding fit your real situation.'],
+        ['Be careful, though. Lower withholding can increase take-home pay now, but it may reduce your refund or create a tax bill later. A good goal is balance. You want enough money each payday without getting burned during tax season.'],
+      ],
+      subsections: [
+        ['Update Your W-4', 'Update your W-4 when life changes. Marriage, divorce, a child, a second job, a raise, or side income can affect withholding. The IRS says workers can use Form W-4 so employers withhold the correct federal income tax from pay.'],
+        ['Use Pre-Tax Benefits', 'Using pre-tax benefits can reduce taxable income. Traditional 401(k) contributions, health insurance premiums, HSA contributions, and FSA contributions can all affect your paycheck. They may lower some taxes while helping you plan ahead.'],
+        ['Review Your Filing Status', 'Your filing status affects withholding and tax brackets. Single, married filing jointly, married filing separately, and head of household can produce different paycheck results. This is why how filing status affects taxes matters.'],
+        ['Check Tax Credits', 'Tax credits can reduce your final tax liability when you qualify. Dependents, education, and other credits may affect your tax return and withholding choices. This is also part of how dependents affect paycheck, because dependents can reduce withholding on the W-4.'],
+      ],
+    },
+    {
+      id: 'final-thoughts-salary-paycheck-calculator',
+      title: 'Final Thoughts on Using a Salary Paycheck Calculator',
+      paragraphs: [
+        ['A Salary Paycheck Calculator gives you more than a number. It gives you financial clarity. It helps you understand your annual salary to paycheck, your paycheck after deductions, and your real take-home pay. That clarity matters when you plan rent, savings, debt, groceries, travel, or a new job move.'],
+        ['The best way to use it is simple. Enter honest income details, choose the right state, select the correct pay frequency, add W-4 details, include deductions, and review your result. When your paycheck finally arrives, compare it with your estimate. If both numbers are close, you know your money map is working.'],
+      ],
+    },
+  ];
+  const paycheckFaqItems = [
+    ['How much is $100,000 salary after tax in the USA?', 'A $100,000 salary after tax in the USA may leave around $70,000 to $78,000 take-home pay for a single filer, depending on state taxes, deductions, and benefits.'],
+    ['Is $70,000 a good salary in the USA?', 'Yes, $70,000 can be a good salary in many U.S. states, especially in low-cost areas. However, it may feel average in expensive cities like New York, San Francisco, Boston, or Los Angeles.'],
+    ['How to calculate US salary?', 'To calculate US salary, multiply hourly pay by hours worked per week, then by 52 weeks. For salary after taxes, subtract federal taxes, state taxes, FICA, and deductions.'],
+    ['What is $70,000 a year hourly?', '$70,000 a year is about $33.65 per hour, based on 40 hours per week and 52 weeks per year.'],
+    ['How much is $90000 a year per hour?', '$90,000 a year is about $43.27 per hour, based on a full-time 40-hour workweek.'],
+    ["What's my take home pay if I earn $70,000?", 'If you earn $70,000, your take-home pay may be around $52,000 to $58,000 per year, depending on your state, filing status, and deductions.'],
+    ['Is $100,000 a good salary in the USA?', 'Yes, $100,000 is a strong salary in many parts of the USA. In high-cost cities, rent, taxes, childcare, and insurance can reduce its comfort level.'],
+    ['How much is $65000 a year after taxes in NYC?', 'A $65,000 salary in NYC may leave around $47,000 to $51,000 after federal, New York State, NYC, FICA taxes, and basic deductions.'],
+    ['What is the 60% trap?', 'The 60% trap usually means losing a large share of extra income through higher taxes, reduced benefits, or other deductions.'],
+    ['Is 5000 dollars a month good in the USA?', '$5,000 a month can be good in many U.S. areas, especially for a single person. In expensive cities, it may feel modest after rent, insurance, and groceries.'],
+    ['What is a $40,000 salary hourly?', 'A $40,000 yearly salary is about $19.23 per hour, based on 40 hours per week and 52 weeks per year.'],
+    ['What is my monthly income if I make $70,000 a year?', 'If you make $70,000 a year, your gross monthly income is about $5,833 before taxes and deductions.'],
+    ['Is $300,000 a good salary in the USA?', 'Yes, $300,000 is a very high salary in the USA. It can support a strong lifestyle, though taxes and living costs still matter in expensive cities.'],
+    ['Is $10,000 a month good?', 'Yes, $10,000 a month is a strong income in most of the USA. After taxes, it can still provide comfortable living if housing and debt are managed well.'],
+    ['What is a top 5% salary in the USA?', 'A top 5% salary in the USA is roughly around $170,000+ for individual income, but the exact number changes by year, state, and data source.'],
+  ];
+  const renderPaycheckContent = (parts) => parts.map((part, index) => (
+    typeof part === 'string'
+      ? <Fragment key={`${part.slice(0, 20)}-${index}`}>{part}</Fragment>
+      : <a key={`${part.href}-${index}`} href={part.href} target="_blank" rel="nofollow noopener noreferrer" style={{ color: '#1a6fe8', fontWeight: 700 }}>{part.text}</a>
+  ));
   const fieldBoxStyle = {
     background: 'var(--input)',
     border: '2px solid var(--border)',
@@ -3354,8 +3540,8 @@ function PaycheckCalculatorPage({ isDark }) {
   };
 
   useEffect(() => {
-    document.title = 'Salary Paycheck Calculator - Estimate Your Take-Home Pay';
-    const description = 'A Salary Paycheck Calculator estimates take-home pay after federal taxes, state taxes, FICA, and deductions. Enter salary, pay frequency, and filing status for a clear net pay estimate.';
+    document.title = 'Salary Paycheck Calculator – Estimate Take-Home Pay After Taxes';
+    const description = 'Use our Salary Paycheck Calculator to estimate take-home pay after taxes, deductions, FICA, and pay frequency in the USA.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -3374,7 +3560,7 @@ function PaycheckCalculatorPage({ isDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Salary Paycheck Calculator - Estimate Your Take-Home Pay',
+      name: 'Salary Paycheck Calculator – Estimate Take-Home Pay After Taxes',
       description,
       url: `${window.location.origin}/paycheck-calculator`,
       mainEntity: {
@@ -3420,10 +3606,7 @@ function PaycheckCalculatorPage({ isDark }) {
         <section style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '28px 28px 24px', marginBottom: 16 }}>
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
-              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>Paycheck Calculator</h1>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.65, marginBottom: 16 }}>
-                Estimate gross pay, federal withholding, state tax, FICA deductions, and take-home paycheck in seconds.
-              </p>
+              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Salary Paycheck Calculator</h1>
               <div className="flex flex-wrap gap-3">
                 {['Instant Results', '2026 Ready', 'State Taxes', 'No Sign Up'].map((tag) => (
                   <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: '#16a34a', fontWeight: 800 }}>
@@ -3606,115 +3789,35 @@ function PaycheckCalculatorPage({ isDark }) {
 
         <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="space-y-5">
-            <article id="what-is-paycheck" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>What is a Paycheck?</h2>
-              <div className="grid gap-5 md:grid-cols-[1fr_200px] md:items-start">
-                <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
-                  A paycheck is your gross earnings reduced by federal income tax, selected state tax, Social Security, Medicare, and other payroll deductions. This calculator shows the same gross-to-net flow using the current payroll logic already built into this site.
-                </p>
-                <div style={{ height: 128, borderRadius: 10, background: 'linear-gradient(135deg,#0f172a 0%,#1a6fe8 58%,#22c55e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, position: 'relative', overflow: 'hidden' }}>
-                  <svg width="168" height="112" viewBox="0 0 168 112" fill="none" aria-hidden="true">
-                    <rect x="18" y="20" width="106" height="68" rx="12" fill="white" fillOpacity=".94" />
-                    <rect x="30" y="34" width="58" height="8" rx="4" fill="#1a6fe8" />
-                    <rect x="30" y="51" width="82" height="7" rx="3.5" fill="#cbd5e1" />
-                    <rect x="30" y="66" width="48" height="7" rx="3.5" fill="#cbd5e1" />
-                    <circle cx="126" cy="70" r="26" fill="#22c55e" />
-                    <text x="126" y="80" textAnchor="middle" fontSize="30" fill="white" fontWeight="900">$</text>
-                    <path d="M104 24h24a8 8 0 0 1 8 8v16" stroke="#93c5fd" strokeWidth="4" strokeLinecap="round" />
-                    <circle cx="42" cy="86" r="10" fill="#fbbf24" />
-                  </svg>
-                </div>
-              </div>
-            </article>
-
-            <article id="how-to-use-paycheck-calculator" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>How to Use Paycheck Calculator</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 18 }}>Follow these steps to estimate gross pay, taxes, and take-home pay.</p>
-              <div className="grid gap-3 md:grid-cols-3">
-                {[
-                  ['pay', 'Choose Pay Type', 'Select annual salary or hourly wage.'],
-                  ['tax', 'Add Tax Details', 'Pick pay frequency, filing status, and state.'],
-                  ['chart', 'Review Results', 'Check paycheck taxes and net pay breakdown.'],
-                ].map(([icon, title, text], index) => (
-                  <div key={title} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: 15 }}>
-                    <div style={{ width: 38, height: 38, borderRadius: 9, background: '#1a6fe8', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
-                      {icon === 'pay' && <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2.5" y="4" width="15" height="12" rx="2" stroke="currentColor" strokeWidth="1.7"/><path d="M5.5 8h9M5.5 12h5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>}
-                      {icon === 'tax' && <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 15 15 5M6 6.5h.01M14 13.5h.01" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/><rect x="2.5" y="2.5" width="15" height="15" rx="3" stroke="currentColor" strokeWidth="1.5"/></svg>}
-                      {icon === 'chart' && <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 15V9M10 15V5M16 15v-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M3 16h14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/></svg>}
-                    </div>
-                    <div style={{ fontSize: 11, fontWeight: 900, color: '#1a6fe8', marginBottom: 5 }}>STEP {index + 1}</div>
-                    <div style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--text)', marginBottom: 5 }}>{title}</div>
-                    <div style={{ fontSize: 12.5, color: 'var(--text2)', lineHeight: 1.5 }}>{text}</div>
+            {paycheckArticleSections.map((section, sectionIndex) => (
+              <article key={section.id} id={section.id} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
+                {sectionIndex === 0 ? (
+                  <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text)', marginBottom: 12 }}>{section.title}</h1>
+                ) : (
+                  <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>{section.title}</h2>
+                )}
+                {section.paragraphs.map((paragraph, index) => (
+                  <p key={`${section.id}-p-${index}`} style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginBottom: index === section.paragraphs.length - 1 && !section.subsections ? 0 : 12 }}>
+                    {renderPaycheckContent(paragraph)}
+                  </p>
+                ))}
+                {section.subsections && (
+                  <div className="grid gap-3 md:grid-cols-2" style={{ marginTop: 14 }}>
+                    {section.subsections.map(([title, text]) => (
+                      <div key={title} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '13px 15px' }}>
+                        <h3 style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>{title}</h3>
+                        <p style={{ fontSize: 12.5, color: 'var(--text2)', lineHeight: 1.65, margin: 0 }}>{text}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </article>
-
-            <article id="paycheck-formula" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Paycheck Formula</h2>
-              <div style={{ background: 'rgba(26,111,232,.10)', border: '1px solid rgba(26,111,232,.20)', borderRadius: 10, padding: 16, color: 'var(--text2)', fontSize: 13.5, lineHeight: 1.7 }}>
-                <strong style={{ color: 'var(--text)' }}>Formula:</strong> Gross Pay - Federal Income Tax - State Income Tax - Social Security - Medicare = Take Home Pay<br />
-                <strong style={{ color: 'var(--text)' }}>Example:</strong> {usd2(r.grossPer)} gross - {usd2(paycheckTaxesPer)} taxes = <strong style={{ color: 'var(--text)' }}>{usd2(r.netPer)} take-home pay</strong>
-              </div>
-            </article>
-
-            <article id="paycheck-taxes-usa" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>Paycheck Taxes in the USA</h2>
-              <div className="grid gap-5 md:grid-cols-[1fr_200px] md:items-start">
-                <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
-                  U.S. paychecks commonly include federal withholding, Social Security, Medicare, and state income tax where applicable. This calculator estimates those parts with the existing federal and state tax setup in the app.
-                </p>
-                <div style={{ height: 118, borderRadius: 10, background: 'linear-gradient(135deg,#111827 0%,#1a6fe8 55%,#22c55e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-                  <div style={{ textAlign: 'center', padding: 14 }}><div style={{ fontSize: 20, fontWeight: 900, color: 'white', letterSpacing: 3 }}>TAX</div><div style={{ fontSize: 8, color: 'rgba(255,255,255,0.62)', letterSpacing: 1, textTransform: 'uppercase', marginTop: 4, lineHeight: 1.4 }}>Payroll<br />Withholding</div></div>
-                </div>
-              </div>
-            </article>
-
-            <article id="why-choose-paycheck-calculator" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>Why Choose Our Paycheck Calculator?</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginBottom: 16 }}>
-                It keeps the important payroll pieces in one place: income, pay frequency, filing status, state tax, federal withholding, FICA, and take-home pay. Results update instantly as you edit inputs.
-              </p>
-              <div className="grid gap-3 md:grid-cols-3">
-                {[
-                  ['Live Payroll View', 'Gross, tax, and take-home numbers update from the current inputs.'],
-                  ['State-Aware Estimate', 'Select a state to include the state tax rate already used by this site.'],
-                  ['Shareable Summary', 'Save a PDF report or share the calculator link from the sidebar.'],
-                ].map(([title, text]) => (
-                  <div key={title} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: 14 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(34,197,94,.14)', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 9 }}>
-                      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5 8.2 14 16 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </div>
-                    <div style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--text)', marginBottom: 5 }}>{title}</div>
-                    <div style={{ fontSize: 12.3, color: 'var(--text2)', lineHeight: 1.5 }}>{text}</div>
-                  </div>
-                ))}
-              </div>
-            </article>
-
-            <article id="important-notes" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Important Notes</h2>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {[
-                  'This calculator uses the existing 2026 federal tax, FICA, and selected state tax logic.',
-                  'Hourly wage uses hours per day and 260 working days for annual gross pay.',
-                  'Pre-tax deductions, post-tax deductions, local taxes, and insurance fields are currently displayed as zero because the existing calculator logic has no inputs for them.',
-                  'Actual payroll withholding can vary based on W-4, benefits, employer setup, and local rules.',
-                ].map((note) => (
-                  <li key={note} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13.5, color: 'var(--text2)' }}><span style={{ marginTop: 3, color: 'var(--text2)', flexShrink: 0 }}>•</span>{note}</li>
-                ))}
-              </ul>
-            </article>
+                )}
+              </article>
+            ))}
 
             <article id="paycheck-faq" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>Frequently Asked Questions</h2>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>FAQs</h2>
               <div className="grid gap-3 md:grid-cols-2">
-                {[
-                  ['Does this include state tax?', 'Yes, when you select a state from the dropdown. Federal-only mode is used if no state is selected.'],
-                  ['Can I use hourly pay?', 'Yes. Select Hourly Wage and enter hours per day. The existing logic annualizes hourly pay with 260 workdays.'],
-                  ['Why are local and deduction lines zero?', 'The current calculator logic does not include inputs for local tax, insurance, pre-tax deductions, or post-tax deductions.'],
-                  ['Is this exact payroll advice?', 'No. It is an estimate based on the current calculator formulas and tax values in the app.'],
-                ].map(([q, a]) => (
+                {paycheckFaqItems.map(([q, a]) => (
                   <details key={q} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '13px 15px' }}>
                     <summary style={{ cursor: 'pointer', fontSize: 13.5, fontWeight: 800, color: 'var(--text)' }}>{q}</summary>
                     <p style={{ marginTop: 10, fontSize: 12.5, lineHeight: 1.6, color: 'var(--text2)' }}>{a}</p>
@@ -3752,13 +3855,18 @@ function PaycheckCalculatorPage({ isDark }) {
               <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>On This Page</div>
               <div className="flex flex-col gap-2 text-sm">
                 {[
-                  ['#what-is-paycheck', 'What is a Paycheck?'],
-                  ['#how-to-use-paycheck-calculator', 'How to Use Calculator'],
-                  ['#paycheck-formula', 'Paycheck Formula'],
-                  ['#paycheck-taxes-usa', 'Paycheck Taxes in the USA'],
-                  ['#why-choose-paycheck-calculator', 'Why Choose Calculator'],
-                  ['#important-notes', 'Important Notes'],
-                  ['#paycheck-faq', 'Frequently Asked Questions'],
+                  ['#salary-paycheck-calculator-estimate', 'Take-Home Pay'],
+                  ['#what-is-salary-paycheck-calculator', 'What Is It?'],
+                  ['#gross-pay-vs-net-pay', 'Gross vs Net Pay'],
+                  ['#how-to-calculate-your-salary-paycheck', 'Calculate Paycheck'],
+                  ['#federal-income-tax-withholding', 'Federal Withholding'],
+                  ['#fica-taxes-social-security-medicare', 'FICA Taxes'],
+                  ['#pay-frequency-effect', 'Pay Frequency'],
+                  ['#common-paycheck-deductions-withholdings', 'Deductions'],
+                  ['#bonus-overtime-extra-income', 'Bonus & Overtime'],
+                  ['#how-to-read-paycheck-pay-stub', 'Pay Stub'],
+                  ['#how-to-reduce-taxes-paycheck', 'Reduce Withholding'],
+                  ['#paycheck-faq', 'FAQs'],
                 ].map(([href, label]) => (
                   <a key={href} href={href} style={{ color: 'var(--text2)', fontSize: 12.5, fontWeight: 700 }}>{label}</a>
                 ))}
@@ -7058,8 +7166,8 @@ export default function App() {
         canonicalPath: '/salary-calculator',
       },
       '/paycheck-calculator': {
-        title: 'Salary Paycheck Calculator - Estimate Your Take-Home Pay',
-        description: 'A Salary Paycheck Calculator estimates take-home pay after federal taxes, state taxes, FICA, and deductions. Enter salary, pay frequency, and filing status for a clear net pay estimate.',
+        title: 'Salary Paycheck Calculator – Estimate Take-Home Pay After Taxes',
+        description: 'Use our Salary Paycheck Calculator to estimate take-home pay after taxes, deductions, FICA, and pay frequency in the USA.',
         keywords: 'Paycheck Calculator',
         canonicalPath: '/paycheck-calculator',
       },

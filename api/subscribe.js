@@ -109,6 +109,11 @@ function getSubscriberSegment(stateCode, stateName) {
   };
 }
 
+function cleanStateCode(value) {
+  const code = String(value || '').trim().toUpperCase();
+  return US_STATE_NAMES[code] ? code : '';
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -122,7 +127,9 @@ export default async function handler(req, res) {
   }
 
   const region = decodeHeader(req.headers['x-vercel-ip-country-region']);
-  const stateCode = String(region || body.stateCode || '').trim().toUpperCase();
+  const vercelStateCode = cleanStateCode(region);
+  const bodyStateCode = cleanStateCode(body.stateCode || body.browserStateCode);
+  const stateCode = vercelStateCode || bodyStateCode;
   const stateName = String(body.stateName || US_STATE_NAMES[stateCode] || '').trim();
   const segment = getSubscriberSegment(stateCode, stateName);
 
@@ -153,7 +160,8 @@ export default async function handler(req, res) {
     userAgent: req.headers['user-agent'] || '',
   };
 
-  const shouldStoreToFile = await hasSupabaseStorage() || process.env.SUBSCRIBERS_STORE === 'file' || (!process.env.VERCEL && process.env.SUBSCRIBERS_STORE !== 'webhook');
+  const hasPersistentStorage = await hasSupabaseStorage();
+  const shouldStoreToFile = hasPersistentStorage || process.env.SUBSCRIBERS_STORE === 'file' || (!process.env.VERCEL && process.env.SUBSCRIBERS_STORE !== 'webhook');
   let fileStored = false;
   let fileError = '';
   let subscriberStatus = '';
@@ -181,6 +189,13 @@ export default async function handler(req, res) {
 
   const webhookUrl = process.env.SUBSCRIBERS_WEBHOOK_URL;
   if (!webhookUrl) {
+    if (process.env.VERCEL && !hasPersistentStorage) {
+      return res.status(503).json({
+        ok: false,
+        error: 'persistent_storage_not_configured',
+        message: 'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be configured in Vercel production.',
+      });
+    }
     const reason = fileStored
       ? ''
       : subscriberStatus === 'existing'

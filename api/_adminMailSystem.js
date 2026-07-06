@@ -232,6 +232,7 @@ export async function readCampaignFile(key) {
     await upsertRow('obba_campaigns', { key, content: DEFAULT_CAMPAIGNS[key], updated_at: new Date().toISOString() }, 'key');
     return DEFAULT_CAMPAIGNS[key];
   }
+  if (process.env.VERCEL) return DEFAULT_CAMPAIGNS[key];
   try {
     return await readFile(filePath, 'utf8');
   } catch (error) {
@@ -247,6 +248,9 @@ export async function writeCampaignFile(key, content) {
   if (await hasSupabaseStorage()) {
     await upsertRow('obba_campaigns', { key, content: String(content || ''), updated_at: new Date().toISOString() }, 'key');
     return readCampaignFile(key);
+  }
+  if (process.env.VERCEL) {
+    throw new Error('persistent_storage_not_configured');
   }
   await ensureDir(filePath);
   await writeFile(filePath, String(content || ''), 'utf8');
