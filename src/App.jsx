@@ -2,7 +2,10 @@ import React, { Fragment, Suspense, lazy, useEffect, useMemo, useState } from 'r
 import { Link, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { BarChart3, ChevronDown, Landmark, Map, MapPin, Menu, Moon, Sun, X } from 'lucide-react';
 import { blogPosts } from './blogData';
+import { overtimeDocMeta, overtimeDocSections } from './overtimeContent';
+import { paycheckDocxSections } from './paycheckContent';
 import { SITE_URL } from './seoConfig';
+import { texasDocMeta, texasDocSections } from './texasContent';
 import homeThemeHtml from '../OBBA Calculators.dc (1).html?raw';
 import overtimeThemeHtml from '../Overtime Calculator.dc (1).html?raw';
 const FAQPage = lazy(() => import('./FAQPage'));
@@ -105,6 +108,144 @@ const STATE_CALCULATOR_LINKS = [
   { name: 'Hawaii', code: 'HI', path: '/hawaii-paycheck-calculator', tax: 'Progressive state tax', accent: '#ec4899' },
   { name: 'Nebraska', code: 'NE', path: '/nebraska-paycheck-calculator', tax: 'Progressive state tax', accent: '#84cc16' },
 ];
+
+function DocxContentSections({ sections }) {
+  const renderInlineContent = (content = []) => content.map((part, index) => {
+    if (typeof part === 'string') return <Fragment key={`${part.slice(0, 20)}-${index}`}>{part}</Fragment>;
+    const linkStyle = { color: '#1a6fe8', fontWeight: 800, fontSize: part.text?.length > 90 ? 12 : undefined };
+    if (part.href?.startsWith('/')) {
+      return <Link key={`${part.href}-${index}`} to={part.href} style={linkStyle}>{part.text}</Link>;
+    }
+    return <a key={`${part.href}-${index}`} href={part.href} target="_blank" rel="nofollow noopener noreferrer" style={linkStyle}>{part.text}</a>;
+  });
+
+  const renderBlock = (block, index) => {
+    if (block.type === 'numbered') {
+      return (
+        <ol key={`numbered-${index}`} style={{ margin: '12px 0 0', paddingLeft: 0, display: 'grid', gap: 10, listStyle: 'none', counterReset: 'docx-step' }}>
+          {block.items.map((item, itemIndex) => (
+            <li key={`item-${itemIndex}`} style={{ display: 'grid', gridTemplateColumns: '28px 1fr', gap: 10, alignItems: 'start', counterIncrement: 'docx-step' }}>
+              <span style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(26,111,232,.12)', color: '#1a6fe8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900 }}>{itemIndex + 1}</span>
+              <span>{renderInlineContent(item)}</span>
+            </li>
+          ))}
+        </ol>
+      );
+    }
+    if (block.type === 'list') {
+      return (
+        <ul key={`list-${index}`} style={{ margin: '12px 0 0', paddingLeft: 0, display: 'grid', gap: 10, listStyle: 'none' }}>
+          {block.items.map((item, itemIndex) => (
+            <li key={`item-${itemIndex}`} style={{ display: 'grid', gridTemplateColumns: '22px 1fr', gap: 10, alignItems: 'start' }}>
+              <span style={{ width: 10, height: 10, borderRadius: 99, background: '#1a6fe8', marginTop: 8, boxShadow: '0 0 0 5px rgba(26,111,232,.10)' }} />
+              <span>{renderInlineContent(item)}</span>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    if (block.type === 'table') {
+      return (
+        <div key={`table-${index}`} style={{ margin: '14px 0', overflowX: 'auto', border: '1px solid var(--border)', borderRadius: 10 }}>
+          <table style={{ width: '100%', minWidth: 560, borderCollapse: 'collapse', fontSize: 12.5, lineHeight: 1.45 }}>
+            <tbody>
+              {block.rows.map((row, rowIndex) => (
+                <tr key={`row-${rowIndex}`} style={{ background: rowIndex === 0 ? 'var(--surface-alt)' : 'transparent' }}>
+                  {row.map((cell, cellIndex) => {
+                    const CellTag = rowIndex === 0 ? 'th' : 'td';
+                    return (
+                      <CellTag
+                        key={`cell-${rowIndex}-${cellIndex}`}
+                        style={{
+                          padding: '10px 12px',
+                          borderBottom: rowIndex === block.rows.length - 1 ? 0 : '1px solid var(--border)',
+                          borderRight: cellIndex === row.length - 1 ? 0 : '1px solid var(--border)',
+                          color: rowIndex === 0 ? 'var(--text)' : 'var(--text2)',
+                          fontWeight: rowIndex === 0 ? 800 : 600,
+                          textAlign: cellIndex === 0 ? 'left' : 'center',
+                          verticalAlign: 'middle',
+                          whiteSpace: 'pre-line',
+                        }}
+                      >
+                        {renderInlineContent(cell)}
+                      </CellTag>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+    if (block.type === 'faq') {
+      return (
+        <div key={`faq-${index}`} style={{ margin: index === 0 ? 0 : '14px 0 0' }}>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 7 }}>{renderInlineContent(block.question)}</h3>
+          <p style={{ margin: 0 }}>{renderInlineContent(block.answer)}</p>
+        </div>
+      );
+    }
+    return <p key={`p-${index}`} style={{ margin: index === 0 ? 0 : '12px 0 0' }}>{renderInlineContent(block.content)}</p>;
+  };
+
+  return sections.map((section, index) => (
+    <article key={section.id} id={section.id} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
+      {index === 0 ? (
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text)', marginBottom: 14 }}>{section.title}</h1>
+      ) : (
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>{section.title}</h2>
+      )}
+      <div style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.78 }}>
+        {section.blocks.map(renderBlock)}
+      </div>
+    </article>
+  ));
+}
+
+function docxSectionsToHtml(sections) {
+  const inline = (content = []) => content.map((part) => {
+    if (typeof part === 'string') return escapeHtml(part);
+    const href = part.href || '#';
+    const text = escapeHtml(part.text || '');
+    if (href.startsWith('/')) {
+      return `<a href="${escapeHtml(href)}" style="color:#1a6fe8;font-weight:800;">${text}</a>`;
+    }
+    return `<a href="${escapeHtml(href)}" target="_blank" rel="nofollow noopener noreferrer" style="color:#1a6fe8;font-weight:800;">${text}</a>`;
+  }).join('');
+
+  const table = (block) => `<div style="margin:14px 0;overflow-x:auto;border:1px solid var(--border);border-radius:10px;">
+    <table style="width:100%;min-width:560px;border-collapse:collapse;font-size:12.5px;line-height:1.45;">
+      <tbody>${block.rows.map((row, rowIndex) => `<tr style="background:${rowIndex === 0 ? 'var(--surface-alt)' : 'transparent'};">${row.map((cell, cellIndex) => {
+        const tag = rowIndex === 0 ? 'th' : 'td';
+        return `<${tag} style="padding:10px 12px;border-bottom:${rowIndex === block.rows.length - 1 ? 0 : '1px solid var(--border)'};border-right:${cellIndex === row.length - 1 ? 0 : '1px solid var(--border)'};color:${rowIndex === 0 ? 'var(--text)' : 'var(--text2)'};font-weight:${rowIndex === 0 ? 800 : 600};text-align:${cellIndex === 0 ? 'left' : 'center'};vertical-align:middle;white-space:pre-line;">${inline(cell)}</${tag}>`;
+      }).join('')}</tr>`).join('')}</tbody>
+    </table>
+  </div>`;
+
+  const blockHtml = (block, index) => {
+    if (block.type === 'table') return table(block);
+    if (block.type === 'numbered') {
+      return `<ol style="margin:12px 0 0;padding-left:0;display:grid;gap:10px;list-style:none;font-size:13.5px;color:var(--text2);line-height:1.78;">${block.items.map((item, itemIndex) => `<li style="display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;"><span style="width:28px;height:28px;border-radius:8px;background:rgba(26,111,232,.12);color:#1a6fe8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;">${itemIndex + 1}</span><span>${inline(item)}</span></li>`).join('')}</ol>`;
+    }
+    if (block.type === 'list') {
+      return `<ul style="margin:12px 0 0;padding-left:0;display:grid;gap:10px;list-style:none;font-size:13.5px;color:var(--text2);line-height:1.78;">${block.items.map((item) => `<li style="display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;"><span style="width:10px;height:10px;border-radius:99px;background:#1a6fe8;margin-top:8px;box-shadow:0 0 0 5px rgba(26,111,232,.10);"></span><span>${inline(item)}</span></li>`).join('')}</ul>`;
+    }
+    if (block.type === 'faq') {
+      return `<div style="margin:${index === 0 ? 0 : '14px 0 0'};"><h3 style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:7px;">${inline(block.question)}</h3><p style="font-size:13.5px;color:var(--text2);line-height:1.78;margin:0;">${inline(block.answer)}</p></div>`;
+    }
+    return `<p style="font-size:13.5px;color:var(--text2);line-height:1.78;margin:${index === 0 ? 0 : '12px 0 0'};">${inline(block.content)}</p>`;
+  };
+
+  return sections.map((section, index) => `<article id="${escapeHtml(section.id)}" data-obba-section="${escapeHtml(section.id)}" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;">
+    <h${index === 0 ? 1 : 2} style="font-size:${index === 0 ? 24 : 20}px;font-weight:${index === 0 ? 800 : 700};color:var(--text);margin-bottom:14px;">${escapeHtml(section.title)}</h${index === 0 ? 1 : 2}>
+    ${section.blocks.map(blockHtml).join('')}
+  </article>`).join('');
+}
+
+function docxTocHtml(sections) {
+  return sections.map((section) => `<li style="display:flex;align-items:center;gap:7px;"><svg width="10" height="10" viewBox="0 0 11 11" fill="none"><path d="M3.5 2.5l4 3-4 3" stroke="#1a6fe8" stroke-width="1.4" stroke-linecap="round"/></svg><a href="#${escapeHtml(section.id)}" data-obba-toc="${escapeHtml(section.id)}" style="font-size:12.5px;color:var(--text2);">${escapeHtml(section.title)}</a></li>`).join('');
+}
 const progressiveTax = (taxableIncome, brackets) => {
   let remaining = Math.max(0, num(taxableIncome));
   let previous = 0;
@@ -1584,9 +1725,9 @@ function OvertimePage({ isDark, setIsDark }) {
   });
 
   useEffect(() => {
-    document.title = 'Calculate Your Overtime Pay in Seconds';
+    document.title = overtimeDocMeta.title;
 
-    const metaDescriptionContent = 'See your annual overtime pay, tax savings, and monthly breakdown with this free overtime calculator || OBBACALCULATORS.COM';
+    const metaDescriptionContent = overtimeDocMeta.description;
     let metaDescription = document.querySelector('meta[name=\"description\"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -1605,7 +1746,7 @@ function OvertimePage({ isDark, setIsDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Calculate Your Overtime Pay in Seconds',
+      name: overtimeDocMeta.title,
       description: metaDescriptionContent,
       url: `${window.location.origin}/overtime`,
       mainEntity: {
@@ -1717,6 +1858,14 @@ function OvertimePage({ isDark, setIsDark }) {
     };
 
     let html = overtimeTemplate
+      .replace(
+        /<div style="display:flex;flex-direction:column;gap:32px;">[\s\S]*?<\/div>\s*<!-- SIDEBAR -->/,
+        `<div style="display:flex;flex-direction:column;gap:32px;">${docxSectionsToHtml(overtimeDocSections)}</div>\n\n      <!-- SIDEBAR -->`
+      )
+      .replace(
+        /(<div style="font-size:13\.5px;font-weight:700;color:#111827;margin-bottom:12px;">On This Page<\/div>\s*<ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px;">)[\s\S]*?(<\/ul>)/,
+        `$1${docxTocHtml(overtimeDocSections)}$2`
+      )
       .replace(/<sc-if[^>]*value="{{ showAdvanced }}"[^>]*>([\s\S]*?)<\/sc-if>/g, showAdvanced ? '$1' : '')
       .replace(/<sc-for[^>]*list="{{ stateOptions }}"[^>]*>[\s\S]*?<\/sc-for>/g, stateOptions)
       .replace(/onClick="{{\s*([^}]+?)\s*}}"/g, 'data-obba-click="$1"')
@@ -3540,8 +3689,8 @@ function PaycheckCalculatorPage({ isDark }) {
   };
 
   useEffect(() => {
-    document.title = 'Salary Paycheck Calculator – Estimate Take-Home Pay After Taxes';
-    const description = 'Use our Salary Paycheck Calculator to estimate take-home pay after taxes, deductions, FICA, and pay frequency in the USA.';
+    document.title = 'Paycheck Calculator - Estimate Your Take-Home Pay Fast';
+    const description = 'Estimate your take-home pay with our free paycheck calculator, covering federal tax, state tax, FICA, overtime, bonus, and 401(k) or insurance deductions.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -3560,12 +3709,12 @@ function PaycheckCalculatorPage({ isDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Salary Paycheck Calculator – Estimate Take-Home Pay After Taxes',
+      name: 'Paycheck Calculator - Estimate Your Take-Home Pay Fast',
       description,
       url: `${window.location.origin}/paycheck-calculator`,
       mainEntity: {
         '@type': 'SoftwareApplication',
-        name: 'Salary Paycheck Calculator',
+        name: 'Paycheck Calculator',
         applicationCategory: 'FinanceApplication',
         operatingSystem: 'Web',
         offers: {
@@ -3606,7 +3755,7 @@ function PaycheckCalculatorPage({ isDark }) {
         <section style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '28px 28px 24px', marginBottom: 16 }}>
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
-              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Salary Paycheck Calculator</h1>
+              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Paycheck Calculator</h1>
               <div className="flex flex-wrap gap-3">
                 {['Instant Results', '2026 Ready', 'State Taxes', 'No Sign Up'].map((tag) => (
                   <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: '#16a34a', fontWeight: 800 }}>
@@ -3789,42 +3938,7 @@ function PaycheckCalculatorPage({ isDark }) {
 
         <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="space-y-5">
-            {paycheckArticleSections.map((section, sectionIndex) => (
-              <article key={section.id} id={section.id} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-                {sectionIndex === 0 ? (
-                  <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text)', marginBottom: 12 }}>{section.title}</h1>
-                ) : (
-                  <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>{section.title}</h2>
-                )}
-                {section.paragraphs.map((paragraph, index) => (
-                  <p key={`${section.id}-p-${index}`} style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginBottom: index === section.paragraphs.length - 1 && !section.subsections ? 0 : 12 }}>
-                    {renderPaycheckContent(paragraph)}
-                  </p>
-                ))}
-                {section.subsections && (
-                  <div className="grid gap-3 md:grid-cols-2" style={{ marginTop: 14 }}>
-                    {section.subsections.map(([title, text]) => (
-                      <div key={title} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '13px 15px' }}>
-                        <h3 style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>{title}</h3>
-                        <p style={{ fontSize: 12.5, color: 'var(--text2)', lineHeight: 1.65, margin: 0 }}>{text}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </article>
-            ))}
-
-            <article id="paycheck-faq" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>FAQs</h2>
-              <div className="grid gap-3 md:grid-cols-2">
-                {paycheckFaqItems.map(([q, a]) => (
-                  <details key={q} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '13px 15px' }}>
-                    <summary style={{ cursor: 'pointer', fontSize: 13.5, fontWeight: 800, color: 'var(--text)' }}>{q}</summary>
-                    <p style={{ marginTop: 10, fontSize: 12.5, lineHeight: 1.6, color: 'var(--text2)' }}>{a}</p>
-                  </details>
-                ))}
-              </div>
-            </article>
+            <DocxContentSections sections={paycheckDocxSections} />
           </div>
 
           <aside className="flex flex-col gap-5 lg:self-stretch">
@@ -3855,18 +3969,7 @@ function PaycheckCalculatorPage({ isDark }) {
               <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>On This Page</div>
               <div className="flex flex-col gap-2 text-sm">
                 {[
-                  ['#salary-paycheck-calculator-estimate', 'Take-Home Pay'],
-                  ['#what-is-salary-paycheck-calculator', 'What Is It?'],
-                  ['#gross-pay-vs-net-pay', 'Gross vs Net Pay'],
-                  ['#how-to-calculate-your-salary-paycheck', 'Calculate Paycheck'],
-                  ['#federal-income-tax-withholding', 'Federal Withholding'],
-                  ['#fica-taxes-social-security-medicare', 'FICA Taxes'],
-                  ['#pay-frequency-effect', 'Pay Frequency'],
-                  ['#common-paycheck-deductions-withholdings', 'Deductions'],
-                  ['#bonus-overtime-extra-income', 'Bonus & Overtime'],
-                  ['#how-to-read-paycheck-pay-stub', 'Pay Stub'],
-                  ['#how-to-reduce-taxes-paycheck', 'Reduce Withholding'],
-                  ['#paycheck-faq', 'FAQs'],
+                  ...paycheckDocxSections.map((section) => [`#${section.id}`, section.title]),
                 ].map(([href, label]) => (
                   <a key={href} href={href} style={{ color: 'var(--text2)', fontSize: 12.5, fontWeight: 700 }}>{label}</a>
                 ))}
@@ -4602,8 +4705,8 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
     let appName = `${stateName} Paycheck Calculator`;
 
     if (stateName === 'Texas') {
-      title = 'Texas Paycheck Calculator Estimate Your Take-Home Pay';
-      description = 'Texas paycheck tax calculator to estimate take-home pay, compare gross vs net income, apply federal withholding and FICA deductions, and improve monthly budget planning with accurate payroll calculations.';
+      title = texasDocMeta.title;
+      description = texasDocMeta.description;
       path = '/texas-paycheck-calculator';
     } else if (stateName === 'Florida') {
       title = 'Florida Paycheck Calculator - See Your Earnings Instantly';
@@ -4902,6 +5005,10 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
 
         <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="space-y-5">
+            {stateName === 'Texas' ? (
+              <DocxContentSections sections={texasDocSections} />
+            ) : (
+            <>
             <article id={`what-is-${stateSlug}-paycheck`} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
               <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>What is {stateArticle} {stateName} Paycheck?</h2>
               <div className="grid gap-5 md:grid-cols-[1fr_200px] md:items-start">
@@ -5017,6 +5124,8 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
                 ))}
               </div>
             </article>
+            </>
+            )}
           </div>
 
           <aside className="flex flex-col gap-5 lg:self-stretch">
@@ -5046,7 +5155,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
             <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
               <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>On This Page</div>
               <div className="flex flex-col gap-2 text-sm">
-                {[
+                {(stateName === 'Texas' ? texasDocSections.map((section) => [`#${section.id}`, section.title]) : [
                   [`#what-is-${stateSlug}-paycheck`, `What is ${stateArticle} ${stateName} Paycheck?`],
                   [`#how-to-use-${stateSlug}-paycheck-calculator`, 'How to Use Calculator'],
                   [`#${stateSlug}-paycheck-formula`, 'Paycheck Formula'],
@@ -5054,7 +5163,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
                   [`#why-choose-${stateSlug}-paycheck-calculator`, 'Why Choose Calculator'],
                   [`#${stateSlug}-important-notes`, 'Important Notes'],
                   [`#${stateSlug}-paycheck-faq`, 'Frequently Asked Questions'],
-                ].map(([href, label]) => (
+                ]).map(([href, label]) => (
                   <a key={href} href={href} style={{ color: 'var(--text2)', fontSize: 12.5, fontWeight: 700 }}>{label}</a>
                 ))}
               </div>
@@ -7154,8 +7263,8 @@ export default function App() {
         canonicalPath: '/',
       },
       '/overtime': {
-        title: 'Calculate Your Overtime Pay in Seconds',
-        description: 'See your annual overtime pay, tax savings, and monthly breakdown with this free overtime calculator || OBBACALCULATORS.COM',
+        title: overtimeDocMeta.title,
+        description: overtimeDocMeta.description,
         keywords: 'Overtime Calculator',
         canonicalPath: '/overtime',
       },
@@ -7166,8 +7275,8 @@ export default function App() {
         canonicalPath: '/salary-calculator',
       },
       '/paycheck-calculator': {
-        title: 'Salary Paycheck Calculator – Estimate Take-Home Pay After Taxes',
-        description: 'Use our Salary Paycheck Calculator to estimate take-home pay after taxes, deductions, FICA, and pay frequency in the USA.',
+        title: 'Paycheck Calculator - Estimate Your Take-Home Pay Fast',
+        description: 'Estimate your take-home pay with our free paycheck calculator, covering federal tax, state tax, FICA, overtime, bonus, and 401(k) or insurance deductions.',
         keywords: 'Paycheck Calculator',
         canonicalPath: '/paycheck-calculator',
       },
@@ -7178,8 +7287,8 @@ export default function App() {
         canonicalPath: '/states',
       },
       '/texas-paycheck-calculator': {
-        title: 'Texas Paycheck Calculator Estimate Your Take-Home Pay',
-        description: 'Estimate Texas take-home pay with federal withholding and FICA deductions, compare gross vs net income, and plan monthly payroll budget accurately.',
+        title: texasDocMeta.title,
+        description: texasDocMeta.description,
         keywords: 'Texas Paycheck Calculator',
         canonicalPath: '/texas-paycheck-calculator',
       },
