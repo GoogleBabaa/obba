@@ -2,10 +2,15 @@ import React, { Fragment, Suspense, lazy, useEffect, useMemo, useState } from 'r
 import { Link, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { BarChart3, ChevronDown, Landmark, Map, MapPin, Menu, Moon, Sun, X } from 'lucide-react';
 import { blogPosts } from './blogData';
+import { californiaDocMeta, californiaDocSections } from './californiaContent';
+import { floridaDocMeta, floridaDocSections } from './floridaContent';
+import { illinoisDocMeta, illinoisDocSections } from './illinoisContent';
+import { indianaDocMeta, indianaDocSections } from './indianaContent';
 import { overtimeDocMeta, overtimeDocSections } from './overtimeContent';
 import { paycheckDocxSections } from './paycheckContent';
 import { SITE_URL } from './seoConfig';
 import { texasDocMeta, texasDocSections } from './texasContent';
+import { virginiaDocMeta, virginiaDocSections } from './virginiaContent';
 import homeThemeHtml from '../OBBA Calculators.dc (1).html?raw';
 import overtimeThemeHtml from '../Overtime Calculator.dc (1).html?raw';
 const FAQPage = lazy(() => import('./FAQPage'));
@@ -4709,17 +4714,17 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       description = texasDocMeta.description;
       path = '/texas-paycheck-calculator';
     } else if (stateName === 'Florida') {
-      title = 'Florida Paycheck Calculator - See Your Earnings Instantly';
-      description = 'Florida paycheck calculator to estimate take-home pay, calculate gross-to-net income, apply federal withholding and FICA deductions, and plan monthly budget with accurate payroll insights.';
+      title = floridaDocMeta.title;
+      description = floridaDocMeta.description;
       path = '/florida-paycheck-calculator';
     } else if (stateName === 'California') {
-      title = 'California Paycheck Calculator - Estimate Your Take-Home Pay';
-      description = 'California paycheck calculator to estimate take-home pay after federal income tax, California state income tax, SDI, and FICA deductions. Plan your monthly budget with accurate CA payroll results.';
+      title = californiaDocMeta.title;
+      description = californiaDocMeta.description;
       path = '/california-paycheck-calculator';
       appName = 'California Paycheck Calculator';
     } else if (stateName === 'Illinois') {
-      title = 'Illinois Paycheck Calculator - Estimate Your Take-Home Pay';
-      description = 'Illinois paycheck calculator to estimate take-home pay after federal income tax, Illinois flat 4.95% state income tax, and FICA deductions. Plan your monthly budget with accurate IL payroll results.';
+      title = illinoisDocMeta.title;
+      description = illinoisDocMeta.description;
       path = '/illinois-paycheck-calculator';
       appName = 'Illinois Paycheck Calculator';
     } else if (stateName === 'Washington') {
@@ -4728,13 +4733,13 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       path = '/washington-paycheck-calculator';
       appName = 'Washington Paycheck Calculator';
     } else if (stateName === 'Indiana') {
-      title = 'Indiana Paycheck Calculator - Estimate Your Take-Home Pay';
-      description = 'Indiana paycheck calculator to estimate take-home pay after federal income tax, Indiana flat 3.05% state income tax, and FICA deductions. Plan your monthly budget with accurate IN payroll results.';
+      title = indianaDocMeta.title;
+      description = indianaDocMeta.description;
       path = '/indiana-paycheck-calculator';
       appName = 'Indiana Paycheck Calculator';
     } else if (stateName === 'Virginia') {
-      title = 'Virginia Paycheck Calculator - Estimate Your Take-Home Pay';
-      description = 'Virginia paycheck calculator to estimate take-home pay after federal income tax, Virginia progressive state income tax, and FICA deductions. Plan your budget with accurate VA payroll results.';
+      title = virginiaDocMeta.title;
+      description = virginiaDocMeta.description;
       path = '/virginia-paycheck-calculator';
       appName = 'Virginia Paycheck Calculator';
     } else if (stateName === 'Hawaii') {
@@ -5005,8 +5010,8 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
 
         <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="space-y-5">
-            {stateName === 'Texas' ? (
-              <DocxContentSections sections={texasDocSections} />
+            {stateName === 'Texas' || stateName === 'Florida' || stateName === 'California' || stateName === 'Illinois' || stateName === 'Indiana' || stateName === 'Virginia' ? (
+              <DocxContentSections sections={stateName === 'Texas' ? texasDocSections : stateName === 'Florida' ? floridaDocSections : stateName === 'California' ? californiaDocSections : stateName === 'Illinois' ? illinoisDocSections : stateName === 'Indiana' ? indianaDocSections : virginiaDocSections} />
             ) : (
             <>
             <article id={`what-is-${stateSlug}-paycheck`} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
@@ -5155,7 +5160,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
             <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
               <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>On This Page</div>
               <div className="flex flex-col gap-2 text-sm">
-                {(stateName === 'Texas' ? texasDocSections.map((section) => [`#${section.id}`, section.title]) : [
+                {(stateName === 'Texas' ? texasDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Florida' ? floridaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'California' ? californiaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Illinois' ? illinoisDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Indiana' ? indianaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Virginia' ? virginiaDocSections.map((section) => [`#${section.id}`, section.title]) : [
                   [`#what-is-${stateSlug}-paycheck`, `What is ${stateArticle} ${stateName} Paycheck?`],
                   [`#how-to-use-${stateSlug}-paycheck-calculator`, 'How to Use Calculator'],
                   [`#${stateSlug}-paycheck-formula`, 'Paycheck Formula'],
@@ -7293,20 +7298,20 @@ export default function App() {
         canonicalPath: '/texas-paycheck-calculator',
       },
       '/florida-paycheck-calculator': {
-        title: 'Florida Paycheck Calculator - See Your Earnings Instantly',
-        description: 'Estimate Florida paycheck net income instantly using federal tax withholding and FICA deductions, and plan monthly spending with accurate payroll projections.',
+        title: floridaDocMeta.title,
+        description: floridaDocMeta.description,
         keywords: 'Florida Paycheck Calculator',
         canonicalPath: '/florida-paycheck-calculator',
       },
       '/california-paycheck-calculator': {
-        title: 'California Paycheck Calculator | Estimate Take-Home Pay',
-        description: 'Use this California Paycheck Calculator to estimate your take-home pay after federal tax, California income tax, SDI, FICA, and payroll deductions.',
+        title: californiaDocMeta.title,
+        description: californiaDocMeta.description,
         keywords: 'California Paycheck Calculator',
         canonicalPath: '/california-paycheck-calculator',
       },
       '/illinois-paycheck-calculator': {
-        title: 'Illinois Paycheck Calculator - Estimate Your Take-Home Pay',
-        description: 'Use this Illinois Paycheck Calculator to estimate your take-home pay after federal tax, Illinois flat 4.95% state income tax, and FICA deductions.',
+        title: illinoisDocMeta.title,
+        description: illinoisDocMeta.description,
         keywords: 'Illinois Paycheck Calculator',
         canonicalPath: '/illinois-paycheck-calculator',
       },
@@ -7317,14 +7322,14 @@ export default function App() {
         canonicalPath: '/washington-paycheck-calculator',
       },
       '/indiana-paycheck-calculator': {
-        title: 'Indiana Paycheck Calculator - Estimate Your Take-Home Pay',
-        description: 'Use this Indiana Paycheck Calculator to estimate your take-home pay after federal tax, Indiana flat 3.05% state income tax, and FICA deductions.',
+        title: indianaDocMeta.title,
+        description: indianaDocMeta.description,
         keywords: 'Indiana Paycheck Calculator',
         canonicalPath: '/indiana-paycheck-calculator',
       },
       '/virginia-paycheck-calculator': {
-        title: 'Virginia Paycheck Calculator - Estimate Your Take-Home Pay',
-        description: 'Use this Virginia Paycheck Calculator to estimate your take-home pay after federal tax, Virginia progressive state income tax, and FICA deductions.',
+        title: virginiaDocMeta.title,
+        description: virginiaDocMeta.description,
         keywords: 'Virginia Paycheck Calculator',
         canonicalPath: '/virginia-paycheck-calculator',
       },
