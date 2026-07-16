@@ -24,7 +24,7 @@ body {
   --border: #eef1f6;
   --text: #1e293b;
   --text2: #334155;
-  --text3: #475569;
+  --text3: #334155;
   --brand: #2563eb;
   --brand-soft: #eaf1fe;
   background: var(--bg);
@@ -357,6 +357,22 @@ body {
   color: #cbd5e1;
   border-top: 1px solid #1e2a4d;
   min-height: 312px;
+}
+
+.obba-site-footer p,
+.obba-site-footer span {
+  color: #f8fafc !important;
+}
+
+.obba-site-footer a {
+  color: #ffffff !important;
+  transition: color .18s ease, transform .18s ease;
+}
+
+.obba-site-footer a:hover,
+.obba-site-footer a:focus-visible {
+  color: #fbbf24 !important;
+  transform: translateX(2px);
 }
 
 .obba-updates-popup {

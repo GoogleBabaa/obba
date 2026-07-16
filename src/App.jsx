@@ -34,7 +34,7 @@ const buildHomeBlogSection = () => {
   const popularPosts = blogPosts.filter((post) => post.popular).slice(0, 5);
   const latestHtml = latestPosts.map((post) => {
     const path = `/blogs/${post.slug}`;
-    return `<a href="${path}" style="display:flex; gap:14px; align-items:center;"><span style="width:78px; height:58px; border-radius:9px; background:${post.gradient}; flex:0 0 auto;"></span><span><b style="font-size:14px; color:var(--text);">${escapeHtml(post.title)}</b><div style="font-size:11.5px; color:#94a3b8; margin-top:5px;">${escapeHtml(post.date)}</div></span></a>`;
+    return `<a class="m-latest-blog-link" href="${path}" style="display:flex; gap:14px; align-items:center; border:1px solid transparent; border-radius:12px; padding:10px;"><span style="width:78px; height:58px; border-radius:9px; background:${post.gradient}; flex:0 0 auto;"></span><span><b style="font-size:14px; color:var(--text);">${escapeHtml(post.title)}</b><div style="font-size:11.5px; color:var(--text3); margin-top:5px;">${escapeHtml(post.date)}</div></span></a>`;
   }).join('');
   const popularHtml = popularPosts.map((post) => {
     const path = `/blogs/${post.slug}`;
@@ -42,16 +42,16 @@ const buildHomeBlogSection = () => {
   }).join('');
 
   return `<section class="m-articles-grid m-section" style="max-width:1280px; margin:0 auto; padding:20px 32px 52px; display:grid; grid-template-columns:1fr 1fr; gap:28px;">
-    <div style="background:var(--surface-alt); border:1px solid var(--border); border-radius:16px; padding:26px;">
+    <div class="m-blog-card" style="background:var(--surface-alt); border:1px solid var(--border); border-radius:16px; padding:26px;">
       <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
         <h3 style="font-size:19px; font-weight:800; color:var(--text);">Latest Articles &amp; Blogs</h3>
         <a href="/blogs" style="display:flex; align-items:center; gap:5px; font-size:13px; font-weight:700; color:#2563eb;">View All Articles <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
-      <div style="margin-top:18px; display:flex; flex-direction:column; gap:16px;">${latestHtml}</div>
+      <div class="m-blog-list" style="margin-top:18px; display:flex; flex-direction:column; gap:16px;">${latestHtml}</div>
     </div>
-    <div style="background:var(--surface-alt); border:1px solid var(--border); border-radius:16px; padding:26px;">
+    <div class="m-blog-card" style="background:var(--surface-alt); border:1px solid var(--border); border-radius:16px; padding:26px;">
       <h3 style="font-size:19px; font-weight:800; color:var(--text);">Popular Blogs</h3>
-      <div style="margin-top:18px; display:flex; flex-direction:column; gap:11px;">${popularHtml}</div>
+      <div class="m-blog-list" style="margin-top:18px; display:flex; flex-direction:column; gap:11px;">${popularHtml}</div>
     </div>
   </section>`;
 };
@@ -197,18 +197,71 @@ function DocxContentSections({ sections }) {
     return <p key={`p-${index}`} style={{ margin: index === 0 ? 0 : '12px 0 0' }}>{renderInlineContent(block.content)}</p>;
   };
 
-  return sections.map((section, index) => (
-    <article key={section.id} id={section.id} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-      {index === 0 ? (
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text)', marginBottom: 14 }}>{section.title}</h1>
-      ) : (
-        <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>{section.title}</h2>
-      )}
-      <div style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.78 }}>
-        {section.blocks.map(renderBlock)}
-      </div>
-    </article>
-  ));
+  return sections.map((section, index) => {
+    if (section.id === 'paycheck-frequently-asked-questions') {
+      const faqItems = [];
+      let ctaBlock = null;
+      section.blocks.forEach((block) => {
+        const firstPart = block.content?.[0];
+        if (typeof firstPart === 'string' && firstPart.includes('?')) {
+          const questionEnd = firstPart.indexOf('?') + 1;
+          const question = firstPart.slice(0, questionEnd).trim();
+          const answerLead = firstPart.slice(questionEnd).trim();
+          faqItems.push({
+            question,
+            answer: [
+              ...(answerLead ? [answerLead] : []),
+              ...(block.content || []).slice(1),
+            ],
+          });
+          return;
+        }
+        if ((block.content || []).some((part) => typeof part !== 'string') || String(firstPart || '').startsWith('Use the free paycheck calculator')) {
+          ctaBlock = block;
+          return;
+        }
+        if (faqItems.length) {
+          faqItems[faqItems.length - 1].answer.push(
+            ...(block.content || []).map((part, partIndex) => (
+              partIndex === 0 && typeof part === 'string' ? ` ${part.trimStart()}` : part
+            ))
+          );
+        }
+      });
+
+      return (
+        <article key={section.id} id={section.id} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>{section.title}</h2>
+          <div style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.78 }}>
+            {faqItems.map((item, itemIndex) => (
+              <div key={item.question} style={{ margin: itemIndex === 0 ? 0 : '14px 0 0' }}>
+                <h3 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', marginBottom: 7, textAlign: 'left' }}>{item.question}</h3>
+                <p style={{ margin: 0, textAlign: 'left' }}>{renderInlineContent(item.answer)}</p>
+              </div>
+            ))}
+          </div>
+          {ctaBlock && (
+            <p style={{ marginTop: 14, marginBottom: 0, fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.78, textAlign: 'left' }}>
+              {renderInlineContent(ctaBlock.content)}
+            </p>
+          )}
+        </article>
+      );
+    }
+
+    return (
+      <article key={section.id} id={section.id} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
+        {index === 0 ? (
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text)', marginBottom: 14 }}>{section.title}</h1>
+        ) : (
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>{section.title}</h2>
+        )}
+        <div style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.78 }}>
+          {section.blocks.map(renderBlock)}
+        </div>
+      </article>
+    );
+  });
 }
 
 function docxSectionsToHtml(sections) {
@@ -2392,7 +2445,7 @@ function OvertimePage({ isDark, setIsDark }) {
         '--border': isDark ? '#1f3050' : '#e5e7eb',
         '--text': isDark ? '#f1f5f9' : '#111827',
         '--text2': isDark ? '#9aa8bd' : '#334155',
-        '--text3': isDark ? '#cbd5e1' : '#475569',
+        '--text3': isDark ? '#cbd5e1' : '#334155',
         background: isDark ? '#0d1829' : '#f5f6fa',
         color: isDark ? '#f1f5f9' : '#111827',
         fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
@@ -2666,7 +2719,7 @@ function SalaryCalculatorPage({ isDark }) {
         '--border': isDark ? '#1f3050' : '#e5e7eb',
         '--text': isDark ? '#f1f5f9' : '#111827',
         '--text2': isDark ? '#9aa8bd' : '#334155',
-        '--text3': isDark ? '#cbd5e1' : '#475569',
+        '--text3': isDark ? '#cbd5e1' : '#334155',
         '--accent': '#1a6fe8',
         '--green': '#22c55e',
         background: 'var(--bg)',
@@ -3751,7 +3804,7 @@ function PaycheckCalculatorPage({ isDark }) {
         '--border': isDark ? '#1f3050' : '#e5e7eb',
         '--text': isDark ? '#f1f5f9' : '#111827',
         '--text2': isDark ? '#9aa8bd' : '#334155',
-        '--text3': isDark ? '#cbd5e1' : '#475569',
+        '--text3': isDark ? '#cbd5e1' : '#334155',
         '--accent': '#1a6fe8',
         '--green': '#22c55e',
         background: 'var(--bg)',
@@ -4810,7 +4863,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
         '--border': isDark ? '#1f3050' : '#e5e7eb',
         '--text': isDark ? '#f1f5f9' : '#111827',
         '--text2': isDark ? '#9aa8bd' : '#334155',
-        '--text3': isDark ? '#cbd5e1' : '#475569',
+        '--text3': isDark ? '#cbd5e1' : '#334155',
         '--accent': '#1a6fe8',
         '--green': '#22c55e',
         background: 'var(--bg)',
