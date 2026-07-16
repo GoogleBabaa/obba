@@ -111,10 +111,10 @@
 </style>
 </helmet>
 
-<div class="app m-wrap {{ themeClass }}" style="width:100%; background:var(--bg);">
+<div class="app m-wrap {{ themeClass }}" style="width:100%; background:var(--bg); padding-top:69px;">
 
   <!-- ========== HEADER ========== -->
-  <header style="position:sticky; top:0; z-index:50; background:var(--surface); border-bottom:1px solid var(--border);">
+  <header style="position:fixed; top:0; left:0; right:0; width:100%; z-index:50; background:var(--surface); border-bottom:1px solid var(--border);">
     <div style="max-width:1280px; margin:0 auto; padding:14px 32px; display:flex; align-items:center; gap:28px;" class="m-hdr">
       <a href="#" style="display:flex; align-items:center; gap:10px;">
         <img src="assets/logo-mark.png" alt="OBBA" style="width:38px; height:38px; border-radius:10px; display:block; object-fit:cover;"/>
@@ -536,20 +536,14 @@ class Component extends DCLogic {
       if (app) { dark ? app.classList.add('dark') : app.classList.remove('dark'); }
     } catch (e) {}
   }
-  autoDark() {
-    // Auto mode: light 6:00 AM–5:59 PM, dark 6:00 PM–5:59 AM (local device time)
-    const h = new Date().getHours();
-    return (h < 6 || h >= 18);
-  }
   componentDidMount() {
-    let dark;
+    let dark = false;
     try {
       const saved = localStorage.getItem('obba-theme');
       if (saved === 'dark') dark = true;        // saved manual choice wins
       else if (saved === 'light') dark = false; // saved manual choice wins
-      else dark = this.autoDark();              // no manual choice -> time-based auto
     } catch (e) {
-      dark = this.autoDark();
+      dark = false;
     }
     this.applyTheme(dark);
     this.setState({ dark });

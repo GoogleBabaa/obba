@@ -133,8 +133,11 @@ body {
 }
 
 .obba-site-header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 40;
   min-height: 69px;
   background: color-mix(in srgb, var(--surface) 95%, transparent);

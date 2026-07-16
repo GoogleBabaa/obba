@@ -4,13 +4,16 @@ import { BarChart3, ChevronDown, Landmark, Map, MapPin, Menu, Moon, Sun, X } fro
 import { blogPosts } from './blogData';
 import { californiaDocMeta, californiaDocSections } from './californiaContent';
 import { floridaDocMeta, floridaDocSections } from './floridaContent';
+import { hawaiiDocMeta, hawaiiDocSections } from './hawaiiContent';
 import { illinoisDocMeta, illinoisDocSections } from './illinoisContent';
 import { indianaDocMeta, indianaDocSections } from './indianaContent';
+import { nebraskaDocMeta, nebraskaDocSections } from './nebraskaContent';
 import { overtimeDocMeta, overtimeDocSections } from './overtimeContent';
 import { paycheckDocxSections } from './paycheckContent';
 import { SITE_URL } from './seoConfig';
 import { texasDocMeta, texasDocSections } from './texasContent';
 import { virginiaDocMeta, virginiaDocSections } from './virginiaContent';
+import { washingtonDocMeta, washingtonDocSections } from './washingtonContent';
 import homeThemeHtml from '../OBBA Calculators.dc (1).html?raw';
 import overtimeThemeHtml from '../Overtime Calculator.dc (1).html?raw';
 const FAQPage = lazy(() => import('./FAQPage'));
@@ -4728,8 +4731,8 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       path = '/illinois-paycheck-calculator';
       appName = 'Illinois Paycheck Calculator';
     } else if (stateName === 'Washington') {
-      title = 'Washington Paycheck Calculator - Complete Guide to Wages, Taxes, and Deductions';
-      description = 'Use this Washington Paycheck Calculator guide to understand wages, taxes, deductions, net pay, and take-home pay.';
+      title = washingtonDocMeta.title;
+      description = washingtonDocMeta.description;
       path = '/washington-paycheck-calculator';
       appName = 'Washington Paycheck Calculator';
     } else if (stateName === 'Indiana') {
@@ -4743,13 +4746,13 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       path = '/virginia-paycheck-calculator';
       appName = 'Virginia Paycheck Calculator';
     } else if (stateName === 'Hawaii') {
-      title = 'Hawaii Paycheck Calculator - Estimate Your Take-Home Pay';
-      description = 'Hawaii paycheck calculator to estimate take-home pay after federal income tax, Hawaii progressive state income tax, and FICA deductions. Plan your budget with accurate HI payroll results.';
+      title = hawaiiDocMeta.title;
+      description = hawaiiDocMeta.description;
       path = '/hawaii-paycheck-calculator';
       appName = 'Hawaii Paycheck Calculator';
     } else if (stateName === 'Nebraska') {
-      title = 'Nebraska Paycheck Calculator - Estimate Your Take-Home Pay';
-      description = 'Nebraska paycheck calculator to estimate take-home pay after federal income tax, Nebraska progressive state income tax, and FICA deductions. Plan your budget with accurate NE payroll results.';
+      title = nebraskaDocMeta.title;
+      description = nebraskaDocMeta.description;
       path = '/nebraska-paycheck-calculator';
       appName = 'Nebraska Paycheck Calculator';
     }
@@ -5010,8 +5013,8 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
 
         <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="space-y-5">
-            {stateName === 'Texas' || stateName === 'Florida' || stateName === 'California' || stateName === 'Illinois' || stateName === 'Indiana' || stateName === 'Virginia' ? (
-              <DocxContentSections sections={stateName === 'Texas' ? texasDocSections : stateName === 'Florida' ? floridaDocSections : stateName === 'California' ? californiaDocSections : stateName === 'Illinois' ? illinoisDocSections : stateName === 'Indiana' ? indianaDocSections : virginiaDocSections} />
+            {stateName === 'Texas' || stateName === 'Florida' || stateName === 'California' || stateName === 'Illinois' || stateName === 'Washington' || stateName === 'Indiana' || stateName === 'Virginia' || stateName === 'Hawaii' || stateName === 'Nebraska' ? (
+              <DocxContentSections sections={stateName === 'Texas' ? texasDocSections : stateName === 'Florida' ? floridaDocSections : stateName === 'California' ? californiaDocSections : stateName === 'Illinois' ? illinoisDocSections : stateName === 'Washington' ? washingtonDocSections : stateName === 'Indiana' ? indianaDocSections : stateName === 'Virginia' ? virginiaDocSections : stateName === 'Hawaii' ? hawaiiDocSections : nebraskaDocSections} />
             ) : (
             <>
             <article id={`what-is-${stateSlug}-paycheck`} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
@@ -5160,7 +5163,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
             <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
               <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>On This Page</div>
               <div className="flex flex-col gap-2 text-sm">
-                {(stateName === 'Texas' ? texasDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Florida' ? floridaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'California' ? californiaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Illinois' ? illinoisDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Indiana' ? indianaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Virginia' ? virginiaDocSections.map((section) => [`#${section.id}`, section.title]) : [
+                {(stateName === 'Texas' ? texasDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Florida' ? floridaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'California' ? californiaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Illinois' ? illinoisDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Washington' ? washingtonDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Indiana' ? indianaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Virginia' ? virginiaDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Hawaii' ? hawaiiDocSections.map((section) => [`#${section.id}`, section.title]) : stateName === 'Nebraska' ? nebraskaDocSections.map((section) => [`#${section.id}`, section.title]) : [
                   [`#what-is-${stateSlug}-paycheck`, `What is ${stateArticle} ${stateName} Paycheck?`],
                   [`#how-to-use-${stateSlug}-paycheck-calculator`, 'How to Use Calculator'],
                   [`#${stateSlug}-paycheck-formula`, 'Paycheck Formula'],
@@ -7253,7 +7256,7 @@ function AdminMailPage({ isDark }) {
 }
 
 export default function App() {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [footerMoreOpen, setFooterMoreOpen] = useState(false);
   const location = useLocation();
@@ -7316,8 +7319,8 @@ export default function App() {
         canonicalPath: '/illinois-paycheck-calculator',
       },
       '/washington-paycheck-calculator': {
-        title: 'Washington Paycheck Calculator - Complete Guide to Wages, Taxes, and Deductions',
-        description: 'Use this Washington Paycheck Calculator guide to understand wages, taxes, deductions, net pay, and take-home pay.',
+        title: washingtonDocMeta.title,
+        description: washingtonDocMeta.description,
         keywords: 'Washington Paycheck Calculator',
         canonicalPath: '/washington-paycheck-calculator',
       },
@@ -7334,14 +7337,14 @@ export default function App() {
         canonicalPath: '/virginia-paycheck-calculator',
       },
       '/hawaii-paycheck-calculator': {
-        title: 'Hawaii Paycheck Calculator - Estimate Your Take-Home Pay',
-        description: 'Use this Hawaii Paycheck Calculator to estimate your take-home pay after federal tax, Hawaii progressive state income tax, and FICA deductions.',
+        title: hawaiiDocMeta.title,
+        description: hawaiiDocMeta.description,
         keywords: 'Hawaii Paycheck Calculator',
         canonicalPath: '/hawaii-paycheck-calculator',
       },
       '/nebraska-paycheck-calculator': {
-        title: 'Nebraska Paycheck Calculator - Estimate Your Take-Home Pay',
-        description: 'Use this Nebraska Paycheck Calculator to estimate your take-home pay after federal tax, Nebraska progressive state income tax, and FICA deductions.',
+        title: nebraskaDocMeta.title,
+        description: nebraskaDocMeta.description,
         keywords: 'Nebraska Paycheck Calculator',
         canonicalPath: '/nebraska-paycheck-calculator',
       },
@@ -7525,7 +7528,7 @@ export default function App() {
   }, [location.pathname]);
 
   return (
-    <div className={`obba-theme min-h-screen ${isDark ? 'dark' : ''}`}>
+    <div className={`obba-theme min-h-screen ${isDark ? 'dark' : ''}`} style={{ paddingTop: isHome ? 0 : 69 }}>
       {!isHome && <Header isDark={isDark} setIsDark={setIsDark} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />}
       <Suspense fallback={<main className="max-w-7xl mx-auto px-4 py-8"><p className={isDark ? 'text-slate-300' : 'text-slate-700'}>Loading...</p></main>}>
         <Routes>
