@@ -86,6 +86,7 @@ function buildBreadcrumbSchema(seo) {
 
 function buildSeoTags(seo) {
   const canonicalUrl = `${SITE_URL}${seo.canonicalPath}`;
+  const robots = seo.robots || 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1';
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -108,7 +109,7 @@ function buildSeoTags(seo) {
   return `
     <title>${escapeHtml(seo.title)}</title>
     <meta name="description" content="${escapeHtml(seo.description)}" />${keywords}
-    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+    <meta name="robots" content="${escapeHtml(robots)}" />
     <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
     <meta property="og:title" content="${escapeHtml(seo.title)}" />
     <meta property="og:description" content="${escapeHtml(seo.description)}" />
@@ -146,6 +147,7 @@ for (const [rawPath, seo] of routes) {
 
 const sitemapEntries = [...routes.values()]
   .filter((seo, index, list) => list.findIndex((item) => item.canonicalPath === seo.canonicalPath) === index)
+  .filter((seo) => !String(seo.robots || '').toLowerCase().includes('noindex'))
   .map((seo) => {
     const priority = seo.canonicalPath === '/' ? '1.0' : '0.9';
     const changefreq = 'weekly';

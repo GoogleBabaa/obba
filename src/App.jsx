@@ -714,7 +714,7 @@ function upsertMeta(selector, create) {
   return el;
 }
 
-function setPageMeta({ title, description, keywords, canonicalPath }) {
+function setPageMeta({ title, description, keywords, canonicalPath, robots: robotsContent }) {
   document.title = title;
   const shareCardUrl = `${SITE_URL}/share-card.jpg`;
 
@@ -727,7 +727,7 @@ function setPageMeta({ title, description, keywords, canonicalPath }) {
   }
 
   const robots = upsertMeta('meta[name="robots"]', { name: 'robots' });
-  robots.setAttribute('content', 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1');
+  robots.setAttribute('content', robotsContent || 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1');
 
   const ogTitle = upsertMeta('meta[property="og:title"]', { property: 'og:title' });
   ogTitle.setAttribute('content', title);
@@ -7439,6 +7439,7 @@ export default function App() {
         description: 'Read guides on how to use tax calculators, understand payroll deductions, federal income tax brackets, and overtime calculations.',
         keywords: 'How to use calculators',
         canonicalPath: '/blogs',
+        robots: 'noindex,follow',
       },
       '/admin/mail/3days': {
         title: 'Admin Mail - 3 Days',
@@ -7457,7 +7458,15 @@ export default function App() {
       },
     };
 
-    const pageSeo = seoByPath[location.pathname];
+    const blogPost = location.pathname.startsWith('/blogs/')
+      ? blogPosts.find((post) => location.pathname === `/blogs/${post.slug}`)
+      : null;
+    const pageSeo = seoByPath[location.pathname] || (blogPost ? {
+      title: `${blogPost.title} | OBBA Calculators`,
+      description: blogPost.description,
+      canonicalPath: `/blogs/${blogPost.slug}`,
+      robots: 'noindex,follow',
+    } : null);
     if (!pageSeo) return;
     setPageMeta(pageSeo);
 

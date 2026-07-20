@@ -1,3 +1,5 @@
+import { blogPosts } from './blogData.js';
+
 export const SITE_URL = 'https://www.obbacalculators.com';
 
 export const pageSeoByPath = {
@@ -111,6 +113,22 @@ export const pageSeoByPath = {
     description: 'Contact OBBBA Tax Calculators for support, corrections, policy requests, and calculator feedback across overtime, salary, and paycheck tools.',
     canonicalPath: '/contact-us',
   },
+  '/blogs': {
+    title: 'Knowledge Hub - Tax Calculator Guides & Articles',
+    description: 'Read guides on how to use tax calculators, understand payroll deductions, federal income tax brackets, and overtime calculations.',
+    keywords: 'How to use calculators',
+    canonicalPath: '/blogs',
+    robots: 'noindex,follow',
+  },
+  ...Object.fromEntries(blogPosts.map((post) => [
+    `/blogs/${post.slug}`,
+    {
+      title: `${post.title} | OBBA Calculators`,
+      description: post.description,
+      canonicalPath: `/blogs/${post.slug}`,
+      robots: 'noindex,follow',
+    },
+  ])),
 };
 
 export const breadcrumbLabelsByPath = {
@@ -133,4 +151,6 @@ export const breadcrumbLabelsByPath = {
   '/privacy-policy': 'Privacy Policy',
   '/terms-conditions': 'Terms & Conditions',
   '/contact-us': 'Contact Us',
+  '/blogs': 'Knowledge Hub',
+  ...Object.fromEntries(blogPosts.map((post) => [`/blogs/${post.slug}`, post.title])),
 };
