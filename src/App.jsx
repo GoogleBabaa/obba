@@ -6677,6 +6677,7 @@ function EmailUpdatesPopup() {
 
   useEffect(() => {
     let timerId;
+    let configTimerId;
     let cancelled = false;
     try {
       if (location.pathname.startsWith('/admin') || location.pathname === '/unsubscribe') return undefined;
@@ -6687,16 +6688,16 @@ function EmailUpdatesPopup() {
       const now = Date.now();
       const lastPromptAt = Number(localStorage.getItem('obba-updates-popup-last-prompt-at') || 0);
       if (!lastPromptAt || now - lastPromptAt >= sevenDaysMs) {
-        fetch('/api/admin-config?public=1')
-          .then((response) => response.ok ? response.json() : { popupEnabled: true })
-          .catch(() => ({ popupEnabled: true }))
-          .then((config) => {
-            if (cancelled || config.popupEnabled === false) return;
-            timerId = window.setTimeout(() => {
+        configTimerId = window.setTimeout(() => {
+          fetch('/api/admin-config?public=1')
+            .then((response) => response.ok ? response.json() : { popupEnabled: true })
+            .catch(() => ({ popupEnabled: true }))
+            .then((config) => {
+              if (cancelled || config.popupEnabled === false) return;
               setIsVisible(true);
               localStorage.setItem('obba-updates-popup-last-prompt-at', String(Date.now()));
-            }, popupDelayMs);
-          });
+            });
+        }, popupDelayMs);
       }
     } catch {
       timerId = window.setTimeout(() => setIsVisible(true), popupDelayMs);
@@ -6704,6 +6705,7 @@ function EmailUpdatesPopup() {
     return () => {
       cancelled = true;
       if (timerId) window.clearTimeout(timerId);
+      if (configTimerId) window.clearTimeout(configTimerId);
     };
   }, [location.pathname]);
 
