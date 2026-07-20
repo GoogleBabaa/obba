@@ -1,12 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { homePageSchema } from '../src/homeSchema.js';
 import { breadcrumbLabelsByPath, pageSeoByPath, SITE_URL } from '../src/seoConfig.js';
 
 const distDir = path.resolve('dist');
 const baseIndexPath = path.join(distDir, 'index.html');
 const today = new Date().toISOString().slice(0, 10);
 const SITE_NAME = 'OBBA Calculators';
-const SHARE_CARD_URL = `${SITE_URL}/share-card.png`;
+const SHARE_CARD_URL = `${SITE_URL}/share-card.jpg`;
 const SHARE_CARD_ALT = 'OBBA Calculators paycheck and tax calculator share card';
 
 if (!fs.existsSync(baseIndexPath)) {
@@ -46,7 +47,8 @@ function stripExistingSeo(head) {
     .replace(/\s*<meta\s+property=["']og:[^"']+["'][^>]*>/gi, '')
     .replace(/\s*<meta\s+name=["']twitter:[^"']+["'][^>]*>/gi, '')
     .replace(/\s*<link\s+rel=["']canonical["'][^>]*>/gi, '')
-    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']page-webpage-schema["'][\s\S]*?<\/script>/gi, '');
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']page-webpage-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']home-page-schema["'][\s\S]*?<\/script>/gi, '');
 }
 
 function buildBreadcrumbSchema(seo) {
@@ -99,6 +101,9 @@ function buildSeoTags(seo) {
   };
 
   const keywords = seo.keywords ? `\n    <meta name="keywords" content="${escapeHtml(seo.keywords)}" />` : '';
+  const homeSchema = seo.canonicalPath === '/'
+    ? `\n    <script type="application/ld+json" id="home-page-schema">${jsonLd(homePageSchema)}</script>`
+    : '';
 
   return `
     <title>${escapeHtml(seo.title)}</title>
@@ -112,15 +117,15 @@ function buildSeoTags(seo) {
     <meta property="og:site_name" content="${escapeHtml(SITE_NAME)}" />
     <meta property="og:image" content="${escapeHtml(SHARE_CARD_URL)}" />
     <meta property="og:image:alt" content="${escapeHtml(SHARE_CARD_ALT)}" />
-    <meta property="og:image:width" content="1731" />
-    <meta property="og:image:height" content="909" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeHtml(seo.title)}" />
     <meta name="twitter:description" content="${escapeHtml(seo.description)}" />
     <meta name="twitter:image" content="${escapeHtml(SHARE_CARD_URL)}" />
     <meta name="twitter:image:alt" content="${escapeHtml(SHARE_CARD_ALT)}" />
     <script type="application/ld+json" id="page-webpage-schema">${jsonLd(schema)}</script>
-    <script type="application/ld+json" id="breadcrumb-schema">${jsonLd(buildBreadcrumbSchema(seo))}</script>`;
+    <script type="application/ld+json" id="breadcrumb-schema">${jsonLd(buildBreadcrumbSchema(seo))}</script>${homeSchema}`;
 }
 
 function renderHtml(seo) {

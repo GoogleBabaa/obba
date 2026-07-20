@@ -5,6 +5,7 @@ import { blogPosts } from './blogData';
 import { californiaDocMeta, californiaDocSections } from './californiaContent';
 import { floridaDocMeta, floridaDocSections } from './floridaContent';
 import { hawaiiDocMeta, hawaiiDocSections } from './hawaiiContent';
+import { homePageSchema } from './homeSchema';
 import { illinoisDocMeta, illinoisDocSections } from './illinoisContent';
 import { indianaDocMeta, indianaDocSections } from './indianaContent';
 import { nebraskaDocMeta, nebraskaDocSections } from './nebraskaContent';
@@ -715,7 +716,7 @@ function upsertMeta(selector, create) {
 
 function setPageMeta({ title, description, keywords, canonicalPath }) {
   document.title = title;
-  const shareCardUrl = `${SITE_URL}/share-card.png`;
+  const shareCardUrl = `${SITE_URL}/share-card.jpg`;
 
   const desc = upsertMeta('meta[name="description"]', { name: 'description' });
   desc.setAttribute('content', description);
@@ -743,9 +744,9 @@ function setPageMeta({ title, description, keywords, canonicalPath }) {
   const ogImageAlt = upsertMeta('meta[property="og:image:alt"]', { property: 'og:image:alt' });
   ogImageAlt.setAttribute('content', 'OBBA Calculators paycheck and tax calculator share card');
   const ogImageWidth = upsertMeta('meta[property="og:image:width"]', { property: 'og:image:width' });
-  ogImageWidth.setAttribute('content', '1731');
+  ogImageWidth.setAttribute('content', '1200');
   const ogImageHeight = upsertMeta('meta[property="og:image:height"]', { property: 'og:image:height' });
-  ogImageHeight.setAttribute('content', '909');
+  ogImageHeight.setAttribute('content', '630');
 
   const twitterCard = upsertMeta('meta[name="twitter:card"]', { name: 'twitter:card' });
   twitterCard.setAttribute('content', 'summary_large_image');
@@ -1047,7 +1048,7 @@ function HomePage({ isDark, setIsDark }) {
       )
       .replace(
         /<a href="#" style="width:30px;height:30px;border-radius:7px;background:#ff0000;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M22 12s0-3.2-.4-4.7a2.5 2.5 0 0 0-1.8-1.8C18.4 5 12 5 12 5s-6.4 0-7.8.5A2.5 2.5 0 0 0 2.4 7.3C2 8.8 2 12 2 12s0 3.2.4 4.7a2.5 2.5 0 0 0 1.8 1.8C5.6 19 12 19 12 19s6.4 0 7.8-.5a2.5 2.5 0 0 0 1.8-1.8C22 15.2 22 12 22 12Zm-12 3V9l5 3-5 3Z"\/><\/svg><\/a>/g,
-        `<a href="https://api.whatsapp.com/send?text=${encodedHomeText}%20${encodedHomeUrl}" target="_blank" rel="nofollow noopener noreferrer" aria-label="${homeShareText}" title="${homeShareText}" style="width:30px;height:30px;border-radius:7px;background:#25d366;display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.7 4.8Zm5.4-7.3c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 .1-.2.2-.4.2-.7.1-.3-.2-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6 0-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"/></svg></a>`
+        `<a href="https://api.whatsapp.com/send?text=${encodedHomeUrl}%20${encodedHomeText}" target="_blank" rel="nofollow noopener noreferrer" aria-label="${homeShareText}" title="${homeShareText}" style="width:30px;height:30px;border-radius:7px;background:#25d366;display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.7 4.8Zm5.4-7.3c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 .1-.2.2-.4.2-.7.1-.3-.2-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6 0-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"/></svg></a>`
       );
 
     html = html.replace(/<a href="#"([^>]*)>/g, (match, attrs, offset, source) => {
@@ -2225,7 +2226,7 @@ function OvertimePage({ isDark, setIsDark }) {
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
       x: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-      whatsapp: `https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`,
+      whatsapp: `https://api.whatsapp.com/send?text=${encodedUrl}%20${encodedText}`,
       reddit: `https://www.reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`,
     };
 
@@ -2698,7 +2699,7 @@ function SalaryCalculatorPage({ isDark }) {
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
       x: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-      whatsapp: `https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`,
+      whatsapp: `https://api.whatsapp.com/send?text=${encodedUrl}%20${encodedText}`,
       reddit: `https://www.reddit.com/submit?url=${encodedUrl}&title=${encodeURIComponent('Salary Calculator')}`,
     };
     if (platform === 'copy') {
@@ -3739,7 +3740,7 @@ function PaycheckCalculatorPage({ isDark }) {
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
       x: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-      whatsapp: `https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`,
+      whatsapp: `https://api.whatsapp.com/send?text=${encodedUrl}%20${encodedText}`,
       reddit: `https://www.reddit.com/submit?url=${encodedUrl}&title=${encodeURIComponent('Paycheck Calculator')}`,
     };
     if (platform === 'copy') {
@@ -4749,7 +4750,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
       x: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-      whatsapp: `https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`,
+      whatsapp: `https://api.whatsapp.com/send?text=${encodedUrl}%20${encodedText}`,
       reddit: `https://www.reddit.com/submit?url=${encodedUrl}&title=${encodeURIComponent(`${stateName} Paycheck Calculator`)}`,
     };
     if (platform === 'copy') {
@@ -7463,6 +7464,9 @@ export default function App() {
     const pageSchemaId = 'page-webpage-schema';
     const oldPageSchema = document.getElementById(pageSchemaId);
     if (oldPageSchema) oldPageSchema.remove();
+    const homeSchemaId = 'home-page-schema';
+    const oldHomeSchema = document.getElementById(homeSchemaId);
+    if (oldHomeSchema) oldHomeSchema.remove();
 
     const pageSchema = document.createElement('script');
     pageSchema.type = 'application/ld+json';
@@ -7482,9 +7486,19 @@ export default function App() {
     });
     document.head.appendChild(pageSchema);
 
+    if (pageSeo.canonicalPath === '/') {
+      const homeSchema = document.createElement('script');
+      homeSchema.type = 'application/ld+json';
+      homeSchema.id = homeSchemaId;
+      homeSchema.text = JSON.stringify(homePageSchema);
+      document.head.appendChild(homeSchema);
+    }
+
     return () => {
       const existing = document.getElementById(pageSchemaId);
       if (existing) existing.remove();
+      const existingHomeSchema = document.getElementById(homeSchemaId);
+      if (existingHomeSchema) existingHomeSchema.remove();
     };
   }, [location.pathname]);
 
