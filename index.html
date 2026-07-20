@@ -10,10 +10,77 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=3" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
     <title>Best Paycheck &amp; Tax Calculators 2026 | OBBA</title>
+    <script>
+      if (location.pathname !== '/') document.documentElement.classList.add('not-home');
+    </script>
+    <style>
+      .not-home #home-lcp-fallback { display: none; }
+      #home-lcp-fallback {
+        min-height: 100vh;
+        background: #f8fafc;
+        color: #1e293b;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      #home-lcp-fallback header {
+        height: 69px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      #home-lcp-fallback img {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+      #home-lcp-fallback main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 70px 24px 40px;
+      }
+      #home-lcp-fallback h1 {
+        max-width: 780px;
+        margin: 0;
+        font-size: clamp(38px, 5vw, 64px);
+        line-height: 1.02;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+      #home-lcp-fallback p {
+        max-width: 700px;
+        margin: 18px 0 46px;
+        font-size: 18px;
+        line-height: 1.65;
+        color: #475569;
+      }
+      #home-lcp-fallback h2 {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 800;
+        color: #1e293b;
+        letter-spacing: 0;
+      }
+    </style>
   </head>
   <body>
+    <div id="home-lcp-fallback" aria-hidden="true">
+      <header>
+        <img src="/logo.png" alt="" width="38" height="38" />
+        <span style="display:flex;flex-direction:column;line-height:1;">
+          <span style="font-size:18px;font-weight:800;color:#1e293b;letter-spacing:0;">OBBA</span>
+          <span style="font-size:9px;font-weight:800;color:#1e293b;letter-spacing:1.5px;">CALCULATORS</span>
+        </span>
+      </header>
+      <main>
+        <h1>Best Paycheck &amp; Tax Calculators 2026</h1>
+        <p>See your real take-home pay in seconds with OBBA Calculators - paycheck, salary, overtime, state taxes, and money-saving tools in one modern view.</p>
+        <h2>Explore Our Most Popular Calculators</h2>
+      </main>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-
