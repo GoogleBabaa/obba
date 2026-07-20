@@ -833,7 +833,7 @@ function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
           <img src="/logo.png" alt="OBBA Logo" className="h-[38px] w-[38px] rounded-[10px] object-cover" />
           <span className="flex flex-col leading-none">
             <span className="text-lg font-extrabold tracking-[.3px]" style={{ color: 'var(--text)' }}>OBBA</span>
-            <span className="text-[9px] font-extrabold tracking-[1.5px] text-slate-400">CALCULATORS</span>
+            <span className="text-[9px] font-extrabold tracking-[1.5px]" style={{ color: 'var(--text)' }}>CALCULATORS</span>
           </span>
         </Link>
         <div ref={menuRef} className="hidden md:flex items-center gap-1">
@@ -944,7 +944,7 @@ function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
               <Link to="/" onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                 <img src="/logo.png" alt="OBBA" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover', display: 'block' }} />
                 <span style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>
-                  OBBA <span style={{ fontSize: 9, fontWeight: 800, color: '#94a3b8', letterSpacing: 1.4 }}>CALCULATORS</span>
+                  OBBA <span style={{ fontSize: 9, fontWeight: 800, color: 'var(--text)', letterSpacing: 1.4 }}>CALCULATORS</span>
                 </span>
               </Link>
               <button
