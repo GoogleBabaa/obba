@@ -3,20 +3,29 @@ import { Link, Route, Routes, useLocation, useNavigate, useParams, useSearchPara
 import { BarChart3, ChevronDown, Landmark, Map, MapPin, Menu, Moon, Sun, X } from 'lucide-react';
 import { blogPosts } from './blogData';
 import { californiaDocMeta, californiaDocSections } from './californiaContent';
+import { californiaPaycheckSchema } from './californiaSchema';
 import { floridaDocMeta, floridaDocSections } from './floridaContent';
 import { floridaPaycheckSchema } from './floridaSchema';
 import { hawaiiDocMeta, hawaiiDocSections } from './hawaiiContent';
+import { hawaiiPaycheckSchema } from './hawaiiSchema';
 import { homePageSchema } from './homeSchema';
 import { illinoisDocMeta, illinoisDocSections } from './illinoisContent';
+import { illinoisPaycheckSchema } from './illinoisSchema';
 import { indianaDocMeta, indianaDocSections } from './indianaContent';
+import { indianaPaycheckSchema } from './indianaSchema';
 import { nebraskaDocMeta, nebraskaDocSections } from './nebraskaContent';
+import { nebraskaPaycheckSchema } from './nebraskaSchema';
 import { overtimeDocMeta, overtimeDocSections } from './overtimeContent';
+import { overtimeCalculatorSchema } from './overtimeSchema';
+import { paycheckCalculatorSchema } from './paycheckSchema';
 import { paycheckDocxSections } from './paycheckContent';
 import { SITE_URL } from './seoConfig';
 import { texasDocMeta, texasDocSections } from './texasContent';
 import { texasPaycheckSchema } from './texasSchema';
 import { virginiaDocMeta, virginiaDocSections } from './virginiaContent';
+import { virginiaPaycheckSchema } from './virginiaSchema';
 import { washingtonDocMeta, washingtonDocSections } from './washingtonContent';
+import { washingtonPaycheckSchema } from './washingtonSchema';
 import homeThemeHtml from '../OBBA Calculators.dc (1).html?raw';
 import overtimeThemeHtml from '../Overtime Calculator.dc (1).html?raw';
 const FAQPage = lazy(() => import('./FAQPage'));
@@ -1807,24 +1816,7 @@ function OvertimePage({ isDark, setIsDark }) {
     const schemaScript = document.createElement('script');
     schemaScript.type = 'application/ld+json';
     schemaScript.id = schemaId;
-    schemaScript.text = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'WebPage',
-      name: overtimeDocMeta.title,
-      description: metaDescriptionContent,
-      url: `${window.location.origin}/overtime`,
-      mainEntity: {
-        '@type': 'SoftwareApplication',
-        name: 'No Tax on Overtime Calculator',
-        applicationCategory: 'FinanceApplication',
-        operatingSystem: 'Web',
-        offers: {
-          '@type': 'Offer',
-          price: '0',
-          priceCurrency: 'USD',
-        },
-      },
-    });
+    schemaScript.text = JSON.stringify(overtimeCalculatorSchema);
     document.head.appendChild(schemaScript);
 
     return () => {
@@ -3770,24 +3762,7 @@ function PaycheckCalculatorPage({ isDark }) {
     const schemaScript = document.createElement('script');
     schemaScript.type = 'application/ld+json';
     schemaScript.id = schemaId;
-    schemaScript.text = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'WebPage',
-      name: 'Paycheck Calculator - Estimate Your Take-Home Pay Fast',
-      description,
-      url: `${window.location.origin}/paycheck-calculator`,
-      mainEntity: {
-        '@type': 'SoftwareApplication',
-        name: 'Paycheck Calculator',
-        applicationCategory: 'FinanceApplication',
-        operatingSystem: 'Web',
-        offers: {
-          '@type': 'Offer',
-          price: '0',
-          priceCurrency: 'USD',
-        },
-      },
-    });
+    schemaScript.text = JSON.stringify(paycheckCalculatorSchema);
     document.head.appendChild(schemaScript);
 
     return () => {
@@ -4829,7 +4804,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
     const schemaScript = document.createElement('script');
     schemaScript.type = 'application/ld+json';
     schemaScript.id = schemaId;
-    schemaScript.text = JSON.stringify(stateName === 'Texas' ? texasPaycheckSchema : stateName === 'Florida' ? floridaPaycheckSchema : {
+    schemaScript.text = JSON.stringify(stateName === 'Texas' ? texasPaycheckSchema : stateName === 'Florida' ? floridaPaycheckSchema : stateName === 'California' ? californiaPaycheckSchema : stateName === 'Illinois' ? illinoisPaycheckSchema : stateName === 'Washington' ? washingtonPaycheckSchema : stateName === 'Indiana' ? indianaPaycheckSchema : stateName === 'Hawaii' ? hawaiiPaycheckSchema : stateName === 'Nebraska' ? nebraskaPaycheckSchema : stateName === 'Virginia' ? virginiaPaycheckSchema : {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
       name: title,

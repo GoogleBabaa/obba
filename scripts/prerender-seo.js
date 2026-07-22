@@ -1,8 +1,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { californiaPaycheckSchema } from '../src/californiaSchema.js';
 import { floridaPaycheckSchema } from '../src/floridaSchema.js';
+import { hawaiiPaycheckSchema } from '../src/hawaiiSchema.js';
 import { homePageSchema } from '../src/homeSchema.js';
+import { illinoisPaycheckSchema } from '../src/illinoisSchema.js';
+import { indianaPaycheckSchema } from '../src/indianaSchema.js';
+import { nebraskaPaycheckSchema } from '../src/nebraskaSchema.js';
+import { overtimeCalculatorSchema } from '../src/overtimeSchema.js';
+import { paycheckCalculatorSchema } from '../src/paycheckSchema.js';
 import { texasPaycheckSchema } from '../src/texasSchema.js';
+import { virginiaPaycheckSchema } from '../src/virginiaSchema.js';
+import { washingtonPaycheckSchema } from '../src/washingtonSchema.js';
 import { breadcrumbLabelsByPath, pageSeoByPath, SITE_URL } from '../src/seoConfig.js';
 
 const distDir = path.resolve('dist');
@@ -50,8 +59,17 @@ function stripExistingSeo(head) {
     .replace(/\s*<meta\s+name=["']twitter:[^"']+["'][^>]*>/gi, '')
     .replace(/\s*<link\s+rel=["']canonical["'][^>]*>/gi, '')
     .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']page-webpage-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']california-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
     .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']florida-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']hawaii-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']illinois-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']indiana-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']nebraska-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']overtime-calculator-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
     .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']texas-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']virginia-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']washington-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
     .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']home-page-schema["'][\s\S]*?<\/script>/gi, '');
 }
 
@@ -112,8 +130,35 @@ function buildSeoTags(seo) {
   const floridaSchema = seo.canonicalPath === '/florida-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="florida-paycheck-calculator-schema">${jsonLd(floridaPaycheckSchema)}</script>`
     : '';
+  const californiaSchema = seo.canonicalPath === '/california-paycheck-calculator'
+    ? `\n    <script type="application/ld+json" id="california-paycheck-calculator-schema">${jsonLd(californiaPaycheckSchema)}</script>`
+    : '';
+  const hawaiiSchema = seo.canonicalPath === '/hawaii-paycheck-calculator'
+    ? `\n    <script type="application/ld+json" id="hawaii-paycheck-calculator-schema">${jsonLd(hawaiiPaycheckSchema)}</script>`
+    : '';
   const texasSchema = seo.canonicalPath === '/texas-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="texas-paycheck-calculator-schema">${jsonLd(texasPaycheckSchema)}</script>`
+    : '';
+  const overtimeSchema = seo.canonicalPath === '/overtime'
+    ? `\n    <script type="application/ld+json" id="overtime-calculator-schema">${jsonLd(overtimeCalculatorSchema)}</script>`
+    : '';
+  const paycheckSchema = seo.canonicalPath === '/paycheck-calculator'
+    ? `\n    <script type="application/ld+json" id="paycheck-calculator-schema">${jsonLd(paycheckCalculatorSchema)}</script>`
+    : '';
+  const washingtonSchema = seo.canonicalPath === '/washington-paycheck-calculator'
+    ? `\n    <script type="application/ld+json" id="washington-paycheck-calculator-schema">${jsonLd(washingtonPaycheckSchema)}</script>`
+    : '';
+  const illinoisSchema = seo.canonicalPath === '/illinois-paycheck-calculator'
+    ? `\n    <script type="application/ld+json" id="illinois-paycheck-calculator-schema">${jsonLd(illinoisPaycheckSchema)}</script>`
+    : '';
+  const indianaSchema = seo.canonicalPath === '/indiana-paycheck-calculator'
+    ? `\n    <script type="application/ld+json" id="indiana-paycheck-calculator-schema">${jsonLd(indianaPaycheckSchema)}</script>`
+    : '';
+  const nebraskaSchema = seo.canonicalPath === '/nebraska-paycheck-calculator'
+    ? `\n    <script type="application/ld+json" id="nebraska-paycheck-calculator-schema">${jsonLd(nebraskaPaycheckSchema)}</script>`
+    : '';
+  const virginiaSchema = seo.canonicalPath === '/virginia-paycheck-calculator'
+    ? `\n    <script type="application/ld+json" id="virginia-paycheck-calculator-schema">${jsonLd(virginiaPaycheckSchema)}</script>`
     : '';
 
   return `
@@ -136,7 +181,7 @@ function buildSeoTags(seo) {
     <meta name="twitter:image" content="${escapeHtml(SHARE_CARD_URL)}" />
     <meta name="twitter:image:alt" content="${escapeHtml(SHARE_CARD_ALT)}" />
     <script type="application/ld+json" id="page-webpage-schema">${jsonLd(schema)}</script>
-    <script type="application/ld+json" id="breadcrumb-schema">${jsonLd(buildBreadcrumbSchema(seo))}</script>${homeSchema}${floridaSchema}${texasSchema}`;
+    <script type="application/ld+json" id="breadcrumb-schema">${jsonLd(buildBreadcrumbSchema(seo))}</script>${homeSchema}${floridaSchema}${californiaSchema}${hawaiiSchema}${texasSchema}${overtimeSchema}${paycheckSchema}${washingtonSchema}${illinoisSchema}${indianaSchema}${nebraskaSchema}${virginiaSchema}`;
 }
 
 function renderHtml(seo) {
