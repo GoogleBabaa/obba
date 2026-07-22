@@ -4,6 +4,7 @@ import { BarChart3, ChevronDown, Landmark, Map, MapPin, Menu, Moon, Sun, X } fro
 import { blogPosts } from './blogData';
 import { californiaDocMeta, californiaDocSections } from './californiaContent';
 import { floridaDocMeta, floridaDocSections } from './floridaContent';
+import { floridaPaycheckSchema } from './floridaSchema';
 import { hawaiiDocMeta, hawaiiDocSections } from './hawaiiContent';
 import { homePageSchema } from './homeSchema';
 import { illinoisDocMeta, illinoisDocSections } from './illinoisContent';
@@ -4827,7 +4828,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
     const schemaScript = document.createElement('script');
     schemaScript.type = 'application/ld+json';
     schemaScript.id = schemaId;
-    schemaScript.text = JSON.stringify({
+    schemaScript.text = JSON.stringify(stateName === 'Florida' ? floridaPaycheckSchema : {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
       name: title,

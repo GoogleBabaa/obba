@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { floridaPaycheckSchema } from '../src/floridaSchema.js';
 import { homePageSchema } from '../src/homeSchema.js';
 import { breadcrumbLabelsByPath, pageSeoByPath, SITE_URL } from '../src/seoConfig.js';
 
@@ -48,6 +49,7 @@ function stripExistingSeo(head) {
     .replace(/\s*<meta\s+name=["']twitter:[^"']+["'][^>]*>/gi, '')
     .replace(/\s*<link\s+rel=["']canonical["'][^>]*>/gi, '')
     .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']page-webpage-schema["'][\s\S]*?<\/script>/gi, '')
+    .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']florida-paycheck-calculator-schema["'][\s\S]*?<\/script>/gi, '')
     .replace(/\s*<script\s+type=["']application\/ld\+json["']\s+id=["']home-page-schema["'][\s\S]*?<\/script>/gi, '');
 }
 
@@ -105,6 +107,9 @@ function buildSeoTags(seo) {
   const homeSchema = seo.canonicalPath === '/'
     ? `\n    <script type="application/ld+json" id="home-page-schema">${jsonLd(homePageSchema)}</script>`
     : '';
+  const floridaSchema = seo.canonicalPath === '/florida-paycheck-calculator'
+    ? `\n    <script type="application/ld+json" id="florida-paycheck-calculator-schema">${jsonLd(floridaPaycheckSchema)}</script>`
+    : '';
 
   return `
     <title>${escapeHtml(seo.title)}</title>
@@ -126,7 +131,7 @@ function buildSeoTags(seo) {
     <meta name="twitter:image" content="${escapeHtml(SHARE_CARD_URL)}" />
     <meta name="twitter:image:alt" content="${escapeHtml(SHARE_CARD_ALT)}" />
     <script type="application/ld+json" id="page-webpage-schema">${jsonLd(schema)}</script>
-    <script type="application/ld+json" id="breadcrumb-schema">${jsonLd(buildBreadcrumbSchema(seo))}</script>${homeSchema}`;
+    <script type="application/ld+json" id="breadcrumb-schema">${jsonLd(buildBreadcrumbSchema(seo))}</script>${homeSchema}${floridaSchema}`;
 }
 
 function renderHtml(seo) {
