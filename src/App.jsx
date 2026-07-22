@@ -27,7 +27,6 @@ import { virginiaPaycheckSchema } from './virginiaSchema';
 import { washingtonDocMeta, washingtonDocSections } from './washingtonContent';
 import { washingtonPaycheckSchema } from './washingtonSchema';
 import homeThemeHtml from '../OBBA Calculators.dc (1).html?raw';
-import overtimeThemeHtml from '../Overtime Calculator.dc (1).html?raw';
 const FAQPage = lazy(() => import('./FAQPage'));
 const BlogsPage = lazy(() => import('./BlogsPage'));
 const BlogPost = lazy(() => import('./BlogPost'));
@@ -1630,6 +1629,7 @@ function HomePage({ isDark, setIsDark }) {
 
 function OvertimePage({ isDark, setIsDark }) {
   const navigate = useNavigate();
+  const [overtimeThemeHtml, setOvertimeThemeHtml] = useState('');
   const [status, setStatus] = useState('single');
   const [magi, setMagi] = useState(60000);
   const [hourly, setHourly] = useState(25);
@@ -1651,6 +1651,16 @@ function OvertimePage({ isDark, setIsDark }) {
   useEffect(() => {
     document.documentElement.classList.add('overtime-dc-scroll');
     return () => document.documentElement.classList.remove('overtime-dc-scroll');
+  }, []);
+
+  useEffect(() => {
+    let alive = true;
+    import('../Overtime Calculator.dc (1).html?raw').then((module) => {
+      if (alive) setOvertimeThemeHtml(module.default);
+    });
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const usd2 = (v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Math.max(0, v));
@@ -1826,6 +1836,7 @@ function OvertimePage({ isDark, setIsDark }) {
   }, []);
 
   const overtimeTemplate = useMemo(() => {
+    if (!overtimeThemeHtml) return '';
     const style = overtimeThemeHtml.match(/<style>[\s\S]*?<\/style>/)?.[0] ?? '';
     const shell = overtimeThemeHtml.match(/<x-dc>([\s\S]*?)<script type="text\/x-dc"/)?.[1] ?? '';
     return `${style}${shell}`
@@ -1839,7 +1850,7 @@ function OvertimePage({ isDark, setIsDark }) {
       .replace(/<!--[^>]*NAV[\s\S]*?<\/nav>/i, '')
       .replace(/<!-- BREADCRUMB -->[\s\S]*?<!-- MAIN -->/i, '<!-- MAIN -->')
       .replace(/<!-- FOOTER -->[\s\S]*?<\/footer>/i, '');
-  }, []);
+  }, [overtimeThemeHtml]);
 
   const formatDcMoney = (value) => usd2(value);
   const percentOfTotal = (value, total) => (total > 0 ? Math.round((value / total) * 100) : 0);
