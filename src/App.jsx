@@ -14,6 +14,7 @@ import { overtimeDocMeta, overtimeDocSections } from './overtimeContent';
 import { paycheckDocxSections } from './paycheckContent';
 import { SITE_URL } from './seoConfig';
 import { texasDocMeta, texasDocSections } from './texasContent';
+import { texasPaycheckSchema } from './texasSchema';
 import { virginiaDocMeta, virginiaDocSections } from './virginiaContent';
 import { washingtonDocMeta, washingtonDocSections } from './washingtonContent';
 import homeThemeHtml from '../OBBA Calculators.dc (1).html?raw';
@@ -4828,7 +4829,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
     const schemaScript = document.createElement('script');
     schemaScript.type = 'application/ld+json';
     schemaScript.id = schemaId;
-    schemaScript.text = JSON.stringify(stateName === 'Florida' ? floridaPaycheckSchema : {
+    schemaScript.text = JSON.stringify(stateName === 'Texas' ? texasPaycheckSchema : stateName === 'Florida' ? floridaPaycheckSchema : {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
       name: title,
