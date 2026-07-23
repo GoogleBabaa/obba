@@ -16,7 +16,7 @@ import { breadcrumbLabelsByPath, pageSeoByPath, SITE_URL } from '../src/seoConfi
 
 const distDir = path.resolve('dist');
 const baseIndexPath = path.join(distDir, 'index.html');
-const today = new Date().toISOString().slice(0, 10);
+const sitemapLastmod = '2026-07-22';
 const SITE_NAME = 'OBBA Calculators';
 const SHARE_CARD_URL = `${SITE_URL}/share-card.jpg`;
 const SHARE_CARD_ALT = 'OBBA Calculators paycheck and tax calculator share card';
@@ -192,6 +192,27 @@ function renderHtml(seo) {
 }
 
 const routes = new Map(Object.entries(pageSeoByPath));
+const sitemapPathOrder = [
+  '/',
+  '/paycheck-calculator',
+  '/salary-calculator',
+  '/overtime',
+  '/states',
+  '/texas-paycheck-calculator',
+  '/florida-paycheck-calculator',
+  '/california-paycheck-calculator',
+  '/illinois-paycheck-calculator',
+  '/washington-paycheck-calculator',
+  '/indiana-paycheck-calculator',
+  '/virginia-paycheck-calculator',
+  '/hawaii-paycheck-calculator',
+  '/nebraska-paycheck-calculator',
+  '/faq',
+  '/about-us',
+  '/contact-us',
+  '/privacy-policy',
+  '/terms-conditions',
+];
 
 for (const [rawPath, seo] of routes) {
   const routePath = normalizePath(rawPath);
@@ -203,10 +224,35 @@ for (const [rawPath, seo] of routes) {
 const sitemapEntries = [...routes.values()]
   .filter((seo, index, list) => list.findIndex((item) => item.canonicalPath === seo.canonicalPath) === index)
   .filter((seo) => !String(seo.robots || '').toLowerCase().includes('noindex'))
+  .sort((a, b) => {
+    const aIndex = sitemapPathOrder.indexOf(a.canonicalPath);
+    const bIndex = sitemapPathOrder.indexOf(b.canonicalPath);
+    return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+  })
   .map((seo) => {
-    const priority = seo.canonicalPath === '/' ? '1.0' : '0.9';
-    const changefreq = 'weekly';
-    return `  <url>\n    <loc>${SITE_URL}${seo.canonicalPath}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+    const sitemapMetaByPath = {
+      '/': { changefreq: 'daily', priority: '1.0' },
+      '/paycheck-calculator': { changefreq: 'weekly', priority: '0.9' },
+      '/salary-calculator': { changefreq: 'weekly', priority: '0.9' },
+      '/overtime': { changefreq: 'weekly', priority: '0.9' },
+      '/states': { changefreq: 'weekly', priority: '0.9' },
+      '/texas-paycheck-calculator': { changefreq: 'weekly', priority: '0.8' },
+      '/florida-paycheck-calculator': { changefreq: 'weekly', priority: '0.8' },
+      '/california-paycheck-calculator': { changefreq: 'weekly', priority: '0.8' },
+      '/illinois-paycheck-calculator': { changefreq: 'weekly', priority: '0.8' },
+      '/washington-paycheck-calculator': { changefreq: 'weekly', priority: '0.8' },
+      '/indiana-paycheck-calculator': { changefreq: 'weekly', priority: '0.8' },
+      '/virginia-paycheck-calculator': { changefreq: 'weekly', priority: '0.8' },
+      '/hawaii-paycheck-calculator': { changefreq: 'weekly', priority: '0.8' },
+      '/nebraska-paycheck-calculator': { changefreq: 'weekly', priority: '0.8' },
+      '/faq': { changefreq: 'monthly', priority: '0.6' },
+      '/about-us': { changefreq: 'monthly', priority: '0.5' },
+      '/contact-us': { changefreq: 'yearly', priority: '0.4' },
+      '/privacy-policy': { changefreq: 'yearly', priority: '0.3' },
+      '/terms-conditions': { changefreq: 'yearly', priority: '0.3' },
+    };
+    const meta = sitemapMetaByPath[seo.canonicalPath] || { changefreq: 'weekly', priority: '0.8' };
+    return `  <url>\n    <loc>${SITE_URL}${seo.canonicalPath}</loc>\n    <lastmod>${sitemapLastmod}</lastmod>\n    <changefreq>${meta.changefreq}</changefreq>\n    <priority>${meta.priority}</priority>\n  </url>`;
   })
   .join('\n');
 
