@@ -7635,6 +7635,20 @@ export default function App() {
               </span>
             </div>
             <p className="mt-4 max-w-[260px] text-[13px] leading-6 text-slate-400">Your trusted source for free online tax and financial calculators. Accurate, fast and easy to use.</p>
+            <div className="mt-5 flex items-center gap-2.5">
+              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${SITE_URL}/`)}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share OBBA Calculators on Facebook" title="Share OBBA Calculators on Facebook" className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#1877f2] text-white">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5h2.2V5.1c-.4-.1-1.7-.1-3.2-.1-3.2 0-5.3 1.9-5.3 5.5v3.1H4.2v3.8h3.5V24h4.2v-6.6h3.4l.6-3.8h-4v-2.7c0-1.1.3-2.4 2.1-2.4Z"/></svg>
+              </a>
+              <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`${SITE_URL}/`)}&text=${encodeURIComponent('See your real take-home pay in seconds with OBBA Calculators - paycheck, salary, overtime, state taxes, and money-saving tools in one modern view || OBBACALCULATORS.COM')}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share OBBA Calculators on X" title="Share OBBA Calculators on X" className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#111827] text-white">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.2 2h3.3l-7.2 8.2L22.8 22h-6.7l-5.2-6.8L4.9 22H1.6l7.7-8.8L1.2 2h6.8l4.7 6.2L18.2 2Zm-1.2 17.9h1.8L7 4H5.1l11.9 15.9Z"/></svg>
+              </a>
+              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${SITE_URL}/`)}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share OBBA Calculators on LinkedIn" title="Share OBBA Calculators on LinkedIn" className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#0a66c2] text-white">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.34 8h4.32v14H.34V8Zm7.46 0h4.14v1.9H12c.58-1.1 2-2.25 4.12-2.25 4.4 0 5.22 2.9 5.22 6.67V22h-4.32v-6.8c0-1.62-.03-3.7-2.26-3.7-2.26 0-2.6 1.76-2.6 3.58V22H7.8V8Z"/></svg>
+              </a>
+              <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${SITE_URL}/`)}%20${encodeURIComponent('See your real take-home pay in seconds with OBBA Calculators - paycheck, salary, overtime, state taxes, and money-saving tools in one modern view || OBBACALCULATORS.COM')}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share OBBA Calculators on WhatsApp" title="Share OBBA Calculators on WhatsApp" className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#25d366] text-white">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.7 4.8Zm5.4-7.3c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 .1-.2.2-.4.2-.7.1-.3-.2-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6 0-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"/></svg>
+              </a>
+            </div>
           </div>
           <div>
             <h5 className="text-sm font-bold text-white">Calculators</h5>
