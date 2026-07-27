@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "npx playwright install chromium && npm run build",
+  "buildCommand": "npx playwright install --with-deps chromium && npm run build",
   "outputDirectory": "dist",
   "headers": [
     {
