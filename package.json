@@ -13,7 +13,8 @@
     "welcome:worker": "node scripts/send-due-welcome-emails.mjs",
     "mail:scheduled:dry": "node scripts/send-scheduled-mails.mjs --dry-run",
     "mail:scheduled:send": "node scripts/send-scheduled-mails.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:prerendered": "node scripts/serve-prerendered.mjs"
   },
   "dependencies": {
     "canvas": "^3.2.3",

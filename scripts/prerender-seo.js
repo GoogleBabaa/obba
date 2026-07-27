@@ -1,5 +1,7 @@
 import fs from 'node:fs';
+import http from 'node:http';
 import path from 'node:path';
+import { chromium } from 'playwright';
 import { californiaPaycheckSchema } from '../src/californiaSchema.js';
 import { floridaPaycheckSchema } from '../src/floridaSchema.js';
 import { hawaiiPaycheckSchema } from '../src/hawaiiSchema.js';
@@ -26,6 +28,28 @@ if (!fs.existsSync(baseIndexPath)) {
 }
 
 const baseHtml = fs.readFileSync(baseIndexPath, 'utf8');
+const publicRouteSeoExclusions = new Set([
+  '/admin/mail/:type',
+  '/unsubscribe',
+]);
+
+function validatePublicRoutesHaveSeo(routesByPath) {
+  const appPath = path.resolve('src', 'App.jsx');
+  const appSource = fs.readFileSync(appPath, 'utf8');
+  const appRoutes = [...appSource.matchAll(/<Route\s+path=["']([^"']+)["']/g)]
+    .map((match) => normalizePath(match[1]))
+    .filter((routePath) => !routePath.includes('*'))
+    .filter((routePath) => !routePath.includes(':'))
+    .filter((routePath) => !publicRouteSeoExclusions.has(routePath));
+
+  const missingSeoRoutes = appRoutes.filter((routePath) => !routesByPath.has(routePath));
+  if (missingSeoRoutes.length) {
+    throw new Error(
+      `Missing SEO/prerender config for public route(s): ${missingSeoRoutes.join(', ')}. ` +
+      'Add every public page to src/seoConfig.js so Ctrl+U and Googlebot receive full HTML.',
+    );
+  }
+}
 
 function escapeHtml(value = '') {
   return String(value)
@@ -47,6 +71,90 @@ function normalizePath(routePath) {
 function routeToFile(routePath) {
   if (routePath === '/') return baseIndexPath;
   return path.join(distDir, routePath.replace(/^\//, ''), 'index.html');
+}
+
+function contentTypeFor(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  if (ext === '.html') return 'text/html; charset=utf-8';
+  if (ext === '.js') return 'application/javascript; charset=utf-8';
+  if (ext === '.css') return 'text/css; charset=utf-8';
+  if (ext === '.json') return 'application/json; charset=utf-8';
+  if (ext === '.xml') return 'application/xml; charset=utf-8';
+  if (ext === '.svg') return 'image/svg+xml';
+  if (ext === '.png') return 'image/png';
+  if (ext === '.jpg' || ext === '.jpeg') return 'image/jpeg';
+  if (ext === '.ico') return 'image/x-icon';
+  if (ext === '.webp') return 'image/webp';
+  return 'application/octet-stream';
+}
+
+function startStaticServer(rootDir) {
+  const server = http.createServer((req, res) => {
+    try {
+      const requestUrl = new URL(req.url || '/', 'http://127.0.0.1');
+      let requestPath = decodeURIComponent(requestUrl.pathname);
+      if (requestPath.endsWith('/')) requestPath += 'index.html';
+      let filePath = path.join(rootDir, requestPath.replace(/^\/+/, ''));
+
+      if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+        filePath = path.join(rootDir, requestPath.replace(/^\/+/, ''), 'index.html');
+      }
+
+      if (!fs.existsSync(filePath)) {
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Not found');
+        return;
+      }
+
+      res.writeHead(200, { 'Content-Type': contentTypeFor(filePath) });
+      fs.createReadStream(filePath).pipe(res);
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end(String(error?.message || error));
+    }
+  });
+
+  return new Promise((resolve) => {
+    server.listen(0, '127.0.0.1', () => {
+      const address = server.address();
+      resolve({ server, origin: `http://127.0.0.1:${address.port}` });
+    });
+  });
+}
+
+async function prerenderRenderedBodies(routesToRender) {
+  const { server, origin } = await startStaticServer(distDir);
+  const browser = await chromium.launch({ headless: true });
+
+  try {
+    const page = await browser.newPage({ viewport: { width: 1365, height: 900 } });
+    for (const [rawPath, seo] of routesToRender) {
+      const routePath = normalizePath(rawPath);
+      const filePath = routeToFile(routePath);
+      const errors = [];
+      page.removeAllListeners();
+      page.on('pageerror', (error) => errors.push(error.message));
+
+      await page.goto(`${origin}${routePath}`, { waitUntil: 'networkidle', timeout: 60000 });
+      await page.waitForSelector('#root', { timeout: 30000 });
+      await page.evaluate(() => {
+        document.querySelectorAll('[data-obba-newsletter-message]').forEach((node) => node.remove());
+      });
+
+      const renderedHtml = await page.evaluate(() => `<!doctype html>\n${document.documentElement.outerHTML}`);
+      fs.writeFileSync(filePath, renderedHtml, 'utf8');
+
+      const counts = await page.evaluate(() => ({
+        headings: document.querySelectorAll('h1,h2,h3').length,
+        paragraphs: document.querySelectorAll('p').length,
+        tables: document.querySelectorAll('table').length,
+      }));
+      console.log(`Prerendered body for ${seo.canonicalPath}: ${counts.headings} headings, ${counts.paragraphs} paragraphs, ${counts.tables} tables${errors.length ? ` (${errors.length} page errors)` : ''}.`);
+    }
+  } finally {
+    await browser.close();
+    await new Promise((resolve) => server.close(resolve));
+  }
 }
 
 function stripExistingSeo(head) {
@@ -192,6 +300,7 @@ function renderHtml(seo) {
 }
 
 const routes = new Map(Object.entries(pageSeoByPath));
+validatePublicRoutesHaveSeo(routes);
 const sitemapPathOrder = [
   '/',
   '/paycheck-calculator',
@@ -260,4 +369,6 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://w
 fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap, 'utf8');
 fs.writeFileSync(path.join('public', 'sitemap.xml'), sitemap, 'utf8');
 
-console.log(`Prerendered SEO HTML for ${routes.size} routes.`);
+console.log(`Prerendered SEO head for ${routes.size} routes.`);
+await prerenderRenderedBodies(routes);
+console.log(`Prerendered full HTML for ${routes.size} routes.`);
