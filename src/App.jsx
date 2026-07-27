@@ -27,6 +27,7 @@ import { virginiaPaycheckSchema } from './virginiaSchema';
 import { washingtonDocMeta, washingtonDocSections } from './washingtonContent';
 import { washingtonPaycheckSchema } from './washingtonSchema';
 import homeThemeHtml from '../OBBA Calculators.dc (1).html?raw';
+import overtimeThemeHtmlSource from '../Overtime Calculator.dc (1).html?raw';
 const FAQPage = lazy(() => import('./FAQPage'));
 const BlogsPage = lazy(() => import('./BlogsPage'));
 const BlogPost = lazy(() => import('./BlogPost'));
@@ -1629,7 +1630,7 @@ function HomePage({ isDark, setIsDark }) {
 
 function OvertimePage({ isDark, setIsDark }) {
   const navigate = useNavigate();
-  const [overtimeThemeHtml, setOvertimeThemeHtml] = useState('');
+  const [overtimeThemeHtml] = useState(overtimeThemeHtmlSource);
   const [status, setStatus] = useState('single');
   const [magi, setMagi] = useState(60000);
   const [hourly, setHourly] = useState(25);
@@ -1651,16 +1652,6 @@ function OvertimePage({ isDark, setIsDark }) {
   useEffect(() => {
     document.documentElement.classList.add('overtime-dc-scroll');
     return () => document.documentElement.classList.remove('overtime-dc-scroll');
-  }, []);
-
-  useEffect(() => {
-    let alive = true;
-    import('../Overtime Calculator.dc (1).html?raw').then((module) => {
-      if (alive) setOvertimeThemeHtml(module.default);
-    });
-    return () => {
-      alive = false;
-    };
   }, []);
 
   const usd2 = (v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Math.max(0, v));

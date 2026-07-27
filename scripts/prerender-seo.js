@@ -1,7 +1,10 @@
 import fs from 'node:fs';
-import http from 'node:http';
 import path from 'node:path';
-import { chromium } from 'playwright';
+import { Writable } from 'node:stream';
+import React from 'react';
+import { renderToPipeableStream } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom';
+import { createServer as createViteServer } from 'vite';
 import { californiaPaycheckSchema } from '../src/californiaSchema.js';
 import { floridaPaycheckSchema } from '../src/floridaSchema.js';
 import { hawaiiPaycheckSchema } from '../src/hawaiiSchema.js';
@@ -73,87 +76,81 @@ function routeToFile(routePath) {
   return path.join(distDir, routePath.replace(/^\//, ''), 'index.html');
 }
 
-function contentTypeFor(filePath) {
-  const ext = path.extname(filePath).toLowerCase();
-  if (ext === '.html') return 'text/html; charset=utf-8';
-  if (ext === '.js') return 'application/javascript; charset=utf-8';
-  if (ext === '.css') return 'text/css; charset=utf-8';
-  if (ext === '.json') return 'application/json; charset=utf-8';
-  if (ext === '.xml') return 'application/xml; charset=utf-8';
-  if (ext === '.svg') return 'image/svg+xml';
-  if (ext === '.png') return 'image/png';
-  if (ext === '.jpg' || ext === '.jpeg') return 'image/jpeg';
-  if (ext === '.ico') return 'image/x-icon';
-  if (ext === '.webp') return 'image/webp';
-  return 'application/octet-stream';
-}
+function renderReactToHtml(element) {
+  return new Promise((resolve, reject) => {
+    let html = '';
+    let settled = false;
+    const timeout = setTimeout(() => {
+      if (!settled) reject(new Error('SSR prerender timed out.'));
+    }, 60000);
+    const sink = new Writable({
+      write(chunk, _encoding, callback) {
+        html += chunk.toString();
+        callback();
+      },
+    });
 
-function startStaticServer(rootDir) {
-  const server = http.createServer((req, res) => {
-    try {
-      const requestUrl = new URL(req.url || '/', 'http://127.0.0.1');
-      let requestPath = decodeURIComponent(requestUrl.pathname);
-      if (requestPath.endsWith('/')) requestPath += 'index.html';
-      let filePath = path.join(rootDir, requestPath.replace(/^\/+/, ''));
+    const stream = renderToPipeableStream(element, {
+      onAllReady() {
+        stream.pipe(sink);
+      },
+      onError(error) {
+        if (!settled) {
+          settled = true;
+          clearTimeout(timeout);
+          reject(error);
+        }
+      },
+    });
 
-      if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-        filePath = path.join(rootDir, requestPath.replace(/^\/+/, ''), 'index.html');
-      }
-
-      if (!fs.existsSync(filePath)) {
-        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Not found');
-        return;
-      }
-
-      res.writeHead(200, { 'Content-Type': contentTypeFor(filePath) });
-      fs.createReadStream(filePath).pipe(res);
-    } catch (error) {
-      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end(String(error?.message || error));
-    }
-  });
-
-  return new Promise((resolve) => {
-    server.listen(0, '127.0.0.1', () => {
-      const address = server.address();
-      resolve({ server, origin: `http://127.0.0.1:${address.port}` });
+    sink.on('finish', () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      resolve(html);
+    });
+    sink.on('error', (error) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      reject(error);
     });
   });
 }
 
 async function prerenderRenderedBodies(routesToRender) {
-  const { server, origin } = await startStaticServer(distDir);
-  const browser = await chromium.launch({ headless: true });
+  const vite = await createViteServer({
+    server: { middlewareMode: true },
+    appType: 'custom',
+    logLevel: 'error',
+  });
 
   try {
-    const page = await browser.newPage({ viewport: { width: 1365, height: 900 } });
+    const { default: App } = await vite.ssrLoadModule('/src/App.jsx');
     for (const [rawPath, seo] of routesToRender) {
       const routePath = normalizePath(rawPath);
       const filePath = routeToFile(routePath);
-      const errors = [];
-      page.removeAllListeners();
-      page.on('pageerror', (error) => errors.push(error.message));
-
-      await page.goto(`${origin}${routePath}`, { waitUntil: 'networkidle', timeout: 60000 });
-      await page.waitForSelector('#root', { timeout: 30000 });
-      await page.evaluate(() => {
-        document.querySelectorAll('[data-obba-newsletter-message]').forEach((node) => node.remove());
-      });
-
-      const renderedHtml = await page.evaluate(() => `<!doctype html>\n${document.documentElement.outerHTML}`);
+      const pageHtml = fs.readFileSync(filePath, 'utf8');
+      const renderedApp = await renderReactToHtml(
+        React.createElement(StaticRouter, { location: routePath }, React.createElement(App)),
+      );
+      const rootStart = pageHtml.indexOf('<div id="root">');
+      const bodyClose = pageHtml.lastIndexOf('</body>');
+      if (rootStart === -1 || bodyClose === -1 || rootStart > bodyClose) {
+        throw new Error(`Cannot find root container while prerendering ${routePath}.`);
+      }
+      const renderedHtml = `${pageHtml.slice(0, rootStart)}<div id="root">${renderedApp}</div>\n  ${pageHtml.slice(bodyClose)}`;
       fs.writeFileSync(filePath, renderedHtml, 'utf8');
 
-      const counts = await page.evaluate(() => ({
-        headings: document.querySelectorAll('h1,h2,h3').length,
-        paragraphs: document.querySelectorAll('p').length,
-        tables: document.querySelectorAll('table').length,
-      }));
-      console.log(`Prerendered body for ${seo.canonicalPath}: ${counts.headings} headings, ${counts.paragraphs} paragraphs, ${counts.tables} tables${errors.length ? ` (${errors.length} page errors)` : ''}.`);
+      const counts = {
+        headings: (renderedApp.match(/<h[1-3][\s>]/gi) || []).length,
+        paragraphs: (renderedApp.match(/<p[\s>]/gi) || []).length,
+        tables: (renderedApp.match(/<table[\s>]/gi) || []).length,
+      };
+      console.log(`Prerendered body for ${seo.canonicalPath}: ${counts.headings} headings, ${counts.paragraphs} paragraphs, ${counts.tables} tables.`);
     }
   } finally {
-    await browser.close();
-    await new Promise((resolve) => server.close(resolve));
+    await vite.close();
   }
 }
 
