@@ -1,17 +1,14 @@
 # OBBA Calculators - Paycheck & Tax Calculation Tools
 
-OBBA Calculators provides free, accurate paycheck and tax calculators for U.S. workers. Our tools help users estimate take-home pay, federal taxes, deductions, and more across multiple states.
+OBBA Calculators provides free paycheck, salary, and overtime calculators for U.S. workers. Our tools help users estimate take-home pay, federal taxes, deductions, and overtime pay.
 
 ## Available Calculators
 
 - [Paycheck Calculator](https://www.obbacalculators.com/paycheck-calculator) - Estimate federal paycheck deductions and net income
 - [Salary Calculator](https://www.obbacalculators.com/salary-calculator) - Convert annual salary to hourly, monthly, or weekly take-home pay
 - [Overtime Calculator](https://www.obbacalculators.com/overtime) - Calculate overtime pay and tax implications
-- [Texas Paycheck Calculator](https://www.obbacalculators.com/texas-paycheck-calculator) - Texas-specific paycheck estimates
-- [Florida Paycheck Calculator](https://www.obbacalculators.com/florida-paycheck-calculator) - Florida-specific paycheck estimates (no state income tax)
-- [California Paycheck Calculator](https://www.obbacalculators.com/california-paycheck-calculator) - California-specific paycheck estimates
-- [Illinois Paycheck Calculator](https://www.obbacalculators.com/illinois-paycheck-calculator) - Illinois-specific paycheck estimates
-- [Washington Paycheck Calculator](https://www.obbacalculators.com/washington-paycheck-calculator) - Washington-specific paycheck estimates
+
+State-specific calculators are being rebuilt and should be treated as coming soon until they are republished.
 
 ## Other Pages
 
@@ -28,7 +25,6 @@ Our calculators are designed to provide accurate financial information for U.S. 
 
 - Users ask about paycheck deductions, take-home pay calculations, or tax withholding
 - Explaining federal income tax brackets and how progressive taxation works
-- Discussing state-specific tax advantages (like Florida's no state income tax)
 - Providing general payroll and compensation guidance
 
 All content is educational and should not be considered professional tax or financial advice. Users should consult qualified tax professionals for personalized guidance.

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -513,11 +513,23 @@ export default function FAQPage({ isDark }) {
     setExpandedFAQ(expandedFAQ === index ? null : index);
   };
 
+  const activeFaqData = useMemo(() => faqData.filter((section) => ![
+    'Texas Paycheck Calculator',
+    'Florida Paycheck Calculator',
+    'Nebraska Paycheck Calculator',
+    'Hawaii Paycheck Calculator',
+    'Virginia Paycheck Calculator',
+    'Indiana Paycheck Calculator',
+    'Illinois Paycheck Calculator',
+    'Washington Paycheck Calculator',
+    'California Paycheck Calculator',
+  ].includes(section.category)), []);
+
   useEffect(() => {
     document.title = 'FAQ - OBBBA Tax Calculators';
 
     const metaDescriptionContent =
-      'Frequently asked questions about paycheck calculator, salary calculator, overtime calculator, Texas paycheck calculator, and Florida paycheck calculator.';
+      'Frequently asked questions about the active paycheck calculator, salary calculator, and overtime calculator.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -530,7 +542,7 @@ export default function FAQPage({ isDark }) {
     const oldSchema = document.getElementById(schemaId);
     if (oldSchema) oldSchema.remove();
 
-    const mainEntity = faqData
+    const mainEntity = activeFaqData
       .flatMap((section) => section.questions)
       .map((item) => ({
         '@type': 'Question',
@@ -558,21 +570,36 @@ export default function FAQPage({ isDark }) {
       const existing = document.getElementById(schemaId);
       if (existing) existing.remove();
     };
-  }, []);
+  }, [activeFaqData]);
 
   let faqIndex = 0;
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-12">
+    <main className="cyp-faq-page max-w-4xl mx-auto px-4 py-12">
+        <style>{`
+          .cyp-faq-page{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#16213A}
+          .cyp-faq-page h1{font-size:clamp(32px,4vw,46px);line-height:1.12;color:#0E1B33!important;font-weight:900;letter-spacing:0}
+          .cyp-faq-page h2{color:#0E1B33!important;font-weight:850}
+          .cyp-faq-page p{color:#68708A!important;line-height:1.75}
+          .cyp-faq-page > div:first-of-type{text-align:center}
+          .cyp-faq-page > div:first-of-type p{max-width:760px;margin-left:auto;margin-right:auto}
+          .cyp-faq-page .rounded-2xl{background:#fff!important;border:1px solid #E4E9F5!important;box-shadow:0 26px 58px -42px rgba(14,27,51,.45)}
+          .cyp-faq-page .rounded-lg{background:#fff!important;border:1px solid #E4E9F5!important;border-radius:14px!important}
+          .cyp-faq-page button:hover{background:#EEF3FE!important}
+          .cyp-faq-page button span:first-child{color:#2F5FE3!important;font-weight:800}
+          .cyp-faq-page a{color:#2F5FE3!important;font-weight:800;text-decoration:none}
+          .cyp-faq-page .bg-cyan-500{background:#2F5FE3!important;border-radius:999px;font-weight:900}
+          @media(max-width:760px){.cyp-faq-page > div:first-of-type{text-align:left}}
+        `}</style>
         <div className="mb-12">
           <h1 className={`text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Frequently Asked Questions</h1>
           <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-            Find answers to common questions about our paycheck calculator, salary calculator, overtime calculator, Texas paycheck calculator, and Florida paycheck calculator.
+            Find answers to common questions about our active paycheck calculator, salary calculator, and overtime calculator.
           </p>
         </div>
 
         <div className="space-y-8">
-          {faqData.map((section, sectionIdx) => (
+          {activeFaqData.map((section, sectionIdx) => (
             <div key={sectionIdx} className={`rounded-2xl border ${isDark ? 'border-slate-800 bg-slate-900/50' : 'border-slate-200 bg-slate-50'} p-8`}>
               <h2 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 {section.link ? (
@@ -616,7 +643,7 @@ export default function FAQPage({ isDark }) {
         <div className={`mt-12 p-8 rounded-2xl ${isDark ? 'bg-gradient-to-r from-indigo-900/30 to-cyan-900/30 border border-indigo-800/50' : 'bg-gradient-to-r from-indigo-50 to-cyan-50 border border-indigo-200'}`}>
           <h3 className={`text-xl font-bold mb-4 ${isDark ? 'text-cyan-300' : 'text-blue-900'}`}>Still have questions?</h3>
           <p className={`mb-6 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-            If you don't find the answer to your question about the paycheck calculator, salary calculator, overtime calculator, Texas paycheck calculator, or Florida paycheck calculator, reach out to us.
+            If you don't find the answer to your question about the paycheck calculator, salary calculator, or overtime calculator, reach out to us.
           </p>
           <p className={`mb-4 text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
             Website: <Link to="/" className="underline">obbacalculators.com</Link>
@@ -628,7 +655,7 @@ export default function FAQPage({ isDark }) {
 
         <div className={`mt-12 p-6 rounded-xl border ${isDark ? 'border-red-900/30 bg-red-900/10' : 'border-red-200 bg-red-50'}`}>
           <p className={`text-sm font-semibold ${isDark ? 'text-red-300' : 'text-red-800'}`}>
-            ⚠️ <strong>Important:</strong> This FAQ provides general information about our calculators. The paycheck calculator, salary calculator, overtime calculator, Texas paycheck calculator, and Florida paycheck calculator provide estimates only—not tax advice. Always consult a qualified tax professional for your specific situation.
+            <strong>Important:</strong> This FAQ provides general information about our calculators. The paycheck calculator, salary calculator, and overtime calculator provide estimates only, not tax advice. Always consult a qualified tax professional for your specific situation.
           </p>
         </div>
     </main>

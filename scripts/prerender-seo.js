@@ -214,6 +214,7 @@ function buildBreadcrumbSchema(seo) {
 function buildSeoTags(seo) {
   const canonicalUrl = `${SITE_URL}${seo.canonicalPath}`;
   const robots = seo.robots || 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1';
+  const isNoindex = String(robots).toLowerCase().includes('noindex');
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -232,16 +233,16 @@ function buildSeoTags(seo) {
   const homeSchema = seo.canonicalPath === '/'
     ? `\n    <script type="application/ld+json" id="home-page-schema">${jsonLd(homePageSchema)}</script>`
     : '';
-  const floridaSchema = seo.canonicalPath === '/florida-paycheck-calculator'
+  const floridaSchema = !isNoindex && seo.canonicalPath === '/florida-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="florida-paycheck-calculator-schema">${jsonLd(floridaPaycheckSchema)}</script>`
     : '';
-  const californiaSchema = seo.canonicalPath === '/california-paycheck-calculator'
+  const californiaSchema = !isNoindex && seo.canonicalPath === '/california-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="california-paycheck-calculator-schema">${jsonLd(californiaPaycheckSchema)}</script>`
     : '';
-  const hawaiiSchema = seo.canonicalPath === '/hawaii-paycheck-calculator'
+  const hawaiiSchema = !isNoindex && seo.canonicalPath === '/hawaii-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="hawaii-paycheck-calculator-schema">${jsonLd(hawaiiPaycheckSchema)}</script>`
     : '';
-  const texasSchema = seo.canonicalPath === '/texas-paycheck-calculator'
+  const texasSchema = !isNoindex && seo.canonicalPath === '/texas-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="texas-paycheck-calculator-schema">${jsonLd(texasPaycheckSchema)}</script>`
     : '';
   const overtimeSchema = seo.canonicalPath === '/overtime'
@@ -250,19 +251,19 @@ function buildSeoTags(seo) {
   const paycheckSchema = seo.canonicalPath === '/paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="paycheck-calculator-schema">${jsonLd(paycheckCalculatorSchema)}</script>`
     : '';
-  const washingtonSchema = seo.canonicalPath === '/washington-paycheck-calculator'
+  const washingtonSchema = !isNoindex && seo.canonicalPath === '/washington-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="washington-paycheck-calculator-schema">${jsonLd(washingtonPaycheckSchema)}</script>`
     : '';
-  const illinoisSchema = seo.canonicalPath === '/illinois-paycheck-calculator'
+  const illinoisSchema = !isNoindex && seo.canonicalPath === '/illinois-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="illinois-paycheck-calculator-schema">${jsonLd(illinoisPaycheckSchema)}</script>`
     : '';
-  const indianaSchema = seo.canonicalPath === '/indiana-paycheck-calculator'
+  const indianaSchema = !isNoindex && seo.canonicalPath === '/indiana-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="indiana-paycheck-calculator-schema">${jsonLd(indianaPaycheckSchema)}</script>`
     : '';
-  const nebraskaSchema = seo.canonicalPath === '/nebraska-paycheck-calculator'
+  const nebraskaSchema = !isNoindex && seo.canonicalPath === '/nebraska-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="nebraska-paycheck-calculator-schema">${jsonLd(nebraskaPaycheckSchema)}</script>`
     : '';
-  const virginiaSchema = seo.canonicalPath === '/virginia-paycheck-calculator'
+  const virginiaSchema = !isNoindex && seo.canonicalPath === '/virginia-paycheck-calculator'
     ? `\n    <script type="application/ld+json" id="virginia-paycheck-calculator-schema">${jsonLd(virginiaPaycheckSchema)}</script>`
     : '';
 
