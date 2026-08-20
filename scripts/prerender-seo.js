@@ -21,7 +21,7 @@ import { breadcrumbLabelsByPath, pageSeoByPath, SITE_URL } from '../src/seoConfi
 
 const distDir = path.resolve('dist');
 const baseIndexPath = path.join(distDir, 'index.html');
-const sitemapLastmod = '2026-07-22';
+const sitemapLastmod = '2026-08-20';
 const SITE_NAME = 'OBBA Calculators';
 const SHARE_CARD_URL = `${SITE_URL}/share-card.jpg`;
 const SHARE_CARD_ALT = 'OBBA Calculators paycheck and tax calculator share card';
