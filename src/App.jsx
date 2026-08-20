@@ -26,7 +26,7 @@ import { virginiaDocMeta, virginiaDocSections } from './virginiaContent';
 import { virginiaPaycheckSchema } from './virginiaSchema';
 import { washingtonDocMeta, washingtonDocSections } from './washingtonContent';
 import { washingtonPaycheckSchema } from './washingtonSchema';
-import homeThemeHtml from '../OBBA Calculators.dc (1).html?raw';
+import checkYourPaysHomeHtml from '../.claude/checkyourpays-homepage (3).html?raw';
 import overtimeThemeHtmlSource from '../Overtime Calculator.dc (1).html?raw';
 const FAQPage = lazy(() => import('./FAQPage'));
 const BlogsPage = lazy(() => import('./BlogsPage'));
@@ -144,8 +144,8 @@ function DocxContentSections({ sections }) {
       return (
         <ol key={`numbered-${index}`} style={{ margin: '12px 0 0', paddingLeft: 0, display: 'grid', gap: 10, listStyle: 'none', counterReset: 'docx-step' }}>
           {block.items.map((item, itemIndex) => (
-            <li key={`item-${itemIndex}`} style={{ display: 'grid', gridTemplateColumns: '28px 1fr', gap: 10, alignItems: 'start', counterIncrement: 'docx-step' }}>
-              <span style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(26,111,232,.12)', color: '#1a6fe8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900 }}>{itemIndex + 1}</span>
+            <li key={`item-${itemIndex}`} style={{ display: 'grid', gridTemplateColumns: '28px 1fr', gap: 10, alignItems: 'start', counterIncrement: 'docx-step', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: '13px 14px', boxShadow: '0 14px 34px -30px rgba(14,27,51,.45)' }}>
+              <span style={{ width: 28, height: 28, borderRadius: 9, background: 'rgba(26,111,232,.12)', color: '#1a6fe8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900 }}>{itemIndex + 1}</span>
               <span>{renderInlineContent(item)}</span>
             </li>
           ))}
@@ -156,7 +156,7 @@ function DocxContentSections({ sections }) {
       return (
         <ul key={`list-${index}`} style={{ margin: '12px 0 0', paddingLeft: 0, display: 'grid', gap: 10, listStyle: 'none' }}>
           {block.items.map((item, itemIndex) => (
-            <li key={`item-${itemIndex}`} style={{ display: 'grid', gridTemplateColumns: '22px 1fr', gap: 10, alignItems: 'start' }}>
+            <li key={`item-${itemIndex}`} style={{ display: 'grid', gridTemplateColumns: '22px 1fr', gap: 10, alignItems: 'start', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: '13px 14px', boxShadow: '0 14px 34px -30px rgba(14,27,51,.45)' }}>
               <span style={{ width: 10, height: 10, borderRadius: 99, background: '#1a6fe8', marginTop: 8, boxShadow: '0 0 0 5px rgba(26,111,232,.10)' }} />
               <span>{renderInlineContent(item)}</span>
             </li>
@@ -299,10 +299,10 @@ function docxSectionsToHtml(sections) {
   const blockHtml = (block, index) => {
     if (block.type === 'table') return table(block);
     if (block.type === 'numbered') {
-      return `<ol style="margin:12px 0 0;padding-left:0;display:grid;gap:10px;list-style:none;font-size:13.5px;color:var(--text2);line-height:1.78;">${block.items.map((item, itemIndex) => `<li style="display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;"><span style="width:28px;height:28px;border-radius:8px;background:rgba(26,111,232,.12);color:#1a6fe8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;">${itemIndex + 1}</span><span>${inline(item)}</span></li>`).join('')}</ol>`;
+      return `<ol style="margin:12px 0 0;padding-left:0;display:grid;gap:10px;list-style:none;font-size:13.5px;color:var(--text2);line-height:1.78;">${block.items.map((item, itemIndex) => `<li style="display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;box-shadow:0 14px 34px -30px rgba(14,27,51,.45);"><span style="width:28px;height:28px;border-radius:9px;background:rgba(26,111,232,.12);color:#1a6fe8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;">${itemIndex + 1}</span><span>${inline(item)}</span></li>`).join('')}</ol>`;
     }
     if (block.type === 'list') {
-      return `<ul style="margin:12px 0 0;padding-left:0;display:grid;gap:10px;list-style:none;font-size:13.5px;color:var(--text2);line-height:1.78;">${block.items.map((item) => `<li style="display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;"><span style="width:10px;height:10px;border-radius:99px;background:#1a6fe8;margin-top:8px;box-shadow:0 0 0 5px rgba(26,111,232,.10);"></span><span>${inline(item)}</span></li>`).join('')}</ul>`;
+      return `<ul style="margin:12px 0 0;padding-left:0;display:grid;gap:10px;list-style:none;font-size:13.5px;color:var(--text2);line-height:1.78;">${block.items.map((item) => `<li style="display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;box-shadow:0 14px 34px -30px rgba(14,27,51,.45);"><span style="width:10px;height:10px;border-radius:99px;background:#1a6fe8;margin-top:8px;box-shadow:0 0 0 5px rgba(26,111,232,.10);"></span><span>${inline(item)}</span></li>`).join('')}</ul>`;
     }
     if (block.type === 'faq') {
       return `<div style="margin:${index === 0 ? 0 : '14px 0 0'};"><h3 style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:7px;">${inline(block.question)}</h3><p style="font-size:13.5px;color:var(--text2);line-height:1.78;margin:0;">${inline(block.answer)}</p></div>`;
@@ -788,842 +788,482 @@ function ficaForAnnualWages(annualWages, status) {
   return ss + medicare + additionalMedicare;
 }
 
-function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
-  const navigate = useNavigate();
-  const calculatorLinks = [
-    ['Salary Calculator', '/salary-calculator'],
-    ['Paycheck Calculator', '/paycheck-calculator'],
-    ['Overtime Calculator', '/overtime'],
-    ...STATE_CALCULATOR_LINKS.map((state) => [`${state.name} Paycheck Calculator`, state.path]),
-  ];
-  const categoryLinks = [
-    ['Salary', '/salary-calculator'],
-    ['Paycheck', '/paycheck-calculator'],
-    ['Overtime', '/overtime'],
-    ['Payroll & Deductions', '/paycheck-calculator'],
-    ['States Calculators', '/states'],
-  ];
-  const pageLinks = [
+function CheckYourPaysHeader({ isMobileMenuOpen, setIsMobileMenuOpen }) {
+  const navItems = [
+    ['Home', '/'],
+    ['Categories', '/#categories'],
+    ['Calculators', '/#tools'],
+    ['By State', '/states'],
     ['Blog', '/blogs'],
-    ['About Us', '/about-us'],
+    ['FAQ', '/faq'],
   ];
-  const [openMenu, setOpenMenu] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const menuRef = React.useRef(null);
-  const normalizedSearchQuery = searchQuery.toLowerCase().trim();
-  const searchMatches = normalizedSearchQuery
-    ? calculatorLinks
-      .filter(([label]) => label
-        .toLowerCase()
-        .split(/[^a-z0-9]+/)
-        .some((word) => word.startsWith(normalizedSearchQuery)))
-      .slice(0, 8)
-    : [];
-  const runHeaderSearch = () => {
-    const target = searchMatches[0] ?? calculatorLinks.find(([label]) => label.toLowerCase().includes(normalizedSearchQuery));
-    if (!target) return;
-    setSearchQuery('');
-    setIsSearchOpen(false);
-    navigate(target[1]);
+
+  const handleHashLink = (event, to) => {
+    if (!to.startsWith('/#')) return;
+    event.preventDefault();
+    setIsMobileMenuOpen(false);
+    if (window.location.pathname !== '/') {
+      window.location.href = to;
+      return;
+    }
+    document.getElementById(to.slice(2))?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  React.useEffect(() => {
-    if (!openMenu) return;
-    const handleClick = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setOpenMenu(null);
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [openMenu]);
-
   return (
-    <header className="obba-site-header">
-      <div className="mx-auto flex max-w-7xl items-center gap-7 px-8 py-3.5">
-        <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-          <img src="/logo.png" alt="OBBA Logo" className="h-[38px] w-[38px] rounded-[10px] object-cover" />
-          <span className="flex flex-col leading-none">
-            <span className="text-lg font-extrabold tracking-[.3px]" style={{ color: 'var(--text)' }}>OBBA</span>
-            <span className="text-[9px] font-extrabold tracking-[1.5px]" style={{ color: 'var(--text)' }}>CALCULATORS</span>
-          </span>
+    <header className="obba-site-header cyp-shared-header">
+      <style>{`
+        .cyp-shared-header{background:#fff;border-bottom:1px solid #E4E9F5;backdrop-filter:none;box-shadow:0 10px 28px rgba(14,27,51,.04)}
+        .cyp-shared-header .cyp-wrap{max-width:1180px;margin:0 auto;padding:0 28px;min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+        .cyp-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19.5px;color:#16213A;text-decoration:none;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+        .cyp-logo-box{width:30px;height:30px;border-radius:8px;background:#2F5FE3;color:#fff;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:14px;font-weight:700}
+        .cyp-nav{display:flex;gap:26px;align-items:center}
+        .cyp-nav a{font-size:14px;font-weight:700;color:#16213A;text-decoration:none;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+        .cyp-nav a:hover{color:#2F5FE3}
+        .cyp-header-cta{display:inline-flex;align-items:center;gap:8px;background:#2F5FE3;color:#fff!important;border-radius:8px;padding:12px 18px;font-size:14px;font-weight:800;text-decoration:none;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+        .cyp-menu-btn{display:none;background:#fff;border:1px solid #E4E9F5;padding:8px 10px;border-radius:6px;cursor:pointer}
+        .cyp-menu-btn span{display:block;width:18px;height:2px;background:#16213A;margin:3px 0}
+        @media(max-width:820px){.cyp-nav{display:${isMobileMenuOpen ? 'flex' : 'none'};position:absolute;top:68px;left:0;right:0;background:#fff;flex-direction:column;padding:20px 28px;border-bottom:1px solid #E4E9F5;gap:16px}.cyp-menu-btn{display:block}.cyp-header-cta{display:none}}
+      `}</style>
+      <div className="cyp-wrap">
+        <Link to="/" className="cyp-logo">
+          <span className="cyp-logo-box">C</span>
+          <span>CheckYourPays</span>
         </Link>
-        <div ref={menuRef} className="hidden md:flex items-center gap-1">
-          <Link to="/" className="obba-nav-link">Home</Link>
-          <div className="relative">
-            <button
-              onClick={() => setOpenMenu(openMenu === 'calculators' ? null : 'calculators')}
-              className="obba-nav-link flex items-center gap-1"
-            >
-              Calculators
-              <ChevronDown size={14} className={`transition-transform duration-200 ${openMenu === 'calculators' ? 'rotate-180' : ''}`} />
-            </button>
-            {openMenu === 'calculators' && (
-              <div className="obba-dropdown absolute left-0 top-full mt-2 w-72 rounded-2xl z-50 py-2">
-                {calculatorLinks.map(([label, to]) => (
-                  <Link key={label} to={to} onClick={() => setOpenMenu(null)} className="obba-dropdown-link">{label}</Link>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="relative">
-            <button
-              onClick={() => setOpenMenu(openMenu === 'categories' ? null : 'categories')}
-              className="obba-nav-link flex items-center gap-1"
-            >
-              Categories
-              <ChevronDown size={14} className={`transition-transform duration-200 ${openMenu === 'categories' ? 'rotate-180' : ''}`} />
-            </button>
-            {openMenu === 'categories' && (
-              <div className="obba-dropdown absolute left-0 top-full mt-2 w-56 rounded-2xl z-50 py-2">
-                {categoryLinks.map(([label, to]) => (
-                  <Link key={label} to={to} onClick={() => setOpenMenu(null)} className="obba-dropdown-link">{label}</Link>
-                ))}
-              </div>
-            )}
-          </div>
-          <Link to="/states" className="obba-nav-link">States Calculators</Link>
-          <Link to="/blogs" className="obba-nav-link">Blog</Link>
-          <Link to="/about-us" className="obba-nav-link">About Us</Link>
-        </div>
-        <div className="ml-auto flex items-center gap-3">
-          <form
-            className="relative hidden lg:flex w-[280px] items-center gap-2 rounded-[9px] border px-3 py-2"
-            style={{ background: 'var(--input)', borderColor: 'var(--border)' }}
-            onSubmit={(event) => {
-              event.preventDefault();
-              runHeaderSearch();
-            }}
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#94a3b8" strokeWidth="2"/><path d="m20 20-3.5-3.5" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/></svg>
-            <input
-              value={searchQuery}
-              onChange={(event) => {
-                setSearchQuery(event.target.value);
-                setIsSearchOpen(true);
-              }}
-              onFocus={() => setIsSearchOpen(true)}
-              onBlur={() => window.setTimeout(() => setIsSearchOpen(false), 120)}
-              type="search"
-              aria-label="Search calculators"
-              placeholder="Search calculators..."
-              className="min-w-0 flex-1 bg-transparent text-[13px] font-semibold outline-none"
-              style={{ color: 'var(--text)' }}
-            />
-            {isSearchOpen && searchMatches.length > 0 && (
-              <div className="obba-dropdown absolute left-0 top-full z-50 mt-2 w-full rounded-2xl p-2">
-                {searchMatches.map(([label, to]) => (
-                  <button
-                    key={to}
-                    type="button"
-                    onMouseDown={(event) => {
-                      event.preventDefault();
-                      setSearchQuery('');
-                      setIsSearchOpen(false);
-                      navigate(to);
-                    }}
-                    className="obba-dropdown-link w-full rounded-[10px] border-0 bg-transparent text-left"
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </form>
-          <button
-            onClick={() => setIsDark(!isDark)}
-            className="obba-icon-button p-2"
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            title={isDark ? 'Light mode' : 'Dark mode'}
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="obba-icon-button md:hidden p-2"
-            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-            title={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-          >
-            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
-        </div>
+        <nav className="cyp-nav" aria-label="Primary navigation">
+          {navItems.map(([label, to]) => (
+            <Link key={label} to={to} onClick={(event) => handleHashLink(event, to)}>{label}</Link>
+          ))}
+        </nav>
+        <Link to="/#tools" onClick={(event) => handleHashLink(event, '/#tools')} className="cyp-header-cta">Open a calculator →</Link>
+        <button type="button" className="cyp-menu-btn" aria-label="Open menu" onClick={() => setIsMobileMenuOpen((open) => !open)}>
+          <span /><span /><span />
+        </button>
       </div>
-      {isMobileMenuOpen && (
-        <div className="mob-drawer open md:hidden" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="mob-overlay" />
-          <div className="mob-panel" onClick={(event) => event.stopPropagation()}>
-            <div className="mob-ph">
-              <Link to="/" onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-                <img src="/logo.png" alt="OBBA" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover', display: 'block' }} />
-                <span style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>
-                  OBBA <span style={{ fontSize: 9, fontWeight: 800, color: 'var(--text)', letterSpacing: 1.4 }}>CALCULATORS</span>
-                </span>
-              </Link>
-              <button
-                type="button"
-                className="mob-close"
-                onClick={() => setIsMobileMenuOpen(false)}
-                aria-label="Close menu"
-                title="Close menu"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            <div className="mob-sec">Categories</div>
-            {categoryLinks.map(([label, to]) => (
-              <Link key={label} to={to} onClick={() => setIsMobileMenuOpen(false)} className="mob-link">
-                {label === 'Salary' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15v-3M12 15V8M16 15v-5" stroke="#16a34a" strokeWidth="1.8" strokeLinecap="round" /></svg>}
-                {label === 'Paycheck' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2" stroke="#2563eb" strokeWidth="1.8" /><path d="M3 10h18" stroke="#2563eb" strokeWidth="1.8" /></svg>}
-                {label === 'Overtime' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 2 5 13h6l-1 9 9-13h-6l1-7Z" stroke="#dc2626" strokeWidth="1.8" strokeLinejoin="round" /></svg>}
-                {label === 'Payroll & Deductions' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="13" r="8" stroke="#ea580c" strokeWidth="1.8" /><path d="M12 9v4l2.5 2M9 3h6" stroke="#ea580c" strokeWidth="1.8" strokeLinecap="round" /></svg>}
-                {label === 'States Calculators' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z" stroke="#7c3aed" strokeWidth="1.8" /><circle cx="12" cy="10" r="2.5" stroke="#7c3aed" strokeWidth="1.8" /></svg>}
-                {label}
-              </Link>
-            ))}
-
-            <div className="mob-sec">Pages</div>
-            {pageLinks.map(([label, to]) => (
-              <Link key={label} to={to} onClick={() => setIsMobileMenuOpen(false)} className="mob-link">
-                {label === 'Blog' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h16v12H7l-3 3V5Z" stroke="#64748b" strokeWidth="1.8" strokeLinejoin="round" /></svg>}
-                {label === 'About Us' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" stroke="#64748b" strokeWidth="1.8" /><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="#64748b" strokeWidth="1.8" strokeLinecap="round" /></svg>}
-                {label}
-              </Link>
-            ))}
-
-            <div className="mob-theme">
-              <span>{isDark ? 'Dark Mode' : 'Light Mode'}</span>
-              <button
-                type="button"
-                onClick={() => setIsDark(!isDark)}
-                aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-                title={isDark ? 'Light mode' : 'Dark mode'}
-              >
-                {isDark ? (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4.2" stroke="#fbbf24" strokeWidth="1.8" /><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4" stroke="#fbbf24" strokeWidth="1.8" strokeLinecap="round" /></svg>
-                ) : (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" /></svg>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
 
-function HomePage({ isDark, setIsDark }) {
-  const navigate = useNavigate();
-  const [newsletterMessage, setNewsletterMessage] = useState('');
-  const [openHomeMenu, setOpenHomeMenu] = useState(null);
-  const [isHomeMobileMenuOpen, setIsHomeMobileMenuOpen] = useState(false);
-  const [searchState, setSearchState] = useState({ open: false, query: '', source: null, top: 0, left: 0, width: 0 });
-  const { style, markup } = useMemo(() => {
-    const styleMatch = homeThemeHtml.match(/<style>([\s\S]*?)<\/style>/i);
-    const appMatch = homeThemeHtml.match(/<div class="app[^"]*\{\{ themeClass \}\}"[\s\S]*?<\/div>\s*<\/x-dc>/i);
-    let html = appMatch?.[0]?.replace(/\s*<\/x-dc>\s*$/i, '') ?? '';
-    const encodedHomeUrl = encodeURIComponent(`${SITE_URL}/`);
-    const homeShareText = 'See your real take-home pay in seconds with OBBA Calculators - paycheck, salary, overtime, state taxes, and money-saving tools in one modern view || OBBACALCULATORS.COM';
-    const encodedHomeText = encodeURIComponent(homeShareText);
-
-    html = html
-      .replace(/class="app([^"]*)\{\{ themeClass \}\}"/, (_match, beforeTheme) => `class="app${beforeTheme}${isDark ? 'dark' : ''}"`)
-      .replace(/\{\{ menuOpenClass \}\}/g, isHomeMobileMenuOpen ? 'open' : '')
-      .replace(/\{\{ themeLabel \}\}/g, isDark ? 'Dark Mode' : 'Light Mode')
-      .replace(/onClick="\{\{ toggleTheme \}\}"/g, 'data-obba-theme-toggle="true"')
-      .replace(/\s+onClick="\{\{[^"]+\}\}"/g, '')
-      .replace(/assets\/logo-mark\.png/g, '/logo.png')
-      .replace(/<span style="font-size:13px; color:#94a3b8;">Search calculators\.\.\.<\/span>/g, '<input data-obba-search="header" type="search" aria-label="Search calculators" placeholder="Search calculators..." style="width:100%; border:0; outline:0; background:transparent; font:inherit; font-size:13px; color:var(--text);" />')
-      .replace(/<span style="font-size:14px; color:#94a3b8;">Search calculators\.\.\.<\/span>/g, '<input data-obba-search="hero" type="search" aria-label="Search calculators" placeholder="Search calculators..." style="width:100%; border:0; outline:0; background:transparent; font:inherit; font-size:14px; color:var(--text);" />')
-      .replace(/<span style="font-size:13\.5px; color:#94a3b8;">Enter your email address<\/span>/g, '<input data-obba-email type="email" aria-label="Email address" placeholder="Enter your email address" style="width:100%; border:0; outline:0; background:transparent; font:inherit; font-size:13.5px; color:var(--text);" />')
-      .replace(
-        /(<button style="background:#2563eb; color:#fff; border:none; border-radius:10px; padding:11px 26px; font-size:14px; font-weight:700; font-family:inherit; cursor:pointer;">Subscribe<\/button>\s*<\/div>)(\s*<\/div>\s*<div class="m-newsletter-img")/,
-        `$1<div data-obba-newsletter-message style="margin-top:10px; font-size:13px; font-weight:600; color:${newsletterMessage.startsWith('Thanks') || newsletterMessage.includes('already') ? '#16a34a' : '#dc2626'};">${newsletterMessage}</div>$2`
-      )
-      .replace(/<!-- ========== ARTICLES \+ GUIDES ========== -->[\s\S]*?<\/section>\s*(?=<!-- ========== STATE TAX ========== -->)/, `<!-- ========== ARTICLES + BLOGS ========== -->\n  ${buildHomeBlogSection()}\n\n  `)
-      .replace(/\u00c3\u00a2\u00c2\u00ad\u00c2\u0090/g, '★')
-      .replace(/\u00c3\u00a2\u00c5\u201c\u00e2\u20ac\u00a2/g, 'x')
-      .replace(/\u00c3\u201a\u00c2\u00a9/g, '©')
-      .replace(/\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u20ac\u009d/g, '-')
-      .replace(
-        /<a href="#" style="width:30px;height:30px;border-radius:7px;background:#1877f2/g,
-        `<a href="https://www.facebook.com/sharer/sharer.php?u=${encodedHomeUrl}" target="_blank" rel="nofollow noopener noreferrer" aria-label="${homeShareText}" title="${homeShareText}" style="width:30px;height:30px;border-radius:7px;background:#1877f2`
-      )
-      .replace(
-        /<a href="#" style="width:30px;height:30px;border-radius:7px;background:#1da1f2/g,
-        `<a href="https://twitter.com/intent/tweet?url=${encodedHomeUrl}&text=${encodedHomeText}" target="_blank" rel="nofollow noopener noreferrer" aria-label="${homeShareText}" title="${homeShareText}" style="width:30px;height:30px;border-radius:7px;background:#111827`
-      )
-      .replace(
-        /<a href="#" style="width:30px;height:30px;border-radius:7px;background:#0a66c2/g,
-        `<a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedHomeUrl}" target="_blank" rel="nofollow noopener noreferrer" aria-label="${homeShareText}" title="${homeShareText}" style="width:30px;height:30px;border-radius:7px;background:#0a66c2`
-      )
-      .replace(
-        /<a href="#" style="width:30px;height:30px;border-radius:7px;background:#ff0000;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M22 12s0-3.2-.4-4.7a2.5 2.5 0 0 0-1.8-1.8C18.4 5 12 5 12 5s-6.4 0-7.8.5A2.5 2.5 0 0 0 2.4 7.3C2 8.8 2 12 2 12s0 3.2.4 4.7a2.5 2.5 0 0 0 1.8 1.8C5.6 19 12 19 12 19s6.4 0 7.8-.5a2.5 2.5 0 0 0 1.8-1.8C22 15.2 22 12 22 12Zm-12 3V9l5 3-5 3Z"\/><\/svg><\/a>/g,
-        `<a href="https://api.whatsapp.com/send?text=${encodedHomeUrl}%20${encodedHomeText}" target="_blank" rel="nofollow noopener noreferrer" aria-label="${homeShareText}" title="${homeShareText}" style="width:30px;height:30px;border-radius:7px;background:#25d366;display:flex;align-items:center;justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.7 4.8Zm5.4-7.3c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 .1-.2.2-.4.2-.7.1-.3-.2-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6 0-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"/></svg></a>`
-      );
-
-    html = html.replace(/<a href="#"([^>]*)>/g, (match, attrs, offset, source) => {
-      const snippet = source
-        .slice(offset, offset + 900)
-        .replace(/<svg[\s\S]*?<\/svg>/g, ' ')
-        .replace(/<[^>]+>/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-        .toLowerCase();
-      let path = '/';
-      if (snippet.includes('california')) path = '/california-paycheck-calculator';
-      else if (snippet.includes('texas')) path = '/texas-paycheck-calculator';
-      else if (snippet.includes('florida')) path = '/florida-paycheck-calculator';
-      else if (snippet.includes('illinois')) path = '/illinois-paycheck-calculator';
-      else if (snippet.includes('washington')) path = '/washington-paycheck-calculator';
-      else if (snippet.includes('indiana')) path = '/indiana-paycheck-calculator';
-      else if (snippet.includes('virginia')) path = '/virginia-paycheck-calculator';
-      else if (snippet.includes('hawaii')) path = '/hawaii-paycheck-calculator';
-      else if (snippet.includes('nebraska')) path = '/nebraska-paycheck-calculator';
-      else if (snippet.includes('states') || snippet.includes('state paycheck')) path = '/states';
-      else if (snippet.includes('salary')) path = '/salary-calculator';
-      else if (snippet.includes('paycheck') || snippet.includes('payroll') || snippet.includes('tax brackets')) path = '/paycheck-calculator';
-      else if (snippet.includes('overtime')) path = '/overtime';
-      else if (snippet.includes('blog') || snippet.includes('tax news') || snippet.includes('guide')) path = '/blogs';
-      else if (snippet.includes('faq') || snippet.includes('help center')) path = '/faq';
-      else if (snippet.includes('about')) path = '/about-us';
-      else if (snippet.includes('contact') || snippet.includes('suggest') || snippet.includes('report')) path = '/contact-us';
-      else if (snippet.includes('privacy')) path = '/privacy-policy';
-      else if (snippet.includes('terms') || snippet.includes('disclaimer')) path = '/terms-conditions';
-      return `<a href="${path}"${attrs}>`;
-    });
-
-    [
-      ['Salary', '/salary-calculator'],
-      ['Paycheck', '/paycheck-calculator'],
-      ['Overtime', '/overtime'],
-      ['Payroll & Deductions', '/paycheck-calculator'],
-      ['States Calculators', '/states'],
-      ['Salary Calculator', '/salary-calculator'],
-      ['Paycheck Calculator', '/paycheck-calculator'],
-      ['Overtime Calculator', '/overtime'],
-      ['State Paycheck Calculators', '/states'],
-      ['All Calculators', '/'],
-      ['Blog', '/blogs'],
-      ['Tax News', '/faq'],
-      ['Tax Brackets 2026', '/paycheck-calculator'],
-      ['State Tax Guide', '/states'],
-      ['Glossary', '/faq'],
-      ['About Us', '/about-us'],
-      ['Contact Us', '/contact-us'],
-      ['Privacy Policy', '/privacy-policy'],
-      ['Terms of Use', '/terms-conditions'],
-      ['Disclaimer', '/terms-conditions'],
-      ['FAQ', '/faq'],
-      ['Help Center', '/contact-us'],
-      ['Suggest Calculator', '/contact-us'],
-      ['Report an Issue', '/contact-us'],
-    ].forEach(([label, path]) => {
-      html = html.replace(
-        new RegExp(`<a href="[^"]*"([^>]*)>${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</a>`, 'g'),
-        `<a href="${path}"$1>${label}</a>`
-      );
-    });
-
-    html = html.replace(
-      /(<h5 style="font-size:14px; font-weight:700; color:#fff;">Resources<\/h5>\s*<div style="margin-top:14px; display:flex; flex-direction:column; gap:11px; font-size:13px; color:#94a3b8;">)[\s\S]*?(<\/div>)/,
-      '$1<a href="/blogs">Blog</a><a href="/faq">FAQ</a><a href="/paycheck-calculator">Tax Brackets 2026</a><a href="/states">State Tax Guide</a>$2'
-    );
-    html = html.replace(
-      /(<h5 style="font-size:14px; font-weight:700; color:#fff;">Calculators<\/h5>\s*<div style="margin-top:14px; display:flex; flex-direction:column; gap:11px; font-size:13px; color:#94a3b8;">)[\s\S]*?(<\/div>)/,
-      '$1<a href="/salary-calculator">Salary</a><a href="/paycheck-calculator">Paycheck</a><a href="/overtime">Overtime</a><a href="/paycheck-calculator">Payroll &amp; Deductions</a><a href="/states">States Calculators</a><a href="/">All Calculators</a>$2'
-    );
-    html = html.replace(
-      /(<h5 style="font-size:14px; font-weight:700; color:#fff;">Company<\/h5>\s*<div style="margin-top:14px; display:flex; flex-direction:column; gap:11px; font-size:13px; color:#94a3b8;">)[\s\S]*?(<\/div>)/,
-      '$1<a href="/about-us">About Us</a><a href="/contact-us">Contact Us</a><a href="/privacy-policy">Privacy Policy</a><a href="/terms-conditions">Terms of Use</a>$2'
-    );
-
-    if (isDark) {
-      html = html
-        .replace(/<sc-if value="\{\{ isLight \}\}"[\s\S]*?<\/sc-if>/g, '')
-        .replace(/<sc-if value="\{\{ isDark \}\}">([\s\S]*?)<\/sc-if>/g, '$1');
-    } else {
-      html = html
-        .replace(/<sc-if value="\{\{ isLight \}\}"[^>]*>([\s\S]*?)<\/sc-if>/g, '$1')
-        .replace(/<sc-if value="\{\{ isDark \}\}">[\s\S]*?<\/sc-if>/g, '');
-    }
-
-    return {
-      style: styleMatch?.[1] ?? '',
-      markup: html,
-    };
-  }, [isDark, newsletterMessage, isHomeMobileMenuOpen]);
-
-  const calculatorLinks = [
-    ['Salary Calculator', '/salary-calculator'],
-    ['Paycheck Calculator', '/paycheck-calculator'],
-    ['Overtime Calculator', '/overtime'],
-    ...STATE_CALCULATOR_LINKS.map((state) => [`${state.name} Paycheck Calculator`, state.path]),
-  ];
-  const categoryLinks = [
-    ['Salary', '/salary-calculator'],
-    ['Paycheck', '/paycheck-calculator'],
-    ['Overtime', '/overtime'],
-    ['Payroll & Deductions', '/paycheck-calculator'],
-    ['State Paycheck', '/states'],
-  ];
-  const searchSuggestions = [
-    ...calculatorLinks,
-  ];
-  const matchesSearchQuery = (label, query) => {
-    const normalizedQuery = query.toLowerCase().trim();
-    if (!normalizedQuery) return false;
-    return label
-      .toLowerCase()
-      .split(/[^a-z0-9]+/)
-      .some((word) => word.startsWith(normalizedQuery));
-  };
-  const visibleSuggestions = searchSuggestions
-    .filter(([label]) => {
-      const query = searchState.query.toLowerCase().trim();
-      return matchesSearchQuery(label, query);
-    })
-    .slice(0, 8);
-
-  useEffect(() => {
-    if (!searchState.source) return;
-    const input = document.querySelector(`[data-obba-search="${searchState.source}"]`);
-    if (input && input.value !== searchState.query) input.value = searchState.query;
-  }, [searchState.source, searchState.query]);
-
-  const routeForText = (text = '') => {
-    const value = text.toLowerCase().replace(/\s+/g, ' ').trim();
-    if (!value) return '/';
-    if (value.includes('california')) return '/california-paycheck-calculator';
-    if (value.includes('texas')) return '/texas-paycheck-calculator';
-    if (value.includes('florida')) return '/florida-paycheck-calculator';
-    if (value.includes('illinois')) return '/illinois-paycheck-calculator';
-    if (value.includes('washington')) return '/washington-paycheck-calculator';
-    if (value.includes('indiana')) return '/indiana-paycheck-calculator';
-    if (value.includes('virginia')) return '/virginia-paycheck-calculator';
-    if (value.includes('hawaii')) return '/hawaii-paycheck-calculator';
-    if (value.includes('nebraska')) return '/nebraska-paycheck-calculator';
-    if (value.includes('salary')) return '/salary-calculator';
-    if (value.includes('paycheck') || value.includes('payroll')) return '/paycheck-calculator';
-    if (value.includes('overtime')) return '/overtime';
-    if (value.includes('faq')) return '/faq';
-    if (value.includes('about')) return '/about-us';
-    if (value.includes('contact')) return '/contact-us';
-    if (value.includes('privacy')) return '/privacy-policy';
-    if (value.includes('terms')) return '/terms-conditions';
-    if (value.includes('blog') || value.includes('guide') || value.includes('resource') || value.includes('tax news')) return '/blogs';
-    if (value.includes('states') || value.includes('state paycheck')) return '/states';
-    if (value.includes('calculator') || value.includes('categor')) return '/';
-    return '/';
-  };
-
-  const routeForElement = (link) => {
-    const directText = link.textContent || '';
-    const parentText = link.parentElement?.textContent || link.closest('div, section, footer, header')?.textContent || directText;
-    if (/use calculator/i.test(directText)) {
-      const heading = link.parentElement?.querySelector?.('h3')?.textContent || parentText;
-      return routeForText(heading);
-    }
-    return routeForText(directText || parentText);
-  };
-
-  const scrollToHomeSection = (headingText) => {
-    const headings = [...document.querySelectorAll('h2')];
-    const target = headings.find((heading) => heading.textContent.toLowerCase().includes(headingText));
-    target?.closest('section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  const handleNavbarLink = (link) => {
-    const text = (link.textContent || '').toLowerCase();
-    if (text.includes('states')) {
-      setOpenHomeMenu(null);
-      navigate('/states');
-      return true;
-    }
-    if (text.includes('calculators')) {
-      setOpenHomeMenu((current) => current === 'calculators' ? null : 'calculators');
-      return true;
-    }
-    if (text.includes('categories')) {
-      setOpenHomeMenu((current) => current === 'categories' ? null : 'categories');
-      return true;
-    }
-    if (text.includes('blog')) {
-      setOpenHomeMenu(null);
-      navigate('/blogs');
-      return true;
-    }
-    if (text.includes('about')) {
-      setOpenHomeMenu(null);
-      navigate('/about-us');
-      return true;
-    }
-    return false;
-  };
-
-  const runSearch = (source) => {
-    const input = source?.closest('section, header, div')?.querySelector?.('[data-obba-search]') || document.querySelector('[data-obba-search]');
-    const query = input?.value?.trim() || '';
-    hideSearchSuggestions();
-    navigate(routeForText(query || 'salary calculator'));
-  };
-
-  const subscribeNewsletter = async (source) => {
-    const input = source?.closest('section')?.querySelector?.('[data-obba-email]') || document.querySelector('[data-obba-email]');
-    const email = input?.value?.trim() || '';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setNewsletterMessage('Enter a valid email address.');
-      return;
-    }
-    setNewsletterMessage('Saving...');
-    try {
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-      const browserStateGuess = getBrowserStateGuess(timezone);
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          page: window.location.pathname,
-          pageTitle: document.title,
-          timezone,
-          browserStateCode: browserStateGuess.code,
-          browserStateName: browserStateGuess.name,
-          language: navigator.language || '',
-          referrer: document.referrer || '',
-          subscribedAt: new Date().toISOString(),
-        }),
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        setNewsletterMessage('Could not subscribe. Try again.');
-        return;
-      }
-      setNewsletterMessage('Thanks. You are subscribed.');
-      localStorage.setItem('obba-updates-email', email);
-      localStorage.setItem('obba-updates-popup-last-prompt-at', String(Date.now()));
-      localStorage.setItem('obba-updates-popup-last-submit-at', String(Date.now()));
-      input.value = '';
-    } catch {
-      setNewsletterMessage('Could not subscribe. Try again.');
-    }
-  };
-
-  const handleHomeClick = (event) => {
-    const mobileMenuButton = event.target.closest('.mob-menu-btn');
-    if (mobileMenuButton) {
-      event.preventDefault();
-      setIsHomeMobileMenuOpen(true);
-      return;
-    }
-
-    const mobileCloseButton = event.target.closest('.mob-close');
-    if (mobileCloseButton) {
-      event.preventDefault();
-      setIsHomeMobileMenuOpen(false);
-      return;
-    }
-
-    if (event.target.closest('.mob-overlay')) {
-      event.preventDefault();
-      setIsHomeMobileMenuOpen(false);
-      return;
-    }
-
-    const suggestionButton = event.target.closest('[data-obba-suggestion-route]');
-    if (suggestionButton) {
-      event.preventDefault();
-      const route = suggestionButton.getAttribute('data-obba-suggestion-route');
-      hideSearchSuggestions();
-      navigate(route);
-      return;
-    }
-
-    const themeButton = event.target.closest('[data-obba-theme-toggle]');
-    if (themeButton) {
-      event.preventDefault();
-      hideSearchSuggestions();
-      setIsDark((current) => !current);
-      return;
-    }
-
-    const button = event.target.closest('button');
-    if (button && button.textContent.trim().toLowerCase() === 'search') {
-      event.preventDefault();
-      runSearch(button);
-      return;
-    }
-    if (button && button.textContent.trim().toLowerCase() === 'subscribe') {
-      event.preventDefault();
-      void subscribeNewsletter(button);
-      return;
-    }
-
-    const link = event.target.closest('a');
-    if (!link) {
-      if (!event.target.closest('[data-obba-home-dropdown]')) setOpenHomeMenu(null);
-      if (!event.target.closest('[data-obba-search]') && !event.target.closest('[data-obba-search-suggestions]')) {
-        hideSearchSuggestions();
-      }
-      return;
-    }
-    const href = link.getAttribute('href');
-    if (link.closest('header') && handleNavbarLink(link)) {
-      event.preventDefault();
-      return;
-    }
-    if (href && href !== '#') return;
-    event.preventDefault();
-    if (link.closest('.mob-drawer')) setIsHomeMobileMenuOpen(false);
-    navigate(routeForElement(link));
-  };
-
-  const handleHomeKeyDown = (event) => {
-    if (event.key === 'Escape') {
-      setSearchState((current) => ({ ...current, open: false }));
-      setOpenHomeMenu(null);
-      setIsHomeMobileMenuOpen(false);
-      return;
-    }
-    if (event.key !== 'Enter') return;
-    if (event.target.matches('[data-obba-search]')) {
-      event.preventDefault();
-      hideSearchSuggestions();
-      navigate(routeForText(event.target.value || 'salary calculator'));
-    }
-    if (event.target.matches('[data-obba-email]')) {
-      event.preventDefault();
-      void subscribeNewsletter(event.target);
-    }
-  };
-
-  const updateSearchPosition = (input) => {
-    const query = input.value.toLowerCase().trim();
-    const existing = document.getElementById('obba-search-suggestions');
-    if (existing) existing.remove();
-    if (!query) return;
-    const matches = searchSuggestions
-      .filter(([label]) => matchesSearchQuery(label, query))
-      .slice(0, 8);
-    if (!matches.length) return;
-    const box = input.getBoundingClientRect();
-    const panel = document.createElement('div');
-    panel.id = 'obba-search-suggestions';
-    panel.setAttribute('data-obba-search-suggestions', 'true');
-    Object.assign(panel.style, {
-      position: 'fixed',
-      top: `${box.bottom + 8}px`,
-      left: `${box.left}px`,
-      zIndex: '90',
-      width: `${Math.max(box.width, 280)}px`,
-      maxHeight: '340px',
-      overflowY: 'auto',
-      background: isDark ? '#141d2e' : '#ffffff',
-      border: `1px solid ${isDark ? '#26324a' : '#eef1f6'}`,
-      borderRadius: '14px',
-      boxShadow: isDark ? '0 18px 50px rgba(0,0,0,.36)' : '0 18px 50px rgba(15,23,42,.18)',
-      padding: '8px',
-    });
-    matches.forEach(([label, to]) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.setAttribute('data-obba-suggestion-route', to);
-      Object.assign(button.style, {
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '12px',
-        padding: '10px 11px',
-        border: '0',
-        borderRadius: '10px',
-        background: 'transparent',
-        color: isDark ? '#f1f5f9' : '#1e293b',
-        font: 'inherit',
-        fontSize: '13px',
-        fontWeight: '700',
-        cursor: 'pointer',
-        textAlign: 'left',
-      });
-      button.innerHTML = `<span>${label}</span><span style="color:${isDark ? '#60a5fa' : '#2563eb'}">Enter</span>`;
-      button.addEventListener('mouseenter', () => {
-        button.style.background = isDark ? '#1c2740' : '#f8fafd';
-      });
-      button.addEventListener('mouseleave', () => {
-        button.style.background = 'transparent';
-      });
-      panel.appendChild(button);
-    });
-    document.body.appendChild(panel);
-  };
-
-  const hideSearchSuggestions = () => {
-    document.getElementById('obba-search-suggestions')?.remove();
-  };
-
-  const handleHomeInput = (event) => {
-    if (event.target.matches('[data-obba-search]')) updateSearchPosition(event.target);
-  };
-
-  const handleHomeFocus = (event) => {
-    if (event.target.matches('[data-obba-search]')) updateSearchPosition(event.target);
-  };
-
-  useEffect(() => {
-    const onInput = (event) => {
-      if (event.target.matches?.('[data-obba-search]')) updateSearchPosition(event.target);
-    };
-    const onFocus = (event) => {
-      if (event.target.matches?.('[data-obba-search]')) updateSearchPosition(event.target);
-    };
-    const onKeyDown = (event) => {
-      if (!event.target.matches?.('[data-obba-search]')) return;
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        hideSearchSuggestions();
-        navigate(routeForText(event.target.value || 'salary calculator'));
-      }
-      if (event.key === 'Escape') {
-        hideSearchSuggestions();
-      }
-    };
-    const onClick = (event) => {
-      const suggestionButton = event.target.closest?.('[data-obba-suggestion-route]');
-      if (!suggestionButton) return;
-      event.preventDefault();
-      const route = suggestionButton.getAttribute('data-obba-suggestion-route');
-      hideSearchSuggestions();
-      navigate(route);
-    };
-    document.addEventListener('input', onInput);
-    document.addEventListener('focusin', onFocus);
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('click', onClick);
-    return () => {
-      document.removeEventListener('input', onInput);
-      document.removeEventListener('focusin', onFocus);
-      document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('click', onClick);
-      hideSearchSuggestions();
-    };
-  }, [navigate, isDark]);
+function CheckYourPaysFooter() {
+  const nextDeadline = useMemo(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const deadlines = [new Date(year, 0, 15), new Date(year, 3, 15), new Date(year, 5, 15), new Date(year, 8, 15), new Date(year + 1, 0, 15)];
+    const next = deadlines.find((date) => date > now) || deadlines[deadlines.length - 1];
+    return next.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }, []);
+  const shareText = encodeURIComponent('Check your take-home pay in seconds with CheckYourPays calculators.');
+  const shareUrl = encodeURIComponent(`${SITE_URL}/`);
 
   return (
-    <main onClick={handleHomeClick} onKeyDown={handleHomeKeyDown} onInput={handleHomeInput} onFocus={handleHomeFocus}>
-      <style>{style}</style>
+    <footer className="cyp-footer">
+      <style>{`
+        .cyp-footer{background:#0E1B33;color:#B9C3DA;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+        .cyp-footer .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+        .cyp-foot-top{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border-bottom:1px solid rgba(255,255,255,.08)}
+        .cyp-foot-item{display:flex;gap:12px;align-items:center;padding:26px 18px;background:rgba(255,255,255,.02)}
+        .cyp-foot-ic{width:38px;height:38px;border-radius:10px;background:#16264A;display:flex;align-items:center;justify-content:center;color:#fff}
+        .cyp-foot-lbl{font-size:12px;color:#7F8BA6}.cyp-foot-val{font-size:13px;font-weight:700;color:#fff;margin-top:3px}
+        .cyp-foot-grid{display:grid;grid-template-columns:1.45fr repeat(3,1fr);gap:40px;padding:44px 0}
+        .cyp-foot-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:19px;color:#fff}.cyp-foot-box{width:28px;height:28px;border-radius:8px;background:#2F5FE3;color:#fff;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:13px}
+        .cyp-footer p{font-size:13px;line-height:1.75;color:#B9C3DA;margin:15px 0 0;max-width:270px}
+        .cyp-foot-widget{margin-top:20px;background:#16264A;border-radius:12px;padding:14px 16px;display:inline-block}
+        .cyp-foot-col h4{color:#fff;font-size:14px;margin:0 0 14px;font-weight:800}.cyp-foot-col ul{list-style:none;margin:0;padding:0;display:grid;gap:11px}.cyp-foot-col a{color:#B9C3DA;text-decoration:none;font-size:13px}.cyp-foot-col a:hover{color:#fff}
+        .cyp-foot-bottom{border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:18px;align-items:center;padding:18px 0;font-size:12.5px}
+        .cyp-social{display:flex;gap:8px}.cyp-social a{width:30px;height:30px;border-radius:7px;background:#16264A;color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:800;font-size:13px}
+        @media(max-width:860px){.cyp-foot-top,.cyp-foot-grid{grid-template-columns:1fr 1fr}.cyp-foot-bottom{flex-direction:column;text-align:center}}
+        @media(max-width:560px){.cyp-foot-top,.cyp-foot-grid{grid-template-columns:1fr}}
+      `}</style>
+      <div className="wrap">
+        <div className="cyp-foot-top">
+          <div className="cyp-foot-item"><div className="cyp-foot-ic">&#9993;</div><div><div className="cyp-foot-lbl">Email support</div><div className="cyp-foot-val">support@checkyourpays.com</div></div></div>
+          <div className="cyp-foot-item"><div className="cyp-foot-ic">&#127760;</div><div><div className="cyp-foot-lbl">Available</div><div className="cyp-foot-val">On any device, anywhere</div></div></div>
+          <div className="cyp-foot-item"><div className="cyp-foot-ic">&#127379;</div><div><div className="cyp-foot-lbl">Pricing</div><div className="cyp-foot-val">Free, always</div></div></div>
+          <div className="cyp-foot-item"><div className="cyp-foot-ic">&#128205;</div><div><div className="cyp-foot-lbl">Coverage</div><div className="cyp-foot-val">All 50 states</div></div></div>
+        </div>        <div className="cyp-foot-grid">
+          <div className="cyp-foot-col">
+            <div className="cyp-foot-logo"><span className="cyp-foot-box">C</span>CheckYourPays</div>
+            <p>Free calculators for salary, paycheck, overtime, payroll, state taxes, and freelance income.</p>
+            <div className="cyp-foot-widget"><div className="cyp-foot-lbl">Next quarterly tax deadline</div><div className="cyp-foot-val">{nextDeadline}</div></div>
+          </div>
+          <div className="cyp-foot-col"><h4>Categories</h4><ul><li><Link to="/salary-calculator">Salary</Link></li><li><Link to="/paycheck-calculator">Paycheck</Link></li><li><Link to="/overtime">Overtime</Link></li><li><Link to="/paycheck-calculator">Payroll &amp; Deductions</Link></li><li><Link to="/paycheck-calculator">Freelance &amp; 1099</Link></li></ul></div>
+          <div className="cyp-foot-col"><h4>Resources</h4><ul><li><Link to="/blogs">Blog</Link></li><li><Link to="/states">By State</Link></li><li><Link to="/faq">FAQ</Link></li><li><Link to="/paycheck-calculator">Tax Brackets 2026</Link></li></ul></div>
+          <div className="cyp-foot-col"><h4>Company</h4><ul><li><Link to="/about-us">About Us</Link></li><li><Link to="/contact-us">Contact</Link></li><li><Link to="/privacy-policy">Privacy Policy</Link></li><li><Link to="/terms-conditions">Terms of Use</Link></li></ul></div>
+        </div>
+        <div className="cyp-foot-bottom">
+          <span>&copy; 2026 CheckYourPays.com &mdash; All estimates for informational purposes only.</span>
+          <div className="cyp-social"><a href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share on X">X</a><a href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share on LinkedIn">in</a><a href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share on Facebook">f</a></div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function Header({ isDark, setIsDark, isMobileMenuOpen, setIsMobileMenuOpen }) {
+  return <CheckYourPaysHeader isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />;
+}
+
+const CHECKYOURPAYS_ROUTE_BY_TEXT = [
+  [/california/i, '/california-paycheck-calculator'],
+  [/texas/i, '/texas-paycheck-calculator'],
+  [/florida/i, '/florida-paycheck-calculator'],
+  [/illinois/i, '/illinois-paycheck-calculator'],
+  [/washington/i, '/washington-paycheck-calculator'],
+  [/indiana/i, '/indiana-paycheck-calculator'],
+  [/virginia/i, '/virginia-paycheck-calculator'],
+  [/hawaii/i, '/hawaii-paycheck-calculator'],
+  [/nebraska/i, '/nebraska-paycheck-calculator'],
+  [/salary/i, '/salary-calculator'],
+  [/paycheck|payroll|tax brackets/i, '/paycheck-calculator'],
+  [/overtime/i, '/overtime'],
+  [/state|by state|50 states/i, '/states'],
+  [/blog|guide/i, '/blogs'],
+  [/faq/i, '/faq'],
+  [/about/i, '/about-us'],
+  [/contact|support/i, '/contact-us'],
+  [/privacy/i, '/privacy-policy'],
+  [/terms/i, '/terms-conditions'],
+  [/calculator|categor/i, '/'],
+];
+
+function routeForCheckYourPaysText(text = '') {
+  const cleanText = text.replace(/\s+/g, ' ').trim();
+  const match = CHECKYOURPAYS_ROUTE_BY_TEXT.find(([pattern]) => pattern.test(cleanText));
+  return match?.[1] ?? '/';
+}
+
+function repairCheckYourPaysText(html) {
+  return html
+    .replace(/â€”/g, '&mdash;')
+    .replace(/â€“/g, '&ndash;')
+    .replace(/â†’/g, '&rarr;')
+    .replace(/âœ“/g, '&#10003;')
+    .replace(/âœ‰ï¸/g, '&#9993;')
+    .replace(/ðŸŒ/g, '&#127760;')
+    .replace(/ðŸ†“/g, '&#127379;')
+    .replace(/ðŸ“/g, '&#128205;')
+    .replace(/ð•/g, 'X')
+    .replace(/Â©/g, '&copy;');
+}
+
+function buildCheckYourPaysHomeMarkup() {
+  const styleMatch = checkYourPaysHomeHtml.match(/<style>([\s\S]*?)<\/style>/i);
+  const bodyMatch = checkYourPaysHomeHtml.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  let markup = bodyMatch?.[1] ?? '';
+  markup = markup.replace(/<script[\s\S]*?<\/script>/gi, '');
+  const testimonials = [
+    {
+      initials: 'SO',
+      name: 'Sam Ortega',
+      role: 'Software Engineer',
+      color: 'var(--blue)',
+      quote: 'I compared two job offers with the salary calculator in under a minute &mdash; way faster than building a spreadsheet myself.',
+    },
+    {
+      initials: 'MR',
+      name: 'Maya Reynolds',
+      role: 'Nurse Practitioner',
+      color: '#1FAE6B',
+      quote: 'The overtime calculator made it clear what my extra shifts would actually add to my monthly take-home pay.',
+    },
+    {
+      initials: 'DK',
+      name: 'Daniel Kim',
+      role: 'Small Business Owner',
+      color: '#5C82F0',
+      quote: 'I use the paycheck calculator before hiring so I can explain gross pay, deductions, and net pay without confusing anyone.',
+    },
+    {
+      initials: 'AP',
+      name: 'Alicia Parker',
+      role: 'HR Coordinator',
+      color: '#F5A623',
+      quote: 'The state calculators are simple enough for employees to use, but detailed enough to answer the questions I hear every week.',
+    },
+    {
+      initials: 'JG',
+      name: 'Jordan Grant',
+      role: 'Freelance Designer',
+      color: '#8B5CF6',
+      quote: 'I finally had a quick way to estimate freelance taxes before sending quotes, which helped me price projects with more confidence.',
+    },
+  ];
+  const testimonialMarkup = `
+  <section class="block wrap">
+    <div class="section-head reveal"><span class="eyebrow">Testimonials</span><h2>What people tell us</h2></div>
+    <div class="testi-wrap reveal" data-active-testimonial="0">
+      <div class="testi-avatars" role="tablist" aria-label="Testimonials">
+        ${testimonials.map((item, index) => `<button type="button" class="avatar testi-avatar-btn ${index === 0 ? 'active' : index === 1 ? 'next' : index === testimonials.length - 1 ? 'prev' : 'far'}" style="background:${item.color};" data-index="${index}" data-name="${item.name}" data-role="${item.role}" data-quote="${item.quote.replace(/"/g, '&quot;')}" aria-label="Show ${item.name}'s review">${item.initials}</button>`).join('')}
+      </div>
+      <div class="testi-copy" aria-live="polite">
+        <p class="testi-quote">"${testimonials[0].quote}"</p>
+        <div class="testi-who">${testimonials[0].name}</div>
+        <div class="testi-role">${testimonials[0].role}</div>
+      </div>
+    </div>
+  </section>`;
+  markup = markup.replace(/<!-- TESTIMONIALS -->[\s\S]*?<!-- FAQ -->/i, `<!-- TESTIMONIALS -->\n${testimonialMarkup}\n\n  <!-- FAQ -->`);
+
+  const concreteLinks = {
+    'Salary Calculator': '/salary-calculator',
+    'Paycheck Calculator': '/paycheck-calculator',
+    'Overtime Calculator': '/overtime',
+    'California Paycheck Calculator': '/california-paycheck-calculator',
+    '1099 / Self-Employment Tax Calculator': '/paycheck-calculator',
+    'Quarterly Estimated Tax Calculator': '/paycheck-calculator',
+    California: '/california-paycheck-calculator',
+    Texas: '/texas-paycheck-calculator',
+    Florida: '/florida-paycheck-calculator',
+    Illinois: '/illinois-paycheck-calculator',
+    Washington: '/washington-paycheck-calculator',
+    Indiana: '/indiana-paycheck-calculator',
+    Virginia: '/virginia-paycheck-calculator',
+    Hawaii: '/hawaii-paycheck-calculator',
+    Nebraska: '/nebraska-paycheck-calculator',
+    'New York': '/states',
+    Georgia: '/states',
+    Ohio: '/states',
+    Salary: '/salary-calculator',
+    Paycheck: '/paycheck-calculator',
+    Overtime: '/overtime',
+    'Payroll &amp; Deductions': '/paycheck-calculator',
+    'Freelance &amp; 1099': '/paycheck-calculator',
+    Blog: '/blogs',
+    'By State': '/states',
+    FAQ: '/faq',
+    'Tax Brackets 2026': '/paycheck-calculator',
+    'About Us': '/about-us',
+    Contact: '/contact-us',
+    'Privacy Policy': '/privacy-policy',
+    'Terms of Use': '/terms-conditions',
+  };
+
+  markup = markup
+    .replace(/<a href="#" class="logo">/g, '<a href="/" class="logo">')
+    .replace(/href="#categories"/g, 'href="/#categories"')
+    .replace(/href="#tools"/g, 'href="/#tools"')
+    .replace(/href="#states"/g, 'href="/states"')
+    .replace(/href="#blog"/g, 'href="/blogs"')
+    .replace(/href="#faq"/g, 'href="/faq"');
+
+  Object.entries(concreteLinks).forEach(([label, to]) => {
+    const escapedLabel = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    markup = markup.replace(new RegExp(`<a([^>]*)href="#"([^>]*)>${escapedLabel}`, 'g'), `<a$1href="${to}"$2>${label}`);
+  });
+
+  markup = markup.replace(/<a href="#"([^>]*)>/g, (match, attrs, offset, source) => {
+    const snippet = source
+      .slice(offset, offset + 700)
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return `<a href="${routeForCheckYourPaysText(snippet)}"${attrs}>`;
+  });
+
+  const blogLinks = [
+    ['/blogs/texas-paycheck-calculator-guide', /<a class="blog-card reveal" href="#">/],
+    ['/blogs/florida-paycheck-calculator-guide', /<a class="blog-card reveal" href="#">/],
+    ['/blogs/salary-calculator-guide', /<a class="blog-card reveal" href="#">/],
+  ];
+  blogLinks.forEach(([to, pattern]) => {
+    markup = markup.replace(pattern, `<a class="blog-card reveal" href="${to}">`);
+  });
+
+  const toolLinks = [
+    '/salary-calculator',
+    '/paycheck-calculator',
+    '/overtime',
+    '/california-paycheck-calculator',
+    '/paycheck-calculator',
+    '/paycheck-calculator',
+  ];
+  toolLinks.forEach((to) => {
+    markup = markup.replace(/<a class="tool-row reveal" href="#">/, `<a class="tool-row reveal" href="${to}">`);
+  });
+
+  const remainingBlogLinks = [
+    '/blogs/texas-paycheck-calculator-guide',
+    '/blogs/florida-paycheck-calculator-guide',
+    '/blogs/salary-calculator-guide',
+  ];
+  remainingBlogLinks.forEach((to) => {
+    markup = markup.replace(/<a class="blog-card reveal" href="#">/, `<a class="blog-card reveal" href="${to}">`);
+  });
+
+  return {
+    style: repairCheckYourPaysText(styleMatch?.[1] ?? ''),
+    markup: repairCheckYourPaysText(markup),
+  };
+}
+
+function HomePage() {
+  const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { style, markup } = useMemo(buildCheckYourPaysHomeMarkup, []);
+
+  const updateHeroDisplay = () => {
+    const slider = document.getElementById('heroSlider');
+    const payTypeSelect = document.getElementById('payType');
+    const incomeVal = document.getElementById('heroIncomeVal');
+    const resultVal = document.getElementById('heroResultVal');
+    if (!slider || !payTypeSelect || !incomeVal || !resultVal) return;
+    const annual = Number(slider.value || 0);
+    incomeVal.textContent = `$${annual.toLocaleString('en-US')} / yr`;
+    const takeHome = payTypeSelect.value === '1099'
+      ? annual - (annual * 0.9235 * 0.153) - Math.max(0, (annual - ((annual * 0.9235 * 0.153) / 2)) * 0.15)
+      : annual - (annual * 0.16) - (annual * 0.0765) - (annual * 0.045);
+    resultVal.textContent = `$${Math.round(Math.max(0, takeHome)).toLocaleString('en-US')}`;
+  };
+
+  useEffect(() => {
+    updateHeroDisplay();
+    const slider = document.getElementById('heroSlider');
+    const payTypeSelect = document.getElementById('payType');
+    const testimonialButtons = [...document.querySelectorAll('.testi-avatar-btn')];
+    const testimonialWrap = document.querySelector('.testi-wrap');
+    const testimonialQuote = document.querySelector('.testi-quote');
+    const testimonialWho = document.querySelector('.testi-who');
+    const testimonialRole = document.querySelector('.testi-role');
+    const handleHeroSlider = () => {
+      updateHeroDisplay();
+    };
+    const handleHeroPayType = () => {
+      updateHeroDisplay();
+    };
+    const setActiveTestimonial = (index) => {
+      const count = testimonialButtons.length;
+      if (!count) return;
+      const activeIndex = ((index % count) + count) % count;
+      testimonialWrap?.setAttribute('data-active-testimonial', String(activeIndex));
+      const activeButton = testimonialButtons[activeIndex];
+      testimonialQuote?.classList.add('is-changing');
+      window.setTimeout(() => {
+        if (testimonialQuote) testimonialQuote.innerHTML = `"${activeButton.dataset.quote || ''}"`;
+        if (testimonialWho) testimonialWho.textContent = activeButton.dataset.name || '';
+        if (testimonialRole) testimonialRole.textContent = activeButton.dataset.role || '';
+        testimonialQuote?.classList.remove('is-changing');
+      }, 120);
+      testimonialButtons.forEach((button, buttonIndex) => {
+        const delta = (buttonIndex - activeIndex + count) % count;
+        button.classList.remove('active', 'prev', 'next', 'far');
+        if (delta === 0) button.classList.add('active');
+        else if (delta === 1) button.classList.add('next');
+        else if (delta === count - 1) button.classList.add('prev');
+        else button.classList.add('far');
+      });
+    };
+    const handleTestimonialClick = (event) => {
+      const index = Number(event.currentTarget.dataset.index || 0);
+      setActiveTestimonial(index);
+    };
+    slider?.addEventListener('input', handleHeroSlider);
+    payTypeSelect?.addEventListener('change', handleHeroPayType);
+    testimonialButtons.forEach((button) => button.addEventListener('click', handleTestimonialClick));
+    const deadline = document.getElementById('footDeadline');
+    if (deadline) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const deadlines = [new Date(year, 0, 15), new Date(year, 3, 15), new Date(year, 5, 15), new Date(year, 8, 15), new Date(year + 1, 0, 15)];
+      const next = deadlines.find((date) => date > now) || deadlines[deadlines.length - 1];
+      deadline.textContent = next.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+    const reveals = [...document.querySelectorAll('.reveal')];
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      reveals.forEach((node) => node.classList.add('in'));
+      return () => {
+        slider?.removeEventListener('input', handleHeroSlider);
+        payTypeSelect?.removeEventListener('change', handleHeroPayType);
+        testimonialButtons.forEach((button) => button.removeEventListener('click', handleTestimonialClick));
+      };
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach((node) => observer.observe(node));
+    return () => {
+      observer.disconnect();
+      slider?.removeEventListener('input', handleHeroSlider);
+      payTypeSelect?.removeEventListener('change', handleHeroPayType);
+      testimonialButtons.forEach((button) => button.removeEventListener('click', handleTestimonialClick));
+    };
+  }, []);
+
+  useEffect(() => {
+    const navlinks = document.querySelector('.navlinks');
+    if (!navlinks) return;
+    if (mobileOpen) {
+      navlinks.style.display = 'flex';
+      navlinks.style.position = 'absolute';
+      navlinks.style.top = '64px';
+      navlinks.style.left = '0';
+      navlinks.style.right = '0';
+      navlinks.style.background = '#fff';
+      navlinks.style.flexDirection = 'column';
+      navlinks.style.padding = '20px 28px';
+      navlinks.style.borderBottom = '1px solid var(--line)';
+      navlinks.style.gap = '16px';
+    } else {
+      navlinks.removeAttribute('style');
+    }
+  }, [mobileOpen]);
+
+  const handleClick = (event) => {
+    const menuButton = event.target.closest('.menu-btn');
+    if (menuButton) {
+      event.preventDefault();
+      setMobileOpen((open) => !open);
+      return;
+    }
+
+    const anchor = event.target.closest('a');
+    if (!anchor) return;
+    const href = anchor.getAttribute('href') || '';
+    if (!href) return;
+    if (href.startsWith('/#')) {
+      event.preventDefault();
+      setMobileOpen(false);
+      if (window.location.pathname !== '/') {
+        navigate('/');
+        window.setTimeout(() => document.getElementById(href.slice(2))?.scrollIntoView({ behavior: 'smooth' }), 50);
+      } else {
+        document.getElementById(href.slice(2))?.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
+    if (href.startsWith('/')) {
+      event.preventDefault();
+      setMobileOpen(false);
+      navigate(href);
+    }
+  };
+
+  return (
+    <main className="checkyourpays-home" onClick={handleClick}>
+      <style>{`${style}
+        .checkyourpays-home .float-card{width:min(290px, calc(100% - 16px));right:0;top:205px;z-index:10}
+        .checkyourpays-home .hero-visual{z-index:5}
+        .checkyourpays-home .stats-strip{z-index:1}
+        .checkyourpays-home .plan-row{gap:16px;align-items:flex-start}
+        .checkyourpays-home .plan-row > div:first-child{min-width:0;flex:1}
+        .checkyourpays-home .plan-row .lbl{white-space:nowrap}
+        .checkyourpays-home .plan-row .amt{white-space:nowrap;font-size:24px;line-height:1.25}
+        .checkyourpays-home .plan-row .arrow{flex:0 0 36px}
+        .checkyourpays-home .testi-avatars{min-height:78px;gap:14px}
+        .checkyourpays-home .testi-avatar-btn{border:0;cursor:pointer;transition:transform .28s ease,opacity .28s ease,box-shadow .28s ease;flex:0 0 auto}
+        .checkyourpays-home .testi-avatar-btn.active{width:64px;height:64px;font-size:17px;opacity:1;transform:translateX(0) scale(1);box-shadow:0 16px 30px -12px rgba(47,95,227,.55)}
+        .checkyourpays-home .testi-avatar-btn.prev,.checkyourpays-home .testi-avatar-btn.next{width:48px;height:48px;font-size:13px;opacity:.62}
+        .checkyourpays-home .testi-avatar-btn.prev{transform:translateX(-4px) scale(.94)}
+        .checkyourpays-home .testi-avatar-btn.next{transform:translateX(4px) scale(.94)}
+        .checkyourpays-home .testi-avatar-btn.far{width:42px;height:42px;font-size:12px;opacity:.28;transform:scale(.86)}
+        .checkyourpays-home .testi-copy{transition:transform .24s ease,opacity .24s ease}
+        .checkyourpays-home .testi-quote{min-height:92px;transition:transform .22s ease,opacity .22s ease}
+        .checkyourpays-home .testi-quote.is-changing{opacity:0;transform:translateY(8px)}
+        @media(max-width:420px){.checkyourpays-home .plan-row .lbl{font-size:11px}.checkyourpays-home .plan-row .amt{font-size:21px}}
+      `}</style>
       <div dangerouslySetInnerHTML={{ __html: markup }} />
-      {openHomeMenu === 'calculators' && (
-        <div
-          data-obba-home-dropdown
-          style={{
-            position: 'fixed',
-            top: 67,
-            left: 'calc(50% - 430px)',
-            zIndex: 80,
-            width: 320,
-            maxHeight: '70vh',
-            overflowY: 'auto',
-            background: isDark ? '#141d2e' : '#ffffff',
-            border: `1px solid ${isDark ? '#26324a' : '#eef1f6'}`,
-            borderRadius: 14,
-            boxShadow: isDark ? '0 18px 50px rgba(0,0,0,.36)' : '0 18px 50px rgba(15,23,42,.18)',
-            padding: 10,
-          }}
-        >
-          {calculatorLinks.map(([label, to]) => (
-            <button
-              key={to}
-              type="button"
-              onClick={() => {
-                setOpenHomeMenu(null);
-                navigate(to);
-              }}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 12,
-                padding: '11px 12px',
-                border: 0,
-                borderRadius: 10,
-                background: 'transparent',
-                color: isDark ? '#f1f5f9' : '#1e293b',
-                font: 'inherit',
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: 'pointer',
-                textAlign: 'left',
-              }}
-              onMouseEnter={(event) => {
-                event.currentTarget.style.background = isDark ? '#1c2740' : '#f8fafd';
-              }}
-              onMouseLeave={(event) => {
-                event.currentTarget.style.background = 'transparent';
-              }}
-            >
-              <span>{label}</span>
-              <span style={{ color: isDark ? '#60a5fa' : '#2563eb' }}>-&gt;</span>
-            </button>
-          ))}
-        </div>
-      )}
-      {openHomeMenu === 'categories' && (
-        <div
-          data-obba-home-dropdown
-          style={{
-            position: 'fixed',
-            top: 67,
-            left: 'calc(50% - 300px)',
-            zIndex: 80,
-            width: 280,
-            maxHeight: '70vh',
-            overflowY: 'auto',
-            background: isDark ? '#141d2e' : '#ffffff',
-            border: `1px solid ${isDark ? '#26324a' : '#eef1f6'}`,
-            borderRadius: 14,
-            boxShadow: isDark ? '0 18px 50px rgba(0,0,0,.36)' : '0 18px 50px rgba(15,23,42,.18)',
-            padding: 10,
-          }}
-        >
-          {categoryLinks.map(([label, to]) => (
-            <button
-              key={label}
-              type="button"
-              onClick={() => {
-                setOpenHomeMenu(null);
-                navigate(to);
-              }}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 12,
-                padding: '11px 12px',
-                border: 0,
-                borderRadius: 10,
-                background: 'transparent',
-                color: isDark ? '#f1f5f9' : '#1e293b',
-                font: 'inherit',
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: 'pointer',
-                textAlign: 'left',
-              }}
-              onMouseEnter={(event) => {
-                event.currentTarget.style.background = isDark ? '#1c2740' : '#f8fafd';
-              }}
-              onMouseLeave={(event) => {
-                event.currentTarget.style.background = 'transparent';
-              }}
-            >
-              <span>{label}</span>
-              <span style={{ color: isDark ? '#60a5fa' : '#2563eb' }}>-&gt;</span>
-            </button>
-          ))}
-        </div>
-      )}
     </main>
   );
 }
@@ -1838,6 +1478,7 @@ function OvertimePage({ isDark, setIsDark }) {
       .replace(/a\{text-decoration:none;color:inherit;\}/g, '.overtime-dc-page a{text-decoration:none;color:inherit;}')
       .replace(/select\{-webkit-appearance:none;appearance:none;font-family:inherit;\}/g, '.overtime-dc-page select{-webkit-appearance:none;appearance:none;font-family:inherit;}')
       .replace(/input:focus,select:focus\{outline:none;\}/g, '.overtime-dc-page input:focus,.overtime-dc-page select:focus{outline:none;}')
+      .replace('</style>', '.overtime-dc-page{--cyp-blue:#2F5FE3;--cyp-blue-dark:#1E3FAE;--cyp-blue-light:#5C82F0;--cyp-navy:#0E1B33;--cyp-sky:#EEF3FE;--cyp-muted:#68708A;--cyp-line:#E4E9F5;}.overtime-dc-page h1{white-space:nowrap;}.overtime-dc-page .cyp-overtime-wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative}.overtime-dc-page .cyp-breadcrumb{font-size:13px;color:var(--cyp-muted);padding:20px 0 0}.overtime-dc-page .cyp-breadcrumb a{color:var(--cyp-muted);text-decoration:none}.overtime-dc-page .cyp-breadcrumb a:hover{color:var(--cyp-blue)}.overtime-dc-page .cyp-page-head{padding:18px 0 40px;text-align:center;max-width:980px;margin:0 auto}.overtime-dc-page .cyp-page-head .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyp-blue);font-weight:600}.overtime-dc-page .cyp-page-head h1{font-size:clamp(30px,4vw,42px)!important;line-height:1.12!important;color:var(--cyp-navy)!important;font-weight:800!important;margin:12px 0 0!important;letter-spacing:-.01em}.overtime-dc-page .cyp-page-head p{color:var(--cyp-muted)!important;font-size:16px!important;line-height:1.7!important;margin:14px auto 0!important;max-width:720px}.overtime-dc-page .cyp-calc-section{padding-bottom:70px}.overtime-dc-page .cyp-calc-shell{background:var(--cyp-sky);border-radius:24px;padding:6px}.overtime-dc-page .cyp-calc-card{background:#fff;border-radius:20px;box-shadow:0 30px 60px -30px rgba(14,27,51,.25);overflow:visible;padding:22px}.overtime-dc-page .cyp-overtime-content{display:block!important;margin-top:0}.overtime-dc-page .cyp-overtime-article{display:flex;flex-direction:column;gap:0!important}.overtime-dc-page .cyp-overtime-article>div{padding:58px 0;border-top:1px solid rgba(228,233,245,.72)}.overtime-dc-page .cyp-overtime-article>div:nth-child(even){background:var(--cyp-sky);border-radius:28px;border-top:0;margin:18px 0;padding-left:28px;padding-right:28px}.overtime-dc-page .cyp-overtime-article h2{font-size:clamp(22px,2.8vw,28px)!important;line-height:1.2!important;color:var(--cyp-navy)!important;font-weight:800!important;margin-bottom:20px!important}.overtime-dc-page .cyp-overtime-article p,.overtime-dc-page .cyp-overtime-article li{font-size:15.5px!important;line-height:1.75!important;color:var(--cyp-muted)!important}.overtime-dc-page .cyp-overtime-article details{border-radius:16px!important}.overtime-dc-page .cyp-overtime-sidebar{display:none!important}@media(max-width:780px){.overtime-dc-page h1{white-space:normal;font-size:24px!important;line-height:1.18!important;max-width:100%;}.overtime-dc-page .cyp-overtime-wrap{padding:0 18px}.overtime-dc-page .cyp-page-head{padding-bottom:28px}.overtime-dc-page .cyp-page-head h1{font-size:30px!important}.overtime-dc-page .cyp-calc-card{padding:12px}.overtime-dc-page .cyp-overtime-article>div{padding:46px 0}.overtime-dc-page .cyp-overtime-article>div:nth-child(even){padding-left:18px;padding-right:18px}}</style>')
       .replace(/<!--[^>]*NAV[\s\S]*?<\/nav>/i, '')
       .replace(/<!-- BREADCRUMB -->[\s\S]*?<!-- MAIN -->/i, '<!-- MAIN -->')
       .replace(/<!-- FOOTER -->[\s\S]*?<\/footer>/i, '');
@@ -1973,6 +1614,17 @@ function OvertimePage({ isDark, setIsDark }) {
       .replace(/<a href="#"( style="width:28px;height:28px;background:#0a66c2)/g, '<a href="/overtime" data-obba-share="linkedin"$1')
       .replace(/<a href="#"( style="width:28px;height:28px;background:#ff0000)/g, '<a href="/overtime" data-obba-share="whatsapp"$1')
       .replace(/type="number"/g, 'type="text" inputmode="decimal"');
+
+    html = html
+      .replace(
+        /<!-- MAIN -->\s*<div style="padding:20px 0 0;">\s*<div style="max-width:1240px;margin:0 auto;padding:0 24px;">\s*<!-- HERO CARD -->\s*<div style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:28px 28px 24px;margin-bottom:14px;">\s*<!-- Title row -->[\s\S]*?<!--[^>]*CALCULATOR GRID[\s\S]*?-->\s*<div style="display:grid;grid-template-columns:420px 1fr;gap:20px;align-items:start;">/,
+        '<!-- MAIN --><div class="cyp-overtime-wrap"><div class="cyp-breadcrumb"><a href="/">Home</a> / <a href="/">Calculators</a> / Overtime Calculator</div><div class="cyp-page-head"><span class="eyebrow">Overtime Calculator</span><h1>Overtime Calculator</h1><p>Turn extra hours into an exact number, not a guess.</p></div><section class="cyp-calc-section" id="calc"><div class="cyp-calc-shell"><div class="cyp-calc-card"><div style="display:grid;grid-template-columns:420px 1fr;gap:20px;align-items:start;">'
+      )
+      .replace(
+        /\s*<\/div>\s*<\/div>\s*<\/div>\s*<!-- FORMULA BAR -->[\s\S]*?<!-- TWO-COLUMN CONTENT -->\s*<div style="display:grid;grid-template-columns:1fr 336px;gap:24px;align-items:start;">\s*<!-- LEFT -->\s*<div style="display:flex;flex-direction:column;gap:32px;">/,
+        '</div></div></div></section><div class="cyp-overtime-content"><div class="cyp-overtime-article">'
+      )
+      .replace(/<!-- SIDEBAR -->\s*<div style="display:flex;flex-direction:column;gap:18px;position:sticky;top:74px;">/, '<!-- SIDEBAR --><div class="cyp-overtime-sidebar">');
 
     [
       ['What is Overtime?', 'what-is-overtime', 'What is Overtime?'],
@@ -2435,7 +2087,7 @@ function OvertimePage({ isDark, setIsDark }) {
     <main
       className="overtime-dc-page"
       style={{
-        '--bg': isDark ? '#0d1829' : '#f5f6fa',
+        '--bg': isDark ? '#0d1829' : '#ffffff',
         '--surface': isDark ? '#162035' : '#ffffff',
         '--surface-alt': isDark ? '#111e30' : '#f8fafd',
         '--input': isDark ? '#1a2842' : '#f1f5f9',
@@ -2542,9 +2194,9 @@ function SalaryCalculatorPage({ isDark }) {
   });
 
   useEffect(() => {
-    document.title = 'Salary Calculator: Hourly, Weekly & Annual Pay Converter';
+    document.title = 'Salary Calculator 2026 — See Your Real Take-Home Pay | CheckYourPays';
 
-    const metaDescriptionContent = 'Use our free Salary Calculator to convert hourly, daily, weekly, monthly, and annual pay. Estimate gross and net income and plan your budget with confidence.';
+    const metaDescriptionContent = 'Turn your annual, monthly, or hourly salary into what actually lands in your account. Free salary calculator with federal, state, and FICA taxes — no sign-up.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -2563,7 +2215,7 @@ function SalaryCalculatorPage({ isDark }) {
     schemaScript.text = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Salary Calculator: Hourly, Weekly & Annual Pay Converter',
+      name: 'Salary Calculator 2026 — See Your Real Take-Home Pay | CheckYourPays',
       description: metaDescriptionContent,
       url: `${window.location.origin}/salary-calculator`,
       mainEntity: {
@@ -2719,45 +2371,73 @@ function SalaryCalculatorPage({ isDark }) {
         '--text3': isDark ? '#cbd5e1' : '#334155',
         '--accent': '#1a6fe8',
         '--green': '#22c55e',
+        '--blue': '#2F5FE3',
+        '--blue-dark': '#1E3FAE',
+        '--blue-light': '#5C82F0',
+        '--navy': '#0E1B33',
+        '--navy-2': '#16264A',
+        '--sky': '#EEF3FE',
+        '--sky-2': '#DCE6FD',
+        '--ink': '#16213A',
+        '--muted': '#68708A',
+        '--line': '#E4E9F5',
         background: 'var(--bg)',
         color: 'var(--text)',
         fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
       }}
     >
-      <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-        <section style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '28px 28px 24px', marginBottom: 16 }}>
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-3xl">
-              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Salary Calculator</h1>
-              <div className="flex flex-wrap gap-3">
-                {['Instant Results', '2026 Ready', 'Hourly or Salary', 'No Sign Up'].map((tag) => (
-                  <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: '#16a34a', fontWeight: 800 }}>
-                    <span style={{ width: 15, height: 15, borderRadius: 99, background: '#22c55e', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }}>✓</span>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="shrink-0">
-              <svg width="152" height="152" viewBox="0 0 152 152" fill="none" aria-hidden="true">
-                <rect x="18" y="22" width="94" height="108" rx="14" fill="#1a6fe8" />
-                <rect x="28" y="36" width="74" height="24" rx="6" fill="white" fillOpacity=".96" />
-                <text x="65" y="52" textAnchor="middle" fontSize="12" fill="#1a6fe8" fontWeight="900" fontFamily="monospace">PAYROLL</text>
-                <rect x="28" y="72" width="56" height="8" rx="4" fill="white" fillOpacity=".35" />
-                <rect x="28" y="88" width="70" height="8" rx="4" fill="white" fillOpacity=".35" />
-                <rect x="28" y="104" width="48" height="8" rx="4" fill="#fbbf24" />
-                <circle cx="116" cy="42" r="22" fill="#93c5fd" />
-                <circle cx="116" cy="42" r="16" fill="white" />
-                <path d="M109 42h14M116 35v14" stroke="#1a6fe8" strokeWidth="2.4" strokeLinecap="round" />
-                <rect x="91" y="99" width="42" height="30" rx="8" fill="#22c55e" />
-                <path d="M100 113h24M100 121h14" stroke="white" strokeWidth="3" strokeLinecap="round" />
-                <circle cx="42" cy="128" r="14" fill="#fbbf24" />
-                <text x="42" y="134" textAnchor="middle" fontSize="16" fill="white" fontWeight="900">$</text>
-              </svg>
-            </div>
+      <style>{`
+        .salary-dc-page .cyp-salary-wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative}
+        .salary-dc-page .cyp-breadcrumb{font-size:13px;color:var(--muted);padding:20px 0 0}
+        .salary-dc-page .cyp-breadcrumb a{color:var(--muted);text-decoration:none}
+        .salary-dc-page .cyp-breadcrumb a:hover{color:var(--blue)}
+        .salary-dc-page .cyp-page-head{padding:18px 0 40px;text-align:center;max-width:980px;margin:0 auto}
+        .salary-dc-page .cyp-page-head .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);font-weight:600}
+        .salary-dc-page .cyp-page-head h1{font-size:clamp(30px,4vw,42px);line-height:1.12;color:var(--navy);font-weight:800;margin:12px 0 0;letter-spacing:-.01em;white-space:nowrap}
+        .salary-dc-page .cyp-page-head p{color:var(--muted);font-size:16px;line-height:1.7;margin-top:14px}
+        .salary-dc-page .cyp-intro-card{margin:22px auto 0;max-width:820px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 24px;text-align:left;box-shadow:0 22px 48px -38px rgba(14,27,51,.45)}
+        .salary-dc-page .cyp-intro-lead{font-size:20px!important;line-height:1.45!important;color:var(--navy)!important;font-weight:800!important;margin:0 0 12px!important}
+        .salary-dc-page .cyp-intro-card p:not(.cyp-intro-lead){font-size:15.5px!important;line-height:1.75!important;margin:10px 0 0!important;color:var(--muted)!important}
+        .salary-dc-page .cyp-intro-card p:last-child{padding-top:12px;border-top:1px solid var(--line);color:var(--ink)!important;font-weight:700!important}
+        .salary-dc-page .cyp-calc-section{padding-bottom:70px}
+        .salary-dc-page .cyp-calc-shell{background:var(--sky);border-radius:24px;padding:6px}
+        .salary-dc-page .cyp-calc-card{background:#fff;border-radius:20px;box-shadow:0 30px 60px -30px rgba(14,27,51,.25);overflow:visible;padding:22px}
+        .salary-dc-page .cyp-salary-block{padding:64px 0;border-top:1px solid rgba(228,233,245,.72)}
+        .salary-dc-page .cyp-salary-block.cyp-tinted{background:var(--sky);border-radius:28px;border-top:0;margin:18px 0;padding-left:28px;padding-right:28px}
+        .salary-dc-page .cyp-prose{max-width:760px;margin:0 auto;color:var(--muted);font-size:15.5px;line-height:1.75}
+        .salary-dc-page .cyp-prose p{margin:0 0 16px}.salary-dc-page .cyp-prose strong{color:var(--ink);font-weight:800}.salary-dc-page .cyp-prose em{color:var(--ink)}
+        .salary-dc-page .cyp-prose h2,.salary-dc-page .cyp-section-head h2{font-size:clamp(22px,2.8vw,28px);line-height:1.2;color:var(--navy);font-weight:800;margin:10px 0 20px;letter-spacing:0}
+        .salary-dc-page .cyp-prose ul{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:10px;color:var(--muted);line-height:1.75}
+        .salary-dc-page .cyp-prose ul li{position:relative;margin:0;padding:13px 14px 13px 42px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 34px -30px rgba(14,27,51,.45)}
+        .salary-dc-page .cyp-prose ul li::before{content:"";position:absolute;left:16px;top:19px;width:10px;height:10px;border-radius:999px;background:var(--blue);box-shadow:0 0 0 5px rgba(47,95,227,.12)}
+        .salary-dc-page .cyp-prose ol{list-style:none;counter-reset:cyp-step;padding:0;margin:0 0 20px;display:grid;gap:10px;color:var(--muted);line-height:1.75}
+        .salary-dc-page .cyp-prose ol li{counter-increment:cyp-step;position:relative;margin:0;padding:13px 14px 13px 52px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 34px -30px rgba(14,27,51,.45)}
+        .salary-dc-page .cyp-prose ol li::before{content:counter(cyp-step);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:9px;background:rgba(47,95,227,.12);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
+        .salary-dc-page .cyp-ded-table{width:100%;max-width:900px;margin:10px auto 0;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:14px;box-shadow:0 18px 42px -34px rgba(14,27,51,.38)}
+        .salary-dc-page .cyp-ded-table th{background:var(--navy);color:#fff;text-align:left;padding:14px 16px;font-size:13px;font-weight:800}.salary-dc-page .cyp-ded-table td{padding:13px 16px;border-top:1px solid var(--line);color:var(--ink);font-weight:600}.salary-dc-page .cyp-ded-table td:last-child{font-weight:800;color:var(--blue)}
+        .salary-dc-page .cyp-callout{display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(135deg,var(--navy),var(--blue-dark));color:#fff;border-radius:24px;padding:28px;box-shadow:0 22px 44px -30px rgba(14,27,51,.7)}
+        .salary-dc-page .cyp-callout h4{font-size:22px;font-weight:800;margin:0 0 7px}.salary-dc-page .cyp-callout p{margin:0;color:rgba(255,255,255,.78);line-height:1.6}.salary-dc-page .cyp-callout a{background:#fff;color:var(--blue-dark);border-radius:999px;padding:12px 18px;font-weight:800;text-decoration:none;white-space:nowrap}
+        .salary-dc-page .cyp-state-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:820px;margin:20px auto 0}.salary-dc-page .cyp-state-pill{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;color:var(--navy);font-weight:800;text-decoration:none;box-shadow:0 15px 35px -32px rgba(14,27,51,.5);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.salary-dc-page .cyp-state-pill span{color:var(--blue);font-family:"IBM Plex Mono",monospace}.salary-dc-page .cyp-state-pill:hover{transform:translateY(-3px);border-color:var(--blue-light);box-shadow:0 24px 44px -34px rgba(14,27,51,.7)}
+        .salary-dc-page .cyp-states-more{text-align:center;margin-top:18px}.salary-dc-page .cyp-states-more a{color:var(--blue);font-weight:800;text-decoration:none}.salary-dc-page .cyp-section-head{text-align:center;max-width:720px;margin:0 auto 30px}.salary-dc-page .cyp-faq-list{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:12px}.salary-dc-page .cyp-faq-item{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}.salary-dc-page .cyp-faq-item summary{cursor:pointer;list-style:none;padding:18px 20px;color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:18px}.salary-dc-page .cyp-faq-item summary::-webkit-details-marker{display:none}.salary-dc-page .cyp-faq-item p{padding:0 20px 18px;margin:0;color:var(--muted);line-height:1.7;font-size:15px}.salary-dc-page .cyp-disclaimer{max-width:860px;margin:22px auto 0;color:var(--muted);font-size:13px;line-height:1.7;text-align:center}
+        @media(max-width:780px){.salary-dc-page .cyp-salary-wrap{padding:0 18px}.salary-dc-page .cyp-page-head{padding-bottom:28px}.salary-dc-page .cyp-page-head h1{white-space:normal}.salary-dc-page .cyp-calc-card{padding:12px}.salary-dc-page .cyp-salary-block{padding:46px 0}.salary-dc-page .cyp-salary-block.cyp-tinted{padding-left:18px;padding-right:18px}.salary-dc-page .cyp-callout{align-items:flex-start;flex-direction:column}.salary-dc-page .cyp-state-grid{grid-template-columns:1fr}.salary-dc-page .cyp-ded-table{font-size:13px}.salary-dc-page .cyp-ded-table th,.salary-dc-page .cyp-ded-table td{padding:12px}}
+        @media(max-width:780px){.salary-dc-page .cyp-salary-wrap{padding:0 18px}.salary-dc-page .cyp-page-head{padding-bottom:28px}.salary-dc-page .cyp-page-head h1{white-space:normal}.salary-dc-page .cyp-calc-card{padding:12px}}
+      `}</style>
+      <div className="cyp-salary-wrap">
+        <div className="cyp-breadcrumb"><Link to="/">Home</Link> / <Link to="/">Calculators</Link> / Salary Calculator</div>
+        <div className="cyp-page-head">
+          <span className="eyebrow">Salary Calculator</span>
+          <h1>Salary Calculator</h1>
+          <div className="cyp-intro-card">
+            <p className="cyp-intro-lead">See what your salary actually pays you — after tax, not before.</p>
+            <p>A number on an offer letter and a number in your bank account are rarely the same thing. This salary calculator bridges that gap: enter your annual salary, and it works out your take-home pay after federal tax, state tax, and FICA — broken down by whichever pay period you actually get paid on.</p>
+            <p>It's built for one job: turning a gross salary into a real, spendable number. No account, no email, no waiting.</p>
           </div>
+        </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-[420px_minmax(0,1fr)]">
+        <section className="cyp-calc-section" id="calc">
+          <div className="cyp-calc-shell">
+            <div className="cyp-calc-card">
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[420px_minmax(0,1fr)]">
             <aside style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden', position: 'sticky', top: 86, boxShadow: '0 4px 24px rgba(15,23,42,.10)' }}>
               <div style={{ padding: '15px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
@@ -3006,358 +2686,126 @@ function SalaryCalculatorPage({ isDark }) {
               </div>
             </section>
           </div>
+            </div>
+          </div>
         </section>
 
-        <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <div className="space-y-5">
-            <article id="what-is-salary" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text)', marginBottom: 10 }}>Salary Calculator: Convert Your Pay Into Hourly, Weekly, Monthly, and Annual Income</h1>
-              <div className="grid gap-5 md:grid-cols-[1fr_200px] md:items-start">
-                <div style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
-                  <p style={{ marginBottom: 12 }}>
-                    Knowing your exact income — not just the number on your offer letter — is the first step toward real financial planning. A salary calculator takes whatever pay figure you already know (hourly, weekly, monthly, or annual) and converts it into every other pay period, so you can budget accurately, compare job offers, and understand what actually lands in your bank account after deductions.
-                  </p>
-                  <p style={{ marginBottom: 12 }}>
-                    This guide walks through how salary calculations work, the formulas behind them, and how gross pay differs from net pay — the same logic used by payroll professionals and HR departments.
-                  </p>
-                  <p>
-                    Many people also use a <Link to="/paycheck-calculator" style={{ color: '#1a6fe8', fontWeight: 800 }}>Paycheck Calculator</Link> alongside salary calculations to estimate their actual take-home pay after taxes and deductions.
-                  </p>
-                </div>
-                <div style={{ height: 128, borderRadius: 10, background: 'linear-gradient(135deg,#12335b 0%,#1a6fe8 58%,#0f766e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <svg width="62" height="48" viewBox="0 0 64 50" fill="none" aria-hidden="true">
-                      <rect x="8" y="10" width="48" height="32" rx="5" fill="white" fillOpacity=".18" stroke="white" strokeWidth="2.2"/>
-                      <path d="M16 20h28M16 28h20M16 36h30" stroke="white" strokeWidth="2.4" strokeLinecap="round"/>
-                      <circle cx="49" cy="17" r="9" fill="#fbbf24"/>
-                      <text x="49" y="22" textAnchor="middle" fontSize="13" fill="white" fontWeight="900">$</text>
-                    </svg>
-                    <div style={{ fontWeight: 800, fontSize: 12, letterSpacing: 2.5, color: 'white', marginTop: 5 }}>SALARY</div>
-                  </div>
-                </div>
-              </div>
-            </article>
+        <section className="cyp-salary-block" id="how-this-salary-calculator-works">
+          <div className="cyp-prose">
+            <h2>How This Salary Calculator Works</h2>
+            <p>Getting from "salary" to "take-home pay" takes a few steps — the calculator runs all of them for you the moment you enter a number.</p>
+            <ol>
+              <li>Enter your gross annual salary. This is the number in your offer letter or contract — your pay before anything is subtracted.</li>
+              <li>Pick your state. State income tax rules vary a lot, and some states don't charge it at all, so this step changes your result more than people expect.</li>
+              <li>Choose how often you're paid. Weekly, bi-weekly, semi-monthly, or monthly — your per-paycheck amount depends on this, even though your yearly total doesn't.</li>
+              <li>Add filing status and dependents (optional). These affect how much federal tax is withheld, so including them gets you a more accurate number.</li>
+            </ol>
+            <p>The calculator then applies current federal tax brackets, your state's tax rules, and FICA, and shows your net pay per paycheck and per year.</p>
+          </div>
+        </section>
 
-            <article id="how-salary-conversion-works" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>How Salary Conversion Works</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 18, lineHeight: 1.75 }}>
-                Most salary calculators rely on a simple chain of multiplication and division. If you know your hourly rate, the calculator multiplies it by your weekly hours, then by the number of weeks you work in a year. If you know your annual salary, it works backward, dividing by 12 for monthly pay, by 52 for weekly pay, or by your total annual hours for an hourly equivalent.
-              </p>
-              <div style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', marginBottom: 14 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 10 }}>Core formulas:</div>
-                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.6 }}>
-                  {[
-                    'Annual salary = Hourly rate × Hours per week × Weeks per year',
-                    'Monthly salary = Annual salary ÷ 12',
-                    'Weekly salary = Annual salary ÷ 52',
-                    'Daily salary = Weekly salary ÷ Working days per week',
-                    'Hourly rate = Annual salary ÷ (Hours per week × Weeks per year)',
-                  ].map((formula) => (
-                    <li key={formula} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                      <span style={{ color: 'var(--text2)', flexShrink: 0 }}>●</span>
-                      <span>{formula}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
-                Example: An employee earning $1,500 per week has an annual income of 1,500 × 52 = $78,000. Someone earning $30/hour on a standard 40-hour week earns roughly $62,400 a year, or about $5,200 a month.
-              </p>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginTop: 10 }}>
-                These figures represent gross pay — your earnings before anything is withheld. What you actually take home is a different, smaller number.
-              </p>
-            </article>
+        <section className="cyp-salary-block cyp-tinted" id="gross-pay-vs-net-pay">
+          <div className="cyp-prose">
+            <h2>Gross Pay vs. Net Pay — What's the Difference?</h2>
+            <p>These two terms come up constantly on a payslip, and mixing them up is the most common reason people are surprised by their first paycheck.</p>
+            <ul>
+              <li>Gross pay is your salary before anything is taken out — the number your employer agreed to pay you.</li>
+              <li>Net pay (also called take-home pay) is what's left after taxes and deductions come out. This is the number that actually hits your bank account.</li>
+            </ul>
+            <p>The difference between the two is usually 20–35% of your gross salary, depending on your state, filing status, and any pre-tax benefits you've signed up for.</p>
+          </div>
+        </section>
 
-            <article id="salary-pay-formula" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Gross Pay vs. Net Pay</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 14, lineHeight: 1.75 }}>
-                Gross pay is the full amount your employer agrees to pay you, including base salary, bonuses, commissions, and overtime. Net pay — your take-home pay — is what remains after taxes and deductions are subtracted.
-              </p>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 12, lineHeight: 1.75 }}>To go from gross to net, payroll calculations generally follow this order:</p>
-              <ol style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.65 }}>
-                <li>Subtract pre-tax benefit contributions (retirement plans, some health insurance) to find taxable income.</li>
-                <li>Withhold federal, state, and local income tax.</li>
-                <li>Withhold FICA taxes — Medicare and Social Security.</li>
-                <li>Subtract post-tax deductions (Roth contributions, wage garnishments, etc.).</li>
-                <li>What&apos;s left is your net pay.</li>
-              </ol>
-            </article>
-
-            <article id="fica-tax" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>FICA: The Tax Everyone Pays</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginBottom: 14 }}>
-                Every paycheck includes FICA withholding, split between employer and employee:
-              </p>
-              <div className="grid gap-3 md:grid-cols-2">
-                {[
-                  ['Social Security', '6.2% of wages, up to the annual wage base limit.'],
-                  ['Medicare', '1.45% of all wages, with an additional 0.9% for high earners (employee-paid only).'],
-                ].map(([label, body]) => (
-                  <div key={label} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '13px 15px' }}>
-                    <div style={{ fontSize: 13, fontWeight: 900, color: 'var(--text)', marginBottom: 6 }}>{label}</div>
-                    <div style={{ fontSize: 12.5, color: 'var(--text2)', lineHeight: 1.6 }}>{body}</div>
-                  </div>
-                ))}
-              </div>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75, marginTop: 14 }}>
-                Unlike income tax, FICA rates are fixed by law and don&apos;t depend on your filing status.
-              </p>
-            </article>
-
-            <article id="reading-your-pay-stub" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Reading Your Pay Stub</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 14, lineHeight: 1.75 }}>
-                A paycheck and a pay stub are not the same thing. The paycheck is the actual payment; the pay stub is the document explaining how that number was calculated. A typical pay stub includes:
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 14 }}>
-                {[
-                  'Pay period dates and hours worked',
-                  'Gross pay and net pay',
-                  'Federal, state, and local tax withholding',
-                  'Medicare and Social Security deductions',
-                  'Benefit deductions (health, dental, retirement)',
-                  'Year-to-date totals and PTO balances',
-                ].map((item) => (
-                  <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13.5, color: 'var(--text2)' }}><span style={{ marginTop: 3, color: 'var(--text2)', flexShrink: 0 }}>-</span>{item}</li>
-                ))}
-              </ul>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
-                Keeping your pay stubs is a good habit — they&apos;re the first thing you&apos;ll need if a payment dispute ever comes up.
-              </p>
-            </article>
-
-            <article id="overtime-benefits-total-compensation" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Overtime, Benefits, and Total Compensation</h2>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', marginBottom: 12, lineHeight: 1.75 }}>
-                Hourly employees who work beyond their standard schedule are typically paid overtime at 1.5× their regular rate. Someone earning $25/hour who works 10 overtime hours earns an extra $375 — overtime rate of $37.50 × 10 hours — on top of regular pay. An <Link to="/overtime" style={{ color: '#1a6fe8', fontWeight: 800 }}>Overtime Calculator</Link> can help employees estimate these additional earnings quickly and accurately.
-              </p>
-              <p style={{ fontSize: 13.5, color: 'var(--text2)', lineHeight: 1.75 }}>
-                Salary alone doesn&apos;t tell the whole story either. Total compensation includes benefits like health insurance, retirement matching, paid time off, and life insurance — all of which add real value beyond the number on your paycheck. When comparing two job offers, always weigh the full package, not just the base salary.
-              </p>
-            </article>
-
-            <article id="quick-reference-common-conversions" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>Quick Reference: Common Conversions</h2>
-              <div className="overflow-x-auto">
-                <table style={{ width: '100%', minWidth: 560, borderCollapse: 'collapse', fontSize: 13 }}>
-                  <thead>
-                    <tr style={{ background: 'var(--surface-alt)' }}>
-                      {['If you earn...', 'Annual', 'Monthly', 'Weekly'].map((head) => (
-                        <th key={head} style={{ textAlign: 'left', padding: '10px 12px', borderBottom: '1px solid var(--border)', color: 'var(--text)', fontWeight: 900 }}>{head}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ['$20/hour, 40 hrs/wk', '$41,600', '~$3,467', '$800'],
-                      ['$30/hour, 40 hrs/wk', '$62,400', '$5,200', '$1,200'],
-                      ['$72,000/year', '$72,000', '$6,000', '~$1,385'],
-                      ['$400/day, 20 days/mo', '~$96,000', '$8,000', '~$1,846'],
-                    ].map((row, index) => (
-                      <tr key={row[0]} style={{ borderBottom: index === 3 ? 0 : '1px solid var(--border)' }}>
-                        {row.map((cell, cellIndex) => (
-                          <td key={cell} style={{ padding: '10px 12px', color: cellIndex === 0 ? 'var(--text)' : 'var(--text2)', fontWeight: cellIndex === 0 ? 800 : 600 }}>{cell}</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </article>
-
-            <article id="salary-faq" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>Frequently Asked Questions</h2>
-              <div className="grid gap-3 md:grid-cols-2">
-                {[
-                  ['How do I calculate my annual salary from an hourly wage?', 'Multiply your hourly rate by hours worked per week, then by weeks worked per year.'],
-                  ['Why is my net pay lower than my gross pay?', 'Taxes (federal, state, local), FICA contributions, and any benefit deductions are subtracted from gross pay before you receive it.'],
-                  ['Is overtime included in salary calculations?', 'Only if you work overtime hours — it is calculated separately at 1.5× your regular hourly rate and added to your base earnings.'],
-                  ['Does a salary calculator replace a tax professional?', 'No. These calculators provide estimates for budgeting and comparison purposes. For exact tax liability, consult a licensed accountant or tax advisor.'],
-                ].map(([q, a]) => (
-                  <details key={q} style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 10, padding: '13px 15px' }}>
-                    <summary style={{ cursor: 'pointer', fontSize: 13.5, fontWeight: 800, color: 'var(--text)' }}>{q}</summary>
-                    <p style={{ marginTop: 10, fontSize: 12.5, lineHeight: 1.6, color: 'var(--text2)' }}>{a}</p>
-                  </details>
-                ))}
-              </div>
-            </article>
-
+        <section className="cyp-salary-block" id="what-actually-comes-out-of-your-salary">
+          <div className="cyp-prose">
+            <h2>What Actually Comes Out of Your Salary</h2>
+            <p>A salary calculator is only useful if it accounts for everything that reduces a paycheck. Here's what typically applies:</p>
           </div>
 
-          <aside className="flex flex-col gap-5 lg:self-stretch">
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 12 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>Share this Calculator</div>
-              <div style={{ display: 'flex', gap: 9, flexWrap: 'wrap' }}>
-                {[
-                  ['facebook', '#1877f2'],
-                  ['x', '#111827'],
-                  ['linkedin', '#0a66c2'],
-                  ['whatsapp', '#25d366'],
-                  ['reddit', '#ff4500'],
-                  ['copy', isDark ? '#1a2842' : '#f3f4f6'],
-                ].map(([platform, bg]) => (
-                  <button
-                    key={platform}
-                    type="button"
-                    onClick={() => shareSalaryCalculator(platform)}
-                    aria-label={`Share on ${platform}`}
-                    style={{
-                      width: 42,
-                      height: 42,
-                      borderRadius: 8,
-                      border: platform === 'copy' ? '1px solid var(--border)' : 0,
-                      background: bg,
-                      color: platform === 'copy' ? 'var(--text2)' : '#fff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 12,
-                      fontWeight: 900,
-                      cursor: 'pointer',
-                      fontFamily: 'inherit',
-                    }}
-                  >
-                    {platform === 'facebook' && <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5h2.2V5.1c-.4-.1-1.7-.1-3.2-.1-3.2 0-5.3 1.9-5.3 5.5v3.1H4.2v3.8h3.5V24h4.2v-6.6h3.4l.6-3.8h-4v-2.7c0-1.1.3-2.4 2.1-2.4Z"/></svg>}
-                    {platform === 'x' && <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.2 2h3.3l-7.2 8.2L22.8 22h-6.7l-5.2-6.8L4.9 22H1.6l7.7-8.8L1.2 2h6.8l4.7 6.2L18.2 2Zm-1.2 17.9h1.8L7 4H5.1l11.9 15.9Z"/></svg>}
-                    {platform === 'linkedin' && <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.34 8h4.32v14H.34V8Zm7.46 0h4.14v1.9H12c.58-1.1 2-2.25 4.12-2.25 4.4 0 5.22 2.9 5.22 6.67V22h-4.32v-6.8c0-1.62-.03-3.7-2.26-3.7-2.26 0-2.6 1.76-2.6 3.58V22H7.8V8Z"/></svg>}
-                    {platform === 'whatsapp' && <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.7 4.8Zm5.4-7.3c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 .1-.2.2-.4.2-.7.1-.3-.2-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6 0-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"/></svg>}
-                    {platform === 'reddit' && <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 11.8c0-1.5-1.2-2.7-2.7-2.7-.7 0-1.3.3-1.8.7-1.8-1.2-4.2-2-6.9-2.1l1.2-3.8 3.3.8c.1 1 1 1.8 2 1.8 1.1 0 2-.9 2-2s-.9-2-2-2c-.8 0-1.5.5-1.8 1.1l-4-1c-.3-.1-.6.1-.7.4l-1.5 4.7c-2.7.1-5.2.8-7 2.1-.5-.4-1.1-.7-1.8-.7C1.2 9.1 0 10.3 0 11.8c0 1 .6 1.9 1.4 2.4v.7c0 4 4.7 7.2 10.6 7.2s10.6-3.2 10.6-7.2v-.7c.8-.5 1.4-1.4 1.4-2.4ZM6.8 13.9c0-1 .8-1.8 1.8-1.8s1.8.8 1.8 1.8-.8 1.8-1.8 1.8-1.8-.8-1.8-1.8Zm9.2 4.5c-1 .9-2.6 1.3-4 1.3s-3-.4-4-1.3c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0 .7.6 2 .9 3.3.9s2.6-.3 3.3-.9c.2-.2.5-.2.7 0 .2.2.2.5 0 .7Zm-.6-2.7c-1 0-1.8-.8-1.8-1.8s.8-1.8 1.8-1.8 1.8.8 1.8 1.8-.8 1.8-1.8 1.8Z"/></svg>}
-                    {platform === 'copy' && <svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="5.5" y="5.5" width="10" height="10" rx="2" stroke="currentColor" strokeWidth="1.3"/><path d="M3.5 12.5H3A1.5 1.5 0 0 1 1.5 11V3A1.5 1.5 0 0 1 3 1.5h8A1.5 1.5 0 0 1 12.5 3v.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>On This Page</div>
-              <div className="flex flex-col gap-2 text-sm">
-                {[
-                  ['#what-is-salary', 'Salary Calculator'],
-                  ['#how-salary-conversion-works', 'How Conversion Works'],
-                  ['#salary-pay-formula', 'Gross vs. Net Pay'],
-                  ['#fica-tax', 'FICA Taxes'],
-                  ['#reading-your-pay-stub', 'Reading Your Pay Stub'],
-                  ['#overtime-benefits-total-compensation', 'Overtime & Benefits'],
-                  ['#quick-reference-common-conversions', 'Common Conversions'],
-                  ['#salary-faq', 'Frequently Asked Questions'],
-                ].map(([href, label]) => (
-                  <a key={href} href={href} style={{ color: 'var(--text2)', fontSize: 12.5, fontWeight: 700 }}>{label}</a>
-                ))}
-              </div>
-            </div>
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Salary Frequency Guide</div>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
-                <thead>
-                  <tr style={{ background: 'var(--surface-alt)' }}>
-                    <th style={{ textAlign: 'left', padding: '7px 9px', fontWeight: 600, color: 'var(--text2)', borderBottom: '1px solid var(--border)' }}>Frequency</th>
-                    <th style={{ textAlign: 'left', padding: '7px 9px', fontWeight: 600, color: 'var(--text2)', borderBottom: '1px solid var(--border)' }}>Periods</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['Weekly', '52'],
-                    ['Bi-Weekly', '26'],
-                    ['Semi-Monthly', '24'],
-                    ['Monthly', '12'],
-                  ].map(([label, periods], index) => (
-                    <tr key={label} style={{ borderBottom: index === 3 ? 0 : '1px solid var(--border)' }}>
-                      <td style={{ padding: '8px 9px', fontWeight: 700, color: '#1a6fe8' }}>{label}</td>
-                      <td style={{ padding: '8px 9px', color: 'var(--text2)' }}>{periods} / year</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>Example Calculations</div>
-              <div style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text)', marginBottom: 7 }}>Example 1</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 5, paddingBottom: 12, borderBottom: '1px solid var(--border)', marginBottom: 12 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text2)' }}><span>Annual Salary</span><span>$60,000</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text2)' }}><span>Frequency</span><span>Monthly</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 5, borderTop: '1px solid var(--border)', marginTop: 2 }}><span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>Base Pay</span><span style={{ fontSize: 13.5, fontWeight: 700, color: '#22c55e' }}>$5,000</span></div>
-              </div>
-              <div style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text)', marginBottom: 7 }}>Example 2</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text2)' }}><span>Hourly Rate</span><span>$30.00</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text2)' }}><span>Hours</span><span>40</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 5, borderTop: '1px solid var(--border)', marginTop: 2 }}><span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>Base Pay</span><span style={{ fontSize: 13.5, fontWeight: 700, color: '#22c55e' }}>$1,200</span></div>
-              </div>
-            </div>
-            <div data-salary-finance-card style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16, flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 12 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>Read About Finance</div>
-                <Link to="/blogs" style={{ fontSize: 11.5, fontWeight: 700, color: '#1a6fe8', whiteSpace: 'nowrap' }}>View all</Link>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 9, flex: 1 }}>
-                {[
-                  ['Salary Calculator Guide', '/blogs/salary-calculator-guide', 'Convert annual salary into monthly, biweekly, weekly, and hourly pay estimates.'],
-                  ['Texas Paycheck Calculator Guide', '/blogs/texas-paycheck-calculator-guide', 'Estimate Texas net pay with federal taxes and no state income tax.'],
-                  ['Florida Paycheck Calculator Guide', '/blogs/florida-paycheck-calculator-guide', 'Understand Florida take-home pay, FICA, and paycheck planning.'],
-                ].map(([title, to, desc]) => (
-                  <Link key={to} to={to} style={{ display: 'grid', gridTemplateColumns: '34px 1fr', gap: 9, alignItems: 'start', padding: '12px 0', borderTop: '1px solid var(--border)' }}>
-                    <span style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(26,111,232,.10)', color: '#1a6fe8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <BarChart3 size={16} />
-                    </span>
-                    <span style={{ minWidth: 0 }}>
-                      <span style={{ display: 'block', fontSize: 12.2, lineHeight: 1.25, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>{title}</span>
-                      <span style={{ display: 'block', fontSize: 10.8, lineHeight: 1.35, color: 'var(--text3)' }}>{desc}</span>
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div style={{ background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.30)', borderRadius: 10, padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start', marginTop: 'auto' }}>
-              <div style={{ width: 44, height: 44, background: '#22c55e', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg width="24" height="24" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M13 2.5L4.5 7v5.5c0 5 3.5 9.7 8.5 10.8 5-1.1 8.5-5.8 8.5-10.8V7L13 2.5z" fill="white" fillOpacity="0.25" stroke="white" strokeWidth="1.5"/><path d="M9 13l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
-              <div>
-                <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', marginBottom: 5 }}>Accuracy You Can Trust</div>
-                <div style={{ fontSize: 12, color: 'var(--text2)', lineHeight: 1.6 }}>Based on the current salary calculator inputs and federal payroll tax estimate logic.</div>
-              </div>
-            </div>
-          </aside>
+          <table className="cyp-ded-table">
+            <thead><tr><th>Deduction</th><th>What it is</th><th>Roughly how much</th></tr></thead>
+            <tbody>
+              <tr><td>Federal income tax</td><td>Based on IRS tax brackets and your filing status</td><td>10%–37%, depending on income</td></tr>
+              <tr><td>Social Security tax</td><td>Part of FICA, funds Social Security</td><td>6.2% up to the annual wage cap</td></tr>
+              <tr><td>Medicare tax</td><td>Part of FICA, funds Medicare</td><td>1.45%, plus 0.9% above certain income levels</td></tr>
+              <tr><td>State income tax</td><td>Set by your state; some states charge none</td><td>0%–13%, depending on state</td></tr>
+              <tr><td>Pre-tax deductions</td><td>401(k), health insurance, HSA contributions</td><td>Varies by employer plan</td></tr>
+            </tbody>
+          </table>
+
+          <div className="cyp-prose" style={{ marginTop: 26 }}>
+            <p>Pre-tax deductions are worth knowing about specifically: money you put into a 401(k) or health plan before tax is calculated actually lowers your taxable income — which is part of why two people with the same salary can end up with different take-home pay.</p>
+          </div>
         </section>
 
-        <section style={{ marginTop: 40, paddingBottom: 10 }}>
-          <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>Related Calculators</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+        <section className="cyp-salary-block cyp-tinted" id="annual-monthly-or-per-paycheck-salary-by-pay-frequency">
+          <div className="cyp-prose">
+            <h2>Annual, Monthly, or Per Paycheck — Salary by Pay Frequency</h2>
+            <p>Your salary doesn't change based on how often you're paid, but the number on each paycheck does. A $60,000 salary looks very different depending on the pay schedule:</p>
+            <ul>
+              <li>Weekly — 52 paychecks a year</li>
+              <li>Bi-weekly — 26 paychecks a year (the most common schedule in the U.S.)</li>
+              <li>Semi-monthly — 24 paychecks a year (typically the 1st and 15th)</li>
+              <li>Monthly — 12 paychecks a year</li>
+            </ul>
+            <p>Bi-weekly and semi-monthly are easy to confuse because they sound similar but produce different paycheck amounts — the calculator handles that distinction automatically once you select your schedule.</p>
+          </div>
+        </section>
+
+        <section className="cyp-salary-block" id="comparing-two-salary-offers">
+          <div className="cyp-callout">
+            <div>
+              <h4>Comparing Two Salary Offers?</h4>
+              <p>If you're weighing a new job offer against your current one — or comparing offers in two different states — the gap in take-home pay can be bigger than the gap in gross salary. A higher salary in a high-tax state can sometimes net out lower than a smaller salary somewhere with no state income tax.</p>
+              <p>Use our <Link to="/states">Dual Salary Comparison Calculator</Link> to check two offers side by side instead of running the numbers twice.</p>
+            </div>
+            <Link to="/states">Compare two offers</Link>
+          </div>
+        </section>
+
+        <section className="cyp-salary-block" id="why-your-state-matters-more-than-youd-think">
+          <div className="cyp-prose">
+            <h2>Why Your State Matters More Than You'd Think</h2>
+            <p>Nine U.S. states currently charge no state income tax at all, while others tax income at rates that meaningfully change your final number. If your state isn't reflected in the quick estimate above, our state-specific salary calculators apply your exact state's brackets and rules:</p>
+          </div>
+          <div className="cyp-state-grid">
+            <Link className="cyp-state-pill" to="/california-paycheck-calculator">California <span>CA</span></Link>
+            <Link className="cyp-state-pill" to="/texas-paycheck-calculator">Texas <span>TX</span></Link>
+            <Link className="cyp-state-pill" to="/states">New York <span>NY</span></Link>
+            <Link className="cyp-state-pill" to="/florida-paycheck-calculator">Florida <span>FL</span></Link>
+            <Link className="cyp-state-pill" to="/illinois-paycheck-calculator">Illinois <span>IL</span></Link>
+            <Link className="cyp-state-pill" to="/states">View all 50 states → <span>US</span></Link>
+          </div>
+        </section>
+
+        <section className="cyp-salary-block" id="salary-faq">
+          <div className="cyp-section-head">
+            <span className="eyebrow">FAQ</span>
+            <h2>Frequently Asked Questions</h2>
+          </div>
+          <div className="cyp-faq-list">
             {[
-              ['Overtime Calculator', '/overtime', 'Calculate overtime pay and savings.', '#fff7ed', '#f97316', 'clock'],
-              ['Paycheck Calculator', '/paycheck-calculator', 'Estimate take-home paycheck.', '#faf5ff', '#7c3aed', 'paycheck'],
-              ['State Paycheck Calculators', '/states', 'Choose a state payroll tool.', '#eff6ff', '#1a6fe8', 'map'],
-              ['Texas Paycheck Calculator', '/texas-paycheck-calculator', 'Estimate Texas take-home pay.', '#f0fdf4', '#22c55e', 'dollar'],
-              ['Florida Paycheck Calculator', '/florida-paycheck-calculator', 'Estimate Florida paycheck.', '#f0fdfa', '#0d9488', 'sun'],
-              ['California Paycheck Calculator', '/california-paycheck-calculator', 'Estimate California taxes.', '#fff1f2', '#e11d48', 'tax'],
-            ].map(([title, to, desc, bg, color, icon]) => (
-              <Link key={to} to={to} style={{ display: 'block', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 13px' }}>
-                <div style={{ width: 40, height: 40, background: bg, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 9 }}>
-                  {icon === 'clock' && (
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="9" fill={color}/><path d="M11 7v4l3 3" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
-                  )}
-                  {icon === 'paycheck' && (
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect x="2" y="2" width="18" height="18" rx="3.5" fill={color}/><rect x="5" y="8" width="12" height="2" rx="1" fill="white"/><rect x="5" y="12" width="8" height="2" rx="1" fill="white"/></svg>
-                  )}
-                  {icon === 'map' && (
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect x="2" y="2" width="18" height="18" rx="3.5" fill={color}/><path d="M11 17s5-4 5-8a5 5 0 0 0-10 0c0 4 5 8 5 8Z" stroke="white" strokeWidth="1.6"/><circle cx="11" cy="9" r="1.8" fill="white"/></svg>
-                  )}
-                  {icon === 'dollar' && (
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect x="2" y="2" width="18" height="18" rx="3.5" fill={color}/><text x="11" y="16" textAnchor="middle" fontSize="12" fill="white" fontWeight="800">$</text></svg>
-                  )}
-                  {icon === 'sun' && (
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="9" fill={color}/><circle cx="11" cy="11" r="3.3" fill="white"/><path d="M11 4.8v1.4M11 15.8v1.4M4.8 11h1.4M15.8 11h1.4M6.6 6.6l1 1M14.4 14.4l1 1M15.4 6.6l-1 1M7.6 14.4l-1 1" stroke="white" strokeWidth="1.2" strokeLinecap="round"/></svg>
-                  )}
-                  {icon === 'tax' && (
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect x="2" y="2" width="18" height="18" rx="3.5" fill={color}/><path d="M7 15 15 7M7.8 8.2h.01M14.2 13.8h.01" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
-                  )}
-                </div>
-                <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{title}</div>
-                <div style={{ fontSize: 11.5, color: 'var(--text3)', lineHeight: 1.4, marginBottom: 9 }}>{desc}</div>
-                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)' }}>Calculate →</span>
-              </Link>
+              ['How is my salary actually calculated into a paycheck?', 'Your annual salary is divided by your number of pay periods to get gross pay per paycheck. Federal tax, state tax, and FICA are then calculated and subtracted to arrive at net pay — the amount you\'re actually paid.'],
+              ['What percentage of my salary goes to taxes?', 'Most people lose roughly 20–35% of their gross salary to combined federal, state, and FICA taxes, though the exact figure depends on income level, filing status, and state of residence.'],
+              ['How much federal tax is taken out of my paycheck?', 'Federal tax is withheld based on IRS tax brackets, which range from 10% to 37% depending on your taxable income and filing status. Your employer withholds an estimated amount each pay period based on the W-4 you submitted.'],
+              ['Does this calculator include bonuses?', 'No — bonuses are taxed differently, using what\'s called the supplemental wage rate. If you\'ve received a bonus, our dedicated bonus calculator will give you a more accurate result.'],
+              ['How many pay periods are there in a year?', 'It depends on your pay schedule: 52 for weekly, 26 for bi-weekly, 24 for semi-monthly, and 12 for monthly pay.'],
+              ['Why did my take-home pay change even though my salary didn\'t?', 'This usually happens when tax brackets update for a new year, your filing status changes, or you adjust pre-tax deductions like retirement contributions.'],
+              ['Is this salary calculator accurate for freelance or 1099 income?', 'No — this tool is built for salaried W-2 employees, where taxes are withheld automatically. If you\'re a freelancer or contractor, use our 1099 / Self-Employment Tax Calculator instead, since self-employment income is taxed differently.'],
+              ['What is the formula to calculate your salary?', 'The basic formula is: Gross pay per period × number of pay periods in a year = annual salary. To go the other direction, divide your annual salary by your number of pay periods to find your gross pay per paycheck. Net pay is then found by subtracting federal tax, state tax, and FICA from that gross figure.'],
+              ['How to calculate US payroll?', 'Payroll is calculated by starting with an employee\'s gross pay for the period, then subtracting federal income tax (based on IRS brackets and their W-4), Social Security tax (6.2%), Medicare tax (1.45%), any applicable state and local taxes, and pre-tax or post-tax deductions like retirement contributions or insurance premiums. What remains is net pay — the amount actually paid out.'],
+              ['How do I calculate my total salary?', 'Multiply your gross pay per pay period by the number of pay periods in a year. For example, a bi-weekly paycheck of $2,500 comes to a total annual salary of $65,000 (26 pay periods × $2,500). If you receive regular bonuses or commissions, add those in separately since they\'re often taxed differently.'],
+              ['How do I calculate gross salary?', 'Gross salary is your total pay before any taxes or deductions are subtracted — it\'s the base figure in your offer letter or contract, plus any guaranteed additions like a fixed monthly allowance. It does not yet account for tax withholding, so it will always be higher than your take-home pay.'],
+              ['How do I calculate my daily salary?', 'Divide your annual salary by the number of working days in the year (typically around 260 for a standard five-day work week, excluding weekends). For example, a $52,000 annual salary works out to roughly $200 per working day before taxes.'],
+            ].map(([question, answer], index) => (
+              <details className="cyp-faq-item" key={question} open={index === 0}>
+                <summary>{question}<span>+</span></summary>
+                <p>{answer}</p>
+              </details>
             ))}
           </div>
-        </section>
-      </div>
+          <p className="cyp-disclaimer">This calculator provides an estimate based on current federal and state tax rules and is intended for informational purposes only. It isn't a substitute for professional tax or financial advice.</p>
+        </section>      </div>
     </main>
   );
 }
@@ -3506,7 +2954,7 @@ function PaycheckCalculatorPage({ isDark }) {
     },
     {
       id: 'federal-tax-brackets-2025-2026',
-      title: '2025–2026 Federal Tax Brackets',
+      title: '2025�2026 Federal Tax Brackets',
       paragraphs: [
         ['The IRS uses progressive tax brackets, which means different parts of your taxable income may be taxed at different rates. You can review current federal rates through the official IRS page on ', { text: 'federal income tax rates and brackets', href: 'https://www.irs.gov/filing/federal-income-tax-rates-and-brackets' }, ', because bracket amounts can change by tax year.'],
       ],
@@ -3747,8 +3195,8 @@ function PaycheckCalculatorPage({ isDark }) {
   };
 
   useEffect(() => {
-    document.title = 'Paycheck Calculator - Estimate Your Take-Home Pay Fast';
-    const description = 'Estimate your take-home pay with our free paycheck calculator, covering federal tax, state tax, FICA, overtime, bonus, and 401(k) or insurance deductions.';
+    document.title = 'Paycheck Calculator — Hourly & Overtime Take-Home Pay | CheckYourPays';
+    const description = 'Calculate your paycheck from an hourly wage, including overtime and bonus pay. Free paycheck calculator with a full pay stub breakdown — no sign-up.';
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -3787,41 +3235,64 @@ function PaycheckCalculatorPage({ isDark }) {
         '--text3': isDark ? '#cbd5e1' : '#334155',
         '--accent': '#1a6fe8',
         '--green': '#22c55e',
+        '--blue': '#2F5FE3',
+        '--blue-dark': '#1E3FAE',
+        '--blue-light': '#5C82F0',
+        '--navy': '#0E1B33',
+        '--sky': '#EEF3FE',
+        '--muted': '#68708A',
+        '--line': '#E4E9F5',
+        '--ink': '#172033',
         background: 'var(--bg)',
         color: 'var(--text)',
         fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
       }}
     >
-      <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-        <section style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '28px 28px 24px', marginBottom: 16 }}>
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-3xl">
-              <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Paycheck Calculator</h1>
-              <div className="flex flex-wrap gap-3">
-                {['Instant Results', '2026 Ready', 'State Taxes', 'No Sign Up'].map((tag) => (
-                  <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: '#16a34a', fontWeight: 800 }}>
-                    <span style={{ width: 15, height: 15, borderRadius: 99, background: '#22c55e', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }}>✓</span>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="shrink-0">
-              <svg width="152" height="152" viewBox="0 0 152 152" fill="none" aria-hidden="true">
-                <rect x="18" y="24" width="112" height="78" rx="14" fill="#1a6fe8" />
-                <rect x="30" y="38" width="88" height="15" rx="4" fill="white" fillOpacity=".94" />
-                <rect x="30" y="63" width="50" height="8" rx="4" fill="white" fillOpacity=".36" />
-                <rect x="30" y="80" width="72" height="8" rx="4" fill="#fbbf24" />
-                <circle cx="116" cy="103" r="28" fill="#22c55e" />
-                <text x="116" y="113" textAnchor="middle" fontSize="30" fill="white" fontWeight="900">$</text>
-                <circle cx="39" cy="111" r="18" fill="#93c5fd" />
-                <path d="M31 111h16M39 103v16" stroke="white" strokeWidth="3" strokeLinecap="round" />
-              </svg>
-            </div>
-          </div>
+      <style>{`
+        .salary-dc-page .paycheck-cyp-wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative}
+        .salary-dc-page .paycheck-cyp-breadcrumb{font-size:13px;color:var(--muted);padding:20px 0 0}
+        .salary-dc-page .paycheck-cyp-breadcrumb a{color:var(--muted);text-decoration:none}
+        .salary-dc-page .paycheck-cyp-breadcrumb a:hover{color:var(--blue)}
+        .salary-dc-page .paycheck-cyp-page-head{padding:18px 0 40px;text-align:center;max-width:980px;margin:0 auto}
+        .salary-dc-page .paycheck-cyp-page-head .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);font-weight:600}
+        .salary-dc-page .paycheck-cyp-page-head h1{font-size:clamp(30px,4vw,42px);line-height:1.12;color:var(--navy);font-weight:800;margin:12px 0 0;letter-spacing:0;white-space:nowrap}
+        .salary-dc-page .paycheck-cyp-page-head p{color:var(--muted);font-size:16px;line-height:1.7;margin:14px auto 0;max-width:760px}
+        .salary-dc-page .paycheck-cyp-calc-section{padding-bottom:70px}
+        .salary-dc-page .paycheck-cyp-calc-shell{background:var(--sky);border-radius:24px;padding:6px}
+        .salary-dc-page .paycheck-cyp-calc-card{background:#fff;border-radius:20px;box-shadow:0 30px 60px -30px rgba(14,27,51,.25);overflow:visible;padding:22px}
+        .salary-dc-page .paycheck-cyp-calc-card aside{position:sticky;top:70px}
+        .salary-dc-page .paycheck-cyp-content{padding:8px 0 44px}
+        .salary-dc-page .paycheck-cyp-article{max-width:920px;margin:0 auto;color:var(--muted)}
+        .salary-dc-page .paycheck-cyp-article>article{background:transparent!important;border:0!important;border-top:1px solid rgba(228,233,245,.88)!important;border-radius:0!important;padding:58px 0!important;margin:0!important;color:var(--muted)!important;box-shadow:none!important}
+        .salary-dc-page .paycheck-cyp-article>article:first-child{border-top:0!important;padding-top:18px!important}
+        .salary-dc-page .paycheck-cyp-article>article:nth-child(even){background:var(--sky)!important;border-radius:28px!important;border-top:0!important;margin:18px 0!important;padding:54px 30px!important}
+        .salary-dc-page .paycheck-cyp-article h1,.salary-dc-page .paycheck-cyp-article h2{font-size:clamp(22px,2.8vw,30px)!important;line-height:1.2!important;color:var(--navy)!important;font-weight:800!important;margin:0 0 18px!important;letter-spacing:0!important}
+        .salary-dc-page .paycheck-cyp-article h3{color:var(--navy)!important;font-size:16px!important;line-height:1.35!important;font-weight:800!important}
+        .salary-dc-page .paycheck-cyp-article p,.salary-dc-page .paycheck-cyp-article li{color:var(--muted)!important;font-size:15.5px!important;line-height:1.78!important}
+        .salary-dc-page .paycheck-cyp-article strong{color:var(--ink)!important;font-weight:800!important}
+        .salary-dc-page .paycheck-cyp-article table{background:#fff!important;border-color:var(--line)!important;border-radius:16px!important;overflow:hidden!important;box-shadow:0 18px 42px -34px rgba(14,27,51,.38)!important}
+        .salary-dc-page .paycheck-cyp-article th{background:var(--navy)!important;color:#fff!important;font-weight:800!important}
+        .salary-dc-page .paycheck-cyp-article td{color:var(--ink)!important;background:#fff!important}
+        .salary-dc-page .paycheck-cyp-related{padding:58px 0 10px;border-top:1px solid rgba(228,233,245,.88)}
+        .salary-dc-page .paycheck-cyp-related h2{font-size:clamp(22px,2.8vw,28px)!important;line-height:1.2!important;color:var(--navy)!important;font-weight:800!important;margin:0 0 20px!important;text-align:center}
+        .salary-dc-page .paycheck-cyp-related a{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+        .salary-dc-page .paycheck-cyp-related a:hover{transform:translateY(-3px);border-color:var(--blue-light)!important;box-shadow:0 24px 44px -34px rgba(14,27,51,.7)}
+        @media(max-width:1024px){.salary-dc-page .paycheck-cyp-calc-card aside{position:relative;top:auto}}
+        @media(max-width:780px){.salary-dc-page .paycheck-cyp-wrap{padding:0 18px}.salary-dc-page .paycheck-cyp-page-head{padding-bottom:28px}.salary-dc-page .paycheck-cyp-page-head h1{white-space:normal}.salary-dc-page .paycheck-cyp-calc-card{padding:12px}.salary-dc-page .paycheck-cyp-calc-section{padding-bottom:46px}.salary-dc-page .paycheck-cyp-article>article{padding:42px 0!important}.salary-dc-page .paycheck-cyp-article>article:nth-child(even){padding:38px 18px!important}.salary-dc-page .paycheck-cyp-article p,.salary-dc-page .paycheck-cyp-article li{font-size:14.5px!important}.salary-dc-page .paycheck-cyp-related{padding-top:44px}}
+      `}</style>
+      <div className="paycheck-cyp-wrap">
+        <div className="paycheck-cyp-breadcrumb"><Link to="/">Home</Link> / <Link to="/">Calculators</Link> / Paycheck Calculator</div>
+        <div className="paycheck-cyp-page-head">
+          <span className="eyebrow">Paycheck Calculator</span>
+          <h1>See what your paycheck actually pays you</h1>
+          <p>Enter your salary or hourly wage, pay frequency, filing status, and state to estimate gross pay, taxes, FICA, and take-home pay.</p>
+        </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-[420px_minmax(0,1fr)]">
-            <aside style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden', position: 'sticky', top: 86, boxShadow: '0 4px 24px rgba(15,23,42,.10)' }}>
+        <section className="paycheck-cyp-calc-section" id="calc">
+          <div className="paycheck-cyp-calc-shell">
+            <div className="paycheck-cyp-calc-card">
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-[420px_minmax(0,1fr)]" style={{ alignItems: 'start' }}>
+            <aside style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden', position: 'sticky', top: 70, boxShadow: '0 4px 24px rgba(15,23,42,.10)' }}>
               <div style={{ padding: '15px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                   <span style={{ width: 32, height: 32, borderRadius: 9, background: 'rgba(26,111,232,.13)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)' }}>
@@ -3829,17 +3300,17 @@ function PaycheckCalculatorPage({ isDark }) {
                   </span>
                   <div>
                     <div style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--text)' }}>Input Details</div>
-                    <div style={{ fontSize: 11, color: 'var(--text3)' }}>Edit values to update results</div>
+                    <div style={{ fontSize: 11, color: 'var(--text3)' }}>Fill in to see results instantly</div>
                   </div>
                 </div>
                 <span style={{ fontSize: 11, fontWeight: 800, color: '#16a34a', background: 'rgba(34,197,94,.13)', borderRadius: 999, padding: '3px 9px', border: '1px solid rgba(34,197,94,.32)' }}>2026</span>
               </div>
-              <div className="space-y-3" style={{ padding: '16px 20px', maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
+              <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 13, maxHeight: 'calc(100vh - 200px)', overflowY: 'auto', scrollbarWidth: 'thin', scrollbarColor: '#1a6fe822 transparent' }}>
                 <div>
                   <label style={labelStyle}>Rate Type</label>
                   <div style={{ display: 'flex', gap: 5, background: 'var(--input)', borderRadius: 10, padding: 4 }}>
                     {[['annual', 'Annual Salary'], ['hourly', 'Hourly Wage']].map(([value, label]) => (
-                      <button key={value} type="button" onClick={() => setRateType(value)} style={{ flex: 1, padding: '9px 6px', borderRadius: 7, border: 0, cursor: 'pointer', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 800, background: rateType === value ? 'var(--accent)' : 'transparent', color: rateType === value ? '#fff' : 'var(--text2)' }}>
+                      <button key={value} type="button" onClick={() => setRateType(value)} style={{ flex: 1, padding: '9px 6px', borderRadius: 7, border: 0, cursor: 'pointer', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 700, background: rateType === value ? 'var(--accent)' : 'transparent', color: rateType === value ? '#fff' : 'var(--text2)' }}>
                         {label}
                       </button>
                     ))}
@@ -3850,7 +3321,7 @@ function PaycheckCalculatorPage({ isDark }) {
                   <label style={labelStyle}>{rateType === 'hourly' ? 'Hourly Wage ($)' : 'Salary Per Year ($)'}</label>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--input)', border: '2px solid var(--border)', borderRadius: 10, padding: '0 13px', height: 50 }}>
                     <span style={{ fontSize: 19, fontWeight: 900, color: 'var(--accent)' }}>$</span>
-                    <input type="text" inputMode="decimal" value={grossPay} onChange={(e) => setGrossPay(e.target.value)} style={{ flex: 1, minWidth: 0, background: 'none', border: 0, color: 'var(--text)', fontFamily: 'inherit', fontSize: 18, fontWeight: 650, outline: 0 }} />
+                    <input type="text" inputMode="decimal" value={grossPay} onChange={(e) => setGrossPay(e.target.value)} style={{ flex: 1, minWidth: 0, background: 'none', border: 0, color: 'var(--text)', fontFamily: 'inherit', fontSize: 19, fontWeight: 800, outline: 0 }} />
                     <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text3)' }}>{rateType === 'hourly' ? '/hr' : '/yr'}</span>
                   </div>
                 </div>
@@ -3892,230 +3363,134 @@ function PaycheckCalculatorPage({ isDark }) {
                   </select>
                 </div>
 
-                <button type="button" onClick={savePaycheckSummary} style={{ width: '100%', padding: 13, background: 'var(--surface)', color: 'var(--accent)', border: '1.5px solid #bfdbfe', borderRadius: 10, fontSize: 14.5, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontFamily: 'inherit', boxShadow: '0 2px 10px rgba(26,111,232,.08)' }}>
+                <button type="button" onClick={savePaycheckSummary} style={{ width: '100%', padding: 13, background: 'var(--surface)', color: 'var(--accent)', border: '1.5px solid #bfdbfe', borderRadius: 10, fontSize: 14.5, fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontFamily: 'inherit', marginTop: 10, boxShadow: '0 2px 10px rgba(26,111,232,.08)' }}>
                   <svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 2.5h7l3 3V15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1Z" stroke="currentColor" strokeWidth="1.5"/><path d="M11 2.5V6h3M6 9h6M6 12h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                   Save Paycheck Summary
                 </button>
               </div>
             </aside>
 
-            <section className="space-y-5">
-              <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, boxShadow: '0 4px 24px rgba(15,23,42,.08)' }}>
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div style={{ background: 'rgba(26,111,232,.10)', border: '1px solid rgba(26,111,232,.18)', borderRadius: 12, padding: 16 }}>
-                    <div style={{ fontSize: 11, color: 'var(--text2)', fontWeight: 800, textTransform: 'uppercase', marginBottom: 6 }}>Gross Pay / {periodLabel}</div>
-                    <div style={{ fontSize: 25, fontWeight: 800, color: 'var(--text)' }}>{usd2(r.grossPer)}</div>
-                  </div>
-                  <div style={{ background: 'rgba(245,158,11,.12)', border: '1px solid rgba(245,158,11,.22)', borderRadius: 12, padding: 16 }}>
-                    <div style={{ fontSize: 11, color: 'var(--text2)', fontWeight: 800, textTransform: 'uppercase', marginBottom: 6 }}>Taxes / {periodLabel}</div>
-                    <div style={{ fontSize: 25, fontWeight: 800, color: 'var(--text)' }}>-{usd2(paycheckTaxesPer)}</div>
-                  </div>
-                  <div style={{ background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.24)', borderRadius: 12, padding: 16 }}>
-                    <div style={{ fontSize: 11, color: 'var(--text2)', fontWeight: 800, textTransform: 'uppercase', marginBottom: 6 }}>Take Home / {periodLabel}</div>
-                    <div style={{ fontSize: 25, fontWeight: 800, color: '#16a34a' }}>{usd2(r.netPer)}</div>
-                  </div>
-                </div>
-
-                <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
-                  <div className="space-y-5">
+            <section style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, overflow: 'hidden', boxShadow: '0 2px 12px rgba(15,23,42,.06)' }}>
+                <div style={{ background: 'linear-gradient(135deg,#1e40af 0%,#1a6fe8 55%,#3b82f6 100%)', padding: '20px 22px' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
                     <div>
-                      <div className="flex items-center justify-between text-lg font-bold" style={{ color: 'var(--text)' }}>
-                        <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-3 rounded-sm bg-sky-500" />Earnings</span>
-                        <span>{usd2(r.grossPer)}</span>
-                      </div>
-                      <div className="mt-3 space-y-2" style={{ color: 'var(--text2)', fontSize: 13.5 }}>
-                        <div className="flex items-start justify-between gap-3"><span>Gross Paycheck</span><span style={{ color: 'var(--text)', fontWeight: 800 }}>{usd2(r.grossPer)}</span></div>
-                        <div className="flex items-start justify-between gap-3"><span>Annual Gross Pay</span><span style={{ color: 'var(--text)', fontWeight: 800 }}>{usd2(r.grossAnnual)}</span></div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="flex items-center justify-between text-lg font-bold" style={{ color: 'var(--text)' }}>
-                        <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-3 rounded-sm bg-amber-500" />Taxes</span>
-                        <span>-{usd2(paycheckTaxesPer)}</span>
-                      </div>
-                      <div className="mt-3 space-y-2" style={{ color: 'var(--text2)', fontSize: 13.5 }}>
-                        <div className="flex justify-between gap-3"><span>Federal Income Tax ({r.taxesPct.toFixed(2)}%)</span><span style={{ color: 'var(--text)', fontWeight: 800 }}>-{usd2(r.fedPer)}</span></div>
-                        <div className="flex justify-between gap-3"><span>{stateLabel} Income ({r.stateRatePct.toFixed(2)}%)</span><span style={{ color: 'var(--text)', fontWeight: 800 }}>-{usd2(r.statePer)}</span></div>
-                        <div className="flex justify-between gap-3"><span>Social Security (6.20%)</span><span style={{ color: 'var(--text)', fontWeight: 800 }}>-{usd2(r.ssPer)}</span></div>
-                        <div className="flex justify-between gap-3"><span>Medicare (1.45%)</span><span style={{ color: 'var(--text)', fontWeight: 800 }}>-{usd2(r.medicarePer)}</span></div>
-                        <div className="flex justify-between gap-3"><span>FICA Total ({r.ficaPct.toFixed(2)}%)</span><span style={{ color: 'var(--text)', fontWeight: 800 }}>-{usd2(r.ficaPer)}</span></div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#93c5fd', letterSpacing: '.6px', textTransform: 'uppercase', marginBottom: 7 }}>Take Home Pay ({periodLabel})</div>
+                      <div style={{ fontSize: 46, fontWeight: 900, color: '#fff', letterSpacing: '-2px', lineHeight: 1 }}>{usd2(r.netPer)}</div>
+                      <div style={{ marginTop: 14, display: 'flex', gap: 7, flexWrap: 'wrap' }}>
+                        <div style={{ background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.2)', borderRadius: 9, padding: '8px 12px' }}>
+                          <div style={{ fontSize: 9, fontWeight: 700, color: '#93c5fd', textTransform: 'uppercase', letterSpacing: '.5px' }}>Gross Pay</div>
+                          <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', marginTop: 2 }}>{usd2(r.grossPer)}</div>
+                        </div>
+                        <div style={{ background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.2)', borderRadius: 9, padding: '8px 12px' }}>
+                          <div style={{ fontSize: 9, fontWeight: 700, color: '#93c5fd', textTransform: 'uppercase', letterSpacing: '.5px' }}>Total Taxes</div>
+                          <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', marginTop: 2 }}>-{usd2(paycheckTaxesPer)}</div>
+                        </div>
+                        <div style={{ background: 'rgba(74,222,128,.2)', border: '1px solid rgba(74,222,128,.35)', borderRadius: 9, padding: '8px 12px' }}>
+                          <div style={{ fontSize: 9, fontWeight: 700, color: '#4ade80', textTransform: 'uppercase', letterSpacing: '.5px' }}>Annual Take Home</div>
+                          <div style={{ fontSize: 15, fontWeight: 800, color: '#4ade80', marginTop: 2 }}>{usd2(r.netAnnual)}</div>
+                        </div>
                       </div>
                     </div>
-
-                    <div className="flex items-center justify-between text-lg font-bold" style={{ color: 'var(--text)' }}>
-                      <span>Annual Take-Home</span>
-                      <span>{usd2(r.netAnnual)}</span>
-                    </div>
-                  </div>
-
-                  <div style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 14, padding: 18 }}>
-                    <div className="flex justify-center">
-                      <svg viewBox="0 0 120 120" className="h-40 w-40" aria-label="Paycheck breakdown chart">
-                        <circle cx="60" cy="60" r="42" fill="none" stroke={isDark ? '#1e293b' : '#cbd5e1'} strokeWidth="16" />
+                    <div style={{ flex: '0 0 auto', position: 'relative', width: 110, height: 110 }}>
+                      <svg width="110" height="110" viewBox="0 0 110 110" aria-label="Paycheck take-home chart">
+                        <circle cx="55" cy="55" r="44" stroke="rgba(255,255,255,.12)" strokeWidth="13" fill="none" />
                         {paycheckGraphSlices.map((slice) => (
-                          <circle key={slice.key} cx="60" cy="60" r="42" fill="none" stroke={slice.color} strokeWidth="16" strokeDasharray={`${slice.dash} ${paycheckCircumference - slice.dash}`} strokeDashoffset={-slice.offset} transform="rotate(-90 60 60)" />
+                          <circle key={slice.key} cx="55" cy="55" r="44" stroke={slice.color} strokeWidth="13" fill="none" strokeLinecap="round" strokeDasharray={`${(slice.value / paycheckGraphTotal) * 276.5} 276.5`} strokeDashoffset={`${69.1 - (slice.offset / paycheckCircumference) * 276.5}`} transform="rotate(-90 55 55)" style={{ transition: 'all .7s ease' }} />
                         ))}
                       </svg>
-                    </div>
-                    <div className="mt-4 space-y-3">
-                      {paycheckBarRows.map(([label, value, color]) => (
-                        <div key={label}>
-                          <div className="mb-1 flex justify-between text-xs font-extrabold" style={{ color: 'var(--text2)' }}>
-                            <span>{label}</span><span>{usd2(value)}</span>
-                          </div>
-                          <div style={{ height: 6, borderRadius: 99, background: isDark ? '#26324a' : '#e5e7eb', overflow: 'hidden' }}>
-                            <div style={{ width: `${Math.round((value / maxPaycheckBar) * 100)}%`, height: '100%', borderRadius: 99, background: color }} />
-                          </div>
-                        </div>
-                      ))}
+                      <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+                        <div style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,.6)', textTransform: 'uppercase', letterSpacing: '.3px' }}>Keep</div>
+                        <div style={{ fontSize: 19, fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>{Math.max(0, r.takeHomePct).toFixed(0)}%</div>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <div style={{ padding: '11px 18px', background: '#f9fafb', borderTop: '1px solid #e5e7eb', display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#f59e0b', flex: '0 0 auto' }} /><span style={{ fontSize: 11.5, color: '#6b7280', fontWeight: 600 }}>Federal: <b style={{ color: '#d97706' }}>-{usd2(r.fedPer)}</b></span></div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#818cf8', flex: '0 0 auto' }} /><span style={{ fontSize: 11.5, color: '#6b7280', fontWeight: 600 }}>{stateLabel}: <b style={{ color: '#6366f1' }}>-{usd2(r.statePer)}</b></span></div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', flex: '0 0 auto' }} /><span style={{ fontSize: 11.5, color: '#6b7280', fontWeight: 600 }}>Take Home: <b style={{ color: '#16a34a' }}>{usd2(r.netPer)}</b></span></div>
+                </div>
+              </div>
+
+              <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ padding: '13px 20px', borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 800, color: '#111827' }}>Paycheck Breakdown</div>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: '#1a6fe8', display: 'flex', alignItems: 'center', gap: 4 }}><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="1.5" width="10" height="10" rx="2" stroke="#1a6fe8" strokeWidth="1.2"/><path d="M4 6.5h5M6.5 4v5" stroke="#1a6fe8" strokeWidth="1.2" strokeLinecap="round"/></svg>Breakdown</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 110px', gap: 8, padding: '8px 20px', background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '.5px' }}>Category</div>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: '#9ca3af', textAlign: 'right', textTransform: 'uppercase', letterSpacing: '.5px' }}>Per {periodLabel}</div>
+                </div>
+                {[
+                  ['Gross Pay', r.grossPer, '#3b82f6', 100, true],
+                  ['Federal Income Tax', r.fedPer, '#f59e0b', Math.min(100, (r.fedPer / maxPaycheckBar) * 100), false],
+                  [`${stateLabel} Income Tax`, r.statePer, '#818cf8', Math.min(100, (r.statePer / maxPaycheckBar) * 100), false],
+                  ['Social Security', r.ssPer, '#14b8a6', Math.min(100, (r.ssPer / maxPaycheckBar) * 100), false],
+                  ['Medicare', r.medicarePer, '#a78bfa', Math.min(100, (r.medicarePer / maxPaycheckBar) * 100), false],
+                ].map(([label, value, color, width, strong]) => (
+                  <div key={label} style={{ display: 'grid', gridTemplateColumns: '1fr 110px', gap: 8, padding: '12px 20px', borderBottom: '1px solid #f3f4f6', alignItems: 'center' }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}><span style={{ width: strong ? 7 : 6, height: strong ? 7 : 6, borderRadius: '50%', background: color, flex: '0 0 auto' }} /><span style={{ fontSize: strong ? 13 : 12.5, fontWeight: strong ? 700 : 600, color: strong ? '#111827' : '#374151' }}>{label}</span></div>
+                      <div style={{ height: 6, borderRadius: 99, background: '#edf2f7', overflow: 'hidden', marginTop: 7 }}><div style={{ width: `${Math.max(0, width)}%`, height: '100%', borderRadius: 99, background: color }} /></div>
+                    </div>
+                    <div style={{ fontSize: strong ? 13.5 : 13, fontWeight: strong ? 700 : 600, color: strong ? '#1a6fe8' : '#374151', textAlign: 'right' }}>{strong ? usd2(value) : `-${usd2(value)}`}</div>
+                  </div>
+                ))}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 110px', gap: 8, padding: '14px 20px', background: 'linear-gradient(135deg,rgba(34,197,94,.07),rgba(34,197,94,.01))', alignItems: 'center' }}>
+                  <div><div style={{ display: 'flex', alignItems: 'center', gap: 7 }}><span style={{ width: 9, height: 9, borderRadius: '50%', background: '#22c55e', flex: '0 0 auto' }} /><span style={{ fontSize: 14, fontWeight: 800, color: '#111827' }}>Take Home Pay</span></div><div style={{ height: 6, borderRadius: 99, background: '#edf2f7', overflow: 'hidden', marginTop: 7 }}><div style={{ width: `${Math.max(0, Math.min(100, r.takeHomePct))}%`, height: '100%', borderRadius: 99, background: '#22c55e' }} /></div></div>
+                  <div style={{ fontSize: 16, fontWeight: 900, color: '#16a34a', textAlign: 'right' }}>{usd2(r.netPer)}</div>
+                </div>
+              </div>
+
+              <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ padding: '12px 20px', borderBottom: '1px solid #e5e7eb', fontSize: 13.5, fontWeight: 800, color: '#111827' }}>Annual Summary</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', borderBottom: '1px solid #e5e7eb' }}>
+                  {['Period', 'Gross', 'Taxes', 'Take Home'].map((label) => <div key={label} style={{ padding: '8px 14px', fontSize: 9.5, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '.5px', background: '#f9fafb', textAlign: label === 'Period' ? 'left' : 'right' }}>{label}</div>)}
+                </div>
+                {[
+                  ['Per Paycheck', r.grossPer, paycheckTaxesPer, r.netPer],
+                  ['Annual', r.grossAnnual, r.fedAnnual + r.stateAnnual + r.ssAnnual + r.medicareAnnual, r.netAnnual],
+                ].map(([label, gross, taxes, takeHome], index) => (
+                  <div key={label} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', borderBottom: index === 0 ? '1px solid #f3f4f6' : 0 }}>
+                    <div style={{ padding: '11px 14px', fontSize: 12.5, fontWeight: 700, color: '#111827' }}>{label}</div>
+                    <div style={{ padding: '11px 14px', fontSize: 12.5, fontWeight: 600, color: '#1a6fe8', textAlign: 'right' }}>{usd2(gross)}</div>
+                    <div style={{ padding: '11px 14px', fontSize: 12.5, fontWeight: 600, color: '#f59e0b', textAlign: 'right' }}>-{usd2(taxes)}</div>
+                    <div style={{ padding: '11px 14px', fontSize: 12.5, fontWeight: 700, color: '#16a34a', textAlign: 'right' }}>{usd2(takeHome)}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ padding: '12px 20px', borderBottom: '1px solid #e5e7eb', fontSize: 13.5, fontWeight: 800, color: '#111827' }}>Monthly Breakdown</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', borderBottom: '1px solid #e5e7eb' }}>
+                  {['Period', 'Gross', 'Taxes', 'Take Home'].map((label) => <div key={label} style={{ padding: '8px 14px', fontSize: 9.5, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '.5px', background: '#f9fafb', textAlign: label === 'Period' ? 'left' : 'right' }}>{label}</div>)}
+                </div>
+                {[
+                  ['Monthly', r.grossAnnual / 12, (r.fedAnnual + r.stateAnnual + r.ssAnnual + r.medicareAnnual) / 12, r.netAnnual / 12],
+                  ['Quarterly', r.grossAnnual / 4, (r.fedAnnual + r.stateAnnual + r.ssAnnual + r.medicareAnnual) / 4, r.netAnnual / 4],
+                  ['Semi-Annual', r.grossAnnual / 2, (r.fedAnnual + r.stateAnnual + r.ssAnnual + r.medicareAnnual) / 2, r.netAnnual / 2],
+                ].map(([label, gross, taxes, takeHome], index) => (
+                  <div key={label} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', borderBottom: index === 2 ? 0 : '1px solid #f3f4f6' }}>
+                    <div style={{ padding: '11px 14px', fontSize: 12.5, fontWeight: 700, color: '#111827' }}>{label}</div>
+                    <div style={{ padding: '11px 14px', fontSize: 12.5, fontWeight: 600, color: '#1a6fe8', textAlign: 'right' }}>{usd2(gross)}</div>
+                    <div style={{ padding: '11px 14px', fontSize: 12.5, fontWeight: 600, color: '#f59e0b', textAlign: 'right' }}>-{usd2(taxes)}</div>
+                    <div style={{ padding: '11px 14px', fontSize: 12.5, fontWeight: 800, color: '#16a34a', textAlign: 'right' }}>{usd2(takeHome)}</div>
+                  </div>
+                ))}
               </div>
             </section>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <div className="space-y-5">
+        <section className="paycheck-cyp-content">
+          <div className="paycheck-cyp-article">
             <DocxContentSections sections={paycheckDocxSections} />
           </div>
-
-          <aside className="flex flex-col gap-5 lg:self-stretch">
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>Share this Calculator</div>
-              <div style={{ display: 'flex', gap: 9, flexWrap: 'wrap' }}>
-                {[
-                  ['facebook', '#1877f2'],
-                  ['x', '#111827'],
-                  ['linkedin', '#0a66c2'],
-                  ['whatsapp', '#25d366'],
-                  ['reddit', '#ff4500'],
-                  ['copy', isDark ? '#1a2842' : '#f3f4f6'],
-                ].map(([platform, bg]) => (
-                  <button key={platform} type="button" onClick={() => sharePaycheckCalculator(platform)} aria-label={`Share on ${platform}`} style={{ width: 42, height: 42, borderRadius: 8, border: platform === 'copy' ? '1px solid var(--border)' : 0, background: bg, color: platform === 'copy' ? 'var(--text2)' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontFamily: 'inherit' }}>
-                    {platform === 'facebook' && <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5h2.2V5.1c-.4-.1-1.7-.1-3.2-.1-3.2 0-5.3 1.9-5.3 5.5v3.1H4.2v3.8h3.5V24h4.2v-6.6h3.4l.6-3.8h-4v-2.7c0-1.1.3-2.4 2.1-2.4Z"/></svg>}
-                    {platform === 'x' && <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.2 2h3.3l-7.2 8.2L22.8 22h-6.7l-5.2-6.8L4.9 22H1.6l7.7-8.8L1.2 2h6.8l4.7 6.2L18.2 2Zm-1.2 17.9h1.8L7 4H5.1l11.9 15.9Z"/></svg>}
-                    {platform === 'linkedin' && <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.34 8h4.32v14H.34V8Zm7.46 0h4.14v1.9H12c.58-1.1 2-2.25 4.12-2.25 4.4 0 5.22 2.9 5.22 6.67V22h-4.32v-6.8c0-1.62-.03-3.7-2.26-3.7-2.26 0-2.6 1.76-2.6 3.58V22H7.8V8Z"/></svg>}
-                    {platform === 'whatsapp' && <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.7 4.8Zm5.4-7.3c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 .1-.2.2-.4.2-.7.1-.3-.2-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6 0-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"/></svg>}
-                    {platform === 'reddit' && <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 11.8c0-1.5-1.2-2.7-2.7-2.7-.7 0-1.3.3-1.8.7-1.8-1.2-4.2-2-6.9-2.1l1.2-3.8 3.3.8c.1 1 1 1.8 2 1.8 1.1 0 2-.9 2-2s-.9-2-2-2c-.8 0-1.5.5-1.8 1.1l-4-1c-.3-.1-.6.1-.7.4l-1.5 4.7c-2.7.1-5.2.8-7 2.1-.5-.4-1.1-.7-1.8-.7C1.2 9.1 0 10.3 0 11.8c0 1 .6 1.9 1.4 2.4v.7c0 4 4.7 7.2 10.6 7.2s10.6-3.2 10.6-7.2v-.7c.8-.5 1.4-1.4 1.4-2.4ZM6.8 13.9c0-1 .8-1.8 1.8-1.8s1.8.8 1.8 1.8-.8 1.8-1.8 1.8-1.8-.8-1.8-1.8Zm9.2 4.5c-1 .9-2.6 1.3-4 1.3s-3-.4-4-1.3c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0 .7.6 2 .9 3.3.9s2.6-.3 3.3-.9c.2-.2.5-.2.7 0 .2.2.2.5 0 .7Zm-.6-2.7c-1 0-1.8-.8-1.8-1.8s.8-1.8 1.8-1.8 1.8.8 1.8 1.8-.8 1.8-1.8 1.8Z"/></svg>}
-                    {platform === 'copy' && <svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="5.5" y="5.5" width="10" height="10" rx="2" stroke="currentColor" strokeWidth="1.3"/><path d="M3.5 12.5H3A1.5 1.5 0 0 1 1.5 11V3A1.5 1.5 0 0 1 3 1.5h8A1.5 1.5 0 0 1 12.5 3v.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 900, color: 'var(--text)', marginBottom: 12 }}>On This Page</div>
-              <div className="flex flex-col gap-2 text-sm">
-                {[
-                  ...paycheckDocxSections.map((section) => [`#${section.id}`, section.title]),
-                ].map(([href, label]) => (
-                  <a key={href} href={href} style={{ color: 'var(--text2)', fontSize: 12.5, fontWeight: 700 }}>{label}</a>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Pay Frequency Guide</div>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
-                <tbody>
-                  {[
-                    ['Weekly', '52 / year'],
-                    ['Bi-Weekly', '26 / year'],
-                    ['Semi-Monthly', '24 / year'],
-                    ['Monthly', '12 / year'],
-                  ].map(([label, periods], index) => (
-                    <tr key={label} style={{ borderBottom: index === 3 ? 0 : '1px solid var(--border)' }}>
-                      <td style={{ padding: '8px 9px', fontWeight: 700, color: '#1a6fe8' }}>{label}</td>
-                      <td style={{ padding: '8px 9px', color: 'var(--text2)' }}>{periods}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', marginBottom: 14 }}>Example Calculations</div>
-              {[
-                ['Salary example', 'Annual salary', usd2(60000), 'Monthly take-home', usd2(60000 / 12)],
-                ['Hourly example', '$30 x 8 hrs/day', usd2(30 * 8 * 260 / 26), 'Bi-weekly gross', usd2(30 * 8 * 260 / 26)],
-              ].map(([title, labelA, valueA, labelB, valueB], index) => (
-                <div key={title} style={{ paddingBottom: index === 0 ? 12 : 0, borderBottom: index === 0 ? '1px solid var(--border)' : 0, marginBottom: index === 0 ? 12 : 0 }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--text)', marginBottom: 7 }}>{title}</div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 12, color: 'var(--text2)', marginBottom: 5 }}><span>{labelA}</span><span>{valueA}</span></div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, paddingTop: 5, borderTop: '1px solid var(--border)', marginTop: 4 }}><span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{labelB}</span><span style={{ fontSize: 13.5, fontWeight: 800, color: '#22c55e' }}>{valueB}</span></div>
-                </div>
-              ))}
-            </div>
-
-            <div data-paycheck-finance-card style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 12 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>Read About Finance</div>
-                <Link to="/blogs" style={{ fontSize: 11.5, fontWeight: 700, color: '#1a6fe8', whiteSpace: 'nowrap' }}>View all</Link>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-                {[
-                  ['Texas Paycheck Calculator Guide', '/blogs/texas-paycheck-calculator-guide', 'Estimate Texas net pay with federal taxes and no state income tax.'],
-                  ['Florida Paycheck Calculator Guide', '/blogs/florida-paycheck-calculator-guide', 'Understand Florida take-home pay, FICA, and paycheck planning.'],
-                  ['Salary Calculator Guide', '/blogs/salary-calculator-guide', 'Convert annual salary into monthly, biweekly, weekly, and hourly pay estimates.'],
-                ].map(([title, to, desc]) => (
-                  <Link key={to} to={to} style={{ display: 'grid', gridTemplateColumns: '34px 1fr', gap: 9, alignItems: 'start', padding: '12px 0', borderTop: '1px solid var(--border)' }}>
-                    <span style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(26,111,232,.10)', color: '#1a6fe8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <BarChart3 size={16} />
-                    </span>
-                    <span style={{ minWidth: 0 }}>
-                      <span style={{ display: 'block', fontSize: 12.2, lineHeight: 1.25, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>{title}</span>
-                      <span style={{ display: 'block', fontSize: 10.8, lineHeight: 1.35, color: 'var(--text3)' }}>{desc}</span>
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16, overflow: 'hidden' }}>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Payroll Snapshot</div>
-              <div style={{ height: 150, borderRadius: 10, background: 'linear-gradient(135deg,#0f172a 0%,#1a6fe8 58%,#22c55e 100%)', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="220" height="132" viewBox="0 0 220 132" fill="none" aria-hidden="true">
-                  <rect x="28" y="26" width="128" height="80" rx="14" fill="white" fillOpacity=".94" />
-                  <rect x="44" y="42" width="72" height="8" rx="4" fill="#1a6fe8" />
-                  <rect x="44" y="60" width="94" height="7" rx="3.5" fill="#cbd5e1" />
-                  <rect x="44" y="76" width="58" height="7" rx="3.5" fill="#cbd5e1" />
-                  <rect x="44" y="92" width="76" height="7" rx="3.5" fill="#22c55e" />
-                  <circle cx="158" cy="82" r="30" fill="#22c55e" />
-                  <text x="158" y="93" textAnchor="middle" fontSize="32" fill="white" fontWeight="900">$</text>
-                  <path d="M154 32c18 4 33 18 38 36" stroke="#93c5fd" strokeWidth="5" strokeLinecap="round" strokeDasharray="8 8" />
-                  <circle cx="54" cy="112" r="12" fill="#fbbf24" />
-                </svg>
-              </div>
-              <div style={{ marginTop: 12, display: 'grid', gap: 8 }}>
-                {[
-                  ['Gross Pay', usd2(r.grossPer), '#0ea5e9'],
-                  ['Taxes', usd2(paycheckTaxesPer), '#f59e0b'],
-                  ['Take Home', usd2(r.netPer), '#22c55e'],
-                ].map(([label, value, color]) => (
-                  <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, fontSize: 12.5 }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, color: 'var(--text2)', fontWeight: 700 }}><span style={{ width: 8, height: 8, borderRadius: 99, background: color }} />{label}</span>
-                    <span style={{ color: 'var(--text)', fontWeight: 800 }}>{value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.30)', borderRadius: 10, padding: 16, display: 'flex', gap: 12, alignItems: 'flex-start', marginTop: 'auto' }}>
-              <div style={{ width: 44, height: 44, background: '#22c55e', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg width="24" height="24" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M13 2.5L4.5 7v5.5c0 5 3.5 9.7 8.5 10.8 5-1.1 8.5-5.8 8.5-10.8V7L13 2.5z" fill="white" fillOpacity="0.25" stroke="white" strokeWidth="1.5"/><path d="M9 13l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </div>
-              <div>
-                <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', marginBottom: 5 }}>Accuracy You Can Trust</div>
-                <div style={{ fontSize: 12, color: 'var(--text2)', lineHeight: 1.6 }}>Based on the current paycheck inputs and the existing federal, state, and FICA estimate logic.</div>
-              </div>
-            </div>
-          </aside>
         </section>
-
-        <section style={{ marginTop: 40, paddingBottom: 10 }}>
+        <section className="paycheck-cyp-related">
           <h2 style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>Related Calculators</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
             {[
@@ -4137,7 +3512,7 @@ function PaycheckCalculatorPage({ isDark }) {
                 </div>
                 <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{title}</div>
                 <div style={{ fontSize: 11.5, color: 'var(--text3)', lineHeight: 1.4, marginBottom: 9 }}>{desc}</div>
-                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)' }}>Calculate →</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)' }}>Calculate ?</span>
               </Link>
             ))}
           </div>
@@ -4862,7 +4237,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
               <div className="flex flex-wrap gap-3">
                 {['Instant Results', '2026 Ready', `${stateName} Rules`, 'No Sign Up'].map((tag) => (
                   <span key={tag} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: '#16a34a', fontWeight: 800 }}>
-                    <span style={{ width: 15, height: 15, borderRadius: 99, background: '#22c55e', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }}>✓</span>
+                    <span style={{ width: 15, height: 15, borderRadius: 99, background: '#22c55e', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }}>?</span>
                     {tag}
                   </span>
                 ))}
@@ -5144,7 +4519,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
                   'Pre-tax, post-tax, insurance, and local fields only appear where the existing logic supports them.',
                   'Actual payroll withholding can vary based on W-4, employer setup, benefits, and local rules.',
                 ].map((note) => (
-                  <li key={note} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13.5, color: 'var(--text2)' }}><span style={{ marginTop: 3, color: 'var(--text2)', flexShrink: 0 }}>•</span>{note}</li>
+                  <li key={note} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13.5, color: 'var(--text2)' }}><span style={{ marginTop: 3, color: 'var(--text2)', flexShrink: 0 }}>�</span>{note}</li>
                 ))}
               </ul>
             </article>
@@ -5338,7 +4713,7 @@ function StatePaycheckCalculatorPage({ isDark, stateName }) {
                 </div>
                 <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{title}</div>
                 <div style={{ fontSize: 11.5, color: 'var(--text3)', lineHeight: 1.4, marginBottom: 9 }}>{desc}</div>
-                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)' }}>Calculate →</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)' }}>Calculate ?</span>
               </Link>
             ))}
           </div>
@@ -7312,14 +6687,14 @@ export default function App() {
         canonicalPath: '/overtime',
       },
       '/salary-calculator': {
-        title: 'Salary Calculator: Hourly, Weekly & Annual Pay Converter',
-        description: 'Use our free Salary Calculator to convert hourly, daily, weekly, monthly, and annual pay. Estimate gross and net income and plan your budget with confidence.',
+        title: 'Salary Calculator 2026 — See Your Real Take-Home Pay | CheckYourPays',
+        description: 'Turn your annual, monthly, or hourly salary into what actually lands in your account. Free salary calculator with federal, state, and FICA taxes — no sign-up.',
         keywords: 'Salary calculator',
         canonicalPath: '/salary-calculator',
       },
       '/paycheck-calculator': {
-        title: 'Paycheck Calculator - Estimate Your Take-Home Pay Fast',
-        description: 'Estimate your take-home pay with our free paycheck calculator, covering federal tax, state tax, FICA, overtime, bonus, and 401(k) or insurance deductions.',
+        title: 'Paycheck Calculator — Hourly & Overtime Take-Home Pay | CheckYourPays',
+        description: 'Calculate your paycheck from an hourly wage, including overtime and bonus pay. Free paycheck calculator with a full pay stub breakdown — no sign-up.',
         keywords: 'Paycheck Calculator',
         canonicalPath: '/paycheck-calculator',
       },
@@ -7615,75 +6990,7 @@ export default function App() {
           <Route path="/blogs/:slug" element={<BlogPost isDark={isDark} />} />
         </Routes>
       </Suspense>
-      {!isHome && <footer className="obba-site-footer">
-        <div className="mx-auto grid max-w-7xl gap-7 px-8 pt-12 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr]">
-          <div>
-            <div className="flex items-center gap-2.5">
-              <img src="/logo.png" alt="OBBA" className="h-[38px] w-[38px] rounded-[10px] object-cover" />
-              <span className="flex flex-col leading-none">
-                <span className="text-[17px] font-extrabold text-white">OBBA</span>
-                <span className="text-[9px] font-semibold tracking-[1.5px] text-slate-400">CALCULATORS</span>
-              </span>
-            </div>
-            <p className="mt-4 max-w-[260px] text-[13px] leading-6 text-slate-400">Your trusted source for free online tax and financial calculators. Accurate, fast and easy to use.</p>
-            <div className="mt-5 flex items-center gap-2.5">
-              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${SITE_URL}/`)}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share OBBA Calculators on Facebook" title="Share OBBA Calculators on Facebook" className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#1877f2] text-white">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5h2.2V5.1c-.4-.1-1.7-.1-3.2-.1-3.2 0-5.3 1.9-5.3 5.5v3.1H4.2v3.8h3.5V24h4.2v-6.6h3.4l.6-3.8h-4v-2.7c0-1.1.3-2.4 2.1-2.4Z"/></svg>
-              </a>
-              <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`${SITE_URL}/`)}&text=${encodeURIComponent('See your real take-home pay in seconds with OBBA Calculators - paycheck, salary, overtime, state taxes, and money-saving tools in one modern view || OBBACALCULATORS.COM')}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share OBBA Calculators on X" title="Share OBBA Calculators on X" className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#111827] text-white">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.2 2h3.3l-7.2 8.2L22.8 22h-6.7l-5.2-6.8L4.9 22H1.6l7.7-8.8L1.2 2h6.8l4.7 6.2L18.2 2Zm-1.2 17.9h1.8L7 4H5.1l11.9 15.9Z"/></svg>
-              </a>
-              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${SITE_URL}/`)}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share OBBA Calculators on LinkedIn" title="Share OBBA Calculators on LinkedIn" className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#0a66c2] text-white">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.34 8h4.32v14H.34V8Zm7.46 0h4.14v1.9H12c.58-1.1 2-2.25 4.12-2.25 4.4 0 5.22 2.9 5.22 6.67V22h-4.32v-6.8c0-1.62-.03-3.7-2.26-3.7-2.26 0-2.6 1.76-2.6 3.58V22H7.8V8Z"/></svg>
-              </a>
-              <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${SITE_URL}/`)}%20${encodeURIComponent('See your real take-home pay in seconds with OBBA Calculators - paycheck, salary, overtime, state taxes, and money-saving tools in one modern view || OBBACALCULATORS.COM')}`} target="_blank" rel="nofollow noopener noreferrer" aria-label="Share OBBA Calculators on WhatsApp" title="Share OBBA Calculators on WhatsApp" className="flex h-[30px] w-[30px] items-center justify-center rounded-[7px] bg-[#25d366] text-white">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.6 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1c-1.8 0-3.6-.5-5.1-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 1 1 8.7 4.8Zm5.4-7.3c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.8.9-1 .1-.2.2-.4.2-.7.1-.3-.2-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6 0-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"/></svg>
-              </a>
-            </div>
-          </div>
-          <div>
-            <h5 className="text-sm font-bold text-white">Calculators</h5>
-            <div className="mt-3.5 flex flex-col gap-2.5 text-[13px] text-slate-400">
-              <Link to="/salary-calculator" className="hover:text-white">Salary</Link>
-              <Link to="/paycheck-calculator" className="hover:text-white">Paycheck</Link>
-              <Link to="/overtime" className="hover:text-white">Overtime</Link>
-              <Link to="/paycheck-calculator" className="hover:text-white">Payroll &amp; Deductions</Link>
-              <Link to="/states" className="hover:text-white">States Calculators</Link>
-              <Link to="/" className="hover:text-white">All Calculators</Link>
-            </div>
-          </div>
-          <div>
-            <h5 className="text-sm font-bold text-white">Resources</h5>
-            <div className="mt-3.5 flex flex-col gap-2.5 text-[13px] text-slate-400">
-              <Link to="/blogs" className="hover:text-white">Blog</Link>
-              <Link to="/faq" className="hover:text-white">FAQ</Link>
-              <Link to="/paycheck-calculator" className="hover:text-white">Tax Brackets 2026</Link>
-              <Link to="/states" className="hover:text-white">State Tax Guide</Link>
-            </div>
-          </div>
-          <div>
-            <h5 className="text-sm font-bold text-white">Company</h5>
-            <div className="mt-3.5 flex flex-col gap-2.5 text-[13px] text-slate-400">
-              <Link to="/about-us" className="hover:text-white">About Us</Link>
-              <Link to="/contact-us" className="hover:text-white">Contact Us</Link>
-              <Link to="/privacy-policy" className="hover:text-white">Privacy Policy</Link>
-              <Link to="/terms-conditions" className="hover:text-white">Terms of Use</Link>
-            </div>
-          </div>
-          <div>
-            <h5 className="text-sm font-bold text-white">Support</h5>
-            <div className="mt-3.5 flex flex-col gap-2.5 text-[13px] text-slate-400">
-              <Link to="/faq" className="hover:text-white">FAQ</Link>
-              <Link to="/contact-us" className="hover:text-white">Help Center</Link>
-              <Link to="/contact-us" className="hover:text-white">Suggest Calculator</Link>
-              <Link to="/contact-us" className="hover:text-white">Report an Issue</Link>
-            </div>
-          </div>
-        </div>
-        <div className="mx-auto mt-8 flex max-w-7xl items-center justify-center border-t border-[#1e2a4d] px-8 py-4 text-center">
-          <span className="text-xs text-slate-400">© 2026 OBBA Calculators. All rights reserved.</span>
-        </div>
-      </footer>}
+      {!isHome && <CheckYourPaysFooter />}
       <EmailUpdatesPopup />
     </div>
   );

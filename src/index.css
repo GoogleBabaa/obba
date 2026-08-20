@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 :root {
   font-family: "Plus Jakarta Sans", "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -50,7 +50,11 @@ body {
   html.overtime-dc-scroll,
   html.overtime-dc-scroll body,
   html.overtime-dc-scroll #root,
-  html.overtime-dc-scroll .obba-theme {
+  html.overtime-dc-scroll .obba-theme,
+  html:has(.paycheck-cyp-wrap),
+  html:has(.paycheck-cyp-wrap) body,
+  html:has(.paycheck-cyp-wrap) #root,
+  html:has(.paycheck-cyp-wrap) .obba-theme {
     overflow: visible;
   }
 }

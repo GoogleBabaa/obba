@@ -1,4 +1,4 @@
-export const paycheckCalculatorSchema = {
+﻿export const paycheckCalculatorSchema = {
   '@context': 'https://schema.org',
   '@graph': [
     {
@@ -23,8 +23,8 @@ export const paycheckCalculatorSchema = {
       '@type': 'WebPage',
       '@id': 'https://www.obbacalculators.com/paycheck-calculator#webpage',
       url: 'https://www.obbacalculators.com/paycheck-calculator',
-      name: 'Salary Paycheck Calculator - Estimate Your Take-Home Pay',
-      description: 'A Salary Paycheck Calculator estimates take-home pay after federal taxes, state taxes, FICA, and deductions. Enter salary, pay frequency, and filing status for a clear net pay estimate.',
+      name: 'Paycheck Calculator — Hourly & Overtime Take-Home Pay | CheckYourPays',
+      description: 'Calculate your paycheck from an hourly wage, including overtime and bonus pay. Free paycheck calculator with a full pay stub breakdown — no sign-up.',
       isPartOf: {
         '@id': 'https://www.obbacalculators.com/#website',
       },
@@ -45,9 +45,9 @@ export const paycheckCalculatorSchema = {
     {
       '@type': 'SoftwareApplication',
       '@id': 'https://www.obbacalculators.com/paycheck-calculator#software',
-      name: 'Salary Paycheck Calculator',
+      name: 'Paycheck Calculator',
       url: 'https://www.obbacalculators.com/paycheck-calculator',
-      description: 'A Salary Paycheck Calculator estimates take-home pay after federal taxes, state taxes, FICA, and deductions. Enter salary, pay frequency, and filing status for a clear net pay estimate.',
+      description: 'Calculate your paycheck from an hourly wage, including overtime and bonus pay. Free paycheck calculator with a full pay stub breakdown — no sign-up.',
       applicationCategory: 'FinanceApplication',
       applicationSubCategory: 'Paycheck Calculator',
       operatingSystem: 'Any (Web-based)',

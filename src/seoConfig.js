@@ -1,4 +1,4 @@
-import { blogPosts } from './blogData.js';
+﻿import { blogPosts } from './blogData.js';
 
 export const SITE_URL = 'https://www.obbacalculators.com';
 
@@ -10,20 +10,20 @@ export const pageSeoByPath = {
     canonicalPath: '/',
   },
   '/overtime': {
-    title: 'Use the No Tax on Overtime Calculator to Maximize Earnings',
-    description: 'Use our No Tax on Overtime Calculator to estimate federal overtime deductions, understand FLSA overtime rules, plan take-home pay, and optimize tax strategy under 2025-2028 OBBBA limits.',
+    title: 'Overtime Calculator, Time and a Half & Double Time Pay | CheckYourPays',
+    description: 'Calculate your overtime pay, time and a half, double time, and total gross pay — from your hourly rate and hours worked. Free, instant, no sign-up.',
     keywords: 'Overtime Calculator',
     canonicalPath: '/overtime',
   },
   '/salary-calculator': {
-    title: 'Salary Calculator - Convert Hourly, Monthly & Annual Pay',
-    description: 'Use our Salary Calculator to convert hourly, weekly, monthly, and annual pay into clear income estimates for USA workers.',
+    title: 'Salary Calculator 2026 — See Your Real Take-Home Pay | CheckYourPays',
+    description: 'Turn your annual, monthly, or hourly salary into what actually lands in your account. Free salary calculator with federal, state, and FICA taxes — no sign-up.',
     keywords: 'Salary calculator',
     canonicalPath: '/salary-calculator',
   },
   '/paycheck-calculator': {
-    title: 'Salary Paycheck Calculator - Estimate Your Take-Home Pay',
-    description: 'A Salary Paycheck Calculator estimates take-home pay after federal taxes, state taxes, FICA, and deductions. Enter salary, pay frequency, and filing status for a clear net pay estimate.',
+    title: 'Paycheck Calculator — Hourly & Overtime Take-Home Pay | CheckYourPays',
+    description: 'Calculate your paycheck from an hourly wage, including overtime and bonus pay. Free paycheck calculator with a full pay stub breakdown — no sign-up.',
     keywords: 'Paycheck Calculator',
     canonicalPath: '/paycheck-calculator',
   },
