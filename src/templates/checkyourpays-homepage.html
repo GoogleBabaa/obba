@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CheckYourPays — Salary, Paycheck, Overtime & Freelance Tax Calculators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2F5FE3; --blue-dark:#1E3FAE; --blue-light:#5C82F0;
+    --navy:#0E1B33; --navy-2:#16264A;
+    --sky:#EEF3FE; --sky-2:#DCE6FD;
+    --ink:#16213A; --muted:#68708A; --white:#FFFFFF;
+    --green:#1FAE6B; --line:#E4E9F5;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--white); color:var(--ink); font-family:'Plus Jakarta Sans',sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  h1,h2,h3{ font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; margin:0; letter-spacing:-0.01em; }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  a{ color:inherit; text-decoration:none; }
+  img,svg{ display:block; max-width:100%; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; position:relative; }
+  :focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); font-weight:600; }
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} .reveal{opacity:1; transform:none; transition:none;} }
+
+  .btn{ display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:8px; border:1px solid transparent; transition:all .15s ease; }
+  .btn-primary{ background:var(--blue); color:#fff; }
+  .btn-primary:hover{ background:var(--blue-dark); transform:translateY(-2px); box-shadow:0 10px 22px rgba(47,95,227,0.28); }
+  .btn-ghost{ background:#fff; color:var(--ink); border-color:var(--line); }
+  .btn-ghost:hover{ border-color:var(--blue); color:var(--blue); }
+  .btn-dark{ background:#fff; color:var(--navy); }
+  .btn-dark:hover{ background:var(--sky); }
+
+  .topbar{ background:var(--navy); color:#B9C3DA; font-size:13px; }
+  .topbar .wrap{ display:flex; justify-content:space-between; align-items:center; padding:9px 28px; flex-wrap:wrap; gap:8px; }
+  .topbar .left{ display:flex; gap:22px; align-items:center; }
+  .topbar .right a{ color:#B9C3DA; }
+  .topbar .right a:hover{ color:#fff; }
+
+  header{ position:sticky; top:0; z-index:80; background:#fff; border-bottom:1px solid var(--line); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
+  .logo{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:19.5px; color:var(--ink); }
+  .logo .box{ width:30px; height:30px; border-radius:8px; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:700; }
+  .navlinks{ display:flex; gap:26px; align-items:center; list-style:none; margin:0; padding:0; }
+  .navlinks a{ font-size:14px; font-weight:600; color:var(--ink); transition:color .15s ease; }
+  .navlinks a:hover{ color:var(--blue); }
+  .menu-btn{ display:none; background:none; border:1px solid var(--line); padding:8px 10px; border-radius:6px; cursor:pointer; }
+  .menu-btn span{ display:block; width:18px; height:2px; background:var(--ink); margin:3px 0; }
+
+  .hero{ background:var(--sky); position:relative; overflow:hidden; padding:64px 0 0; }
+  .dotgrid{ position:absolute; inset:0; background-image:radial-gradient(circle, #C6D4FA 1.4px, transparent 1.4px); background-size:22px 22px; opacity:.5; pointer-events:none; }
+  .ring{ position:absolute; border:2px dashed #C6D4FA; border-radius:50%; pointer-events:none; }
+  .hero-grid{ display:grid; grid-template-columns:1fr 0.95fr; gap:40px; align-items:center; position:relative; z-index:2; padding-bottom:70px; }
+  .hero h1{ font-size:clamp(33px,4.1vw,48px); line-height:1.12; color:var(--navy); }
+  .hero h1 .hl{ color:var(--blue); }
+  .hero p.lead{ margin:20px 0 28px; font-size:16.5px; line-height:1.65; color:var(--muted); max-width:46ch; }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-play{ display:inline-flex; align-items:center; gap:10px; font-weight:700; font-size:14.5px; color:var(--ink); }
+  .play-circle{ width:38px; height:38px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(14,27,51,0.12); }
+
+  .hero-visual{ position:relative; height:420px; }
+  .stack-card{ position:absolute; background:#fff; border-radius:16px; box-shadow:0 20px 50px -20px rgba(14,27,51,0.25); padding:22px; }
+  .card-a{ width:78%; top:10px; left:0; z-index:1; }
+  .card-a .bar{ height:10px; border-radius:6px; background:var(--sky-2); margin-bottom:10px; }
+  .card-a .bar.w1{ width:90%; } .card-a .bar.w2{ width:65%; } .card-a .bar.w3{ width:80%; background:var(--blue); opacity:.25; }
+  .card-a .chart{ display:flex; align-items:flex-end; gap:6px; height:70px; margin-top:16px; }
+  .card-a .chart i{ flex:1; background:linear-gradient(180deg,var(--blue-light),var(--blue)); border-radius:4px 4px 0 0; }
+
+  .float-card{ position:absolute; right:-6px; top:210px; width:250px; z-index:3; background:#fff; border-radius:16px; box-shadow:0 24px 50px -16px rgba(14,27,51,0.3); padding:22px; }
+  .float-card .ft-title{ font-size:12px; color:var(--muted); font-weight:600; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
+  .float-card .ft-title span.dot{ width:8px; height:8px; border-radius:50%; background:var(--green); display:inline-block; margin-right:6px; }
+  .slider-row{ margin-bottom:16px; }
+  .slider-row label{ font-size:12px; color:var(--muted); display:block; margin-bottom:8px; }
+  input[type=range]{ width:100%; accent-color:var(--blue); }
+  select{ width:100%; font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; padding:8px 10px; border-radius:6px; border:1px solid var(--line); background:#fff; color:var(--ink); margin-top:6px; }
+  .float-amt{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink); font-weight:600; margin-top:6px; }
+  .plan-row{ display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+  .plan-row .lbl{ font-size:12px; color:var(--muted); }
+  .plan-row .amt{ font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:700; color:var(--blue); }
+  .plan-row .arrow{ width:36px; height:36px; border-radius:50%; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; }
+
+  .mini-blob{ position:absolute; border-radius:50%; z-index:0; }
+  .blob-1{ width:120px; height:120px; background:var(--sky-2); left:-30px; bottom:20px; }
+  .blob-2{ width:60px; height:60px; border:2px dashed var(--blue-light); right:40px; top:-10px; }
+
+  .stats-strip{ background:#fff; border-top:1px solid var(--line); position:relative; z-index:2; }
+  .stats-row{ display:flex; padding:34px 0; }
+  .stat{ flex:1; display:flex; gap:14px; align-items:center; padding:0 20px; border-left:1px solid var(--line); }
+  .stat:first-child{ border-left:none; padding-left:0; }
+  .stat .ic{ width:44px; height:44px; border-radius:10px; background:var(--sky); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .stat .num{ font-family:'IBM Plex Mono',monospace; font-size:21px; font-weight:700; color:var(--navy); }
+  .stat .lbl{ font-size:12.5px; color:var(--muted); margin-top:2px; }
+
+  section.block{ padding:84px 0; position:relative; }
+  .section-head{ text-align:center; max-width:680px; margin:0 auto 50px; }
+  .section-head .eyebrow{ display:block; margin-bottom:10px; }
+  .section-head h2{ font-size:clamp(26px,3.2vw,36px); color:var(--navy); }
+  .section-head p{ color:var(--muted); margin-top:12px; font-size:15.5px; }
+
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+  .about-copy p{ color:var(--muted); font-size:15.5px; line-height:1.75; margin-bottom:16px; }
+  .about-cta{ display:flex; align-items:center; gap:22px; margin-top:26px; flex-wrap:wrap; }
+  .about-cta .phone{ display:flex; gap:12px; align-items:center; }
+  .about-cta .phone .ic{ width:42px; height:42px; border-radius:50%; background:var(--sky); display:flex; align-items:center; justify-content:center; }
+  .about-cta .phone .lbl{ font-size:12px; color:var(--muted); }
+  .about-cta .phone .val{ font-weight:700; font-size:14.5px; color:var(--navy); }
+
+  .about-visual{ position:relative; height:400px; }
+  .av-card{ position:absolute; border-radius:16px; box-shadow:0 20px 45px -18px rgba(14,27,51,0.28); overflow:hidden; }
+  .av-1{ width:62%; height:320px; left:0; top:0; background:linear-gradient(160deg,var(--navy) 0%, var(--blue-dark) 60%, var(--blue) 100%); padding:26px; color:#fff; }
+  .av-1 .tag{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#AFC0F5; }
+  .av-1 h4{ font-size:19px; margin-top:10px; line-height:1.35; }
+  .av-1 .form-lines{ margin-top:26px; }
+  .av-1 .form-lines .row{ display:flex; justify-content:space-between; font-size:12px; color:#C7D3FA; padding:9px 0; border-top:1px solid rgba(255,255,255,0.14); }
+  .av-1 .form-lines .row:first-child{ border-top:none; }
+  .av-2{ width:56%; height:200px; right:0; bottom:0; background:#fff; padding:22px; }
+  .av-2 .tag{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; }
+  .av-2 .chart2{ display:flex; align-items:flex-end; gap:5px; height:90px; margin-top:14px; }
+  .av-2 .chart2 i{ flex:1; background:var(--sky-2); border-radius:3px 3px 0 0; }
+  .av-2 .chart2 i:last-child{ background:var(--blue); }
+  .about-ring{ position:absolute; width:150px; height:150px; border:2px dashed var(--sky-2); border-radius:50%; right:-30px; top:-30px; z-index:-1; }
+
+  /* category grid — 6 cards */
+  .cat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .cat-card{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:26px 24px; transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; position:relative; }
+  .cat-card:hover{ transform:translateY(-6px); box-shadow:0 24px 44px -22px rgba(14,27,51,0.25); border-color:transparent; }
+  .cat-card.new::before{
+    content:"New"; position:absolute; top:18px; right:18px; background:var(--green); color:#fff;
+    font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:.03em;
+  }
+  .cat-icon{ width:48px; height:48px; border-radius:12px; background:var(--sky); display:flex; align-items:center; justify-content:center; margin-bottom:16px; font-size:20px; }
+  .cat-card h3{ font-size:17.5px; color:var(--navy); margin-bottom:8px; }
+  .cat-card p{ font-size:13.5px; color:var(--muted); line-height:1.55; margin-bottom:14px; }
+  .cat-count{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--blue); font-weight:700; }
+
+  /* popular tools list */
+  .tool-list{ border-top:1px solid var(--line); margin-top:10px; }
+  .tool-row{ display:grid; grid-template-columns:44px 1fr auto; gap:18px; align-items:center; padding:20px 4px; border-bottom:1px solid var(--line); transition:background .15s ease; }
+  .tool-row:hover{ background:var(--sky); }
+  .tool-num{ font-family:'IBM Plex Mono',monospace; color:var(--blue); font-size:14px; }
+  .tool-name{ font-weight:700; font-size:16px; color:var(--navy); }
+  .tool-desc{ font-size:13px; color:var(--muted); margin-top:3px; }
+  .tool-cta{ font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:700; color:var(--blue); white-space:nowrap; }
+
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .checklist{ list-style:none; margin:22px 0 0; padding:0; }
+  .checklist li{ display:flex; gap:12px; align-items:flex-start; font-size:15px; color:var(--ink); padding:10px 0; }
+  .checklist li .chk{ width:22px; height:22px; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+
+  .why-visual{ display:flex; flex-direction:column; gap:22px; }
+  .wv-card{
+    background:linear-gradient(160deg,var(--navy) 0%, var(--blue-dark) 65%, var(--blue) 100%);
+    border-radius:18px; padding:36px 30px; color:#fff; box-shadow:0 24px 50px -20px rgba(14,27,51,0.4);
+  }
+  .wv-path{ display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; }
+  .wv-node{ display:flex; flex-direction:column; align-items:center; gap:8px; font-size:13px; font-weight:600; color:#DCE6FD; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16); border-radius:12px; padding:16px 18px; min-width:120px; }
+  .wv-ic{ font-size:24px; }
+  .wv-line{ width:36px; height:2px; background:rgba(255,255,255,0.25); flex-shrink:0; }
+  .wv-arrow{ text-align:center; font-size:20px; color:var(--blue-light); margin:18px 0; }
+  .wv-result{ display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16); border-radius:12px; padding:16px 18px; }
+  .wv-check{ width:34px; height:34px; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:700; }
+  .wv-result-title{ font-weight:700; font-size:14.5px; }
+  .wv-result-sub{ font-size:12.5px; color:#B9C3DA; margin-top:2px; }
+  .why-cta{
+    display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap;
+    background:var(--sky); border:1px solid var(--sky-2); border-radius:16px; padding:22px 26px;
+  }
+  .why-cta-title{ font-weight:700; font-size:15px; color:var(--navy); }
+  .why-cta-sub{ font-size:13px; color:var(--muted); margin-top:4px; }
+
+  .state-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
+  .state-pill{ display:flex; justify-content:space-between; align-items:center; border:1px solid var(--line); border-radius:10px; padding:13px 16px; background:#fff; font-size:14px; font-weight:600; color:var(--ink); transition:border-color .15s ease, background .15s ease, transform .15s ease; }
+  .state-pill:hover{ border-color:var(--blue); background:var(--sky); transform:translateY(-2px); }
+  .state-pill span{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); }
+  .states-more{ margin-top:20px; text-align:center; font-size:13.5px; }
+  .states-more a{ color:var(--blue); font-weight:700; }
+
+  .blog-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+  .blog-card{ border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#fff; transition:transform .18s ease, box-shadow .18s ease; }
+  .blog-card:hover{ transform:translateY(-5px); box-shadow:0 22px 40px -22px rgba(14,27,51,0.25); }
+  .blog-media{ height:150px; background:linear-gradient(135deg,var(--sky),var(--sky-2)); position:relative; display:flex; align-items:center; justify-content:center; }
+  .blog-media .bnum{ font-family:'IBM Plex Mono',monospace; font-size:38px; font-weight:700; color:rgba(47,95,227,0.18); }
+  .blog-body{ padding:20px 20px 24px; }
+  .blog-tags{ display:flex; gap:8px; margin-bottom:12px; }
+  .blog-tag{ font-size:11px; font-weight:700; color:var(--blue); background:var(--sky); padding:4px 9px; border-radius:20px; }
+  .blog-body h3{ font-size:16px; color:var(--navy); line-height:1.4; margin-bottom:12px; }
+  .blog-meta{ font-size:12px; color:var(--muted); display:flex; justify-content:space-between; }
+
+  .counter-section{ background:var(--navy); position:relative; overflow:hidden; padding:76px 0; }
+  .counter-section .dotgrid{ background-image:radial-gradient(circle, rgba(255,255,255,0.14) 1.4px, transparent 1.4px); opacity:1; }
+  .counter-row{ display:flex; justify-content:space-between; position:relative; z-index:2; flex-wrap:wrap; gap:30px; }
+  .counter-item{ text-align:center; flex:1; min-width:150px; }
+  .counter-circle{ width:96px; height:96px; border-radius:50%; border:2px solid rgba(255,255,255,0.25); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:700; color:#fff; position:relative; }
+  .counter-circle::after{ content:""; position:absolute; inset:-6px; border-radius:50%; border:1px dashed rgba(92,130,240,0.5); }
+  .counter-item p{ color:#B9C3DA; font-size:13.5px; max-width:20ch; margin:0 auto; }
+  .counter-line{ position:absolute; top:48px; left:0; right:0; height:1px; background:repeating-linear-gradient(90deg,rgba(255,255,255,0.2) 0 10px,transparent 10px 20px); z-index:1; }
+
+  .testi-wrap{ max-width:720px; margin:0 auto; text-align:center; }
+  .testi-avatars{ display:flex; justify-content:center; align-items:center; gap:22px; margin-bottom:28px; }
+  .avatar{ border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; font-family:'IBM Plex Mono',monospace; }
+  .avatar.sm{ width:44px; height:44px; font-size:13px; opacity:.5; }
+  .avatar.lg{ width:64px; height:64px; font-size:17px; box-shadow:0 12px 26px -10px rgba(47,95,227,0.5); }
+  .testi-quote{ font-size:19px; line-height:1.6; color:var(--ink); font-weight:500; margin-bottom:22px; }
+  .testi-who{ font-weight:700; color:var(--navy); font-size:14.5px; }
+  .testi-role{ font-size:13px; color:var(--muted); }
+
+  .faq-list{ max-width:820px; margin:0 auto; }
+  .faq-item{ border-bottom:1px solid var(--line); padding:20px 0; }
+  .faq-item h4{ font-size:15.5px; color:var(--navy); margin-bottom:8px; }
+  .faq-item p{ font-size:14px; color:var(--muted); line-height:1.65; margin:0; }
+
+  .cta-band{ background:var(--navy); position:relative; overflow:hidden; padding:70px 0; text-align:center; }
+  .cta-band .dotgrid{ background-image:radial-gradient(circle, rgba(255,255,255,0.12) 1.4px, transparent 1.4px); opacity:1; }
+  .cta-band h2{ color:#fff; font-size:clamp(24px,3.2vw,34px); max-width:24ch; margin:0 auto 24px; position:relative; z-index:2; }
+  .cta-band .btn{ position:relative; z-index:2; }
+
+  footer{ background:var(--navy-2); color:#B9C3DA; padding-top:56px; }
+  .foot-top{ display:flex; gap:24px; flex-wrap:wrap; justify-content:space-between; padding-bottom:40px; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:44px; }
+  .foot-item{ display:flex; gap:12px; align-items:center; }
+  .foot-item .ic{ width:42px; height:42px; border-radius:10px; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .foot-item .lbl{ font-size:11.5px; color:#8B96B5; }
+  .foot-item .val{ font-size:14px; font-weight:700; color:#fff; }
+  .foot-grid{ display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:32px; padding-bottom:40px; }
+  .foot-col h4{ font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#8B96B5; margin-bottom:16px; }
+  .foot-col ul{ list-style:none; padding:0; margin:0; }
+  .foot-col li{ margin-bottom:11px; }
+  .foot-col a{ font-size:14px; color:#D6DEF5; }
+  .foot-col a:hover{ color:#fff; }
+  .foot-logo{ font-weight:800; font-size:19.5px; color:#fff; display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .foot-col p{ font-size:13.5px; color:#8B96B5; line-height:1.7; max-width:30ch; }
+  .foot-widget{ background:rgba(255,255,255,0.06); border-radius:12px; padding:16px; margin-top:18px; }
+  .foot-widget .lbl{ font-size:11px; color:#8B96B5; margin-bottom:4px; }
+  .foot-widget .val{ font-family:'IBM Plex Mono',monospace; font-weight:700; color:#fff; font-size:15px; }
+  .foot-bottom{ border-top:1px solid rgba(255,255,255,0.1); padding:22px 0; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:13px; color:#8B96B5; }
+  .social{ display:flex; gap:10px; }
+  .social a{ width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; }
+
+  @media (max-width:900px){
+    .navlinks{ display:none; }
+    .menu-btn{ display:block; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-visual{ height:340px; margin-top:20px; }
+    .stats-row{ flex-wrap:wrap; }
+    .stat{ flex:1 1 50%; border-left:none; padding:14px 0; }
+    .about-grid{ grid-template-columns:1fr; }
+    .cat-grid{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+    .why-cta{ flex-direction:column; align-items:flex-start; }
+    .blog-grid{ grid-template-columns:1fr; }
+    .counter-row{ justify-content:center; }
+    .foot-grid{ grid-template-columns:1fr 1fr; }
+    .topbar .left{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="left">
+      <span>✓ 100% free</span>
+      <span>✓ No sign-up</span>
+      <span>✓ Updated for 2026</span>
+    </div>
+    <div class="right"><span>support@checkyourpays.com</span></div>
+  </div>
+</div>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo"><span class="box">C</span>CheckYourPays</a>
+    <ul class="navlinks">
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#tools">Calculators</a></li>
+      <li><a href="#states">By State</a></li>
+      <li><a href="#blog">Blog</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div style="display:flex; gap:12px; align-items:center;">
+      <a href="#tools" class="btn btn-primary">Open a calculator →</a>
+      <button class="menu-btn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="dotgrid"></div>
+    <div class="ring" style="width:260px; height:260px; top:-60px; right:6%;"></div>
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="reveal in">
+          <span class="eyebrow">Pay &amp; tax calculators, all in one place</span>
+          <h1 style="margin-top:14px;">Know exactly what<br>lands in <span class="hl">your account.</span></h1>
+          <p class="lead">Salary, hourly paycheck, overtime, and state-by-state take-home pay — plus calculators for freelancers and 1099 earners who don't fit the standard paycheck model.</p>
+          <div class="hero-ctas">
+            <a href="#tools" class="btn btn-primary">Check my take-home pay →</a>
+            <a href="#categories" class="btn-play"><span class="play-circle">▶</span> Browse categories</a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="mini-blob blob-1"></div>
+          <div class="mini-blob blob-2"></div>
+          <div class="stack-card card-a">
+            <div class="bar w1"></div>
+            <div class="bar w2"></div>
+            <div class="bar w3"></div>
+            <div class="chart">
+              <i style="height:35%"></i><i style="height:55%"></i><i style="height:40%"></i>
+              <i style="height:70%"></i><i style="height:50%"></i><i style="height:85%"></i>
+            </div>
+          </div>
+          <div class="float-card">
+            <div class="ft-title"><span><span class="dot"></span>Quick check</span><span>2026</span></div>
+            <div class="slider-row">
+              <label for="payType">I'm paid as</label>
+              <select id="payType">
+                <option value="w2">Salaried employee (W-2)</option>
+                <option value="1099">Freelancer / 1099</option>
+              </select>
+            </div>
+            <div class="slider-row">
+              <label for="heroSlider">Gross annual income</label>
+              <input type="range" id="heroSlider" min="20000" max="200000" step="1000" value="70000">
+              <div class="float-amt" id="heroIncomeVal">$70,000 / yr</div>
+            </div>
+            <div class="plan-row">
+              <div><div class="lbl">Estimated take-home</div><div class="amt" id="heroResultVal">$0</div></div>
+              <div class="arrow">→</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="wrap">
+        <div class="stats-row reveal">
+          <div class="stat"><div class="ic">🧮</div><div><div class="num">18+</div><div class="lbl">Calculators</div></div></div>
+          <div class="stat"><div class="ic">📍</div><div><div class="num">50</div><div class="lbl">States covered</div></div></div>
+          <div class="stat"><div class="ic">🗂️</div><div><div class="num">6</div><div class="lbl">Categories</div></div></div>
+          <div class="stat"><div class="ic">👥</div><div><div class="num">100K+</div><div class="lbl">Monthly users</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="block wrap">
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <span class="eyebrow">About CheckYourPays</span>
+        <h2 style="margin-top:12px; font-size:clamp(24px,3vw,32px); color:var(--navy);">One hub for every kind of paycheck question</h2>
+        <p>Whether you're comparing a job offer's salary, checking an hourly paycheck, working out overtime, or trying to figure out what a state actually takes off your check — we built a single, fast place to get that number.</p>
+        <p>We also cover a group most calculator sites skip entirely: freelancers and 1099 contractors, whose income isn't withheld the way a regular paycheck is. Same standard — quick, accurate, and free — applied to income that works differently.</p>
+        <div class="about-cta">
+          <a href="#categories" class="btn btn-primary">Browse all categories</a>
+          <div class="phone">
+            <div class="ic">✉️</div>
+            <div><div class="lbl">Have a question?</div><div class="val">support@checkyourpays.com</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-visual reveal">
+        <div class="about-ring"></div>
+        <div class="av-card av-1">
+          <div class="tag">Every pay type, one place</div>
+          <h4>What we help you calculate</h4>
+          <div class="form-lines">
+            <div class="row"><span>Salary → take-home</span><span>Instant</span></div>
+            <div class="row"><span>Hourly paycheck</span><span>Instant</span></div>
+            <div class="row"><span>State tax difference</span><span>50 states</span></div>
+            <div class="row"><span>Freelance / 1099 tax</span><span>New</span></div>
+          </div>
+        </div>
+        <div class="av-card av-2">
+          <div class="tag">Sample take-home trend</div>
+          <div class="chart2">
+            <i style="height:30%"></i><i style="height:45%"></i><i style="height:38%"></i>
+            <i style="height:60%"></i><i style="height:50%"></i><i style="height:75%"></i><i style="height:95%"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="block wrap" id="categories" style="background:var(--sky); border-radius:28px;">
+    <div class="section-head reveal">
+      <span class="eyebrow">Browse by category</span>
+      <h2>Six ways to check your pay</h2>
+      <p>Every calculator on CheckYourPays sits under one of these — pick the one that matches how you actually get paid.</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card reveal">
+        <div class="cat-icon">💼</div>
+        <h3>Salary</h3>
+        <p>Turn an annual salary offer into what actually lands in your account each month.</p>
+        <span class="cat-count">3 calculators</span>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon">🧾</div>
+        <h3>Paycheck</h3>
+        <p>Work out take-home pay from an hourly wage, salary, or a specific pay period.</p>
+        <span class="cat-count">3 calculators</span>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon">⏱️</div>
+        <h3>Overtime</h3>
+        <p>Calculate time-and-a-half or double-time pay on top of your regular hours.</p>
+        <span class="cat-count">2 calculators</span>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon">📋</div>
+        <h3>Payroll &amp; Deductions</h3>
+        <p>See exactly where federal tax, state tax, and FICA come out of a paycheck.</p>
+        <span class="cat-count">3 calculators</span>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon">📍</div>
+        <h3>State Calculators</h3>
+        <p>State-specific take-home pay — tax rules vary a lot depending on where you work.</p>
+        <span class="cat-count">50 states</span>
+      </div>
+      <div class="cat-card new reveal">
+        <div class="cat-icon">🧑‍💻</div>
+        <h3>Freelance &amp; 1099</h3>
+        <p>Self-employment tax, quarterly estimates, and take-home pay for contract income.</p>
+        <span class="cat-count">4 calculators</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR TOOLS -->
+  <section class="block wrap" id="tools">
+    <div class="section-head reveal">
+      <span class="eyebrow">Most used</span>
+      <h2>Popular calculators right now</h2>
+      <p>A quick shortlist — the rest live inside their category above.</p>
+    </div>
+    <div class="tool-list">
+      <a class="tool-row reveal" href="#"><span class="tool-num">01</span><span><span class="tool-name">Salary Calculator</span><div class="tool-desc">Annual or monthly take-home pay from a salary figure.</div></span><span class="tool-cta">Use →</span></a>
+      <a class="tool-row reveal" href="#"><span class="tool-num">02</span><span><span class="tool-name">Paycheck Calculator</span><div class="tool-desc">Take-home pay by hourly rate or salary, per pay period.</div></span><span class="tool-cta">Use →</span></a>
+      <a class="tool-row reveal" href="#"><span class="tool-num">03</span><span><span class="tool-name">Overtime Calculator</span><div class="tool-desc">Time-and-a-half and double-time pay from hourly wage.</div></span><span class="tool-cta">Use →</span></a>
+      <a class="tool-row reveal" href="#"><span class="tool-num">04</span><span><span class="tool-name">California Paycheck Calculator</span><div class="tool-desc">State-specific take-home pay estimate for CA residents.</div></span><span class="tool-cta">Use →</span></a>
+      <a class="tool-row reveal" href="#"><span class="tool-num">05</span><span><span class="tool-name">1099 / Self-Employment Tax Calculator</span><div class="tool-desc">Self-employment tax and total owed on freelance income.</div></span><span class="tool-cta">Use →</span></a>
+      <a class="tool-row reveal" href="#"><span class="tool-num">06</span><span><span class="tool-name">Quarterly Estimated Tax Calculator</span><div class="tool-desc">Splits a freelancer's yearly tax into 4 due-date payments.</div></span><span class="tool-cta">Use →</span></a>
+    </div>
+  </section>
+
+  <!-- CHECKLIST + CHART -->
+  <section class="block wrap" id="why">
+    <div class="split">
+      <div class="reveal">
+        <span class="eyebrow">Why CheckYourPays</span>
+        <h2 style="margin-top:12px; font-size:clamp(24px,3vw,32px); color:var(--navy);">Built to match how you're actually paid</h2>
+        <p style="color:var(--muted); margin-top:14px; font-size:15.5px; line-height:1.7;">Most calculator sites assume a standard salaried paycheck with tax already withheld. We built ours around the fact that pay works differently depending on your situation.</p>
+        <ul class="checklist">
+          <li><span class="chk">✓</span> Employee calculators cover federal, state, and FICA withholding automatically.</li>
+          <li><span class="chk">✓</span> Freelance calculators add the self-employment tax a W-2 tool would miss entirely.</li>
+          <li><span class="chk">✓</span> Every result updates instantly in your browser — nothing is stored or sent anywhere.</li>
+        </ul>
+      </div>
+
+      <div class="why-visual reveal">
+        <div class="wv-card">
+          <div class="wv-path">
+            <div class="wv-node"><span class="wv-ic">💼</span><span>Salaried</span></div>
+            <div class="wv-line"></div>
+            <div class="wv-node"><span class="wv-ic">🧑‍💻</span><span>Freelance / 1099</span></div>
+          </div>
+          <div class="wv-arrow">↓</div>
+          <div class="wv-result">
+            <span class="wv-check">✓</span>
+            <div><div class="wv-result-title">One accurate take-home number</div><div class="wv-result-sub">Whichever way you're paid</div></div>
+          </div>
+        </div>
+        <div class="why-cta">
+          <div>
+            <div class="why-cta-title">Not sure which calculator fits you?</div>
+            <div class="why-cta-sub">Pick your pay type and get your number in under a minute.</div>
+          </div>
+          <a href="#tools" class="btn btn-primary">Find my calculator →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATES -->
+  <section class="block wrap" id="states" style="background:var(--sky); border-radius:28px;">
+    <div class="section-head reveal">
+      <span class="eyebrow">By state</span>
+      <h2>Take-home pay changes by state</h2>
+      <p>State income tax rules can shift your real take-home pay by a meaningful amount — check yours.</p>
+    </div>
+    <div class="state-grid">
+      <a class="state-pill" href="#">California <span>CA</span></a>
+      <a class="state-pill" href="#">Texas <span>TX</span></a>
+      <a class="state-pill" href="#">Florida <span>FL</span></a>
+      <a class="state-pill" href="#">New York <span>NY</span></a>
+      <a class="state-pill" href="#">Illinois <span>IL</span></a>
+      <a class="state-pill" href="#">Washington <span>WA</span></a>
+      <a class="state-pill" href="#">Indiana <span>IN</span></a>
+      <a class="state-pill" href="#">Virginia <span>VA</span></a>
+      <a class="state-pill" href="#">Hawaii <span>HI</span></a>
+      <a class="state-pill" href="#">Nebraska <span>NE</span></a>
+      <a class="state-pill" href="#">Georgia <span>GA</span></a>
+      <a class="state-pill" href="#">Ohio <span>OH</span></a>
+    </div>
+    <div class="states-more"><a href="#">View all 50 states →</a></div>
+  </section>
+
+  <!-- BLOG -->
+  <section class="block wrap" id="blog">
+    <div class="section-head reveal">
+      <span class="eyebrow">From the blog</span>
+      <h2>Guides on getting paid right</h2>
+      <p>Written for the questions people actually type into Google, not tax jargon.</p>
+    </div>
+    <div class="blog-grid">
+      <a class="blog-card reveal" href="#">
+        <div class="blog-media"><span class="bnum">01</span></div>
+        <div class="blog-body"><div class="blog-tags"><span class="blog-tag">State Pay</span></div><h3>Why two people with the same salary can take home different amounts</h3><div class="blog-meta"><span>Aug 2, 2026</span><span>6 min</span></div></div>
+      </a>
+      <a class="blog-card reveal" href="#">
+        <div class="blog-media"><span class="bnum">02</span></div>
+        <div class="blog-body"><div class="blog-tags"><span class="blog-tag">Freelance</span></div><h3>Going freelance? Here's what changes about your taxes on day one</h3><div class="blog-meta"><span>Jul 26, 2026</span><span>5 min</span></div></div>
+      </a>
+      <a class="blog-card reveal" href="#">
+        <div class="blog-media"><span class="bnum">03</span></div>
+        <div class="blog-body"><div class="blog-tags"><span class="blog-tag">Overtime</span></div><h3>How overtime pay actually gets calculated (with real examples)</h3><div class="blog-meta"><span>Jul 15, 2026</span><span>4 min</span></div></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- DARK COUNTER -->
+  <section class="counter-section">
+    <div class="dotgrid"></div>
+    <div class="wrap">
+      <div class="counter-line"></div>
+      <div class="counter-row">
+        <div class="counter-item reveal"><div class="counter-circle">18+</div><p>Calculators across 6 categories</p></div>
+        <div class="counter-item reveal"><div class="counter-circle">50</div><p>States with dedicated take-home calculators</p></div>
+        <div class="counter-item reveal"><div class="counter-circle">2</div><p>Pay types covered — employee and freelance</p></div>
+        <div class="counter-item reveal"><div class="counter-circle">0</div><p>Sign-ups needed to get a number</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="block wrap">
+    <div class="section-head reveal"><span class="eyebrow">Testimonials</span><h2>What people tell us</h2></div>
+    <div class="testi-wrap reveal">
+      <div class="testi-avatars">
+        <div class="avatar sm" style="background:#5C82F0;">JT</div>
+        <div class="avatar lg" style="background:var(--blue);">SM</div>
+        <div class="avatar sm" style="background:#1FAE6B;">LR</div>
+      </div>
+      <p class="testi-quote">"I compared two job offers with the salary calculator in under a minute — way faster than building a spreadsheet myself."</p>
+      <div class="testi-who">Sam Ortega</div>
+      <div class="testi-role">Software Engineer</div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="block wrap" id="faq" style="background:var(--sky); border-radius:28px;">
+    <div class="section-head reveal"><span class="eyebrow">FAQ</span><h2>Common questions</h2></div>
+    <div class="faq-list">
+      <div class="faq-item reveal"><h4>Do I need to make an account to use a calculator?</h4><p>No. Every calculator runs instantly in your browser — no sign-up, no email required.</p></div>
+      <div class="faq-item reveal"><h4>Is CheckYourPays only for W-2 employees?</h4><p>No — alongside salary, paycheck, and overtime tools, we run a dedicated Freelance &amp; 1099 category for contractors and gig workers.</p></div>
+      <div class="faq-item reveal"><h4>How current are the tax figures?</h4><p>Every calculator is reviewed and updated for the 2026 tax year, including state-specific rates.</p></div>
+      <div class="faq-item reveal"><h4>Do you store what I enter?</h4><p>No. Nothing you type is saved or transmitted — all calculations happen locally in your browser.</p></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band">
+    <div class="dotgrid"></div>
+    <div class="wrap">
+      <h2>Whatever your paycheck looks like, get a real number in seconds.</h2>
+      <a href="#tools" class="btn btn-dark">Check my take-home pay →</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-item"><div class="ic">✉️</div><div><div class="lbl">Email support</div><div class="val">support@checkyourpays.com</div></div></div>
+      <div class="foot-item"><div class="ic">🌐</div><div><div class="lbl">Available</div><div class="val">On any device, anywhere</div></div></div>
+      <div class="foot-item"><div class="ic">🆓</div><div><div class="lbl">Pricing</div><div class="val">Free, always</div></div></div>
+      <div class="foot-item"><div class="ic">📍</div><div><div class="lbl">Coverage</div><div class="val">All 50 states</div></div></div>
+    </div>
+
+    <div class="foot-grid">
+      <div class="foot-col">
+        <div class="foot-logo"><span class="box" style="width:28px;height:28px;font-size:13px;">C</span>CheckYourPays</div>
+        <p>Free calculators for salary, paycheck, overtime, payroll, state taxes, and freelance income.</p>
+        <div class="foot-widget">
+          <div class="lbl">Next quarterly tax deadline</div>
+          <div class="val" id="footDeadline">—</div>
+        </div>
+      </div>
+      <div class="foot-col"><h4>Categories</h4><ul><li><a href="#">Salary</a></li><li><a href="#">Paycheck</a></li><li><a href="#">Overtime</a></li><li><a href="#">Payroll &amp; Deductions</a></li><li><a href="#">Freelance &amp; 1099</a></li></ul></div>
+      <div class="foot-col"><h4>Resources</h4><ul><li><a href="#">Blog</a></li><li><a href="#">By State</a></li><li><a href="#">FAQ</a></li><li><a href="#">Tax Brackets 2026</a></li></ul></div>
+      <div class="foot-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Contact</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li></ul></div>
+    </div>
+
+    <div class="foot-bottom">
+      <span>© 2026 CheckYourPays.com — All estimates for informational purposes only.</span>
+      <div class="social"><a href="#" aria-label="Twitter">𝕏</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="Facebook">f</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const payType = document.getElementById('payType');
+  const slider = document.getElementById('heroSlider');
+  const incomeVal = document.getElementById('heroIncomeVal');
+  const resultVal = document.getElementById('heroResultVal');
+
+  function updateHero(){
+    const annual = parseInt(slider.value, 10);
+    incomeVal.textContent = '$' + annual.toLocaleString('en-US') + ' / yr';
+    let takeHome;
+    if(payType.value === '1099'){
+      const seTax = annual * 0.9235 * 0.153;
+      const fedTax = Math.max(0, (annual - seTax/2) * 0.15);
+      takeHome = annual - seTax - fedTax;
+    } else {
+      const fedTax = annual * 0.16;
+      const fica = annual * 0.0765;
+      const stateTax = annual * 0.045;
+      takeHome = annual - fedTax - fica - stateTax;
+    }
+    resultVal.textContent = '$' + Math.round(takeHome).toLocaleString('en-US');
+  }
+  slider.addEventListener('input', updateHero);
+  payType.addEventListener('change', updateHero);
+  updateHero();
+
+  function nextDeadline(){
+    const now = new Date(); const year = now.getFullYear();
+    const deadlines = [new Date(year,0,15), new Date(year,3,15), new Date(year,5,15), new Date(year,8,15), new Date(year+1,0,15)];
+    for(const d of deadlines){ if(d > now) return d; }
+    return deadlines[deadlines.length-1];
+  }
+  const d = nextDeadline();
+  document.getElementById('footDeadline').textContent = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+
+  const menuBtn = document.querySelector('.menu-btn');
+  const navlinks = document.querySelector('.navlinks');
+  menuBtn.addEventListener('click', () => {
+    const open = navlinks.style.display === 'flex';
+    navlinks.style.display = open ? 'none' : 'flex';
+    navlinks.style.cssText += open ? '' : 'position:absolute; top:64px; left:0; right:0; background:#fff; flex-direction:column; padding:20px 28px; border-bottom:1px solid var(--line); gap:16px;';
+  });
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal:not(.in)').forEach(el => obs.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>

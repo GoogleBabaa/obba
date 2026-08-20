@@ -26,7 +26,7 @@ import { virginiaDocMeta, virginiaDocSections } from './virginiaContent';
 import { virginiaPaycheckSchema } from './virginiaSchema';
 import { washingtonDocMeta, washingtonDocSections } from './washingtonContent';
 import { washingtonPaycheckSchema } from './washingtonSchema';
-import checkYourPaysHomeHtml from '../.claude/checkyourpays-homepage (3).html?raw';
+import checkYourPaysHomeHtml from './templates/checkyourpays-homepage.html?raw';
 import overtimeThemeHtmlSource from '../Overtime Calculator.dc (1).html?raw';
 const FAQPage = lazy(() => import('./FAQPage'));
 const BlogsPage = lazy(() => import('./BlogsPage'));
